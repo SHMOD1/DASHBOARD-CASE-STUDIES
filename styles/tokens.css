@@ -1,0 +1,9 @@
+/*
+  Theme contract consumed by every section component.
+  `lib/theme.ts` writes these variables from Theme / per-section overrides;
+  components read them via `var(--token)` so nothing is hardcoded.
+
+  --color-primary / --color-secondary / --color-background / --color-text / --color-accent
+  --font-heading / --font-body
+  --heading-size / --paragraph-size / --letter-spacing / --line-height / --font-weight-heading
+*/

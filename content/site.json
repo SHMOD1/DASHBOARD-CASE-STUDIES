@@ -1,0 +1,997 @@
+{
+  "siteName": "Original Exhibition Co.",
+  "theme": {
+    "colors": {
+      "primary": "#f5ecd8",
+      "secondary": "#c97b5e",
+      "background": "#0b1220",
+      "text": "#f5ecd8",
+      "accent": "#7fbf9e"
+    },
+    "typography": {
+      "fontHeading": "var(--font-serif)",
+      "fontBody": "var(--font-sans)",
+      "headingSize": 4.5,
+      "paragraphSize": 1.125,
+      "letterSpacing": 0,
+      "lineHeight": 1.5,
+      "uppercaseHeadings": false,
+      "boldHeadings": false,
+      "weight": 500
+    }
+  },
+  "media": [
+    {
+      "id": "media_hero",
+      "url": "/placeholders/hero-lighthouse.svg",
+      "type": "image",
+      "alt": "Lighthouse silhouette at dusk",
+      "caption": "Dusk over the point",
+      "credit": "Studio Placeholder",
+      "folder": "chapter-1",
+      "tags": [
+        "hero",
+        "coast"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_quote",
+      "url": "/placeholders/quote-fog.svg",
+      "type": "image",
+      "alt": "Abstract fog gradient",
+      "caption": "",
+      "credit": "Studio Placeholder",
+      "folder": "chapter-1",
+      "tags": [
+        "mood"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_cliffs",
+      "url": "/placeholders/fullscreen-cliffs.svg",
+      "type": "image",
+      "alt": "Layered coastal cliffs",
+      "caption": "The northern cliffs",
+      "credit": "Studio Placeholder",
+      "folder": "chapter-2",
+      "tags": [
+        "landscape"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_portrait",
+      "url": "/placeholders/portrait-keeper.svg",
+      "type": "image",
+      "alt": "Portrait silhouette illustration",
+      "caption": "The keeper, illustrated",
+      "credit": "Studio Placeholder",
+      "folder": "chapter-2",
+      "tags": [
+        "portrait"
+      ],
+      "width": 1200,
+      "height": 1500,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_gallery_1",
+      "url": "/placeholders/gallery-1.svg",
+      "type": "image",
+      "alt": "Gallery placeholder one",
+      "caption": "Fragment I",
+      "credit": "Studio Placeholder",
+      "folder": "gallery",
+      "tags": [
+        "gallery"
+      ],
+      "width": 1600,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_gallery_2",
+      "url": "/placeholders/gallery-2.svg",
+      "type": "image",
+      "alt": "Gallery placeholder two",
+      "caption": "Fragment II",
+      "credit": "Studio Placeholder",
+      "folder": "gallery",
+      "tags": [
+        "gallery"
+      ],
+      "width": 1600,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_gallery_3",
+      "url": "/placeholders/gallery-3.svg",
+      "type": "image",
+      "alt": "Gallery placeholder three",
+      "caption": "Fragment III",
+      "credit": "Studio Placeholder",
+      "folder": "gallery",
+      "tags": [
+        "gallery"
+      ],
+      "width": 1600,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_gallery_4",
+      "url": "/placeholders/gallery-4.svg",
+      "type": "image",
+      "alt": "Gallery placeholder four",
+      "caption": "Fragment IV",
+      "credit": "Studio Placeholder",
+      "folder": "gallery",
+      "tags": [
+        "gallery"
+      ],
+      "width": 1600,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_gallery_5",
+      "url": "/placeholders/gallery-5.svg",
+      "type": "image",
+      "alt": "Gallery placeholder five",
+      "caption": "Fragment V",
+      "credit": "Studio Placeholder",
+      "folder": "gallery",
+      "tags": [
+        "gallery"
+      ],
+      "width": 1600,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_timeline_1",
+      "url": "/placeholders/timeline-1.svg",
+      "type": "image",
+      "alt": "Timeline placeholder one",
+      "caption": "",
+      "credit": "",
+      "folder": "timeline",
+      "tags": [
+        "timeline"
+      ],
+      "width": 1000,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_timeline_2",
+      "url": "/placeholders/timeline-2.svg",
+      "type": "image",
+      "alt": "Timeline placeholder two",
+      "caption": "",
+      "credit": "",
+      "folder": "timeline",
+      "tags": [
+        "timeline"
+      ],
+      "width": 1000,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_timeline_3",
+      "url": "/placeholders/timeline-3.svg",
+      "type": "image",
+      "alt": "Timeline placeholder three",
+      "caption": "",
+      "credit": "",
+      "folder": "timeline",
+      "tags": [
+        "timeline"
+      ],
+      "width": 1000,
+      "height": 1000,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_video_poster",
+      "url": "/placeholders/video-poster.svg",
+      "type": "image",
+      "alt": "Video poster placeholder",
+      "caption": "",
+      "credit": "",
+      "folder": "chapter-3",
+      "tags": [
+        "video"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_map",
+      "url": "/placeholders/map-chart.svg",
+      "type": "image",
+      "alt": "Stylized chart map",
+      "caption": "",
+      "credit": "",
+      "folder": "chapter-3",
+      "tags": [
+        "map"
+      ],
+      "width": 1600,
+      "height": 1200,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_ending",
+      "url": "/placeholders/ending-horizon.svg",
+      "type": "image",
+      "alt": "Horizon at night placeholder",
+      "caption": "",
+      "credit": "",
+      "folder": "chapter-4",
+      "tags": [
+        "ending"
+      ],
+      "width": 1920,
+      "height": 1080,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "media_cta",
+      "url": "/placeholders/cta-dusk.svg",
+      "type": "image",
+      "alt": "Dusk gradient placeholder",
+      "caption": "",
+      "credit": "",
+      "folder": "chapter-4",
+      "tags": [
+        "cta"
+      ],
+      "width": 1920,
+      "height": 900,
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "pages": [
+    {
+      "id": "page_home",
+      "title": "The Last Lighthouse Keepers",
+      "slug": "home",
+      "published": true,
+      "updatedAt": "2026-01-01T00:00:00.000Z",
+      "seo": {
+        "title": "The Last Lighthouse Keepers — An Original Exhibition",
+        "description": "A placeholder long-form storytelling exhibition. Replace every word, image and video from the dashboard.",
+        "ogImageId": "media_hero",
+        "slug": "home",
+        "metaTags": [
+          {
+            "name": "author",
+            "content": "Original Exhibition Co."
+          }
+        ],
+        "schemaType": "Article"
+      },
+      "sections": [
+        {
+          "id": "sec_hero",
+          "type": "hero",
+          "name": "Hero — Opening",
+          "visible": true,
+          "content": {
+            "chapterNumber": "01",
+            "eyebrow": "An original exhibition",
+            "heading": "The Last Lighthouse Keepers",
+            "subheading": "Every word, image and video on this page is placeholder content — replace it all from the dashboard.",
+            "mediaId": "media_hero"
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "fade",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": true,
+            "parallaxStrength": 35,
+            "duration": 1.8,
+            "delay": 0.1,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power3.out"
+          },
+          "layout": {
+            "height": "screen",
+            "paddingY": 6,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 60,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": "media_hero",
+            "overlayOpacity": 0.45
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": 6,
+            "paragraphSize": 1.25,
+            "letterSpacing": -0.01,
+            "lineHeight": 1.05,
+            "uppercase": false,
+            "bold": false,
+            "weight": 600
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_intro_split",
+          "type": "splitImageText",
+          "name": "Introduction",
+          "visible": true,
+          "content": {
+            "eyebrow": "Chapter One",
+            "heading": "A house built against the wind",
+            "body": "This paragraph is placeholder body copy. In the dashboard you can rewrite it, resize the column it lives in, or swap the accompanying image entirely — nothing here is hardcoded into the page.",
+            "mediaId": "media_portrait"
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "slide",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1.1,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power3.out"
+          },
+          "layout": {
+            "height": "auto",
+            "paddingY": 10,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "left",
+            "imagePosition": "right",
+            "textWidth": 42,
+            "columns": 2,
+            "backgroundColor": null,
+            "backgroundImageId": null,
+            "overlayOpacity": 0
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_quote_1",
+          "type": "quote",
+          "name": "Pull Quote",
+          "visible": true,
+          "content": {
+            "quote": "Replace this pull quote with a line worth pinning to the screen while the reader scrolls past it.",
+            "attribution": "— Placeholder Attribution"
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "fade",
+            "slideDirection": "up",
+            "pinned": true,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 1,
+            "easing": "sine.inOut"
+          },
+          "layout": {
+            "height": "tall",
+            "paddingY": 6,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 52,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": "media_quote",
+            "overlayOpacity": 0.6
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": 3,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": 1.2,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_fullscreen_cliffs",
+          "type": "fullscreenImage",
+          "name": "Fullscreen — Cliffs",
+          "visible": true,
+          "content": {
+            "caption": "The coastline this story is set against.",
+            "credits": "Placeholder credit",
+            "mediaId": "media_cliffs"
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "mask",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": true,
+            "parallaxStrength": 25,
+            "duration": 1.4,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "expo.out"
+          },
+          "layout": {
+            "height": "screen",
+            "paddingY": 6,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "left",
+            "imagePosition": "background",
+            "textWidth": 60,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": "media_cliffs",
+            "overlayOpacity": 0.2
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_gallery_1",
+          "type": "gallery",
+          "name": "Horizontal Gallery",
+          "visible": true,
+          "content": {
+            "heading": "Fragments from the archive",
+            "gallery": [
+              {
+                "id": "gi_1",
+                "mediaId": "media_gallery_1",
+                "caption": "Fragment I — placeholder caption",
+                "credit": "Studio Placeholder"
+              },
+              {
+                "id": "gi_2",
+                "mediaId": "media_gallery_2",
+                "caption": "Fragment II — placeholder caption",
+                "credit": "Studio Placeholder"
+              },
+              {
+                "id": "gi_3",
+                "mediaId": "media_gallery_3",
+                "caption": "Fragment III — placeholder caption",
+                "credit": "Studio Placeholder"
+              },
+              {
+                "id": "gi_4",
+                "mediaId": "media_gallery_4",
+                "caption": "Fragment IV — placeholder caption",
+                "credit": "Studio Placeholder"
+              },
+              {
+                "id": "gi_5",
+                "mediaId": "media_gallery_5",
+                "caption": "Fragment V — placeholder caption",
+                "credit": "Studio Placeholder"
+              }
+            ]
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "slide",
+            "slideDirection": "left",
+            "pinned": true,
+            "horizontal": true,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 1,
+            "easing": "power2.out"
+          },
+          "layout": {
+            "height": "screen",
+            "paddingY": 6,
+            "paddingX": 0,
+            "marginY": 0,
+            "align": "left",
+            "imagePosition": "background",
+            "textWidth": 60,
+            "columns": 1,
+            "backgroundColor": "#080d16",
+            "backgroundImageId": null,
+            "overlayOpacity": 0
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": true,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_timeline_1",
+          "type": "timeline",
+          "name": "Timeline",
+          "visible": true,
+          "content": {
+            "eyebrow": "Chapter Two",
+            "heading": "A century, in fragments",
+            "timeline": [
+              {
+                "id": "tl_1",
+                "year": "1902",
+                "title": "First light",
+                "body": "Placeholder timeline copy describing the first entry.",
+                "mediaId": "media_timeline_1"
+              },
+              {
+                "id": "tl_2",
+                "year": "1947",
+                "title": "The storm",
+                "body": "Placeholder timeline copy describing the second entry.",
+                "mediaId": "media_timeline_2"
+              },
+              {
+                "id": "tl_3",
+                "year": "1998",
+                "title": "Automation",
+                "body": "Placeholder timeline copy describing the third entry.",
+                "mediaId": "media_timeline_3"
+              }
+            ]
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "slide",
+            "slideDirection": "left",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power3.out"
+          },
+          "layout": {
+            "height": "auto",
+            "paddingY": 10,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "left",
+            "imagePosition": "left",
+            "textWidth": 60,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": null,
+            "overlayOpacity": 0
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_stats_1",
+          "type": "stats",
+          "name": "Stats",
+          "visible": true,
+          "content": {
+            "heading": "By the numbers",
+            "stats": [
+              {
+                "id": "st_1",
+                "value": 120,
+                "suffix": "",
+                "label": "Years in service"
+              },
+              {
+                "id": "st_2",
+                "value": 47,
+                "suffix": "",
+                "label": "Keepers on record"
+              },
+              {
+                "id": "st_3",
+                "value": 3200,
+                "suffix": "+",
+                "label": "Ships guided home"
+              }
+            ]
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "slide",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power3.out"
+          },
+          "layout": {
+            "height": "auto",
+            "paddingY": 10,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 70,
+            "columns": 3,
+            "backgroundColor": "#0e1626",
+            "backgroundImageId": null,
+            "overlayOpacity": 0
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_video_1",
+          "type": "video",
+          "name": "Video",
+          "visible": true,
+          "content": {
+            "eyebrow": "Chapter Three",
+            "heading": "Watch the coastline at night",
+            "video": {
+              "source": "youtube",
+              "url": "https://www.youtube.com/watch?v=aqz-KE-bpKQ",
+              "posterMediaId": "media_video_poster",
+              "autoplay": false,
+              "loop": false,
+              "muted": false,
+              "controls": true
+            }
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "fade",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1.2,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power3.out"
+          },
+          "layout": {
+            "height": "screen",
+            "paddingY": 6,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 60,
+            "columns": 1,
+            "backgroundColor": "#05080f",
+            "backgroundImageId": null,
+            "overlayOpacity": 0.2
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_map_1",
+          "type": "map",
+          "name": "Map",
+          "visible": true,
+          "content": {
+            "heading": "Along the coast",
+            "mapPins": [
+              {
+                "id": "mp_1",
+                "x": 22,
+                "y": 62,
+                "label": "Site A",
+                "description": "Placeholder location description."
+              },
+              {
+                "id": "mp_2",
+                "x": 48,
+                "y": 40,
+                "label": "Site B",
+                "description": "Placeholder location description."
+              },
+              {
+                "id": "mp_3",
+                "x": 74,
+                "y": 55,
+                "label": "Site C",
+                "description": "Placeholder location description."
+              }
+            ]
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "scale",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1.2,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power2.out"
+          },
+          "layout": {
+            "height": "tall",
+            "paddingY": 6,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 60,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": "media_map",
+            "overlayOpacity": 0.15
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_ending_1",
+          "type": "ending",
+          "name": "Ending",
+          "visible": true,
+          "content": {
+            "heading": "The light still turns",
+            "body": "Placeholder closing copy. Replace this with the final words of your own story.",
+            "credits": "Placeholder credits line."
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "fade",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": true,
+            "parallaxStrength": 30,
+            "duration": 1.8,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "expo.out"
+          },
+          "layout": {
+            "height": "screen",
+            "paddingY": 6,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 55,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": "media_ending",
+            "overlayOpacity": 0.5
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": 4,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        },
+        {
+          "id": "sec_cta_1",
+          "type": "cta",
+          "name": "Call to Action",
+          "visible": true,
+          "content": {
+            "heading": "Build your own exhibition",
+            "body": "This entire experience is driven by JSON and editable from the dashboard.",
+            "ctaLabel": "Open the dashboard",
+            "ctaHref": "/dashboard"
+          },
+          "animation": {
+            "enabled": true,
+            "reveal": "fade",
+            "slideDirection": "up",
+            "pinned": false,
+            "horizontal": false,
+            "parallax": false,
+            "parallaxStrength": 20,
+            "duration": 1,
+            "delay": 0,
+            "speed": 1,
+            "scrub": 0,
+            "easing": "power3.out"
+          },
+          "layout": {
+            "height": "half",
+            "paddingY": 8,
+            "paddingX": 6,
+            "marginY": 0,
+            "align": "center",
+            "imagePosition": "background",
+            "textWidth": 55,
+            "columns": 1,
+            "backgroundColor": null,
+            "backgroundImageId": "media_cta",
+            "overlayOpacity": 0.35
+          },
+          "typography": {
+            "fontFamily": null,
+            "headingSize": null,
+            "paragraphSize": null,
+            "letterSpacing": null,
+            "lineHeight": null,
+            "uppercase": false,
+            "bold": false,
+            "weight": null
+          },
+          "color": {
+            "primary": null,
+            "secondary": null,
+            "background": null,
+            "text": null,
+            "accent": null
+          }
+        }
+      ]
+    }
+  ]
+}
