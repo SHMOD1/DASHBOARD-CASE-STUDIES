@@ -1,10 +1,11 @@
 # DASHBOARD-CASE-STUDIES
 
-## Editable Chapters & Timeline Dashboard
+## Editable Storymap Dashboard
 
-`index.html` is a self-contained, single-file recreation of an animated "scrollytelling"
-story page — a hero cover, chapters (each with its own mini timeline and accent color), and
-scroll-triggered reveal, parallax, and cursor-tilt animations. It ships with dummy sample
+`index.html` is a self-contained, single-file, full-bleed storymap — every hero, chapter
+cover, and entry is a true full-screen (100vh) slide with its background image/GIF/video
+filling the entire viewport edge-to-edge, continuously zooming and panning as you scroll
+(plus a subtle cursor-tilt effect), not a static boxed layout. It ships with dummy sample
 content ("Beyond Borders", a fictional migration story in four chapters) so you can reshape
 it for histories, product journeys, brand timelines, ambassador/employee profiles, or any
 other chapter-based narrative.
@@ -12,14 +13,16 @@ other chapter-based narrative.
 Open `index.html` directly in a browser — no build step or server required.
 
 **Structure:**
-- A hero cover, then any number of **chapters** — each with its own cover image/video,
-  title, subtitle, accent color, and its own mini timeline of **entries**.
-- Each entry has media (image / GIF / video) plus one or more **text blocks** — pick a
-  style (Heading, Subheading, Body, Pull quote, Caption), font, size, and alignment per
-  block.
-- The left rail shows every chapter as a collapsible group with its own progress line that
-  fills as you scroll through that chapter; the active chapter's accent color washes across
-  the rail, progress bar, and pull-quote borders as you scroll.
+- A full-screen hero, then any number of **chapters** — each with its own full-bleed cover
+  image/video, title, subtitle, accent color, and its own timeline of **entries**, each a
+  full-screen slide too.
+- Each entry's media (image / GIF / video) fills the whole screen behind the text, with one
+  or more **text blocks** overlaid — pick a style (Heading, Subheading, Body, Pull quote,
+  Caption), font, size, and alignment per block.
+- The timeline lives in a floating glass panel pinned to the right edge of the screen at all
+  times (not a layout column) — chapters as collapsible groups, each with its own progress
+  line that fills as you scroll through it. The active chapter's accent color washes across
+  the panel, the top progress bar, and pull-quote borders as you scroll.
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
