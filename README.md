@@ -30,9 +30,11 @@ Open `index.html` directly in a browser — no build step or server required.
 - A full-screen hero, then any number of **chapters** — each with its own full-bleed cover
   image/video, title, subtitle, accent color, and its own timeline of **entries**, each a
   full-screen slide too.
-- Each entry's media (image / GIF / video) fills the whole screen behind the text, with one
-  or more **text blocks** overlaid — pick a style (Heading, Subheading, Body, Pull quote,
-  Caption), font, size, and alignment per block.
+- Each entry's media (image / GIF / video) fills the whole screen behind the text, with a
+  mix of **text blocks** (Heading, Subheading, Body, Pull quote, Caption — pick font, size,
+  alignment per block) and **inline media blocks** — additional images/GIFs/videos dropped
+  into the same text flow as smaller inset cards (S/M/L/Full width, left/center/right
+  aligned, with their own caption), distinct from the entry's full-bleed background.
 - The timeline lives in a floating glass panel pinned to the right edge of the screen at all
   times (not a layout column) — chapters as collapsible groups, each with its own progress
   line that fills as you scroll through it. The active chapter's accent color washes across
@@ -42,8 +44,10 @@ Open `index.html` directly in a browser — no build step or server required.
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
   every text block.
 - Each text block gets its own floating toolbar: style, font, size, alignment, bold/italic,
-  reorder, delete. Use **+ Add text block** to add more.
-- Hover any image/video and click **Change Media** to set an Image, GIF, or Video — paste a
+  reorder, delete. Use **+ Add text block** to add more, or **+ Add image / video / GIF** to
+  drop in an inline media overlay (its toolbar controls size and alignment instead).
+- Hover any image/video — the entry's full-bleed background, a chapter cover, the hero, or
+  an inline media block — and click **Change Media** to set an Image, GIF, or Video — paste a
   URL (including YouTube/Vimeo links, which embed automatically) or upload a file, with
   autoplay/loop/muted options for video.
 - **+ Add chapter**, **+ Add entry**, **+ Insert entry here**, move-up/down, and delete
