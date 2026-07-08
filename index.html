@@ -18,19 +18,20 @@
        — background fills, accents, borders, design elements.
      Tertiary: D5CEC6, 807973, F0E7DD, F8F3EF, F5F0E8 — neutral backgrounds. */
   :root{
-    --bg:#f8f3ef;
-    --bg-alt:#f0e7dd;
-    --paper:#f8f3ef;
+    --bg:#f6ecdc;
+    --bg-alt:#efe1c8;
+    --paper:#f6ecdc;
     --ink:#413c3f;
     --ink-soft:#807973;
     --ink-faint:#a39d97;
     --accent:#0dbfdb;
     --accent-live:#0dbfdb;
     --accent-2:#ffde17;
-    --line:#d5cec6;
-    --line-strong:#b3a99c;
-    --chrome-bg:#134370;
-    --chrome-ink:#f8f3ef;
+    --line:#e0d0ac;
+    --line-strong:#c9b489;
+    --chrome-bg:#efe1c8;
+    --chrome-ink:#413c3f;
+    --chrome-border:rgba(65,60,63,.24);
     --radius:3px;
     /* brand type: "Intercom" (headings/sub-headings/quotes) has no free public release, so it's
        named first for anyone with it licensed/installed locally, then falls back to Poppins — the
@@ -43,14 +44,14 @@
     --bg:#221f22; --bg-alt:#2b272a; --paper:#262226; --ink:#f8f3ef;
     --ink-soft:#d5cec6; --ink-faint:#968f89; --accent:#35d6ef; --accent-live:#35d6ef;
     --accent-2:#ffde17; --line:#3a3438; --line-strong:#524a4e;
-    --chrome-bg:#0c2038; --chrome-ink:#f8f3ef;
+    --chrome-bg:#0c2038; --chrome-ink:#f8f3ef; --chrome-border:rgba(231,226,212,.28);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --bg:#221f22; --bg-alt:#2b272a; --paper:#262226; --ink:#f8f3ef;
       --ink-soft:#d5cec6; --ink-faint:#968f89; --accent:#35d6ef; --accent-live:#35d6ef;
       --accent-2:#ffde17; --line:#3a3438; --line-strong:#524a4e;
-      --chrome-bg:#0c2038; --chrome-ink:#f8f3ef;
+      --chrome-bg:#0c2038; --chrome-ink:#f8f3ef; --chrome-border:rgba(231,226,212,.28);
     }
   }
 
@@ -76,11 +77,15 @@
   .chrome-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2);}
   .chrome-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .chrome button, .chrome label.file-btn{
-    background:transparent;border:1px solid rgba(231,226,212,.28);color:var(--chrome-ink);
+    background:transparent;border:1px solid var(--chrome-border);color:var(--chrome-ink);
     padding:6px 12px;border-radius:20px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
     transition:background .15s, border-color .15s;
   }
-  .chrome button:hover, .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
+  .chrome button:hover, .chrome label.file-btn:hover{background:rgba(65,60,63,.08);border-color:var(--accent);}
+  [data-theme="dark"] .chrome button:hover, [data-theme="dark"] .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .chrome button:hover, :root:not([data-theme="light"]) .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
+  }
   .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#241f13;font-weight:700;}
   .chrome button.primary.on{background:#3f7d5c;border-color:#3f7d5c;color:#eafff1;}
   .chrome-hint{font-size:10.5px;color:var(--ink-faint);opacity:.7;display:none;}
@@ -142,44 +147,106 @@
   /* ---------- full-screen timeline rail: a fixed edge panel spanning the whole viewport
      height whose inner content is panned by JS in lockstep with the page's own scroll
      position, so the timeline visibly scrolls together with the sections instead of sitting
-     static — while a click still jumps the main scroll straight to that chapter/entry. ---------- */
+     static — while a click still jumps the main scroll straight to that chapter/entry.
+     Styled like a river drawn on paper: cream/beige glass, a wavy flowing "water" line
+     connecting droplet-shaped markers instead of a straight rail. ---------- */
   .rail{
     position:fixed;top:49px;right:0;bottom:0;z-index:55;
     width:300px;overflow:hidden;
-    background:linear-gradient(180deg, rgba(10,11,30,.72) 0%, rgba(10,11,30,.55) 45%, rgba(10,11,30,.72) 100%);
-    backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);
-    border-left:1px solid rgba(255,255,255,.14);
-    box-shadow:-24px 0 60px rgba(0,0,0,.3);color:#f2f1fa;
+    background:linear-gradient(180deg, rgba(246,236,214,.88) 0%, rgba(246,236,214,.74) 45%, rgba(246,236,214,.88) 100%);
+    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-left:1px solid rgba(65,60,63,.15);
+    box-shadow:-24px 0 60px rgba(65,50,20,.15);color:#413c3f;
+  }
+  [data-theme="dark"] .rail{
+    background:linear-gradient(180deg, rgba(28,24,18,.85) 0%, rgba(28,24,18,.7) 45%, rgba(28,24,18,.85) 100%);
+    border-left-color:rgba(246,236,214,.15);color:#f6ecdc;
   }
   .rail-inner{position:absolute;left:0;right:0;top:0;padding:28px 22px 60vh;will-change:transform;}
-  .rail-title{font-family:var(--font-body);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(238,239,250,.55);margin:0 0 16px;}
+  .rail-title{font-family:var(--font-body);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(65,60,63,.6);margin:0 0 16px;}
+  [data-theme="dark"] .rail-title{color:rgba(246,236,214,.55);}
 
   .rail-chapter{margin-bottom:18px;}
-  .rail-chapter-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:2px 0;}
-  .rail-chapter-dot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;transition:background .5s ease;}
-  .rail-chapter-title{font-family:var(--font-main);font-size:13px;font-weight:700;letter-spacing:.01em;flex:1;transition:color .4s ease;color:rgba(238,239,250,.85);}
-  .rail-chapter.active .rail-chapter-title{color:#fff;}
-  .rail-chevron{background:none;border:0;color:rgba(238,239,250,.5);font-size:10px;padding:2px;transition:transform .2s ease;}
+  .rail-chapter-head{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;padding:2px 0;}
+  .rail-chapter-dot{width:13px;height:13px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);flex:0 0 auto;
+    transition:background .5s ease;box-shadow:0 1px 3px rgba(65,50,20,.35);}
+  .rail-chapter-title{font-family:var(--font-main);font-size:13px;font-weight:700;letter-spacing:.01em;flex:1;transition:color .4s ease;color:rgba(65,60,63,.85);}
+  .rail-chapter.active .rail-chapter-title{color:var(--ink);}
+  [data-theme="dark"] .rail-chapter-title{color:rgba(246,236,214,.85);}
+  [data-theme="dark"] .rail-chapter.active .rail-chapter-title{color:#fff;}
+  .rail-chevron{background:none;border:0;color:rgba(65,60,63,.5);font-size:10px;padding:2px;transition:transform .2s ease;}
+  [data-theme="dark"] .rail-chevron{color:rgba(246,236,214,.5);}
   .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
 
-  .rail-entries{position:relative;padding-left:20px;margin-top:10px;overflow:hidden;transition:max-height .35s ease;}
+  .rail-entries{position:relative;padding-left:26px;margin-top:12px;overflow:hidden;transition:max-height .35s ease;}
   .rail-chapter.collapsed .rail-entries{max-height:0 !important;margin-top:0;}
-  .rail-track-line{position:absolute;left:4px;top:4px;bottom:4px;width:1px;background:rgba(255,255,255,.16);}
-  .rail-progress-fill{position:absolute;left:4px;top:4px;width:1px;height:0%;background:var(--accent-live);transition:height .12s linear, background-color .5s ease;}
+  /* the wavy "riverbed" line and its accent-colored "water" fill share one tile geometry
+     (a gentle S-curve) so they align perfectly; both drift slowly downward for a free-flowing feel */
+  .rail-track-line{
+    position:absolute;left:1px;top:4px;bottom:4px;width:13px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='52'%3E%3Cpath d='M6.5 0 C11 9 2 17 6.5 26 C11 35 2 43 6.5 52' fill='none' stroke='%23c9b489' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:repeat-y;animation:railFlow 3.6s linear infinite;
+  }
+  [data-theme="dark"] .rail-track-line{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='52'%3E%3Cpath d='M6.5 0 C11 9 2 17 6.5 26 C11 35 2 43 6.5 52' fill='none' stroke='%23524a4e' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
+  .rail-progress-fill{
+    position:absolute;left:1px;top:4px;width:13px;height:0%;background:var(--accent-live);
+    transition:height .12s linear, background-color .5s ease;
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='52'%3E%3Cpath d='M6.5 0 C11 9 2 17 6.5 26 C11 35 2 43 6.5 52' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='52'%3E%3Cpath d='M6.5 0 C11 9 2 17 6.5 26 C11 35 2 43 6.5 52' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+    -webkit-mask-repeat:repeat-y;mask-repeat:repeat-y;
+    animation:railFlow 3.6s linear infinite;
+  }
+  @keyframes railFlow{from{background-position-y:0; -webkit-mask-position-y:0; mask-position-y:0;} to{background-position-y:52px; -webkit-mask-position-y:52px; mask-position-y:52px;}}
   .rail-item{position:relative;padding:0 0 14px;cursor:pointer;}
   .rail-item:last-child{padding-bottom:2px;}
-  .rail-dot{position:absolute;left:-20px;top:2px;width:9px;height:9px;border-radius:50%;background:rgba(20,18,16,.8);border:1px solid rgba(255,255,255,.35);transition:all .2s ease;}
-  .rail-year{font-family:var(--font-main);font-weight:700;font-size:13px;color:rgba(238,239,250,.55);transition:color .2s ease;line-height:1.2;}
-  .rail-label{font-family:var(--font-body);font-size:10.5px;color:rgba(238,239,250,.42);margin-top:1px;transition:color .2s ease;}
-  .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);box-shadow:0 0 0 4px rgba(255,255,255,.1);}
-  .rail-item.active .rail-year{color:#fff;font-weight:600;}
-  .rail-item.active .rail-label{color:rgba(238,239,250,.8);}
-  .rail-item:hover .rail-year{color:var(--accent-2);}
+  .rail-dot{position:absolute;left:-24px;top:1px;width:11px;height:11px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
+    background:rgba(246,236,214,.95);border:1.5px solid rgba(65,60,63,.4);transition:all .2s ease;box-shadow:0 1px 2px rgba(65,50,20,.25);}
+  [data-theme="dark"] .rail-dot{background:rgba(28,24,18,.9);border-color:rgba(246,236,214,.4);}
+  .rail-year{font-family:var(--font-main);font-weight:700;font-size:13px;color:rgba(65,60,63,.55);transition:color .2s ease;line-height:1.2;}
+  .rail-label{font-family:var(--font-body);font-size:10.5px;color:rgba(65,60,63,.45);margin-top:1px;transition:color .2s ease;}
+  [data-theme="dark"] .rail-year{color:rgba(246,236,214,.55);}
+  [data-theme="dark"] .rail-label{color:rgba(246,236,214,.42);}
+  .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);box-shadow:0 0 0 4px rgba(13,191,219,.18), 0 1px 3px rgba(65,50,20,.3);}
+  .rail-item.active .rail-year{color:var(--ink);font-weight:600;}
+  .rail-item.active .rail-label{color:rgba(65,60,63,.75);}
+  [data-theme="dark"] .rail-item.active .rail-year{color:#fff;}
+  [data-theme="dark"] .rail-item.active .rail-label{color:rgba(246,236,214,.8);}
+  .rail-item:hover .rail-year{color:var(--accent);}
 
   .rail-add-entry{margin-left:0;margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;
-    background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(238,239,250,.75);padding:5px 10px;border-radius:20px;}
+    background:none;border:1px dashed rgba(65,60,63,.32);color:rgba(65,60,63,.75);padding:5px 10px;border-radius:20px;}
   .rail-add-chapter{margin-top:4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
-    background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(238,239,250,.75);padding:8px 14px;border-radius:20px;width:100%;}
+    background:none;border:1px dashed rgba(65,60,63,.32);color:rgba(65,60,63,.75);padding:8px 14px;border-radius:20px;width:100%;}
+  [data-theme="dark"] .rail-add-entry, [data-theme="dark"] .rail-add-chapter{border-color:rgba(246,236,214,.3);color:rgba(246,236,214,.75);}
+
+  /* ---------- "you are here" popup: pops up fresh each time the active chapter/entry changes ---------- */
+  .position-popup{
+    position:fixed;left:24px;bottom:26px;z-index:56;
+    display:flex;align-items:center;gap:10px;
+    background:rgba(246,236,214,.92);color:var(--ink);
+    border:1px solid rgba(65,60,63,.18);border-radius:30px;
+    padding:9px 18px 9px 12px;box-shadow:0 14px 34px rgba(65,50,20,.22);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    opacity:0;transform:translateY(10px) scale(.94);
+    transition:opacity .3s ease, transform .3s ease;
+    pointer-events:none;max-width:min(80vw, 360px);
+  }
+  .position-popup.visible{opacity:1;transform:translateY(0) scale(1);}
+  .position-popup.pop{animation:popupPop .5s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes popupPop{0%{transform:translateY(6px) scale(.9);}55%{transform:translateY(-3px) scale(1.05);}100%{transform:translateY(0) scale(1);}}
+  [data-theme="dark"] .position-popup{background:rgba(28,24,18,.9);color:#f6ecdc;border-color:rgba(246,236,214,.16);}
+  .position-popup-drop{font-size:16px;line-height:1;animation:dropBob 2.4s ease-in-out infinite;}
+  @keyframes dropBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+  .position-popup-text{display:flex;flex-direction:column;gap:1px;min-width:0;}
+  .position-popup-chapter{font-family:var(--font-body);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700;}
+  .position-popup-entry{font-family:var(--font-main);font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  @media (max-width: 860px){
+    .position-popup{left:14px;right:70px;bottom:16px;max-width:none;padding:8px 14px 8px 10px;}
+    .position-popup-entry{font-size:12.5px;}
+  }
 
   @media (max-width: 860px){
     .rail{width:56px;border-left:none;}
@@ -344,6 +411,14 @@
       <button class="rail-add-chapter edit-only" id="railAddChapter" type="button">+ Add chapter</button>
     </div>
   </nav>
+
+  <div class="position-popup" id="positionPopup">
+    <span class="position-popup-drop">💧</span>
+    <span class="position-popup-text">
+      <span class="position-popup-chapter" id="positionPopupChapter"></span>
+      <span class="position-popup-entry" id="positionPopupEntry"></span>
+    </span>
+  </div>
 
   <section class="hero" id="hero">
     <div class="media-fill" id="heroMediaWrap" data-media-scope="hero"></div>
@@ -1087,8 +1162,9 @@
   function updateScroll(){
     updateProgressBar();
     updateChapterProgress();
-    updateActiveEntry();
-    updateActiveChapterAccent();
+    const activeEntryId = updateActiveEntry();
+    const activeChapterId = updateActiveChapterAccent();
+    updatePositionPopup(activeChapterId, activeEntryId);
     updateRailSync();
     slideMotion();
     blockMediaMotion();
@@ -1126,6 +1202,7 @@
     railChapters.querySelectorAll(".rail-item").forEach(item => {
       item.classList.toggle("active", item.dataset.id === activeId);
     });
+    return activeId;
   }
 
   function updateActiveChapterAccent(){
@@ -1140,6 +1217,30 @@
     railChapters.querySelectorAll(".rail-chapter").forEach(el => {
       el.classList.toggle("active", el.dataset.chapterId === activeChapterId);
     });
+    return activeChapterId;
+  }
+
+  // a small "you are here" chip that pops up fresh whenever the active chapter/entry changes,
+  // then stays put as a quiet reference until the next change
+  let lastPopupKey = null;
+  let popupHideTimer = null;
+  function updatePositionPopup(activeChapterId, activeEntryId){
+    const chapter = getChapter(activeChapterId);
+    const entry = activeEntryId ? getEntry(activeChapterId, activeEntryId) : null;
+    if(!chapter) return;
+    const key = activeChapterId + "|" + (activeEntryId || "");
+    const popup = $("positionPopup");
+    $("positionPopupChapter").textContent = chapter.title;
+    $("positionPopupEntry").textContent = entry ? `${entry.year} — ${entryLabel(entry)}` : "Introduction";
+    popup.classList.add("visible");
+    if(key !== lastPopupKey){
+      lastPopupKey = key;
+      popup.classList.remove("pop");
+      void popup.offsetWidth; // restart the pop animation
+      popup.classList.add("pop");
+    }
+    clearTimeout(popupHideTimer);
+    popupHideTimer = setTimeout(() => popup.classList.remove("visible"), 2600);
   }
 
   /* every hero / chapter cover / entry is a full-bleed "slide" whose background media

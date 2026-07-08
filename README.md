@@ -35,16 +35,21 @@ Open `index.html` directly in a browser — no build step or server required.
   alignment per block) and **inline media blocks** — additional images/GIFs/videos dropped
   into the same text flow as smaller inset cards (S/M/L/Full width, left/center/right
   aligned, with their own caption), distinct from the entry's full-bleed background.
-- The timeline is a full-height panel spanning the entire right edge of the screen (not a
-  small floating box) — chapters as collapsible groups, each with its own progress line that
-  fills as you scroll through it. Its own content pans vertically in lockstep with the page's
-  scroll position, so the timeline visibly scrolls together with the sections rather than
-  sitting static; clicking any chapter/entry still jumps the main scroll straight to it. The
-  active chapter's accent color washes across the panel, the top progress bar, and pull-quote
-  borders as you scroll.
+- The timeline is a full-height, cream/beige glass panel spanning the entire right edge of
+  the screen, styled like a river drawn on paper — a wavy, gently flowing line (animated,
+  continuously drifting) connects water-droplet-shaped markers instead of a straight rail.
+  Its content pans vertically in lockstep with the page's scroll position, so the timeline
+  visibly scrolls together with the sections rather than sitting static; clicking any
+  chapter/entry still jumps the main scroll straight to it. The active chapter's accent color
+  washes across the panel, the top progress bar, and pull-quote borders as you scroll.
+- A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
+  active chapter/entry changes as you scroll, then fades out after a couple of seconds of
+  no further scrolling.
 - Every media layer moves with scroll: the full-bleed background of each slide continuously
   zooms/pans (plus a cursor-tilt effect), and the smaller inline media-overlay images/GIFs
   inside the text flow get their own independent, subtler scroll-linked drift.
+- The overall UI chrome (top bar, timeline panel, position popup) uses a cream/beige palette;
+  the brand's navy is kept for the dark theme toggle instead.
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
