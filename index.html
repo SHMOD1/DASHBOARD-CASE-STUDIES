@@ -118,10 +118,8 @@
   .media-fill:hover .media-overlay{opacity:1;}
 
   /* ---------- full-bleed story slides (hero / chapter cover / entry share this) ---------- */
-  html{scroll-snap-type:y proximity;}
   .hero, .chapter-cover, .entry{
     position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
-    scroll-snap-align:start;
   }
   /* dark at both the top and bottom edges so consecutive full-bleed slides blend at the seam
      instead of cutting hard from one photo straight into the next */
@@ -141,17 +139,20 @@
     animation:bob 2.2s ease-in-out infinite;}
   @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
 
-  /* ---------- floating edge timeline (replaces the old sidebar) ---------- */
+  /* ---------- full-screen timeline rail: a fixed edge panel spanning the whole viewport
+     height whose inner content is panned by JS in lockstep with the page's own scroll
+     position, so the timeline visibly scrolls together with the sections instead of sitting
+     static — while a click still jumps the main scroll straight to that chapter/entry. ---------- */
   .rail{
-    position:fixed;top:50%;right:20px;transform:translateY(-50%);z-index:55;
-    width:236px;max-height:78vh;overflow-y:auto;overflow-x:visible;
-    background:rgba(14,15,42,.62);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);
-    border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 15px;
-    box-shadow:0 24px 60px rgba(0,0,0,.35);color:#f2f1fa;scrollbar-width:thin;
+    position:fixed;top:49px;right:0;bottom:0;z-index:55;
+    width:300px;overflow:hidden;
+    background:linear-gradient(180deg, rgba(10,11,30,.72) 0%, rgba(10,11,30,.55) 45%, rgba(10,11,30,.72) 100%);
+    backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);
+    border-left:1px solid rgba(255,255,255,.14);
+    box-shadow:-24px 0 60px rgba(0,0,0,.3);color:#f2f1fa;
   }
-  .rail::-webkit-scrollbar{width:5px;}
-  .rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:3px;}
-  .rail-title{font-family:var(--font-body);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(238,239,250,.55);margin:0 0 14px;}
+  .rail-inner{position:absolute;left:0;right:0;top:0;padding:28px 22px 60vh;will-change:transform;}
+  .rail-title{font-family:var(--font-body);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(238,239,250,.55);margin:0 0 16px;}
 
   .rail-chapter{margin-bottom:18px;}
   .rail-chapter-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:2px 0;}
@@ -181,7 +182,8 @@
     background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(238,239,250,.75);padding:8px 14px;border-radius:20px;width:100%;}
 
   @media (max-width: 860px){
-    .rail{width:auto;max-width:44px;padding:10px 8px;right:10px;border-radius:22px;}
+    .rail{width:56px;border-left:none;}
+    .rail-inner{padding:20px 10px 60vh;}
     .rail-title, .rail-chapter-title, .rail-year, .rail-label, .rail-add-entry, .rail-add-chapter{display:none;}
     .rail-chapter{margin-bottom:10px;}
     .rail-entries{padding-left:0;margin-top:6px;}
@@ -254,8 +256,6 @@
   .block-media-align--right{margin-left:auto;}
   .block-media{position:relative;border-radius:8px;overflow:hidden;background:var(--bg-alt);aspect-ratio:16/9;
     box-shadow:0 20px 45px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.1);}
-  .block-media .media-el{transition:transform .4s ease;}
-  .block-media:hover .media-el{transform:scale(1.05);}
   .block-media-caption{font-family:var(--font-body);font-size:11.5px;color:rgba(240,241,250,.65);margin-top:8px;font-style:italic;}
 
   .add-block-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
@@ -338,9 +338,11 @@
   </div>
 
   <nav class="rail" id="rail">
-    <div class="rail-title">Chapters &amp; Timelines</div>
-    <div id="railChapters"></div>
-    <button class="rail-add-chapter edit-only" id="railAddChapter" type="button">+ Add chapter</button>
+    <div class="rail-inner" id="railInner">
+      <div class="rail-title">Chapters &amp; Timelines</div>
+      <div id="railChapters"></div>
+      <button class="rail-add-chapter edit-only" id="railAddChapter" type="button">+ Add chapter</button>
+    </div>
   </nav>
 
   <section class="hero" id="hero">
@@ -413,7 +415,7 @@
 <script>
 (() => {
   "use strict";
-  const STORAGE_KEY = "storymap-dashboard-state-v6";
+  const STORAGE_KEY = "storymap-dashboard-state-v7";
   const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
@@ -434,6 +436,30 @@
       <circle cx="800" cy="400" r="120" fill="rgba(255,255,255,0.07)"/>
       <text x="800" y="440" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="160" fill="rgba(255,255,255,0.55)" text-anchor="middle">${initial}</text>
       <text x="800" y="780" font-family="'Open Sans', Arial, sans-serif" font-size="26" letter-spacing="5" fill="rgba(255,255,255,0.5)" text-anchor="middle">SAMPLE IMAGE</text>
+      </svg>`;
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+  // a genuinely looping/animated placeholder (SMIL <animate>) so a "GIF" demo actually
+  // shows motion when previewing the interface, without needing a real GIF file or network
+  function animatedPlaceholder(seed, label){
+    const p = PALETTES[Math.abs(seed) % PALETTES.length];
+    const initial = (label || "?").trim().charAt(0).toUpperCase() || "?";
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900">
+      <defs><linearGradient id="g${seed}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${p[0]}"/><stop offset="100%" stop-color="${p[1]}"/>
+      </linearGradient></defs>
+      <rect width="1600" height="900" fill="url(#g${seed})"/>
+      <circle cx="800" cy="450" r="120" fill="rgba(255,255,255,0.12)">
+        <animate attributeName="r" values="90;170;90" dur="3.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.16;0.05;0.16" dur="3.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="800" cy="450" r="60" fill="rgba(255,255,255,0.18)">
+        <animate attributeName="cy" values="450;390;450" dur="2.4s" repeatCount="indefinite"/>
+      </circle>
+      <text x="800" y="465" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="120" fill="rgba(255,255,255,0.55)" text-anchor="middle">${initial}
+        <animate attributeName="opacity" values="0.55;0.85;0.55" dur="2.4s" repeatCount="indefinite"/>
+      </text>
+      <text x="800" y="780" font-family="'Open Sans', Arial, sans-serif" font-size="24" letter-spacing="5" fill="rgba(255,255,255,0.55)" text-anchor="middle">ANIMATED GIF DEMO</text>
       </svg>`;
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
@@ -512,9 +538,14 @@
             },
             {
               id:"e2", year:"1985", title:"Encroachment Accelerates",
-              media:{ kind:"gif", src: placeholder(32,"85"), embed:false },
-              caption:"Demo GIF slot — swap in an animated GIF via Change Media.",
-              blocks:[ newBlock("body") ]
+              media:{ kind:"gif", src: animatedPlaceholder(32,"85"), embed:false },
+              caption:"A full-bleed animated GIF background — swap in your own via Change Media.",
+              blocks:[ { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left",
+                  html:"Wetlands become real estate" },
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>As the city grows outward, lakebeds and buffer zones are drained, filled, and built over. What were once flood-absorbing wetlands become bus depots, stadiums, and housing layouts.</p><p>By the end of the decade, more than half of the historic tank network has been lost or fragmented beyond repair.</p>" },
+                { ...newMediaBlock({ kind:"image", src: placeholder(43,"3"), embed:false }), size:"M", align:"right",
+                  caption:"A before/after comparison — a good candidate for a real photo pair." } ]
             }
           ]
         },
@@ -526,7 +557,12 @@
               id:"e3", year:"1995", title:"The Rise of the Borewell",
               media:{ kind:"image", src: placeholder(33,"95"), embed:false },
               caption:"",
-              blocks:[ newBlock("body") ]
+              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>With surface water sources shrinking, households and apartment blocks turn underground, drilling private borewells to make up the shortfall. Within a decade, tens of thousands are in operation across the city, mostly unregulated and unmetered.</p>" },
+                { ...newMediaBlock({ kind:"image", src: placeholder(44,"4"), embed:false }), size:"S", align:"left",
+                  caption:"A drilling rig — a small, left-aligned inline overlay." },
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>Each new borewell is a private solution to a shared problem — and each one lowers the water table a little further for every neighbor drawing from the same aquifer.</p>" } ]
             },
             {
               id:"e4", year:"2012", title:"A Falling Water Table",
@@ -534,7 +570,8 @@
               caption:"Video slot — add a link or upload a clip via Change Media.",
               blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
                 html:"“Every year the drill goes a little deeper, and the water comes back a little less.”" },
-                newBlock("body") ]
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>Well depths that once reached water at 150 feet now go past 1,000. Tanker trucks become a daily fixture in neighborhoods where the pumps have run dry, and water itself turns into a line item in every household budget.</p>" } ]
             }
           ]
         },
@@ -546,15 +583,23 @@
               id:"e5", year:"2003", title:"A Rooftop Revolution",
               media:{ kind:"image", src: placeholder(34,"03"), embed:false },
               caption:"",
-              blocks:[ newBlock("subheading"), newBlock("body"),
-                { ...newMediaBlock({ kind:"gif", src: placeholder(42,"2"), embed:false }), size:"S", align:"right",
-                  caption:"A small GIF overlay, right-aligned — size and alignment are per-block." } ]
+              blocks:[ { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left",
+                  html:"Every roof becomes a catchment" },
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>A new building code requires rainwater harvesting structures on every plot above a certain size. Roofs, once purely functional, are re-engineered as the first stage of a recharge system that feeds storage tanks and percolation pits below.</p>" },
+                { ...newMediaBlock({ kind:"gif", src: animatedPlaceholder(42,"2"), embed:false }), size:"S", align:"right",
+                  caption:"A small animated GIF overlay, right-aligned — size and alignment are per-block." } ]
             },
             {
               id:"e6", year:"2018", title:"Recharge Wells Return",
               media:{ kind:"image", src: placeholder(35,"18"), embed:false },
               caption:"",
-              blocks:[ newBlock("body"), newBlock("caption") ]
+              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>Old, disused open wells — once filled in or forgotten — are cleaned out and reopened as recharge points. Community groups map thousands of them across the city, turning neglected infrastructure back into working water assets.</p>" },
+                { ...newMediaBlock({ kind:"image", src: placeholder(45,"5"), embed:false }), size:"L", align:"center",
+                  caption:"A large, center-aligned overlay — good for a hero-style inline photo." },
+                { id:newId(), type:"caption", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"Source: replace with your own citation or data credit." } ]
             }
           ]
         },
@@ -566,13 +611,21 @@
               id:"e7", year:"2016", title:"Citizens Reclaim a Lake",
               media:{ kind:"image", src: placeholder(36,"16"), embed:false },
               caption:"",
-              blocks:[ newBlock("body") ]
+              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>A residents' association adopts a neglected lake choked with weeds and waste, organizing weekend clean-up drives and lobbying the city for de-silting and fencing. Within two years, migratory birds return for the first time in a generation.</p>" },
+                { ...newMediaBlock({ kind:"image", src: placeholder(46,"6"), embed:false }), size:"M", align:"left",
+                  caption:"Volunteers at a clean-up drive." } ]
             },
             {
               id:"e8", year:"2024", title:"A Living Case Study",
               media:{ kind:"image", src: placeholder(37,"24"), embed:false },
               caption:"",
-              blocks:[ newBlock("body") ]
+              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>Today the model has spread to dozens of lakes across the city, each with its own citizen stewardship group, monitoring water quality and pushing back against fresh encroachment.</p>" },
+                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
+                  html:"“The lake didn't need an expert. It needed a neighborhood that refused to look away.”" },
+                { ...newMediaBlock({ kind:"image", src: placeholder(47,"7"), embed:false }), size:"Full", align:"center",
+                  caption:"A full-width closing image — this template is yours to fill with a real case study." } ]
             }
           ]
         }
@@ -652,7 +705,7 @@
   }
 
   /* ---------------- rendering ---------------- */
-  const heroWrap = $("heroMediaWrap"), railChapters = $("railChapters"), mainEl = $("main");
+  const heroWrap = $("heroMediaWrap"), railChapters = $("railChapters"), mainEl = $("main"), railEl = $("rail"), railInner = $("railInner");
 
   function render(){
     renderHeroText();
@@ -1036,7 +1089,9 @@
     updateChapterProgress();
     updateActiveEntry();
     updateActiveChapterAccent();
+    updateRailSync();
     slideMotion();
+    blockMediaMotion();
   }
 
   function updateProgressBar(){
@@ -1125,6 +1180,33 @@
       slide.dataset.progress = progress.toFixed(3);
       applySlideTransform(slide, progress);
     });
+  }
+
+  // inline media-overlay blocks get their own, smaller-scale scroll-linked drift so they
+  // also feel alive while scrolling, independent of the full-bleed background behind them
+  function blockMediaMotion(){
+    if(reduceMotion) return;
+    document.querySelectorAll(".block-media").forEach(el => {
+      const r = el.getBoundingClientRect();
+      if(r.bottom < -200 || r.top > window.innerHeight + 200) return;
+      const media = el.querySelector(".media-el");
+      if(!media) return;
+      const progress = slideProgress(r);
+      const pan = (progress - 0.5) * 34;
+      const scale = 1.04 + progress * 0.06;
+      media.style.transform = `scale(${scale.toFixed(3)}) translateY(${pan.toFixed(1)}px)`;
+    });
+  }
+
+  // pans the timeline panel's own content in lockstep with overall page scroll progress,
+  // so the timeline visibly scrolls together with the sections rather than sitting static
+  function updateRailSync(){
+    const h = document.documentElement;
+    const scrollTop = h.scrollTop || document.body.scrollTop;
+    const maxScroll = (h.scrollHeight - h.clientHeight) || 1;
+    const progress = Math.min(Math.max(scrollTop / maxScroll, 0), 1);
+    const range = Math.max(railInner.scrollHeight - railEl.clientHeight, 0);
+    railInner.style.transform = `translateY(${(-progress * range).toFixed(1)}px)`;
   }
 
   let ticking = false;
