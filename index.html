@@ -4,43 +4,59 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Editable Storymap Dashboard</title>
+<!-- Brand body font (Open Sans, per brand guidelines). Requires a live connection to fonts.googleapis.com —
+     this <link> is a no-op in network-sandboxed previews (falls back to system sans) but works normally
+     once this file is opened in a regular browser. "Intercom", the brand heading font, has no public CDN
+     release, so it's referenced by name in CSS for anyone with it installed/licensed locally. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Exact brand palette from the client's "Campaign Branding Guidelines" deck.
+     Primary: 0DBFDB (cyan), 005BA6 (blue), 413C3F (charcoal — used for headline highlights).
+     Secondary: 134370 (navy), 61C9E1 (sky), FFDE17 (yellow), 8B5E3C (brown), 53B94E (green)
+       — background fills, accents, borders, design elements.
+     Tertiary: D5CEC6, 807973, F0E7DD, F8F3EF, F5F0E8 — neutral backgrounds. */
   :root{
-    --bg:#f5f6f6;
-    --bg-alt:#e7e9f0;
-    --paper:#fcfcfa;
-    --ink:#0e0f1a;
-    --ink-soft:#3d3f56;
-    --ink-faint:#82849c;
-    --accent:#3d4bd6;
-    --accent-live:#3d4bd6;
-    --accent-2:#f2de2c;
-    --line:#d7d9ea;
-    --line-strong:#b3b6d4;
-    --chrome-bg:#12143a;
-    --chrome-ink:#f2f1e8;
+    --bg:#f8f3ef;
+    --bg-alt:#f0e7dd;
+    --paper:#f8f3ef;
+    --ink:#413c3f;
+    --ink-soft:#807973;
+    --ink-faint:#a39d97;
+    --accent:#0dbfdb;
+    --accent-live:#0dbfdb;
+    --accent-2:#ffde17;
+    --line:#d5cec6;
+    --line-strong:#b3a99c;
+    --chrome-bg:#134370;
+    --chrome-ink:#f8f3ef;
     --radius:3px;
-    --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
-    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* brand type: "Intercom" (headings/sub-headings/quotes) has no free public release, so it's
+       named first for anyone with it licensed/installed locally, then falls back to Poppins — the
+       closest freely-loadable match to its bold grotesque display weight. "Open Sans" (body/captions)
+       is confirmed free and loaded from Google Fonts below. */
+    --font-main: 'Intercom', 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   [data-theme="dark"]{
-    --bg:#0f1024; --bg-alt:#181a3a; --paper:#141530; --ink:#f0f0f6;
-    --ink-soft:#c2c3dc; --ink-faint:#8688a8; --accent:#7d87ff; --accent-live:#7d87ff;
-    --accent-2:#f2de2c; --line:#2b2c56; --line-strong:#3f4178;
-    --chrome-bg:#0a0b22; --chrome-ink:#f2f1e8;
+    --bg:#221f22; --bg-alt:#2b272a; --paper:#262226; --ink:#f8f3ef;
+    --ink-soft:#d5cec6; --ink-faint:#968f89; --accent:#35d6ef; --accent-live:#35d6ef;
+    --accent-2:#ffde17; --line:#3a3438; --line-strong:#524a4e;
+    --chrome-bg:#0c2038; --chrome-ink:#f8f3ef;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#0f1024; --bg-alt:#181a3a; --paper:#141530; --ink:#f0f0f6;
-      --ink-soft:#c2c3dc; --ink-faint:#8688a8; --accent:#7d87ff; --accent-live:#7d87ff;
-      --accent-2:#f2de2c; --line:#2b2c56; --line-strong:#3f4178;
-      --chrome-bg:#0a0b22; --chrome-ink:#f2f1e8;
+      --bg:#221f22; --bg-alt:#2b272a; --paper:#262226; --ink:#f8f3ef;
+      --ink-soft:#d5cec6; --ink-faint:#968f89; --accent:#35d6ef; --accent-live:#35d6ef;
+      --accent-2:#ffde17; --line:#3a3438; --line-strong:#524a4e;
+      --chrome-bg:#0c2038; --chrome-ink:#f8f3ef;
     }
   }
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased;}
   img,video{max-width:100%;display:block;}
   button{font-family:inherit;cursor:pointer;}
   select,input[type=text]{font-family:inherit;}
@@ -65,7 +81,7 @@
     transition:background .15s, border-color .15s;
   }
   .chrome button:hover, .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
-  .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#12123a;font-weight:700;}
+  .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#241f13;font-weight:700;}
   .chrome button.primary.on{background:#3f7d5c;border-color:#3f7d5c;color:#eafff1;}
   .chrome-hint{font-size:10.5px;color:var(--ink-faint);opacity:.7;display:none;}
   body.edit-on .chrome-hint{display:inline;}
@@ -116,11 +132,11 @@
     padding:0 7% 9vh;color:#f3f3fa;
   }
 
-  .hero-eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#f2de2c;margin-bottom:14px;font-weight:700;}
-  .hero-name{font-family:var(--serif);font-size:clamp(38px,6.4vw,78px);line-height:1.02;margin:0 0 10px;font-weight:400;}
-  .hero-role{font-size:clamp(15px,2vw,19px);color:#d6d9f0;font-weight:400;margin-bottom:6px;}
-  .hero-dates{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9aa0d9;margin-bottom:22px;}
-  .hero-intro{max-width:640px;font-family:var(--serif);font-size:17px;line-height:1.6;color:#eceefa;}
+  .hero-eyebrow{font-family:var(--font-body);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#f2de2c;margin-bottom:14px;font-weight:700;}
+  .hero-name{font-family:var(--font-main);font-size:clamp(36px,6vw,72px);line-height:1.04;margin:0 0 10px;font-weight:800;letter-spacing:-.01em;}
+  .hero-role{font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:#d6d9f0;font-weight:400;margin-bottom:6px;}
+  .hero-dates{font-family:var(--font-body);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9aa0d9;margin-bottom:22px;}
+  .hero-intro{max-width:640px;font-family:var(--font-body);font-size:17px;line-height:1.6;color:#eceefa;}
   .scroll-cue{margin-top:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c3c8f0;opacity:.85;
     animation:bob 2.2s ease-in-out infinite;}
   @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
@@ -135,12 +151,12 @@
   }
   .rail::-webkit-scrollbar{width:5px;}
   .rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:3px;}
-  .rail-title{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(238,239,250,.55);margin:0 0 14px;}
+  .rail-title{font-family:var(--font-body);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(238,239,250,.55);margin:0 0 14px;}
 
   .rail-chapter{margin-bottom:18px;}
   .rail-chapter-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:2px 0;}
   .rail-chapter-dot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;transition:background .5s ease;}
-  .rail-chapter-title{font-family:var(--serif);font-size:13.5px;font-weight:600;letter-spacing:.01em;flex:1;transition:color .4s ease;color:rgba(238,239,250,.85);}
+  .rail-chapter-title{font-family:var(--font-main);font-size:13px;font-weight:700;letter-spacing:.01em;flex:1;transition:color .4s ease;color:rgba(238,239,250,.85);}
   .rail-chapter.active .rail-chapter-title{color:#fff;}
   .rail-chevron{background:none;border:0;color:rgba(238,239,250,.5);font-size:10px;padding:2px;transition:transform .2s ease;}
   .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
@@ -152,8 +168,8 @@
   .rail-item{position:relative;padding:0 0 14px;cursor:pointer;}
   .rail-item:last-child{padding-bottom:2px;}
   .rail-dot{position:absolute;left:-20px;top:2px;width:9px;height:9px;border-radius:50%;background:rgba(20,18,16,.8);border:1px solid rgba(255,255,255,.35);transition:all .2s ease;}
-  .rail-year{font-family:var(--serif);font-size:13.5px;color:rgba(238,239,250,.55);transition:color .2s ease;line-height:1.2;}
-  .rail-label{font-size:10.5px;color:rgba(238,239,250,.42);margin-top:1px;transition:color .2s ease;}
+  .rail-year{font-family:var(--font-main);font-weight:700;font-size:13px;color:rgba(238,239,250,.55);transition:color .2s ease;line-height:1.2;}
+  .rail-label{font-family:var(--font-body);font-size:10.5px;color:rgba(238,239,250,.42);margin-top:1px;transition:color .2s ease;}
   .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);box-shadow:0 0 0 4px rgba(255,255,255,.1);}
   .rail-item.active .rail-year{color:#fff;font-weight:600;}
   .rail-item.active .rail-label{color:rgba(238,239,250,.8);}
@@ -178,9 +194,9 @@
   .main{display:flex;flex-direction:column;}
   .chapter{display:flex;flex-direction:column;}
 
-  .chapter-index{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin-bottom:10px;font-weight:600;}
-  .chapter-title{font-family:var(--serif);font-size:clamp(30px,4.6vw,52px);font-weight:400;margin:0 0 10px;line-height:1.06;}
-  .chapter-subtitle{font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;}
+  .chapter-index{font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin-bottom:10px;font-weight:700;}
+  .chapter-title{font-family:var(--font-main);font-size:clamp(28px,4.4vw,48px);font-weight:800;letter-spacing:-.01em;margin:0 0 10px;line-height:1.08;}
+  .chapter-subtitle{font-family:var(--font-body);font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;}
   .chapter-cover-content{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
   .chapter-cover.in-view .chapter-cover-content{opacity:1;transform:translateY(0);}
 
@@ -197,10 +213,10 @@
   .entry.in-view .entry-content{opacity:1;transform:translateY(0);}
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
-  .entry-year-tag{font-family:var(--serif);font-size:15px;color:var(--accent-2);letter-spacing:.04em;transition:color .5s ease;}
+  .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:var(--accent-2);letter-spacing:.04em;transition:color .5s ease;}
   .entry-rule{flex:1;height:1px;background:rgba(240,241,250,.3);max-width:120px;}
-  .entry-title{font-family:var(--serif);font-size:clamp(26px,3.6vw,44px);font-weight:400;margin:0 0 14px;line-height:1.14;max-width:820px;}
-  .entry-caption{font-size:12px;color:rgba(240,241,250,.65);margin:0 0 20px;font-style:italic;}
+  .entry-title{font-family:var(--font-main);font-size:clamp(24px,3.2vw,40px);font-weight:800;letter-spacing:-.01em;margin:0 0 14px;line-height:1.16;max-width:820px;}
+  .entry-caption{font-family:var(--font-body);font-size:12px;color:rgba(240,241,250,.65);margin:0 0 20px;font-style:italic;}
 
   /* ---------- text blocks ---------- */
   .entry-blocks{display:flex;flex-direction:column;}
@@ -220,10 +236,10 @@
   .block{max-width:66ch;color:#e6e7f5;}
   .block p{margin:0 0 12px;}
   .block p:last-child{margin-bottom:0;}
-  .block--heading{color:#fff;font-family:var(--serif);font-weight:400;line-height:1.2;max-width:none;}
-  .block--subheading{color:#f1f2fb;font-weight:600;line-height:1.4;letter-spacing:.01em;}
+  .block--heading{color:#fff;font-weight:800;letter-spacing:-.01em;line-height:1.2;max-width:none;}
+  .block--subheading{color:#f1f2fb;font-weight:700;line-height:1.4;letter-spacing:.01em;}
   .block--body{line-height:1.75;}
-  .block--quote{font-family:var(--serif);font-style:italic;line-height:1.5;border-left:3px solid var(--accent-2);
+  .block--quote{font-style:italic;font-weight:600;line-height:1.5;border-left:3px solid var(--accent-2);
     padding-left:18px;color:#fff;transition:border-color .5s ease;}
   .block--caption{color:rgba(240,241,250,.6);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
 
@@ -257,7 +273,7 @@
   .modal-backdrop.open{display:flex;}
   .modal{background:var(--paper);color:var(--ink);width:100%;max-width:460px;border-radius:8px;padding:22px;
     box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:88vh;overflow-y:auto;}
-  .modal h3{margin:0 0 4px;font-family:var(--serif);font-weight:400;font-size:19px;}
+  .modal h3{margin:0 0 4px;font-family:var(--font-main);font-weight:800;font-size:19px;}
   .modal p.hint{margin:0 0 16px;font-size:12px;color:var(--ink-faint);}
   .modal input[type=text]{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:4px;
     background:var(--bg);color:var(--ink);font-size:13px;margin-bottom:12px;}
@@ -381,13 +397,14 @@
 <script>
 (() => {
   "use strict";
-  const STORAGE_KEY = "storymap-dashboard-state-v4";
+  const STORAGE_KEY = "storymap-dashboard-state-v5";
   const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
+  // gradient pairs derived from the brand's primary/secondary palette (cyan, sky, yellow, green, brown, blue)
   const PALETTES = [
-    ["#161c4a","#3d4bd6"], ["#0d3733","#4fc7bb"], ["#3a3006","#f2c53d"],
-    ["#173a12","#6fb855"], ["#151544","#5a63e0"], ["#0b332e","#2fa89c"]
+    ["#0d2b38","#0dbfdb"], ["#0e2f3d","#61c9e1"], ["#332b06","#ffde17"],
+    ["#13301a","#53b94e"], ["#2b2013","#8b5e3c"], ["#0d2340","#005ba6"]
   ];
   function placeholder(seed, label){
     const p = PALETTES[Math.abs(seed) % PALETTES.length];
@@ -399,14 +416,18 @@
       <rect width="1600" height="900" fill="url(#g)"/>
       <circle cx="800" cy="400" r="200" fill="rgba(255,255,255,0.06)"/>
       <circle cx="800" cy="400" r="120" fill="rgba(255,255,255,0.07)"/>
-      <text x="800" y="440" font-family="Georgia, serif" font-size="160" fill="rgba(255,255,255,0.55)" text-anchor="middle">${initial}</text>
-      <text x="800" y="780" font-family="Helvetica, Arial, sans-serif" font-size="26" letter-spacing="5" fill="rgba(255,255,255,0.5)" text-anchor="middle">SAMPLE IMAGE</text>
+      <text x="800" y="440" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="160" fill="rgba(255,255,255,0.55)" text-anchor="middle">${initial}</text>
+      <text x="800" y="780" font-family="'Open Sans', Arial, sans-serif" font-size="26" letter-spacing="5" fill="rgba(255,255,255,0.5)" text-anchor="middle">SAMPLE IMAGE</text>
       </svg>`;
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
 
   /* ---------------- typography options ---------------- */
+  // brand fonts first (per the client's guidelines: "Intercom" for headings/sub-headings/quotes,
+  // "Open Sans" for body/captions), generic system options kept below for flexibility
   const FONT_OPTIONS = [
+    { label: "Intercom (Brand Heading)", value: "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif" },
+    { label: "Open Sans (Brand Body)", value: "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif" },
     { label: "Georgia (Serif)", value: "Georgia, 'Times New Roman', serif" },
     { label: "Palatino (Serif)", value: "'Palatino Linotype','Book Antiqua',Palatino,serif" },
     { label: "Times New Roman (Serif)", value: "'Times New Roman', Times, serif" },
@@ -426,11 +447,13 @@
   const BLOCK_TYPES = [
     { type:"heading", label:"Heading", font:FONT_OPTIONS[0].value, size:"M", text:"New Heading" },
     { type:"subheading", label:"Subheading", font:FONT_OPTIONS[0].value, size:"M", text:"A short supporting line" },
-    { type:"body", label:"Body text", font:FONT_OPTIONS[3].value, size:"M", text:"<p>Write your paragraph text here. Use the toolbar above to change its style, font, size, or alignment.</p>" },
-    { type:"quote", label:"Pull quote", font:FONT_OPTIONS[1].value, size:"M", text:"“Insert a memorable quote or pull-out line here.”" },
-    { type:"caption", label:"Caption", font:FONT_OPTIONS[3].value, size:"M", text:"Caption or source line" }
+    { type:"body", label:"Body text", font:FONT_OPTIONS[1].value, size:"M", text:"<p>Write your paragraph text here. Use the toolbar above to change its style, font, size, or alignment.</p>" },
+    { type:"quote", label:"Pull quote", font:FONT_OPTIONS[0].value, size:"M", text:"“Insert a memorable quote or pull-out line here.”" },
+    { type:"caption", label:"Caption", font:FONT_OPTIONS[1].value, size:"M", text:"Caption or source line" }
   ];
-  const ACCENTS = ["#3d4bd6","#4fc7bb","#f2c53d","#6fb855","#5a63e0","#2fa89c"];
+  // brand secondary palette (navy substituted with primary blue/cyan variants for on-photo legibility;
+  // exact navy 134370 is used for the app chrome bar instead, where a dark tone is wanted)
+  const ACCENTS = ["#0dbfdb","#61c9e1","#ffde17","#53b94e","#8b5e3c","#005ba6"];
 
   function blockMeta(type){ return BLOCK_TYPES.find(b => b.type === type) || BLOCK_TYPES[2]; }
   function newBlock(type){
@@ -459,7 +482,7 @@
               id:"e1", year:"1905", title:"A City Built on a Thousand Tanks",
               media:{ kind:"image", src: placeholder(31,"05"), embed:false },
               caption:"Sample caption — replace with your own source line.",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[3].value, size:"M", align:"left",
+              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
                 html:"<p>The city's water once moved through a chain of interconnected tanks and lakes, each overflow feeding the next down the valley. The system stored the monsoon for the dry months ahead.</p><p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>" } ]
             },
             {
@@ -484,7 +507,7 @@
               id:"e4", year:"2012", title:"A Falling Water Table",
               media:{ kind:"video", src:null, embed:false },
               caption:"Video slot — add a link or upload a clip via Change Media.",
-              blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+              blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
                 html:"“Every year the drill goes a little deeper, and the water comes back a little less.”" },
                 newBlock("body") ]
             }

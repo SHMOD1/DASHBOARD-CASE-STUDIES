@@ -9,11 +9,22 @@ filling the entire viewport edge-to-edge, continuously zooming and panning as yo
 static boxed layout. It ships with dummy sample content ("The Water City" — urban water
 resilience case studies in four chapters: vanishing lakes, groundwater depletion, rainwater
 harvesting, and community restoration) so you can reshape it for any other chapter-based
-case-study or narrative content. The color palette (indigo blue, bright yellow, teal, green)
-is pulled from a civic/workshop brand reference the user provided — swap the CSS variables
-and the `ACCENTS`/`PALETTES` arrays in the `<script>` to reskin it for a different brand.
+case-study or narrative content.
 
 Open `index.html` directly in a browser — no build step or server required.
+
+**Brand system (from the client's "Campaign Branding Guidelines" deck):**
+- Colors are the exact documented hex values — Primary: `#0DBFDB` (cyan), `#005BA6` (blue),
+  `#413C3F` (charcoal). Secondary: `#134370` (navy), `#61C9E1` (sky), `#FFDE17` (yellow),
+  `#8B5E3C` (brown), `#53B94E` (green). Tertiary neutrals: `#D5CEC6`, `#807973`, `#F0E7DD`,
+  `#F8F3EF`, `#F5F0E8`. All wired into the CSS `:root` variables, the `ACCENTS` array
+  (chapter colors), and the `PALETTES` array (placeholder-image gradients) in the `<script>`.
+- Fonts: **Intercom** for headings/sub-headings/quotes, **Open Sans** for body/captions, per
+  the deck's type-hierarchy spec. Open Sans is loaded from Google Fonts automatically. Intercom
+  has no public CDN release, so it's declared first in `--font-main` for anyone with it
+  installed/licensed locally, falling back to Poppins (closest free match to its bold
+  grotesque weight) — swap in a hosted `@font-face` for Intercom if you have the license files.
+  Both fonts are also the top two choices in every text block's font dropdown in Edit Mode.
 
 **Structure:**
 - A full-screen hero, then any number of **chapters** — each with its own full-bleed cover
