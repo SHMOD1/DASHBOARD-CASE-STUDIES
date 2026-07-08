@@ -6,35 +6,35 @@
 <title>Editable Storymap Dashboard</title>
 <style>
   :root{
-    --bg:#f6f2e8;
-    --bg-alt:#ece5d4;
-    --paper:#fbf8f1;
-    --ink:#20242b;
-    --ink-soft:#5b6270;
-    --ink-faint:#8a8f99;
-    --accent:#7c2a2a;
-    --accent-live:#7c2a2a;
-    --accent-2:#b3893a;
-    --line:#d9d0ba;
-    --line-strong:#b8ac8d;
-    --chrome-bg:#181a1f;
-    --chrome-ink:#e7e2d4;
+    --bg:#f5f6f6;
+    --bg-alt:#e7e9f0;
+    --paper:#fcfcfa;
+    --ink:#0e0f1a;
+    --ink-soft:#3d3f56;
+    --ink-faint:#82849c;
+    --accent:#3d4bd6;
+    --accent-live:#3d4bd6;
+    --accent-2:#f2de2c;
+    --line:#d7d9ea;
+    --line-strong:#b3b6d4;
+    --chrome-bg:#12143a;
+    --chrome-ink:#f2f1e8;
     --radius:3px;
     --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   [data-theme="dark"]{
-    --bg:#14151a; --bg-alt:#1b1d24; --paper:#1c1e25; --ink:#eae6da;
-    --ink-soft:#b3aea0; --ink-faint:#7d7a72; --accent:#d98a8a; --accent-live:#d98a8a;
-    --accent-2:#e0bd76; --line:#33323a; --line-strong:#4a4840;
-    --chrome-bg:#0b0c0f; --chrome-ink:#e7e2d4;
+    --bg:#0f1024; --bg-alt:#181a3a; --paper:#141530; --ink:#f0f0f6;
+    --ink-soft:#c2c3dc; --ink-faint:#8688a8; --accent:#7d87ff; --accent-live:#7d87ff;
+    --accent-2:#f2de2c; --line:#2b2c56; --line-strong:#3f4178;
+    --chrome-bg:#0a0b22; --chrome-ink:#f2f1e8;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#14151a; --bg-alt:#1b1d24; --paper:#1c1e25; --ink:#eae6da;
-      --ink-soft:#b3aea0; --ink-faint:#7d7a72; --accent:#d98a8a; --accent-live:#d98a8a;
-      --accent-2:#e0bd76; --line:#33323a; --line-strong:#4a4840;
-      --chrome-bg:#0b0c0f; --chrome-ink:#e7e2d4;
+      --bg:#0f1024; --bg-alt:#181a3a; --paper:#141530; --ink:#f0f0f6;
+      --ink-soft:#c2c3dc; --ink-faint:#8688a8; --accent:#7d87ff; --accent-live:#7d87ff;
+      --accent-2:#f2de2c; --line:#2b2c56; --line-strong:#3f4178;
+      --chrome-bg:#0a0b22; --chrome-ink:#f2f1e8;
     }
   }
 
@@ -65,7 +65,7 @@
     transition:background .15s, border-color .15s;
   }
   .chrome button:hover, .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
-  .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#1a1508;font-weight:700;}
+  .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#12123a;font-weight:700;}
   .chrome button.primary.on{background:#3f7d5c;border-color:#3f7d5c;color:#eafff1;}
   .chrome-hint{font-size:10.5px;color:var(--ink-faint);opacity:.7;display:none;}
   body.edit-on .chrome-hint{display:inline;}
@@ -102,22 +102,26 @@
   .media-fill:hover .media-overlay{opacity:1;}
 
   /* ---------- full-bleed story slides (hero / chapter cover / entry share this) ---------- */
+  html{scroll-snap-type:y proximity;}
   .hero, .chapter-cover, .entry{
     position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
+    scroll-snap-align:start;
   }
+  /* dark at both the top and bottom edges so consecutive full-bleed slides blend at the seam
+     instead of cutting hard from one photo straight into the next */
   .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(180deg, rgba(10,10,10,.05) 0%, rgba(10,10,10,.32) 48%, rgba(8,8,8,.9) 100%);}
+    background:linear-gradient(180deg, rgba(6,7,20,.62) 0%, rgba(6,7,20,.05) 16%, rgba(6,7,20,.05) 40%, rgba(6,7,20,.3) 55%, rgba(5,6,18,.92) 100%);}
   .hero-content, .chapter-cover-content, .entry-content{
     position:relative;z-index:2;width:100%;max-width:1320px;margin:0 auto;
-    padding:0 7% 9vh;color:#f4efe2;
+    padding:0 7% 9vh;color:#f3f3fa;
   }
 
-  .hero-eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#e2c07e;margin-bottom:14px;font-weight:600;}
+  .hero-eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#f2de2c;margin-bottom:14px;font-weight:700;}
   .hero-name{font-family:var(--serif);font-size:clamp(38px,6.4vw,78px);line-height:1.02;margin:0 0 10px;font-weight:400;}
-  .hero-role{font-size:clamp(15px,2vw,19px);color:#d9d2bf;font-weight:400;margin-bottom:6px;}
-  .hero-dates{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#a99f86;margin-bottom:22px;}
-  .hero-intro{max-width:640px;font-family:var(--serif);font-size:17px;line-height:1.6;color:#ece6d6;}
-  .scroll-cue{margin-top:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c9bfa4;opacity:.85;
+  .hero-role{font-size:clamp(15px,2vw,19px);color:#d6d9f0;font-weight:400;margin-bottom:6px;}
+  .hero-dates{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#9aa0d9;margin-bottom:22px;}
+  .hero-intro{max-width:640px;font-family:var(--serif);font-size:17px;line-height:1.6;color:#eceefa;}
+  .scroll-cue{margin-top:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c3c8f0;opacity:.85;
     animation:bob 2.2s ease-in-out infinite;}
   @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
 
@@ -125,20 +129,20 @@
   .rail{
     position:fixed;top:50%;right:20px;transform:translateY(-50%);z-index:55;
     width:236px;max-height:78vh;overflow-y:auto;overflow-x:visible;
-    background:rgba(16,15,14,.58);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);
+    background:rgba(14,15,42,.62);backdrop-filter:blur(12px) saturate(150%);-webkit-backdrop-filter:blur(12px) saturate(150%);
     border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 15px;
-    box-shadow:0 24px 60px rgba(0,0,0,.35);color:#f1ede2;scrollbar-width:thin;
+    box-shadow:0 24px 60px rgba(0,0,0,.35);color:#f2f1fa;scrollbar-width:thin;
   }
   .rail::-webkit-scrollbar{width:5px;}
   .rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:3px;}
-  .rail-title{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(241,237,226,.55);margin:0 0 14px;}
+  .rail-title{font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:rgba(238,239,250,.55);margin:0 0 14px;}
 
   .rail-chapter{margin-bottom:18px;}
   .rail-chapter-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:2px 0;}
   .rail-chapter-dot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;transition:background .5s ease;}
-  .rail-chapter-title{font-family:var(--serif);font-size:13.5px;font-weight:600;letter-spacing:.01em;flex:1;transition:color .4s ease;color:rgba(241,237,226,.85);}
+  .rail-chapter-title{font-family:var(--serif);font-size:13.5px;font-weight:600;letter-spacing:.01em;flex:1;transition:color .4s ease;color:rgba(238,239,250,.85);}
   .rail-chapter.active .rail-chapter-title{color:#fff;}
-  .rail-chevron{background:none;border:0;color:rgba(241,237,226,.5);font-size:10px;padding:2px;transition:transform .2s ease;}
+  .rail-chevron{background:none;border:0;color:rgba(238,239,250,.5);font-size:10px;padding:2px;transition:transform .2s ease;}
   .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
 
   .rail-entries{position:relative;padding-left:20px;margin-top:10px;overflow:hidden;transition:max-height .35s ease;}
@@ -148,17 +152,17 @@
   .rail-item{position:relative;padding:0 0 14px;cursor:pointer;}
   .rail-item:last-child{padding-bottom:2px;}
   .rail-dot{position:absolute;left:-20px;top:2px;width:9px;height:9px;border-radius:50%;background:rgba(20,18,16,.8);border:1px solid rgba(255,255,255,.35);transition:all .2s ease;}
-  .rail-year{font-family:var(--serif);font-size:13.5px;color:rgba(241,237,226,.55);transition:color .2s ease;line-height:1.2;}
-  .rail-label{font-size:10.5px;color:rgba(241,237,226,.42);margin-top:1px;transition:color .2s ease;}
+  .rail-year{font-family:var(--serif);font-size:13.5px;color:rgba(238,239,250,.55);transition:color .2s ease;line-height:1.2;}
+  .rail-label{font-size:10.5px;color:rgba(238,239,250,.42);margin-top:1px;transition:color .2s ease;}
   .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);box-shadow:0 0 0 4px rgba(255,255,255,.1);}
   .rail-item.active .rail-year{color:#fff;font-weight:600;}
-  .rail-item.active .rail-label{color:rgba(241,237,226,.8);}
+  .rail-item.active .rail-label{color:rgba(238,239,250,.8);}
   .rail-item:hover .rail-year{color:var(--accent-2);}
 
   .rail-add-entry{margin-left:0;margin-top:4px;font-size:10px;text-transform:uppercase;letter-spacing:.05em;
-    background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(241,237,226,.75);padding:5px 10px;border-radius:20px;}
+    background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(238,239,250,.75);padding:5px 10px;border-radius:20px;}
   .rail-add-chapter{margin-top:4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
-    background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(241,237,226,.75);padding:8px 14px;border-radius:20px;width:100%;}
+    background:none;border:1px dashed rgba(255,255,255,.3);color:rgba(238,239,250,.75);padding:8px 14px;border-radius:20px;width:100%;}
 
   @media (max-width: 860px){
     .rail{width:auto;max-width:44px;padding:10px 8px;right:10px;border-radius:22px;}
@@ -176,7 +180,7 @@
 
   .chapter-index{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin-bottom:10px;font-weight:600;}
   .chapter-title{font-family:var(--serif);font-size:clamp(30px,4.6vw,52px);font-weight:400;margin:0 0 10px;line-height:1.06;}
-  .chapter-subtitle{font-size:15.5px;color:#d9d2bf;max-width:600px;line-height:1.55;}
+  .chapter-subtitle{font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;}
   .chapter-cover-content{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
   .chapter-cover.in-view .chapter-cover-content{opacity:1;transform:translateY(0);}
 
@@ -194,9 +198,9 @@
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
   .entry-year-tag{font-family:var(--serif);font-size:15px;color:var(--accent-2);letter-spacing:.04em;transition:color .5s ease;}
-  .entry-rule{flex:1;height:1px;background:rgba(244,239,226,.3);max-width:120px;}
+  .entry-rule{flex:1;height:1px;background:rgba(240,241,250,.3);max-width:120px;}
   .entry-title{font-family:var(--serif);font-size:clamp(26px,3.6vw,44px);font-weight:400;margin:0 0 14px;line-height:1.14;max-width:820px;}
-  .entry-caption{font-size:12px;color:rgba(244,239,226,.65);margin:0 0 20px;font-style:italic;}
+  .entry-caption{font-size:12px;color:rgba(240,241,250,.65);margin:0 0 20px;font-style:italic;}
 
   /* ---------- text blocks ---------- */
   .entry-blocks{display:flex;flex-direction:column;}
@@ -213,15 +217,15 @@
   .block-toolbar button.danger:hover{border-color:#e37a7a;color:#ffbcbc;}
   .block-toolbar .spacer{flex:1;}
 
-  .block{max-width:66ch;color:#e4dfd0;}
+  .block{max-width:66ch;color:#e6e7f5;}
   .block p{margin:0 0 12px;}
   .block p:last-child{margin-bottom:0;}
   .block--heading{color:#fff;font-family:var(--serif);font-weight:400;line-height:1.2;max-width:none;}
-  .block--subheading{color:#f0ebdc;font-weight:600;line-height:1.4;letter-spacing:.01em;}
+  .block--subheading{color:#f1f2fb;font-weight:600;line-height:1.4;letter-spacing:.01em;}
   .block--body{line-height:1.75;}
   .block--quote{font-family:var(--serif);font-style:italic;line-height:1.5;border-left:3px solid var(--accent-2);
     padding-left:18px;color:#fff;transition:border-color .5s ease;}
-  .block--caption{color:rgba(244,239,226,.6);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
+  .block--caption{color:rgba(240,241,250,.6);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
 
   .add-block-btn{align-self:flex-start;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
     background:rgba(0,0,0,.4);border:1px dashed rgba(255,255,255,.35);color:#f1ede2;padding:6px 12px;border-radius:20px;margin-top:6px;}
@@ -377,13 +381,13 @@
 <script>
 (() => {
   "use strict";
-  const STORAGE_KEY = "storymap-dashboard-state-v3";
+  const STORAGE_KEY = "storymap-dashboard-state-v4";
   const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
   const PALETTES = [
-    ["#3a3226","#7c2a2a"], ["#22303a","#3a6e7a"], ["#2c2417","#b3893a"],
-    ["#26221f","#5b6a4f"], ["#241f2e","#6e4a8c"], ["#1f2a2c","#2f7d6b"]
+    ["#161c4a","#3d4bd6"], ["#0d3733","#4fc7bb"], ["#3a3006","#f2c53d"],
+    ["#173a12","#6fb855"], ["#151544","#5a63e0"], ["#0b332e","#2fa89c"]
   ];
   function placeholder(seed, label){
     const p = PALETTES[Math.abs(seed) % PALETTES.length];
@@ -426,7 +430,7 @@
     { type:"quote", label:"Pull quote", font:FONT_OPTIONS[1].value, size:"M", text:"“Insert a memorable quote or pull-out line here.”" },
     { type:"caption", label:"Caption", font:FONT_OPTIONS[3].value, size:"M", text:"Caption or source line" }
   ];
-  const ACCENTS = ["#c0645f","#5aa8b8","#d9a54c","#7fae6c","#9b7fc9","#c98a6a"];
+  const ACCENTS = ["#3d4bd6","#4fc7bb","#f2c53d","#6fb855","#5a63e0","#2fa89c"];
 
   function blockMeta(type){ return BLOCK_TYPES.find(b => b.type === type) || BLOCK_TYPES[2]; }
   function newBlock(type){
@@ -440,82 +444,82 @@
     return {
       meta: {
         eyebrow: "AN EDITABLE STORYMAP",
-        title: "Beyond Borders",
-        subtitle: "Notes on Leaving, Arriving, and Belonging",
+        title: "The Water City",
+        subtitle: "Case Studies in Urban Water Resilience",
         dates: "A Full-Screen Chapters & Timeline Template",
-        intro: "This page is a fully editable, full-bleed storymap template for chapter-based, scroll-driven stories — histories, product journeys, brand timelines, or personal profiles. Turn on Edit Mode above to make it yours.",
-        heroMedia: { kind:"image", src: placeholder(1,"B"), embed:false }
+        intro: "This page is a fully editable, full-bleed storymap template for water case studies — lakes, groundwater, rainwater harvesting, and community action across a growing city. Turn on Edit Mode above to make it yours.",
+        heroMedia: { kind:"image", src: placeholder(1,"W"), embed:false }
       },
       chapters: [
         {
-          id:"c1", title:"Departures", subtitle:"The first wave leaves home, 1945–1960", accent: ACCENTS[0],
+          id:"c1", title:"The Vanishing Lakes", subtitle:"Mapping a century of urban lake loss, 1900–1990", accent: ACCENTS[0],
           cover: { kind:"image", src: placeholder(21,"1"), embed:false },
           entries: [
             {
-              id:"e1", year:"1947", title:"Leaving the Homeland",
-              media:{ kind:"image", src: placeholder(31,"47"), embed:false },
+              id:"e1", year:"1905", title:"A City Built on a Thousand Tanks",
+              media:{ kind:"image", src: placeholder(31,"05"), embed:false },
               caption:"Sample caption — replace with your own source line.",
               blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[3].value, size:"M", align:"left",
-                html:"<p>A first generation departs by ship and by rail, carrying little more than documents and a change of clothes. Entire neighborhoods empty out within a single season.</p><p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>" } ]
+                html:"<p>The city's water once moved through a chain of interconnected tanks and lakes, each overflow feeding the next down the valley. The system stored the monsoon for the dry months ahead.</p><p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>" } ]
             },
             {
-              id:"e2", year:"1952", title:"Crossing the Atlantic",
-              media:{ kind:"gif", src: placeholder(32,"52"), embed:false },
+              id:"e2", year:"1985", title:"Encroachment Accelerates",
+              media:{ kind:"gif", src: placeholder(32,"85"), embed:false },
               caption:"Demo GIF slot — swap in an animated GIF via Change Media.",
               blocks:[ newBlock("body") ]
             }
           ]
         },
         {
-          id:"c2", title:"New Communities", subtitle:"Building homes abroad, 1960–1980", accent: ACCENTS[1],
+          id:"c2", title:"Groundwater Under Pressure", subtitle:"Borewells, depletion, and a city drinking itself dry, 1990–2015", accent: ACCENTS[1],
           cover: { kind:"image", src: placeholder(22,"2"), embed:false },
           entries: [
             {
-              id:"e3", year:"1965", title:"First Neighborhoods",
-              media:{ kind:"image", src: placeholder(33,"65"), embed:false },
+              id:"e3", year:"1995", title:"The Rise of the Borewell",
+              media:{ kind:"image", src: placeholder(33,"95"), embed:false },
               caption:"",
               blocks:[ newBlock("body") ]
             },
             {
-              id:"e4", year:"1978", title:"Faith and Fellowship",
+              id:"e4", year:"2012", title:"A Falling Water Table",
               media:{ kind:"video", src:null, embed:false },
               caption:"Video slot — add a link or upload a clip via Change Media.",
               blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                html:"“The hall we built with our own hands became the one place that still smelled like home.”" },
+                html:"“Every year the drill goes a little deeper, and the water comes back a little less.”" },
                 newBlock("body") ]
             }
           ]
         },
         {
-          id:"c3", title:"Culture Carried Forward", subtitle:"Language, food, and memory, 1980–2005", accent: ACCENTS[2],
+          id:"c3", title:"Harvesting the Monsoon", subtitle:"Rainwater harvesting and citizen-led recharge, 2000–2020", accent: ACCENTS[2],
           cover: { kind:"image", src: placeholder(23,"3"), embed:false },
           entries: [
             {
-              id:"e5", year:"1989", title:"A Festival Takes Root",
-              media:{ kind:"image", src: placeholder(34,"89"), embed:false },
+              id:"e5", year:"2003", title:"A Rooftop Revolution",
+              media:{ kind:"image", src: placeholder(34,"03"), embed:false },
               caption:"",
               blocks:[ newBlock("subheading"), newBlock("body") ]
             },
             {
-              id:"e6", year:"2001", title:"Passing on the Language",
-              media:{ kind:"image", src: placeholder(35,"01"), embed:false },
+              id:"e6", year:"2018", title:"Recharge Wells Return",
+              media:{ kind:"image", src: placeholder(35,"18"), embed:false },
               caption:"",
               blocks:[ newBlock("body"), newBlock("caption") ]
             }
           ]
         },
         {
-          id:"c4", title:"Voices Today", subtitle:"A living, ongoing story, 2005–present", accent: ACCENTS[3],
+          id:"c4", title:"Community Water Guardians", subtitle:"Neighborhoods restoring lakes and wetlands, 2015–present", accent: ACCENTS[3],
           cover: { kind:"image", src: placeholder(24,"4"), embed:false },
           entries: [
             {
-              id:"e7", year:"2016", title:"A New Generation",
+              id:"e7", year:"2016", title:"Citizens Reclaim a Lake",
               media:{ kind:"image", src: placeholder(36,"16"), embed:false },
               caption:"",
               blocks:[ newBlock("body") ]
             },
             {
-              id:"e8", year:"2024", title:"The Story Continues",
+              id:"e8", year:"2024", title:"A Living Case Study",
               media:{ kind:"image", src: placeholder(37,"24"), embed:false },
               caption:"",
               blocks:[ newBlock("body") ]
@@ -999,6 +1003,13 @@
     const traveled = vh - rect.top;
     return Math.min(Math.max(traveled / total, 0), 1);
   }
+  // soft opacity taper at the very start/end of a slide's time in the viewport, so each
+  // photo gently resolves in and out at the seam instead of cutting hard into the next
+  function edgeFade(progress){
+    const fadeIn = Math.min(progress / 0.14, 1);
+    const fadeOut = Math.min((1 - progress) / 0.14, 1);
+    return Math.min(fadeIn, fadeOut) * 0.5 + 0.5;
+  }
   function applySlideTransform(slideEl, progress){
     const media = slideEl.querySelector(".media-fill .media-el");
     if(!media) return;
@@ -1006,6 +1017,7 @@
     const scale = 1.08 + progress * 0.18;
     const panY = (progress - 0.5) * 70;
     media.style.transform = `scale(${scale}) translate(${tilt.x}px, ${(panY + tilt.y).toFixed(1)}px)`;
+    media.style.opacity = edgeFade(progress).toFixed(2);
   }
   function slideMotion(){
     if(reduceMotion) return;

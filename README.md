@@ -5,10 +5,13 @@
 `index.html` is a self-contained, single-file, full-bleed storymap — every hero, chapter
 cover, and entry is a true full-screen (100vh) slide with its background image/GIF/video
 filling the entire viewport edge-to-edge, continuously zooming and panning as you scroll
-(plus a subtle cursor-tilt effect), not a static boxed layout. It ships with dummy sample
-content ("Beyond Borders", a fictional migration story in four chapters) so you can reshape
-it for histories, product journeys, brand timelines, ambassador/employee profiles, or any
-other chapter-based narrative.
+(plus a subtle cursor-tilt effect and a soft cross-fade at the seam between slides), not a
+static boxed layout. It ships with dummy sample content ("The Water City" — urban water
+resilience case studies in four chapters: vanishing lakes, groundwater depletion, rainwater
+harvesting, and community restoration) so you can reshape it for any other chapter-based
+case-study or narrative content. The color palette (indigo blue, bright yellow, teal, green)
+is pulled from a civic/workshop brand reference the user provided — swap the CSS variables
+and the `ACCENTS`/`PALETTES` arrays in the `<script>` to reskin it for a different brand.
 
 Open `index.html` directly in a browser — no build step or server required.
 
