@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editable Timeline Dashboard</title>
+<title>Editable Chapters &amp; Timeline Dashboard</title>
 <style>
   :root{
     --bg:#f6f2e8;
@@ -13,542 +13,285 @@
     --ink-soft:#5b6270;
     --ink-faint:#8a8f99;
     --accent:#7c2a2a;
+    --accent-live:#7c2a2a;
     --accent-2:#b3893a;
     --line:#d9d0ba;
     --line-strong:#b8ac8d;
     --chrome-bg:#181a1f;
     --chrome-ink:#e7e2d4;
-    --radius:2px;
+    --radius:3px;
     --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
     --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
   [data-theme="dark"]{
-    --bg:#14151a;
-    --bg-alt:#1b1d24;
-    --paper:#1c1e25;
-    --ink:#eae6da;
-    --ink-soft:#b3aea0;
-    --ink-faint:#7d7a72;
-    --accent:#d98a8a;
-    --accent-2:#e0bd76;
-    --line:#33323a;
-    --line-strong:#4a4840;
-    --chrome-bg:#0b0c0f;
-    --chrome-ink:#e7e2d4;
+    --bg:#14151a; --bg-alt:#1b1d24; --paper:#1c1e25; --ink:#eae6da;
+    --ink-soft:#b3aea0; --ink-faint:#7d7a72; --accent:#d98a8a; --accent-live:#d98a8a;
+    --accent-2:#e0bd76; --line:#33323a; --line-strong:#4a4840;
+    --chrome-bg:#0b0c0f; --chrome-ink:#e7e2d4;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#14151a;
-      --bg-alt:#1b1d24;
-      --paper:#1c1e25;
-      --ink:#eae6da;
-      --ink-soft:#b3aea0;
-      --ink-faint:#7d7a72;
-      --accent:#d98a8a;
-      --accent-2:#e0bd76;
-      --line:#33323a;
-      --line-strong:#4a4840;
-      --chrome-bg:#0b0c0f;
-      --chrome-ink:#e7e2d4;
+      --bg:#14151a; --bg-alt:#1b1d24; --paper:#1c1e25; --ink:#eae6da;
+      --ink-soft:#b3aea0; --ink-faint:#7d7a72; --accent:#d98a8a; --accent-live:#d98a8a;
+      --accent-2:#e0bd76; --line:#33323a; --line-strong:#4a4840;
+      --chrome-bg:#0b0c0f; --chrome-ink:#e7e2d4;
     }
   }
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;
-  }
-  img{max-width:100%;display:block;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+  img,video{max-width:100%;display:block;}
   button{font-family:inherit;cursor:pointer;}
+  select,input[type=text]{font-family:inherit;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001s !important;transition-duration:.001s !important;}
+  }
 
-  /* ---------- app chrome (dashboard controls) ---------- */
+  /* ---------- progress + chrome ---------- */
+  #progressBar{position:sticky;top:0;z-index:70;height:3px;background:var(--accent-live);width:0%;transition:width .08s linear, background-color .5s ease;}
   .chrome{
-    position:sticky;
-    top:0;
-    z-index:60;
-    background:var(--chrome-bg);
-    color:var(--chrome-ink);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:10px 20px;
-    font-size:12px;
-    letter-spacing:.04em;
-    gap:12px;
-    flex-wrap:wrap;
+    position:sticky;top:3px;z-index:60;background:var(--chrome-bg);color:var(--chrome-ink);
+    display:flex;align-items:center;justify-content:space-between;padding:10px 20px;
+    font-size:12px;letter-spacing:.04em;gap:12px;flex-wrap:wrap;
   }
-  .chrome-brand{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-weight:600;
-    text-transform:uppercase;
-    font-size:11px;
-    opacity:.85;
-  }
+  .chrome-brand{display:flex;align-items:center;gap:8px;font-weight:600;text-transform:uppercase;font-size:11px;opacity:.85;}
   .chrome-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2);}
   .chrome-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .chrome button, .chrome label.file-btn{
-    background:transparent;
-    border:1px solid rgba(231,226,212,.28);
-    color:var(--chrome-ink);
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.05em;
+    background:transparent;border:1px solid rgba(231,226,212,.28);color:var(--chrome-ink);
+    padding:6px 12px;border-radius:20px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;
     transition:background .15s, border-color .15s;
   }
-  .chrome button:hover, .chrome label.file-btn:hover{
-    background:rgba(231,226,212,.1);
-    border-color:rgba(231,226,212,.5);
-  }
-  .chrome button.primary{
-    background:var(--accent-2);
-    border-color:var(--accent-2);
-    color:#1a1508;
-    font-weight:700;
-  }
-  .chrome button.primary.on{
-    background:#3f7d5c;
-    border-color:#3f7d5c;
-    color:#eafff1;
-  }
-  .chrome input[type=file]{display:none;}
-  .chrome-hint{
-    font-size:10.5px;
-    color:var(--ink-faint);
-    opacity:.7;
-    display:none;
-  }
+  .chrome button:hover, .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
+  .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#1a1508;font-weight:700;}
+  .chrome button.primary.on{background:#3f7d5c;border-color:#3f7d5c;color:#eafff1;}
+  .chrome-hint{font-size:10.5px;color:var(--ink-faint);opacity:.7;display:none;}
   body.edit-on .chrome-hint{display:inline;}
 
-  /* ---------- site header / masthead ---------- */
-  .masthead{
-    text-align:center;
-    padding:34px 20px 22px;
-    border-bottom:1px solid var(--line);
-    background:var(--paper);
+  /* ---------- masthead ---------- */
+  .masthead{text-align:center;padding:34px 20px 22px;border-bottom:1px solid var(--line);background:var(--paper);}
+  .masthead-brand{font-family:var(--serif);font-size:15px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent-live);transition:color .5s ease;}
+  .masthead-sub{margin-top:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);}
+
+  /* ---------- editable affordances ---------- */
+  [contenteditable="true"]{outline:none;}
+  body.edit-on [data-editable]{outline:1px dashed rgba(179,137,58,.6);outline-offset:3px;border-radius:2px;cursor:text;transition:background .15s;}
+  body.edit-on [data-editable]:hover, body.edit-on [data-editable]:focus{background:rgba(179,137,58,.12);}
+  .edit-only{display:none;}
+  body.edit-on .edit-only{display:flex;}
+  body.edit-on button.edit-only, body.edit-on label.edit-only{display:inline-flex;}
+
+  /* ---------- generic media (hero / chapter cover / entry) ---------- */
+  .media-fill{position:absolute;inset:0;overflow:hidden;background:var(--bg-alt);}
+  .media-el{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+  .video-frame{position:relative;width:100%;height:100%;}
+  .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .media-badge{
+    position:absolute;top:12px;left:12px;z-index:2;background:rgba(0,0,0,.6);color:#fff;
+    font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:12px;
   }
-  .masthead-brand{
-    font-family:var(--serif);
-    font-size:15px;
-    letter-spacing:.24em;
-    text-transform:uppercase;
-    color:var(--accent);
+  .media-empty{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:8px;color:var(--ink-faint);background:repeating-linear-gradient(135deg,var(--bg-alt),var(--bg-alt) 10px,var(--paper) 10px,var(--paper) 20px);
+    font-size:11px;text-transform:uppercase;letter-spacing:.08em;text-align:center;padding:16px;
   }
-  .masthead-sub{
-    margin-top:4px;
-    font-size:11px;
-    letter-spacing:.18em;
-    text-transform:uppercase;
-    color:var(--ink-faint);
+  .media-empty .icon{font-size:26px;opacity:.6;}
+  .media-overlay{
+    position:absolute;inset:0;z-index:1;display:none;align-items:center;justify-content:center;
+    background:rgba(20,18,14,.45);color:#fff;font-size:12px;text-transform:uppercase;letter-spacing:.08em;
+    opacity:0;transition:opacity .15s;
   }
+  body.edit-on .media-overlay{display:flex;cursor:pointer;}
+  .media-fill:hover .media-overlay{opacity:1;}
+  .media-fill:hover .media-el{transform:scale(1.05);}
 
   /* ---------- hero ---------- */
-  .hero{
-    position:relative;
-    min-height:78vh;
-    display:flex;
-    align-items:flex-end;
-    background-size:cover;
-    background-position:center;
-    overflow:hidden;
-  }
-  .hero-img{
-    position:absolute;inset:0;
-    width:100%;height:100%;
-    object-fit:cover;
-    transform:scale(1.08);
-    transition:transform .6s ease;
-    will-change:transform;
-  }
-  .hero-scrim{
-    position:absolute;inset:0;
-    background:linear-gradient(180deg, rgba(15,15,18,.15) 0%, rgba(15,15,18,.35) 45%, rgba(12,12,14,.92) 100%);
-  }
-  .hero-content{
-    position:relative;
-    z-index:2;
-    width:100%;
-    max-width:1180px;
-    margin:0 auto;
-    padding:60px 40px 46px;
-    color:#f4efe2;
-  }
-  .hero-eyebrow{
-    font-size:12px;
-    letter-spacing:.2em;
-    text-transform:uppercase;
-    color:#e2c07e;
-    margin-bottom:14px;
-    font-weight:600;
-  }
-  .hero-name{
-    font-family:var(--serif);
-    font-size:clamp(38px,6vw,72px);
-    line-height:1.02;
-    margin:0 0 10px;
-    font-weight:400;
-  }
-  .hero-role{
-    font-size:clamp(15px,2vw,19px);
-    color:#d9d2bf;
-    font-weight:400;
-    margin-bottom:6px;
-  }
-  .hero-dates{
-    font-size:12px;
-    letter-spacing:.1em;
-    text-transform:uppercase;
-    color:#a99f86;
-    margin-bottom:22px;
-  }
-  .hero-intro{
-    max-width:640px;
-    font-family:var(--serif);
-    font-size:17px;
-    line-height:1.6;
-    color:#ece6d6;
-  }
-  .hero-edit-btn{
-    position:absolute;
-    top:16px;right:16px;
-    z-index:3;
-    background:rgba(0,0,0,.55);
-    color:#fff;
-    border:1px solid rgba(255,255,255,.4);
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    display:none;
-  }
-  body.edit-on .hero-edit-btn{display:inline-block;}
+  .hero{position:relative;min-height:78vh;display:flex;align-items:flex-end;overflow:hidden;}
+  .hero-content{position:relative;z-index:2;width:100%;max-width:1180px;margin:0 auto;padding:60px 40px 46px;color:#f4efe2;}
+  .hero-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg, rgba(15,15,18,.15) 0%, rgba(15,15,18,.35) 45%, rgba(12,12,14,.92) 100%);}
+  .hero-eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#e2c07e;margin-bottom:14px;font-weight:600;}
+  .hero-name{font-family:var(--serif);font-size:clamp(38px,6vw,72px);line-height:1.02;margin:0 0 10px;font-weight:400;}
+  .hero-role{font-size:clamp(15px,2vw,19px);color:#d9d2bf;font-weight:400;margin-bottom:6px;}
+  .hero-dates{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#a99f86;margin-bottom:22px;}
+  .hero-intro{max-width:640px;font-family:var(--serif);font-size:17px;line-height:1.6;color:#ece6d6;}
+  .scroll-cue{margin-top:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c9bfa4;opacity:.85;
+    animation:bob 2.2s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
 
-  [contenteditable="true"]{
-    outline:none;
-  }
-  body.edit-on [data-editable]{
-    outline:1px dashed rgba(179,137,58,.6);
-    outline-offset:3px;
-    border-radius:2px;
-    cursor:text;
-    transition:background .15s;
-  }
-  body.edit-on [data-editable]:hover,
-  body.edit-on [data-editable]:focus{
-    background:rgba(179,137,58,.12);
-  }
-  body.edit-on .hero-content [data-editable]:hover,
-  body.edit-on .hero-content [data-editable]:focus{
-    background:rgba(226,192,126,.16);
-  }
+  /* ---------- layout ---------- */
+  .layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:250px 1fr;gap:0 48px;padding:56px 40px 40px;align-items:start;}
+  .rail{position:sticky;top:56px;align-self:start;padding-top:6px;max-height:calc(100vh - 76px);overflow-y:auto;}
+  .rail-title{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-faint);margin:0 0 16px;}
 
-  /* ---------- layout: timeline + entries ---------- */
-  .layout{
-    max-width:1180px;
-    margin:0 auto;
-    display:grid;
-    grid-template-columns:230px 1fr;
-    gap:0 48px;
-    padding:64px 40px 40px;
-    align-items:start;
-  }
+  .rail-chapter{margin-bottom:22px;}
+  .rail-chapter-head{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:2px 0;}
+  .rail-chapter-dot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;transition:background .5s ease;}
+  .rail-chapter-title{font-family:var(--serif);font-size:14.5px;font-weight:600;letter-spacing:.02em;flex:1;transition:color .5s ease;}
+  .rail-chapter.active .rail-chapter-title{color:var(--accent-live);}
+  .rail-chevron{background:none;border:0;color:var(--ink-faint);font-size:10px;padding:2px;transition:transform .2s ease;}
+  .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
 
-  .rail{
-    position:sticky;
-    top:64px;
-    align-self:start;
-    padding-top:6px;
-  }
-  .rail-title{
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.14em;
-    color:var(--ink-faint);
-    margin:0 0 18px;
-  }
-  .rail-track{
-    position:relative;
-    padding-left:22px;
-  }
-  .rail-track::before{
-    content:"";
-    position:absolute;
-    left:5px;top:4px;bottom:4px;
-    width:1px;
-    background:var(--line);
-  }
-  .rail-progress{
-    position:absolute;
-    left:5px;top:4px;
-    width:1px;
-    height:0%;
-    background:var(--accent);
-    transition:height .12s linear;
-  }
-  .rail-item{
-    position:relative;
-    padding:0 0 30px;
-    cursor:pointer;
-  }
+  .rail-entries{position:relative;padding-left:22px;margin-top:12px;overflow:hidden;transition:max-height .35s ease;}
+  .rail-chapter.collapsed .rail-entries{max-height:0 !important;margin-top:0;}
+  .rail-track-line{position:absolute;left:5px;top:4px;bottom:4px;width:1px;background:var(--line);}
+  .rail-progress-fill{position:absolute;left:5px;top:4px;width:1px;height:0%;background:var(--accent-live);transition:height .12s linear, background-color .5s ease;}
+  .rail-item{position:relative;padding:0 0 26px;cursor:pointer;}
   .rail-item:last-child{padding-bottom:2px;}
-  .rail-dot{
-    position:absolute;
-    left:-22px;top:2px;
-    width:11px;height:11px;
-    border-radius:50%;
-    background:var(--paper);
-    border:1px solid var(--line-strong);
-    transition:all .2s ease;
-  }
-  .rail-year{
-    font-family:var(--serif);
-    font-size:19px;
-    color:var(--ink-faint);
-    transition:color .2s ease;
-    line-height:1.2;
-  }
-  .rail-label{
-    font-size:11.5px;
-    color:var(--ink-faint);
-    margin-top:2px;
-    max-width:170px;
-    transition:color .2s ease;
-  }
-  .rail-item.active .rail-dot{
-    background:var(--accent);
-    border-color:var(--accent);
-    box-shadow:0 0 0 4px rgba(124,42,42,.15);
-  }
+  .rail-dot{position:absolute;left:-22px;top:2px;width:11px;height:11px;border-radius:50%;background:var(--paper);border:1px solid var(--line-strong);transition:all .2s ease;}
+  .rail-year{font-family:var(--serif);font-size:17px;color:var(--ink-faint);transition:color .2s ease;line-height:1.2;}
+  .rail-label{font-size:11px;color:var(--ink-faint);margin-top:2px;max-width:170px;transition:color .2s ease;}
+  .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);box-shadow:0 0 0 4px rgba(124,42,42,.15);}
   .rail-item.active .rail-year{color:var(--ink);font-weight:600;}
   .rail-item.active .rail-label{color:var(--ink-soft);}
-  .rail-item:hover .rail-year{color:var(--accent);}
+  .rail-item:hover .rail-year{color:var(--accent-live);}
 
-  .rail-add{
-    margin-left:-2px;
-    margin-top:6px;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    background:none;
-    border:1px dashed var(--line-strong);
-    color:var(--ink-soft);
-    padding:7px 12px;
-    border-radius:20px;
-    display:none;
-  }
-  body.edit-on .rail-add{display:inline-block;}
+  .rail-add-entry{margin-left:0;margin-top:4px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+    background:none;border:1px dashed var(--line-strong);color:var(--ink-soft);padding:6px 11px;border-radius:20px;}
+  .rail-add-chapter{margin-top:6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    background:none;border:1px dashed var(--line-strong);color:var(--ink-soft);padding:8px 14px;border-radius:20px;width:100%;}
 
-  /* ---------- entries ---------- */
-  .entries{display:flex;flex-direction:column;gap:96px;}
-  .entry{
-    opacity:0;
-    transform:translateY(26px);
-    transition:opacity .7s ease, transform .7s ease;
-    position:relative;
+  /* ---------- main / chapters ---------- */
+  .main{display:flex;flex-direction:column;gap:8px;}
+  .chapter{margin-bottom:12px;}
+
+  .chapter-cover{
+    position:relative;min-height:56vh;border-radius:10px;overflow:hidden;margin-bottom:44px;
+    display:flex;align-items:flex-end;background:var(--bg-alt);
   }
+  .chapter-cover-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:linear-gradient(180deg, rgba(10,10,10,.05) 0%, rgba(10,10,10,.35) 55%, rgba(8,8,8,.88) 100%);}
+  .chapter-cover-content{position:relative;z-index:2;padding:44px 40px;color:#f4efe2;
+    opacity:0;transform:translateY(22px);transition:opacity .7s ease, transform .7s ease;}
+  .chapter-cover.in-view .chapter-cover-content{opacity:1;transform:translateY(0);}
+  .chapter-index{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-2);margin-bottom:10px;font-weight:600;}
+  .chapter-title{font-family:var(--serif);font-size:clamp(28px,4.2vw,46px);font-weight:400;margin:0 0 8px;line-height:1.08;}
+  .chapter-subtitle{font-size:15px;color:#d9d2bf;max-width:600px;line-height:1.5;
+    transition-delay:.12s;}
+  .chapter-toolbar{position:absolute;top:14px;right:14px;z-index:3;gap:8px;}
+  .chapter-toolbar button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 11px;border-radius:16px;}
+  .chapter-toolbar button:hover{background:rgba(0,0,0,.75);}
+  .chapter-toolbar button.danger:hover{border-color:#e37a7a;color:#ffbcbc;}
+
+  .chapter-entries{display:flex;flex-direction:column;gap:88px;padding-left:2px;}
+
+  /* ---------- entry ---------- */
+  .entry{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;position:relative;}
   .entry.in-view{opacity:1;transform:translateY(0);}
-
-  .entry-toolbar{
-    display:none;
-    gap:8px;
-    margin-bottom:10px;
-  }
-  body.edit-on .entry-toolbar{display:flex;}
-  .entry-toolbar button{
-    font-size:10.5px;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    border:1px solid var(--line-strong);
-    background:var(--paper);
-    color:var(--ink-soft);
-    padding:5px 10px;
-    border-radius:14px;
-  }
-  .entry-toolbar button:hover{border-color:var(--accent);color:var(--accent);}
+  .entry-toolbar{gap:8px;margin-bottom:10px;}
+  .entry-toolbar button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;border:1px solid var(--line-strong);
+    background:var(--paper);color:var(--ink-soft);padding:5px 10px;border-radius:14px;}
+  .entry-toolbar button:hover{border-color:var(--accent-live);color:var(--accent-live);}
   .entry-toolbar button.danger:hover{border-color:#a33;color:#a33;}
 
-  .entry-figure{
-    position:relative;
-    border-radius:var(--radius);
-    overflow:hidden;
-    margin-bottom:26px;
-    background:var(--bg-alt);
-    aspect-ratio:16/9;
-  }
-  .entry-figure img{width:100%;height:100%;object-fit:cover;}
-  .entry-figure .img-overlay{
-    position:absolute;inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:rgba(20,18,14,.45);
-    color:#fff;
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    opacity:0;
-    transition:opacity .15s;
-  }
-  body.edit-on .entry-figure .img-overlay{display:flex;cursor:pointer;}
-  .entry-figure:hover .img-overlay{opacity:1;}
-  .entry-caption{
-    font-size:11px;
-    color:var(--ink-faint);
-    margin-top:8px;
-    font-style:italic;
-  }
+  .entry-media-wrap{position:relative;border-radius:var(--radius);overflow:hidden;margin-bottom:10px;background:var(--bg-alt);aspect-ratio:16/9;}
+  .entry-caption{font-size:11px;color:var(--ink-faint);margin:8px 0 24px;font-style:italic;}
 
-  .entry-eyebrow{
-    display:flex;
-    align-items:baseline;
-    gap:12px;
-    margin-bottom:10px;
-  }
-  .entry-year-tag{
-    font-family:var(--serif);
-    font-size:14px;
-    color:var(--accent);
-    letter-spacing:.04em;
-  }
+  .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
+  .entry-year-tag{font-family:var(--serif);font-size:14px;color:var(--accent-live);letter-spacing:.04em;transition:color .5s ease;}
   .entry-rule{flex:1;height:1px;background:var(--line);}
+  .entry-title{font-family:var(--serif);font-size:clamp(22px,2.8vw,29px);font-weight:400;margin:0 0 16px;line-height:1.18;}
 
-  .entry-title{
-    font-family:var(--serif);
-    font-size:clamp(24px,3vw,32px);
-    font-weight:400;
-    margin:0 0 16px;
-    line-height:1.15;
+  /* ---------- text blocks ---------- */
+  .entry-blocks{display:flex;flex-direction:column;}
+  .block-wrap{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;margin-bottom:6px;}
+  .block-wrap.in-view{opacity:1;transform:translateY(0);}
+  .block-toolbar{gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px;padding:6px 8px;
+    background:var(--bg-alt);border:1px solid var(--line);border-radius:8px;}
+  .block-toolbar select, .block-toolbar button{
+    font-size:10.5px;border:1px solid var(--line-strong);background:var(--paper);color:var(--ink-soft);
+    padding:4px 7px;border-radius:12px;text-transform:uppercase;letter-spacing:.03em;
   }
-  .entry-text{
-    font-size:16px;
-    line-height:1.75;
-    color:var(--ink-soft);
-    max-width:64ch;
-  }
-  .entry-text p{margin:0 0 14px;}
-  .entry-text p:last-child{margin-bottom:0;}
+  .block-toolbar button:hover{border-color:var(--accent-live);color:var(--accent-live);}
+  .block-toolbar button.danger:hover{border-color:#a33;color:#a33;}
+  .block-toolbar .spacer{flex:1;}
 
-  .add-between{
-    display:none;
-    align-items:center;
-    gap:10px;
-    color:var(--ink-faint);
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    margin:-64px 0 0;
+  .block{max-width:66ch;color:var(--ink-soft);}
+  .block p{margin:0 0 12px;}
+  .block p:last-child{margin-bottom:0;}
+  .block--heading{color:var(--ink);font-family:var(--serif);font-weight:400;line-height:1.2;max-width:none;}
+  .block--subheading{color:var(--ink-soft);font-weight:600;line-height:1.4;letter-spacing:.01em;}
+  .block--body{line-height:1.75;}
+  .block--quote{font-family:var(--serif);font-style:italic;line-height:1.5;border-left:3px solid var(--accent-live);
+    padding-left:18px;color:var(--ink);transition:border-color .5s ease;}
+  .block--caption{color:var(--ink-faint);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
+
+  .add-block-btn{align-self:flex-start;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+    background:none;border:1px dashed var(--line-strong);color:var(--ink-soft);padding:6px 12px;border-radius:20px;margin-top:6px;}
+  .add-block-btn:hover{border-color:var(--accent-live);color:var(--accent-live);}
+
+  .add-between, .add-entry-chapter{
+    gap:10px;color:var(--ink-faint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;align-items:center;margin:-64px 0 0;
   }
-  body.edit-on .add-between{display:flex;}
-  .add-between::before,.add-between::after{content:"";flex:1;height:1px;background:var(--line);}
-  .add-between button{
-    background:var(--paper);
-    border:1px solid var(--line-strong);
-    padding:5px 12px;
-    border-radius:14px;
-    color:var(--ink-soft);
-    white-space:nowrap;
-  }
-  .add-between button:hover{border-color:var(--accent);color:var(--accent);}
+  .add-entry-chapter{margin:0;}
+  .add-between::before,.add-between::after,.add-entry-chapter::before{content:"";flex:1;height:1px;background:var(--line);}
+  .add-between button, .add-entry-chapter button{background:var(--paper);border:1px solid var(--line-strong);padding:5px 12px;
+    border-radius:14px;color:var(--ink-soft);white-space:nowrap;}
+  .add-between button:hover, .add-entry-chapter button:hover{border-color:var(--accent-live);color:var(--accent-live);}
+
+  .add-chapter-row{display:flex;justify-content:center;margin-top:26px;}
+  .add-chapter-row button{background:var(--paper);border:1px dashed var(--line-strong);padding:10px 20px;border-radius:22px;
+    color:var(--ink-soft);font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
+  .add-chapter-row button:hover{border-color:var(--accent-live);color:var(--accent-live);}
 
   /* ---------- footer ---------- */
-  .site-footer{
-    margin-top:80px;
-    padding:34px 40px 60px;
-    text-align:center;
-    border-top:1px solid var(--line);
-    color:var(--ink-faint);
-    font-size:12px;
-    letter-spacing:.03em;
-  }
+  .site-footer{margin-top:70px;padding:34px 40px 60px;text-align:center;border-top:1px solid var(--line);
+    color:var(--ink-faint);font-size:12px;letter-spacing:.03em;}
   .site-footer strong{color:var(--ink-soft);}
 
-  /* ---------- image edit modal ---------- */
-  .modal-backdrop{
-    position:fixed;inset:0;
-    background:rgba(10,10,12,.55);
-    display:none;
-    align-items:center;justify-content:center;
-    z-index:100;
-    padding:20px;
-  }
+  /* ---------- modal ---------- */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(10,10,12,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
   .modal-backdrop.open{display:flex;}
-  .modal{
-    background:var(--paper);
-    color:var(--ink);
-    width:100%;max-width:420px;
-    border-radius:6px;
-    padding:22px;
-    box-shadow:0 20px 60px rgba(0,0,0,.4);
-  }
+  .modal{background:var(--paper);color:var(--ink);width:100%;max-width:460px;border-radius:8px;padding:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:88vh;overflow-y:auto;}
   .modal h3{margin:0 0 4px;font-family:var(--serif);font-weight:400;font-size:19px;}
   .modal p.hint{margin:0 0 16px;font-size:12px;color:var(--ink-faint);}
-  .modal input[type=text]{
-    width:100%;
-    padding:9px 10px;
-    border:1px solid var(--line-strong);
-    border-radius:4px;
-    background:var(--bg);
-    color:var(--ink);
-    font-size:13px;
-    margin-bottom:12px;
-  }
-  .modal-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;}
+  .modal input[type=text]{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:4px;
+    background:var(--bg);color:var(--ink);font-size:13px;margin-bottom:12px;}
+  .modal-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
   .modal-row .or{font-size:11px;color:var(--ink-faint);text-transform:uppercase;}
   .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
-  .modal-actions button{
-    padding:8px 16px;
-    border-radius:20px;
-    font-size:12px;
-    border:1px solid var(--line-strong);
-    background:transparent;
-    color:var(--ink-soft);
-  }
-  .modal-actions button.primary{
-    background:var(--accent);
-    border-color:var(--accent);
-    color:#fff;
-  }
+  .modal-actions button{padding:8px 16px;border-radius:20px;font-size:12px;border:1px solid var(--line-strong);
+    background:transparent;color:var(--ink-soft);}
+  .modal-actions button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
   label.file-btn{display:inline-block;}
+  .modal input[type=file]{display:none;}
+
+  .type-tabs{display:flex;gap:8px;margin-bottom:16px;}
+  .type-tabs button{flex:1;padding:8px 10px;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;
+    border:1px solid var(--line-strong);background:var(--bg);color:var(--ink-soft);border-radius:20px;}
+  .type-tabs button.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .video-subtabs{display:flex;gap:8px;margin-bottom:12px;}
+  .video-subtabs button{padding:6px 10px;font-size:11px;text-transform:uppercase;border:1px solid var(--line-strong);
+    background:var(--bg);color:var(--ink-soft);border-radius:16px;}
+  .video-subtabs button.active{background:var(--ink);border-color:var(--ink);color:var(--paper);}
+  .field-hidden{display:none;}
+  .checkbox-row{display:flex;gap:16px;margin:6px 0 14px;font-size:12px;color:var(--ink-soft);flex-wrap:wrap;}
+  .checkbox-row label{display:flex;align-items:center;gap:6px;}
 
   /* ---------- responsive ---------- */
   @media (max-width: 860px){
-    .layout{grid-template-columns:1fr;padding:40px 22px;}
-    .rail{
-      position:static;
-      display:flex;
-      overflow-x:auto;
-      gap:22px;
-      padding-bottom:14px;
-      margin-bottom:38px;
-      border-bottom:1px solid var(--line);
-    }
-    .rail-track{padding-left:0;display:flex;gap:22px;}
-    .rail-track::before{display:none;}
-    .rail-progress{display:none;}
-    .rail-item{padding:0;flex:0 0 auto;}
-    .rail-dot{display:none;}
-    .rail-add{margin-top:0;}
-    .entries{gap:64px;}
+    .layout{grid-template-columns:1fr;padding:36px 20px;}
+    .rail{position:static;max-height:none;overflow:visible;margin-bottom:34px;padding-bottom:14px;border-bottom:1px solid var(--line);}
+    .entries, .chapter-entries{gap:60px;}
     .add-between{margin-top:0;}
-    .hero-content{padding:40px 22px 32px;}
+    .hero-content{padding:40px 20px 30px;}
+    .chapter-cover-content{padding:30px 20px;}
+    .chapter-cover{min-height:44vh;}
   }
 </style>
 </head>
 <body>
 
-  <!-- dashboard control chrome -->
+  <div id="progressBar"></div>
+
   <div class="chrome">
-    <div class="chrome-brand"><span class="chrome-dot"></span> Editable Timeline Dashboard</div>
+    <div class="chrome-brand"><span class="chrome-dot"></span> Editable Chapters &amp; Timeline Dashboard</div>
     <div class="chrome-actions">
-      <span class="chrome-hint">Click any text or image below to edit it</span>
+      <span class="chrome-hint">Click text or media below to edit it</span>
       <button id="btnEdit" class="primary">Edit Mode: Off</button>
       <button id="btnExport">Export JSON</button>
       <label class="file-btn">Import JSON<input type="file" id="fileImport" accept="application/json" /></label>
@@ -558,399 +301,504 @@
   </div>
 
   <header class="masthead">
-    <div class="masthead-brand">Timeline Archive</div>
-    <div class="masthead-sub">A Scrolling Profile Template</div>
+    <div class="masthead-brand">Chapters Archive</div>
+    <div class="masthead-sub">A Scroll-Driven Story Template</div>
   </header>
 
-  <!-- hero -->
   <section class="hero" id="hero">
-    <img class="hero-img" id="heroImg" alt="" />
+    <div class="media-fill" id="heroMediaWrap" data-media-scope="hero"></div>
     <div class="hero-scrim"></div>
-    <button class="hero-edit-btn" id="btnHeroImg" type="button">Change Photo</button>
     <div class="hero-content">
-      <div class="hero-eyebrow" id="heroEyebrow" data-editable contenteditable="false"></div>
-      <h1 class="hero-name" id="heroName" data-editable contenteditable="false"></h1>
-      <div class="hero-role" id="heroRole" data-editable contenteditable="false"></div>
-      <div class="hero-dates" id="heroDates" data-editable contenteditable="false"></div>
-      <p class="hero-intro" id="heroIntro" data-editable contenteditable="false"></p>
+      <div class="hero-eyebrow" data-editable data-bind-type="meta" data-field="eyebrow" contenteditable="false"></div>
+      <h1 class="hero-name" data-editable data-bind-type="meta" data-field="title" contenteditable="false"></h1>
+      <div class="hero-role" data-editable data-bind-type="meta" data-field="subtitle" contenteditable="false"></div>
+      <div class="hero-dates" data-editable data-bind-type="meta" data-field="dates" contenteditable="false"></div>
+      <p class="hero-intro" data-editable data-bind-type="meta" data-field="intro" contenteditable="false"></p>
+      <div class="scroll-cue">↓ Scroll to explore the chapters</div>
     </div>
   </section>
 
-  <!-- timeline + entries -->
   <div class="layout">
     <nav class="rail" id="rail">
-      <div class="rail-title">Timeline</div>
-      <div class="rail-track" id="railTrack">
-        <div class="rail-progress" id="railProgress"></div>
-      </div>
-      <button class="rail-add" id="railAdd" type="button">+ Add entry</button>
+      <div class="rail-title">Chapters &amp; Timelines</div>
+      <div id="railChapters"></div>
+      <button class="rail-add-chapter edit-only" id="railAddChapter" type="button">+ Add chapter</button>
     </nav>
-
-    <main class="entries" id="entries"></main>
+    <main class="main" id="main"></main>
   </div>
 
   <footer class="site-footer">
-    <strong>Editable Timeline Dashboard</strong> — a reusable scrollytelling template.
-    Replace the sample copy and photos with your own content: profiles, product histories, case studies, or company timelines.
+    <strong>Editable Chapters &amp; Timeline Dashboard</strong> — a reusable, animated scrollytelling template.
+    Group your content into chapters, each with its own mini timeline, rich text styles, images, GIFs, and video.
   </footer>
 
-  <!-- image edit modal -->
-  <div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-backdrop" id="mediaModalBackdrop">
     <div class="modal">
-      <h3>Update Image</h3>
-      <p class="hint">Paste an image URL, or upload a file from your device.</p>
-      <input type="text" id="modalUrl" placeholder="https://example.com/photo.jpg" />
-      <div class="modal-row">
-        <label class="file-btn" style="border:1px solid var(--line-strong);padding:8px 14px;border-radius:20px;font-size:12px;color:var(--ink-soft);">
-          Upload file<input type="file" id="modalFile" accept="image/*" />
-        </label>
-        <span class="or">or paste URL above</span>
+      <h3>Update Media</h3>
+      <p class="hint">Choose a media type, then paste a link or upload a file.</p>
+      <div class="type-tabs" id="typeTabs">
+        <button type="button" data-type="image" class="active">Image</button>
+        <button type="button" data-type="gif">GIF</button>
+        <button type="button" data-type="video">Video</button>
       </div>
+
+      <div id="imageFields">
+        <input type="text" id="mediaUrl" placeholder="https://example.com/photo.jpg" />
+        <div class="modal-row">
+          <label class="file-btn" style="border:1px solid var(--line-strong);padding:8px 14px;border-radius:20px;font-size:12px;color:var(--ink-soft);">
+            Upload file<input type="file" id="mediaFile" accept="image/*" />
+          </label>
+          <span class="or">or paste URL above</span>
+        </div>
+      </div>
+
+      <div id="videoFields" class="field-hidden">
+        <div class="video-subtabs" id="videoSubtabs">
+          <button type="button" data-vtab="link" class="active">Link (YouTube / Vimeo / MP4)</button>
+          <button type="button" data-vtab="upload">Upload file</button>
+        </div>
+        <div id="videoLinkField">
+          <input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=... or direct .mp4 link" />
+        </div>
+        <div id="videoUploadField" class="field-hidden">
+          <label class="file-btn" style="border:1px solid var(--line-strong);padding:8px 14px;border-radius:20px;font-size:12px;color:var(--ink-soft);">
+            Upload video file<input type="file" id="videoFile" accept="video/*" />
+          </label>
+        </div>
+        <div class="checkbox-row">
+          <label><input type="checkbox" id="optAutoplay" /> Autoplay</label>
+          <label><input type="checkbox" id="optLoop" /> Loop</label>
+          <label><input type="checkbox" id="optMuted" /> Muted</label>
+        </div>
+      </div>
+
       <div class="modal-actions">
-        <button id="modalCancel">Cancel</button>
-        <button id="modalSave" class="primary">Save Image</button>
+        <button id="modalCancel" type="button">Cancel</button>
+        <button id="modalSave" class="primary" type="button">Save Media</button>
       </div>
     </div>
   </div>
 
 <script>
-(function(){
+(() => {
   "use strict";
-
-  var STORAGE_KEY = "timeline-dashboard-state-v1";
+  const STORAGE_KEY = "chapters-dashboard-state-v2";
+  const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
-  var PALETTES = [
-    ["#3a3226","#7c2a2a"],
-    ["#22303a","#3a6e7a"],
-    ["#2c2417","#b3893a"],
-    ["#26221f","#5b6a4f"],
-    ["#241f2e","#6e4a8c"],
-    ["#1f2a2c","#2f7d6b"]
+  const PALETTES = [
+    ["#3a3226","#7c2a2a"], ["#22303a","#3a6e7a"], ["#2c2417","#b3893a"],
+    ["#26221f","#5b6a4f"], ["#241f2e","#6e4a8c"], ["#1f2a2c","#2f7d6b"]
   ];
   function placeholder(seed, label){
-    var p = PALETTES[Math.abs(seed) % PALETTES.length];
-    var initial = (label || "?").trim().charAt(0).toUpperCase() || "?";
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675">' +
-      '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
-      '<stop offset="0%" stop-color="' + p[0] + '"/>' +
-      '<stop offset="100%" stop-color="' + p[1] + '"/>' +
-      '</linearGradient></defs>' +
-      '<rect width="1200" height="675" fill="url(#g)"/>' +
-      '<circle cx="600" cy="300" r="150" fill="rgba(255,255,255,0.06)"/>' +
-      '<circle cx="600" cy="300" r="90" fill="rgba(255,255,255,0.07)"/>' +
-      '<text x="600" y="330" font-family="Georgia, serif" font-size="120" fill="rgba(255,255,255,0.55)" text-anchor="middle">' + initial + '</text>' +
-      '<text x="600" y="590" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="4" fill="rgba(255,255,255,0.55)" text-anchor="middle">SAMPLE IMAGE</text>' +
-      '</svg>';
+    const p = PALETTES[Math.abs(seed) % PALETTES.length];
+    const initial = (label || "?").trim().charAt(0).toUpperCase() || "?";
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="${p[0]}"/><stop offset="100%" stop-color="${p[1]}"/>
+      </linearGradient></defs>
+      <rect width="1200" height="675" fill="url(#g)"/>
+      <circle cx="600" cy="300" r="150" fill="rgba(255,255,255,0.06)"/>
+      <circle cx="600" cy="300" r="90" fill="rgba(255,255,255,0.07)"/>
+      <text x="600" y="330" font-family="Georgia, serif" font-size="120" fill="rgba(255,255,255,0.55)" text-anchor="middle">${initial}</text>
+      <text x="600" y="590" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="4" fill="rgba(255,255,255,0.55)" text-anchor="middle">SAMPLE IMAGE</text>
+      </svg>`;
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
+
+  /* ---------------- typography options ---------------- */
+  const FONT_OPTIONS = [
+    { label: "Georgia (Serif)", value: "Georgia, 'Times New Roman', serif" },
+    { label: "Palatino (Serif)", value: "'Palatino Linotype','Book Antiqua',Palatino,serif" },
+    { label: "Times New Roman (Serif)", value: "'Times New Roman', Times, serif" },
+    { label: "System Sans", value: "-apple-system, BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif" },
+    { label: "Helvetica (Sans)", value: "Helvetica, Arial, sans-serif" },
+    { label: "Verdana (Sans)", value: "Verdana, Geneva, sans-serif" },
+    { label: "Trebuchet (Sans)", value: "'Trebuchet MS', sans-serif" },
+    { label: "Courier (Mono)", value: "'Courier New', Courier, monospace" }
+  ];
+  const SIZE_PX = {
+    heading:   { S:24, M:32, L:42, XL:54 },
+    subheading:{ S:17, M:20, L:24, XL:28 },
+    body:      { S:14, M:16, L:18, XL:20 },
+    quote:     { S:19, M:23, L:27, XL:31 },
+    caption:   { S:11, M:12.5, L:14, XL:15 }
+  };
+  const BLOCK_TYPES = [
+    { type:"heading", label:"Heading", font:FONT_OPTIONS[0].value, size:"M", text:"New Heading" },
+    { type:"subheading", label:"Subheading", font:FONT_OPTIONS[0].value, size:"M", text:"A short supporting line" },
+    { type:"body", label:"Body text", font:FONT_OPTIONS[3].value, size:"M", text:"<p>Write your paragraph text here. Use the toolbar above to change its style, font, size, or alignment.</p>" },
+    { type:"quote", label:"Pull quote", font:FONT_OPTIONS[1].value, size:"M", text:"“Insert a memorable quote or pull-out line here.”" },
+    { type:"caption", label:"Caption", font:FONT_OPTIONS[3].value, size:"M", text:"Caption or source line" }
+  ];
+  const ACCENTS = ["#7c2a2a","#2f6f7a","#a97a2e","#4f6b3f","#5c4a8c","#8a4a3a"];
+
+  function blockMeta(type){ return BLOCK_TYPES.find(b => b.type === type) || BLOCK_TYPES[2]; }
+  function newBlock(type){
+    const m = blockMeta(type);
+    return { id:newId(), type:m.type, font:m.font, size:m.size, align:"left", html:m.text };
+  }
+  function newId(){ return "id" + Math.random().toString(36).slice(2,9); }
 
   /* ---------------- default dummy content ---------------- */
   function defaultData(){
     return {
-      eyebrow: "PROFILE ARCHIVE · CASE FILE NO. 07",
-      name: "Elena Marsh",
-      role: "Cultural Envoy & Diplomat",
-      dates: "1998 — Present",
-      intro: "A chronicle of appointments, initiatives, and turning points across a quarter-century of cultural diplomacy. Scroll to follow the timeline, or switch on Edit Mode above to make this page your own.",
-      heroImage: placeholder(1, "E"),
-      entries: [
+      meta: {
+        eyebrow: "AN EDITABLE STORY",
+        title: "Beyond Borders",
+        subtitle: "Notes on Leaving, Arriving, and Belonging",
+        dates: "A Chapters &amp; Timeline Template".replace(/&amp;/,"&"),
+        intro: "This page is a fully editable template for chapter-based, scroll-driven stories — histories, product journeys, brand timelines, or personal profiles. Turn on Edit Mode above to make it yours.",
+        heroMedia: { kind:"image", src: placeholder(1,"B"), embed:false }
+      },
+      chapters: [
         {
-          id: "e1", year: "1998", title: "Early Appointment",
-          text: "<p>Began a first posting abroad after completing postgraduate studies in international relations, taking on protocol and cultural-liaison duties within a small regional mission.</p><p>These early years established a reputation for careful, relationship-first diplomacy.</p>",
-          image: placeholder(11, "1998")
+          id:"c1", title:"Departures", subtitle:"The first wave leaves home, 1945–1960", accent: ACCENTS[0],
+          cover: { kind:"image", src: placeholder(21,"1"), embed:false },
+          entries: [
+            {
+              id:"e1", year:"1947", title:"Leaving the Homeland",
+              media:{ kind:"image", src: placeholder(31,"47"), embed:false },
+              caption:"Sample caption — replace with your own source line.",
+              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[3].value, size:"M", align:"left",
+                html:"<p>A first generation departs by ship and by rail, carrying little more than documents and a change of clothes. Entire neighborhoods empty out within a single season.</p><p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>" } ]
+            },
+            {
+              id:"e2", year:"1952", title:"Crossing the Atlantic",
+              media:{ kind:"gif", src: placeholder(32,"52"), embed:false },
+              caption:"Demo GIF slot — swap in an animated GIF via Change Media.",
+              blocks:[ newBlock("body") ]
+            }
+          ]
         },
         {
-          id: "e2", year: "2003", title: "First Overseas Posting",
-          text: "<p>Assigned to a mid-sized embassy abroad, leading a small team responsible for public programming and academic exchange partnerships.</p><p>Launched a scholarship initiative that would later be adopted as a national model.</p>",
-          image: placeholder(12, "2003")
+          id:"c2", title:"New Communities", subtitle:"Building homes abroad, 1960–1980", accent: ACCENTS[1],
+          cover: { kind:"image", src: placeholder(22,"2"), embed:false },
+          entries: [
+            {
+              id:"e3", year:"1965", title:"First Neighborhoods",
+              media:{ kind:"image", src: placeholder(33,"65"), embed:false },
+              caption:"",
+              blocks:[ newBlock("body") ]
+            },
+            {
+              id:"e4", year:"1978", title:"Faith and Fellowship",
+              media:{ kind:"video", src:null, embed:false },
+              caption:"Video slot — add a link or upload a clip via Change Media.",
+              blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                html:"“The hall we built with our own hands became the one place that still smelled like home.”" },
+                newBlock("body") ]
+            }
+          ]
         },
         {
-          id: "e3", year: "2008", title: "Crisis Response",
-          text: "<p>Coordinated an emergency response effort during a period of regional instability, managing communications between local authorities and displaced nationals.</p><p>The work drew recognition for calm, methodical leadership under pressure.</p>",
-          image: placeholder(13, "2008")
+          id:"c3", title:"Culture Carried Forward", subtitle:"Language, food, and memory, 1980–2005", accent: ACCENTS[2],
+          cover: { kind:"image", src: placeholder(23,"3"), embed:false },
+          entries: [
+            {
+              id:"e5", year:"1989", title:"A Festival Takes Root",
+              media:{ kind:"image", src: placeholder(34,"89"), embed:false },
+              caption:"",
+              blocks:[ newBlock("subheading"), newBlock("body") ]
+            },
+            {
+              id:"e6", year:"2001", title:"Passing on the Language",
+              media:{ kind:"image", src: placeholder(35,"01"), embed:false },
+              caption:"",
+              blocks:[ newBlock("body"), newBlock("caption") ]
+            }
+          ]
         },
         {
-          id: "e4", year: "2013", title: "Cultural Initiative Launch",
-          text: "<p>Founded a touring exhibition program pairing contemporary artists with historical archives, shown in twelve cities over three years.</p><p>The program remains one of the most cited examples of soft-power cultural exchange from this period.</p>",
-          image: placeholder(14, "2013")
-        },
-        {
-          id: "e5", year: "2019", title: "Distinguished Service Recognition",
-          text: "<p>Received a distinguished service honor for two decades of continuous diplomatic and cultural work, marking a transition into a senior advisory role.</p>",
-          image: placeholder(15, "2019")
-        },
-        {
-          id: "e6", year: "2024", title: "Present Day",
-          text: "<p>Now serves as senior advisor to incoming envoys, mentoring the next generation of cultural diplomats and documenting institutional knowledge for the archive.</p>",
-          image: placeholder(16, "2024")
+          id:"c4", title:"Voices Today", subtitle:"A living, ongoing story, 2005–present", accent: ACCENTS[3],
+          cover: { kind:"image", src: placeholder(24,"4"), embed:false },
+          entries: [
+            {
+              id:"e7", year:"2016", title:"A New Generation",
+              media:{ kind:"image", src: placeholder(36,"16"), embed:false },
+              caption:"",
+              blocks:[ newBlock("body") ]
+            },
+            {
+              id:"e8", year:"2024", title:"The Story Continues",
+              media:{ kind:"image", src: placeholder(37,"24"), embed:false },
+              caption:"",
+              blocks:[ newBlock("body") ]
+            }
+          ]
         }
       ]
     };
   }
 
-  var state = loadState() || defaultData();
-  var editOn = false;
-  var modalTarget = null; // {type:'hero'} or {type:'entry', id:'e1'}
+  let state = loadState() || defaultData();
+  let editOn = false;
+  let modalTarget = null;
+  let modalType = "image";
+  let modalVideoTab = "link";
 
-  /* ---------------- persistence ---------------- */
-  function saveState(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
-  }
+  function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
   function loadState(){
-    try{
-      var raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : null;
-    }catch(e){ return null; }
+    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+  }
+  let saveTimer = null;
+  function debouncedSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 300); }
+
+  function escapeHtml(str){ const d = document.createElement("div"); d.textContent = str == null ? "" : String(str); return d.innerHTML; }
+  function getChapter(cid){ return state.chapters.find(c => c.id === cid); }
+  function getEntry(cid, eid){ const c = getChapter(cid); return c && c.entries.find(e => e.id === eid); }
+  function getBlock(cid, eid, bid){ const e = getEntry(cid, eid); return e && e.blocks.find(b => b.id === bid); }
+
+  /* ---------------- media helpers ---------------- */
+  function parseVideoUrl(url){
+    const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/);
+    if(yt) return { provider:"youtube", id:yt[1] };
+    const vm = url.match(/vimeo\.com\/(\d+)/);
+    if(vm) return { provider:"vimeo", id:vm[1] };
+    return null;
+  }
+  function buildEmbedUrl(parsed, opts){
+    opts = opts || {};
+    if(parsed.provider === "youtube"){
+      let u = `https://www.youtube-nocookie.com/embed/${parsed.id}?rel=0&modestbranding=1`;
+      if(opts.autoplay) u += "&autoplay=1&mute=1";
+      if(opts.loop) u += `&loop=1&playlist=${parsed.id}`;
+      return u;
+    }
+    if(parsed.provider === "vimeo"){
+      let u = `https://player.vimeo.com/video/${parsed.id}?title=0&byline=0`;
+      if(opts.autoplay) u += "&autoplay=1&muted=1";
+      if(opts.loop) u += "&loop=1";
+      return u;
+    }
+    return "";
   }
 
-  /* ---------------- DOM refs ---------------- */
-  var $ = function(id){ return document.getElementById(id); };
-  var heroImg = $("heroImg"), heroEyebrow = $("heroEyebrow"), heroName = $("heroName"),
-      heroRole = $("heroRole"), heroDates = $("heroDates"), heroIntro = $("heroIntro"),
-      railTrack = $("railTrack"), railProgress = $("railProgress"), entriesEl = $("entries");
-
-  /* ---------------- render ---------------- */
-  function renderHero(){
-    heroImg.src = state.heroImage;
-    heroEyebrow.textContent = state.eyebrow;
-    heroName.textContent = state.name;
-    heroRole.textContent = state.role;
-    heroDates.textContent = state.dates;
-    heroIntro.textContent = state.intro;
+  function mediaMarkup(media){
+    if(!media || !media.src){
+      const icon = media && media.kind === "video" ? "▶" : "🖼";
+      const label = media && media.kind === "video" ? "No video added yet" : (media && media.kind === "gif" ? "No GIF added yet" : "No image added yet");
+      return `<div class="media-empty"><div class="icon">${icon}</div><div>${label}</div></div>
+              <div class="media-overlay" data-act="openMedia">Change Media</div>`;
+    }
+    let inner = "";
+    if(media.kind === "video"){
+      if(media.embed){
+        inner = `<div class="video-frame"><iframe src="${escapeHtml(media.src)}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy" allowfullscreen></iframe></div>`;
+      } else {
+        const attrs = [
+          media.autoplay ? "autoplay" : "",
+          media.loop ? "loop" : "",
+          (media.autoplay || media.muted) ? "muted" : "",
+          "playsinline",
+          "controls"
+        ].filter(Boolean).join(" ");
+        inner = `<video class="media-el" ${attrs} src="${escapeHtml(media.src)}"></video>`;
+      }
+    } else {
+      inner = `<img class="media-el" src="${escapeHtml(media.src)}" alt="" />`;
+      if(media.kind === "gif") inner += `<span class="media-badge">GIF</span>`;
+    }
+    return inner + `<div class="media-overlay" data-act="openMedia">Change Media</div>`;
   }
 
-  function entryLabel(entry){
-    return entry.title || "Untitled";
-  }
+  /* ---------------- rendering ---------------- */
+  const heroWrap = $("heroMediaWrap"), railChapters = $("railChapters"), mainEl = $("main");
 
   function render(){
-    renderHero();
+    renderHeroText();
+    heroWrap.innerHTML = mediaMarkup(state.meta.heroMedia);
 
-    // rail
-    railTrack.innerHTML = "";
-    railTrack.appendChild(railProgress);
-    state.entries.forEach(function(entry){
-      var item = document.createElement("div");
-      item.className = "rail-item";
-      item.dataset.id = entry.id;
-      item.innerHTML =
-        '<div class="rail-dot"></div>' +
-        '<div class="rail-year">' + escapeHtml(entry.year) + '</div>' +
-        '<div class="rail-label">' + escapeHtml(entryLabel(entry)) + '</div>';
-      item.addEventListener("click", function(){
-        var target = document.getElementById("entry-" + entry.id);
-        if(target) target.scrollIntoView({behavior:"smooth", block:"center"});
-      });
-      railTrack.appendChild(item);
+    railChapters.innerHTML = state.chapters.map(renderRailChapter).join("");
+    mainEl.innerHTML = state.chapters.map(renderChapter).join("") +
+      `<div class="add-chapter-row edit-only"><button type="button" data-act="addChapter" data-index="${state.chapters.length}">+ Add chapter at end</button></div>`;
+
+    observeReveal();
+    updateScroll();
+  }
+
+  function renderHeroText(){
+    document.querySelectorAll('[data-bind-type="meta"]').forEach(el => {
+      el.textContent = state.meta[el.dataset.field] || "";
     });
-
-    // entries
-    entriesEl.innerHTML = "";
-    state.entries.forEach(function(entry, idx){
-      entriesEl.appendChild(buildAddBetween(idx));
-      entriesEl.appendChild(buildEntry(entry, idx));
-    });
-    entriesEl.appendChild(buildAddBetween(state.entries.length));
-
-    observeEntries();
-    updateActiveNav();
   }
 
-  function buildAddBetween(index){
-    var wrap = document.createElement("div");
-    wrap.className = "add-between";
-    var btn = document.createElement("button");
-    btn.type = "button";
-    btn.textContent = "+ Insert entry here";
-    btn.addEventListener("click", function(){ insertEntry(index); });
-    wrap.appendChild(btn);
-    return wrap;
+  function entryLabel(entry){ return entry.title || "Untitled"; }
+
+  function renderRailChapter(chapter){
+    const entries = chapter.entries.map(entry => `
+      <div class="rail-item" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-act="jumpEntry">
+        <div class="rail-dot"></div>
+        <div class="rail-year">${escapeHtml(entry.year)}</div>
+        <div class="rail-label">${escapeHtml(entryLabel(entry))}</div>
+      </div>`).join("");
+    return `
+      <div class="rail-chapter" data-chapter-id="${chapter.id}">
+        <div class="rail-chapter-head" data-act="toggleChapter" data-chapter-id="${chapter.id}">
+          <button type="button" class="rail-chevron" tabindex="-1">▾</button>
+          <span class="rail-chapter-dot" style="background:${chapter.accent}"></span>
+          <span class="rail-chapter-title">${escapeHtml(chapter.title)}</span>
+        </div>
+        <div class="rail-entries" data-chapter-id="${chapter.id}">
+          <div class="rail-track-line"></div>
+          <div class="rail-progress-fill" data-chapter-id="${chapter.id}"></div>
+          ${entries}
+          <button type="button" class="rail-add-entry edit-only" data-act="addEntry" data-chapter-id="${chapter.id}" data-index="${chapter.entries.length}">+ Add entry</button>
+        </div>
+      </div>`;
   }
 
-  function buildEntry(entry, idx){
-    var section = document.createElement("section");
-    section.className = "entry";
-    section.id = "entry-" + entry.id;
-    section.dataset.id = entry.id;
-
-    var toolbar = document.createElement("div");
-    toolbar.className = "entry-toolbar";
-    toolbar.innerHTML =
-      '<button type="button" data-act="up">↑ Move up</button>' +
-      '<button type="button" data-act="down">↓ Move down</button>' +
-      '<button type="button" class="danger" data-act="delete">✕ Delete</button>';
-    toolbar.querySelector('[data-act="up"]').addEventListener("click", function(){ moveEntry(entry.id, -1); });
-    toolbar.querySelector('[data-act="down"]').addEventListener("click", function(){ moveEntry(entry.id, 1); });
-    toolbar.querySelector('[data-act="delete"]').addEventListener("click", function(){ deleteEntry(entry.id); });
-    section.appendChild(toolbar);
-
-    var fig = document.createElement("div");
-    fig.className = "entry-figure";
-    var img = document.createElement("img");
-    img.src = entry.image;
-    img.alt = entryLabel(entry);
-    var overlay = document.createElement("div");
-    overlay.className = "img-overlay";
-    overlay.textContent = "Change Image";
-    overlay.addEventListener("click", function(){ openImageModal({type:"entry", id:entry.id}); });
-    fig.appendChild(img);
-    fig.appendChild(overlay);
-    section.appendChild(fig);
-
-    var eyebrow = document.createElement("div");
-    eyebrow.className = "entry-eyebrow";
-    var yearTag = document.createElement("span");
-    yearTag.className = "entry-year-tag";
-    yearTag.setAttribute("data-editable","");
-    yearTag.setAttribute("contenteditable","false");
-    yearTag.textContent = entry.year;
-    yearTag.addEventListener("input", function(){
-      entry.year = yearTag.textContent;
-      syncRailFor(entry);
-      saveState();
-    });
-    var rule = document.createElement("span");
-    rule.className = "entry-rule";
-    eyebrow.appendChild(yearTag);
-    eyebrow.appendChild(rule);
-    section.appendChild(eyebrow);
-
-    var title = document.createElement("h2");
-    title.className = "entry-title";
-    title.setAttribute("data-editable","");
-    title.setAttribute("contenteditable","false");
-    title.textContent = entry.title;
-    title.addEventListener("input", function(){
-      entry.title = title.textContent;
-      syncRailFor(entry);
-      saveState();
-    });
-    section.appendChild(title);
-
-    var text = document.createElement("div");
-    text.className = "entry-text";
-    text.setAttribute("data-editable","");
-    text.setAttribute("contenteditable","false");
-    text.innerHTML = entry.text;
-    text.addEventListener("input", function(){
-      entry.text = text.innerHTML;
-      saveState();
-    });
-    section.appendChild(text);
-
-    return section;
+  function renderChapter(chapter, idx){
+    const entriesHtml = chapter.entries.map((entry, i) => renderAddBetween(chapter.id, i) + renderEntry(chapter, entry)).join("")
+      + renderAddBetween(chapter.id, chapter.entries.length);
+    return `
+      <section class="chapter" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}">
+        <div class="chapter-cover" data-chapter-id="${chapter.id}">
+          <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover)}</div>
+          <div class="chapter-cover-scrim"></div>
+          <div class="chapter-toolbar edit-only">
+            <button type="button" data-act="moveChapter" data-dir="-1" data-chapter-id="${chapter.id}">↑ Move</button>
+            <button type="button" data-act="moveChapter" data-dir="1" data-chapter-id="${chapter.id}">↓ Move</button>
+            <button type="button" class="danger" data-act="deleteChapter" data-chapter-id="${chapter.id}">✕ Delete Chapter</button>
+          </div>
+          <div class="chapter-cover-content">
+            <div class="chapter-index">Chapter 0${idx + 1}</div>
+            <h2 class="chapter-title" data-editable data-bind-type="chapterTitle" data-chapter-id="${chapter.id}" contenteditable="false">${escapeHtml(chapter.title)}</h2>
+            <p class="chapter-subtitle" data-editable data-bind-type="chapterSubtitle" data-chapter-id="${chapter.id}" contenteditable="false">${escapeHtml(chapter.subtitle)}</p>
+          </div>
+        </div>
+        <div class="chapter-entries">${entriesHtml}</div>
+      </section>`;
   }
 
-  function syncRailFor(entry){
-    var item = railTrack.querySelector('.rail-item[data-id="' + cssEscape(entry.id) + '"]');
-    if(!item) return;
-    item.querySelector(".rail-year").textContent = entry.year;
-    item.querySelector(".rail-label").textContent = entryLabel(entry);
+  function renderAddBetween(chapterId, index){
+    return `<div class="add-between edit-only"><button type="button" data-act="insertEntry" data-chapter-id="${chapterId}" data-index="${index}">+ Insert entry here</button></div>`;
   }
 
-  function escapeHtml(str){
-    var d = document.createElement("div");
-    d.textContent = str == null ? "" : String(str);
-    return d.innerHTML;
-  }
-  function cssEscape(id){
-    return String(id).replace(/["\\]/g, "\\$&");
+  function renderEntry(chapter, entry){
+    const blocksHtml = entry.blocks.map(b => renderBlock(chapter.id, entry.id, b)).join("");
+    return `
+      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}">
+        <div class="entry-toolbar edit-only">
+          <button type="button" data-act="moveEntry" data-dir="-1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↑ Move up</button>
+          <button type="button" data-act="moveEntry" data-dir="1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↓ Move down</button>
+          <button type="button" class="danger" data-act="deleteEntry" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">✕ Delete</button>
+        </div>
+        <div class="entry-media-wrap">
+          <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media)}</div>
+        </div>
+        <div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>
+        <div class="entry-eyebrow">
+          <span class="entry-year-tag" data-editable data-bind-type="entryYear" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.year)}</span>
+          <span class="entry-rule"></span>
+        </div>
+        <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
+        <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">
+          ${blocksHtml}
+          <button type="button" class="add-block-btn edit-only" data-act="addBlock" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">+ Add text block</button>
+        </div>
+      </section>`;
   }
 
-  /* ---------------- entry mutations ---------------- */
-  function newId(){
-    return "e" + Math.random().toString(36).slice(2, 9);
+  function renderBlock(chapterId, entryId, block){
+    const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
+    const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};`;
+    const optTypes = BLOCK_TYPES.map(t => `<option value="${t.type}" ${t.type===block.type?"selected":""}>${t.label}</option>`).join("");
+    const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===block.font?"selected":""}>${f.label}</option>`).join("");
+    const sizes = ["S","M","L","XL"];
+    const optSizes = sizes.map(s => `<option value="${s}" ${s===block.size?"selected":""}>${s}</option>`).join("");
+    const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
+    const optAligns = aligns.map(a => `<option value="${a[0]}" ${a[0]===block.align?"selected":""}>${a[1]}</option>`).join("");
+    return `
+      <div class="block-wrap" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
+        <div class="block-toolbar edit-only">
+          <select data-act="blockStyle" data-field="type" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optTypes}</select>
+          <select data-act="blockStyle" data-field="font" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optFonts}</select>
+          <select data-act="blockStyle" data-field="size" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optSizes}</select>
+          <select data-act="blockStyle" data-field="align" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optAligns}</select>
+          <button type="button" data-act="blockFormat" data-cmd="bold" data-block-id="${block.id}"><b>B</b></button>
+          <button type="button" data-act="blockFormat" data-cmd="italic" data-block-id="${block.id}"><i>I</i></button>
+          <span class="spacer"></span>
+          <button type="button" data-act="moveBlock" data-dir="-1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↑</button>
+          <button type="button" data-act="moveBlock" data-dir="1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↓</button>
+          <button type="button" class="danger" data-act="deleteBlock" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">✕</button>
+        </div>
+        <div class="block block--${block.type}" style="${styleAttr}" data-editable data-bind-type="blockHtml"
+             data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}"
+             contenteditable="false">${block.html}</div>
+      </div>`;
   }
-  function insertEntry(index){
-    var n = state.entries.length + 1;
-    var entry = {
-      id: newId(),
-      year: String(new Date().getFullYear()),
-      title: "New Entry",
-      text: "<p>Describe what happened during this period. Click to edit this text.</p>",
-      image: placeholder(n, "New")
+
+  /* ---------------- structural mutations ---------------- */
+  function insertChapter(index){
+    const n = state.chapters.length;
+    const chapter = {
+      id:newId(), title:"New Chapter", subtitle:"Add a short description for this chapter",
+      accent: ACCENTS[n % ACCENTS.length], cover:{ kind:"image", src: placeholder(n+50,"N"), embed:false },
+      entries: [ { id:newId(), year:String(new Date().getFullYear()), title:"New Entry",
+        media:{ kind:"image", src: placeholder(n+60,"N"), embed:false }, caption:"", blocks:[ newBlock("body") ] } ]
     };
-    state.entries.splice(index, 0, entry);
-    saveState();
-    render();
+    state.chapters.splice(index, 0, chapter);
+    saveState(); render();
   }
-  function deleteEntry(id){
-    if(state.entries.length <= 1){
-      alert("At least one entry is required.");
-      return;
-    }
+  function deleteChapter(id){
+    if(state.chapters.length <= 1){ alert("At least one chapter is required."); return; }
+    if(!confirm("Delete this entire chapter and its entries?")) return;
+    state.chapters = state.chapters.filter(c => c.id !== id);
+    saveState(); render();
+  }
+  function moveChapter(id, dir){
+    const i = state.chapters.findIndex(c => c.id === id);
+    const j = i + dir;
+    if(i < 0 || j < 0 || j >= state.chapters.length) return;
+    [state.chapters[i], state.chapters[j]] = [state.chapters[j], state.chapters[i]];
+    saveState(); render();
+    document.getElementById("chapter-" + id)?.scrollIntoView({behavior:"smooth", block:"start"});
+  }
+
+  function insertEntry(chapterId, index){
+    const chapter = getChapter(chapterId);
+    const entry = { id:newId(), year:String(new Date().getFullYear()), title:"New Entry",
+      media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99),"N"), embed:false },
+      caption:"", blocks:[ newBlock("body") ] };
+    chapter.entries.splice(index, 0, entry);
+    saveState(); render();
+  }
+  function deleteEntry(chapterId, entryId){
+    const chapter = getChapter(chapterId);
+    if(chapter.entries.length <= 1){ alert("Each chapter needs at least one entry."); return; }
     if(!confirm("Delete this timeline entry?")) return;
-    state.entries = state.entries.filter(function(e){ return e.id !== id; });
-    saveState();
-    render();
+    chapter.entries = chapter.entries.filter(e => e.id !== entryId);
+    saveState(); render();
   }
-  function moveEntry(id, dir){
-    var i = state.entries.findIndex(function(e){ return e.id === id; });
-    var j = i + dir;
-    if(i < 0 || j < 0 || j >= state.entries.length) return;
-    var tmp = state.entries[i];
-    state.entries[i] = state.entries[j];
-    state.entries[j] = tmp;
-    saveState();
-    render();
-    var el = document.getElementById("entry-" + id);
-    if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+  function moveEntry(chapterId, entryId, dir){
+    const chapter = getChapter(chapterId);
+    const i = chapter.entries.findIndex(e => e.id === entryId);
+    const j = i + dir;
+    if(i < 0 || j < 0 || j >= chapter.entries.length) return;
+    [chapter.entries[i], chapter.entries[j]] = [chapter.entries[j], chapter.entries[i]];
+    saveState(); render();
+    document.getElementById("entry-" + entryId)?.scrollIntoView({behavior:"smooth", block:"center"});
   }
 
-  /* ---------------- scroll: active nav + progress + reveal ---------------- */
-  var io;
-  function observeEntries(){
-    if(io) io.disconnect();
-    io = new IntersectionObserver(function(list){
-      list.forEach(function(e){
-        if(e.isIntersecting) e.target.classList.add("in-view");
-      });
-    }, {threshold:0.12});
-    document.querySelectorAll(".entry").forEach(function(el){ io.observe(el); });
+  function addBlock(chapterId, entryId){
+    const entry = getEntry(chapterId, entryId);
+    entry.blocks.push(newBlock("body"));
+    saveState(); render();
   }
-
-  function updateActiveNav(){
-    var entries = Array.prototype.slice.call(document.querySelectorAll(".entry"));
-    if(!entries.length) return;
-    var viewportMid = window.innerHeight * 0.4;
-    var activeId = entries[0].dataset.id;
-    for(var i=0;i<entries.length;i++){
-      var r = entries[i].getBoundingClientRect();
-      if(r.top - viewportMid <= 0) activeId = entries[i].dataset.id;
-    }
-    railTrack.querySelectorAll(".rail-item").forEach(function(item){
-      item.classList.toggle("active", item.dataset.id === activeId);
-    });
-
-    // progress line: from top of first entry to bottom of active point
-    var first = entries[0].getBoundingClientRect();
-    var last = entries[entries.length-1].getBoundingClientRect();
-    var totalHeight = (last.bottom - first.top);
-    var scrolled = Math.min(Math.max(viewportMid - first.top, 0), totalHeight);
-    var pct = totalHeight > 0 ? (scrolled / totalHeight) * 100 : 0;
-    railProgress.style.height = pct + "%";
+  function deleteBlock(chapterId, entryId, blockId){
+    const entry = getEntry(chapterId, entryId);
+    if(entry.blocks.length <= 1){ alert("Each entry needs at least one text block."); return; }
+    entry.blocks = entry.blocks.filter(b => b.id !== blockId);
+    saveState(); render();
   }
-
-  var ticking = false;
-  window.addEventListener("scroll", function(){
-    if(!ticking){
-      window.requestAnimationFrame(function(){
-        updateActiveNav();
-        parallaxHero();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }, {passive:true});
-  window.addEventListener("resize", updateActiveNav);
-
-  function parallaxHero(){
-    var hero = $("hero");
-    var rect = hero.getBoundingClientRect();
-    if(rect.bottom < 0 || rect.top > window.innerHeight) return;
-    var progress = Math.min(Math.max(-rect.top / rect.height, 0), 1);
-    heroImg.style.transform = "scale(" + (1.08 + progress*0.06) + ")";
+  function moveBlock(chapterId, entryId, blockId, dir){
+    const entry = getEntry(chapterId, entryId);
+    const i = entry.blocks.findIndex(b => b.id === blockId);
+    const j = i + dir;
+    if(i < 0 || j < 0 || j >= entry.blocks.length) return;
+    [entry.blocks[i], entry.blocks[j]] = [entry.blocks[j], entry.blocks[i]];
+    saveState(); render();
   }
 
   /* ---------------- edit mode ---------------- */
@@ -959,130 +807,363 @@
     document.body.classList.toggle("edit-on", on);
     $("btnEdit").textContent = "Edit Mode: " + (on ? "On" : "Off");
     $("btnEdit").classList.toggle("on", on);
-    document.querySelectorAll("[data-editable]").forEach(function(el){
-      el.setAttribute("contenteditable", on ? "true" : "false");
-    });
+    document.querySelectorAll("[data-editable]").forEach(el => el.setAttribute("contenteditable", on ? "true" : "false"));
   }
-  $("btnEdit").addEventListener("click", function(){ setEditMode(!editOn); });
+  $("btnEdit").addEventListener("click", () => setEditMode(!editOn));
 
-  $("btnHeroImg").addEventListener("click", function(){ openImageModal({type:"hero"}); });
-
-  $("railAdd").addEventListener("click", function(){ insertEntry(state.entries.length); });
-
-  heroEyebrow.addEventListener("input", function(){ state.eyebrow = heroEyebrow.textContent; saveState(); });
-  heroName.addEventListener("input", function(){ state.name = heroName.textContent; saveState(); });
-  heroRole.addEventListener("input", function(){ state.role = heroRole.textContent; saveState(); });
-  heroDates.addEventListener("input", function(){ state.dates = heroDates.textContent; saveState(); });
-  heroIntro.addEventListener("input", function(){ state.intro = heroIntro.textContent; saveState(); });
-
-  /* ---------------- image modal ---------------- */
-  var backdrop = $("modalBackdrop"), modalUrl = $("modalUrl"), modalFile = $("modalFile");
-  function openImageModal(target){
-    modalTarget = target;
-    modalUrl.value = "";
-    modalFile.value = "";
-    backdrop.classList.add("open");
-    modalUrl.focus();
-  }
-  function closeImageModal(){
-    backdrop.classList.remove("open");
-    modalTarget = null;
-  }
-  $("modalCancel").addEventListener("click", closeImageModal);
-  backdrop.addEventListener("click", function(e){ if(e.target === backdrop) closeImageModal(); });
-
-  $("modalSave").addEventListener("click", function(){
-    if(modalFile.files && modalFile.files[0]){
-      var reader = new FileReader();
-      reader.onload = function(){
-        applyImage(reader.result);
-        closeImageModal();
-      };
-      reader.readAsDataURL(modalFile.files[0]);
-      return;
+  /* ---------------- delegated input (typing) ---------------- */
+  document.addEventListener("input", (e) => {
+    const el = e.target;
+    if(!el.matches || !el.matches("[data-editable]")) return;
+    const bt = el.dataset.bindType;
+    if(bt === "meta"){
+      state.meta[el.dataset.field] = el.textContent;
+    } else if(bt === "chapterTitle"){
+      const c = getChapter(el.dataset.chapterId); c.title = el.textContent;
+      syncRailChapterTitle(el.dataset.chapterId);
+    } else if(bt === "chapterSubtitle"){
+      getChapter(el.dataset.chapterId).subtitle = el.textContent;
+    } else if(bt === "entryYear"){
+      const en = getEntry(el.dataset.chapterId, el.dataset.entryId); en.year = el.textContent;
+      syncRailEntry(el.dataset.entryId);
+    } else if(bt === "entryTitle"){
+      const en = getEntry(el.dataset.chapterId, el.dataset.entryId); en.title = el.textContent;
+      syncRailEntry(el.dataset.entryId);
+    } else if(bt === "entryCaption"){
+      getEntry(el.dataset.chapterId, el.dataset.entryId).caption = el.textContent;
+    } else if(bt === "blockHtml"){
+      getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     }
-    var url = modalUrl.value.trim();
-    if(url){
-      applyImage(url);
-    }
-    closeImageModal();
+    debouncedSave();
   });
 
-  function applyImage(src){
+  function syncRailChapterTitle(chapterId){
+    const el = railChapters.querySelector(`.rail-chapter[data-chapter-id="${cssEscape(chapterId)}"] .rail-chapter-title`);
+    if(el) el.textContent = getChapter(chapterId).title;
+  }
+  function syncRailEntry(entryId){
+    const item = railChapters.querySelector(`.rail-item[data-id="${cssEscape(entryId)}"]`);
+    if(!item) return;
+    const chapterId = item.dataset.chapterId;
+    const entry = getEntry(chapterId, entryId);
+    item.querySelector(".rail-year").textContent = entry.year;
+    item.querySelector(".rail-label").textContent = entryLabel(entry);
+  }
+  function cssEscape(id){ return String(id).replace(/["\\]/g, "\\$&"); }
+
+  /* ---------------- delegated change (block toolbar selects) ---------------- */
+  document.addEventListener("change", (e) => {
+    const el = e.target;
+    if(el.matches('[data-act="blockStyle"]')){
+      const b = getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId);
+      b[el.dataset.field] = el.value;
+      applyBlockStyle(el.dataset.blockId, b);
+      saveState();
+    }
+  });
+  function applyBlockStyle(blockId, block){
+    const wrap = document.querySelector(`.block-wrap[data-block-id="${cssEscape(blockId)}"]`);
+    if(!wrap) return;
+    const el = wrap.querySelector(".block");
+    const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
+    el.className = "block block--" + block.type;
+    el.style.fontFamily = block.font;
+    el.style.fontSize = px + "px";
+    el.style.textAlign = block.align;
+  }
+
+  /* ---------------- delegated click (all buttons + media overlays + rail nav) ---------------- */
+  document.addEventListener("click", (e) => {
+    const overlay = e.target.closest(".media-overlay");
+    if(overlay){
+      const scopeEl = overlay.closest("[data-media-scope]");
+      openMediaModal({
+        scope: scopeEl.dataset.mediaScope,
+        chapterId: scopeEl.dataset.chapterId,
+        entryId: scopeEl.dataset.entryId
+      });
+      return;
+    }
+
+    const btn = e.target.closest("[data-act]");
+    if(!btn) return;
+    const act = btn.dataset.act;
+
+    if(act === "jumpEntry"){
+      document.getElementById("entry-" + btn.dataset.id)?.scrollIntoView({behavior:"smooth", block:"center"});
+    } else if(act === "toggleChapter"){
+      const wrap = railChapters.querySelector(`.rail-chapter[data-chapter-id="${cssEscape(btn.dataset.chapterId)}"]`);
+      wrap.classList.toggle("collapsed");
+    } else if(act === "addChapter"){
+      insertChapter(parseInt(btn.dataset.index, 10));
+    } else if(act === "moveChapter"){
+      moveChapter(btn.dataset.chapterId, parseInt(btn.dataset.dir, 10));
+    } else if(act === "deleteChapter"){
+      deleteChapter(btn.dataset.chapterId);
+    } else if(act === "insertEntry" || act === "addEntry"){
+      insertEntry(btn.dataset.chapterId, parseInt(btn.dataset.index, 10));
+    } else if(act === "moveEntry"){
+      moveEntry(btn.dataset.chapterId, btn.dataset.entryId, parseInt(btn.dataset.dir, 10));
+    } else if(act === "deleteEntry"){
+      deleteEntry(btn.dataset.chapterId, btn.dataset.entryId);
+    } else if(act === "addBlock"){
+      addBlock(btn.dataset.chapterId, btn.dataset.entryId);
+    } else if(act === "moveBlock"){
+      moveBlock(btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId, parseInt(btn.dataset.dir, 10));
+    } else if(act === "deleteBlock"){
+      deleteBlock(btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId);
+    } else if(act === "blockFormat"){
+      const wrap = btn.closest(".block-wrap");
+      const el = wrap.querySelector(".block");
+      el.focus();
+      document.execCommand(btn.dataset.cmd);
+      el.dispatchEvent(new Event("input", { bubbles:true }));
+    }
+  });
+
+  /* ---------------- scroll: reveal, active nav, per-chapter progress, live accent ---------------- */
+  let io;
+  function observeReveal(){
+    if(io) io.disconnect();
+    io = new IntersectionObserver((list) => {
+      list.forEach(e => { if(e.isIntersecting) e.target.classList.add("in-view"); });
+    }, { threshold:0.12 });
+    document.querySelectorAll(".entry, .block-wrap, .chapter-cover").forEach(el => io.observe(el));
+  }
+
+  function updateScroll(){
+    updateProgressBar();
+    updateChapterProgress();
+    updateActiveEntry();
+    updateActiveChapterAccent();
+    parallax();
+  }
+
+  function updateProgressBar(){
+    const h = document.documentElement;
+    const scrollTop = h.scrollTop || document.body.scrollTop;
+    const height = (h.scrollHeight - h.clientHeight) || 1;
+    $("progressBar").style.width = Math.min(100, Math.max(0, (scrollTop / height) * 100)) + "%";
+  }
+
+  function updateChapterProgress(){
+    const viewportMid = window.innerHeight * 0.42;
+    state.chapters.forEach(chapter => {
+      const entries = chapter.entries.map(e => document.getElementById("entry-" + e.id)).filter(Boolean);
+      if(!entries.length) return;
+      const fill = railChapters.querySelector(`.rail-progress-fill[data-chapter-id="${cssEscape(chapter.id)}"]`);
+      const first = entries[0].getBoundingClientRect();
+      const last = entries[entries.length - 1].getBoundingClientRect();
+      const totalHeight = last.bottom - first.top;
+      const scrolled = Math.min(Math.max(viewportMid - first.top, 0), totalHeight);
+      const pct = totalHeight > 0 ? (scrolled / totalHeight) * 100 : 0;
+      if(fill) fill.style.height = pct + "%";
+    });
+  }
+
+  function updateActiveEntry(){
+    const viewportMid = window.innerHeight * 0.42;
+    let activeId = null;
+    document.querySelectorAll(".entry").forEach(el => {
+      const r = el.getBoundingClientRect();
+      if(r.top - viewportMid <= 0) activeId = el.dataset.id;
+    });
+    railChapters.querySelectorAll(".rail-item").forEach(item => {
+      item.classList.toggle("active", item.dataset.id === activeId);
+    });
+  }
+
+  function updateActiveChapterAccent(){
+    const viewportMid = window.innerHeight * 0.42;
+    let activeChapterId = state.chapters[0] && state.chapters[0].id;
+    document.querySelectorAll(".chapter").forEach(el => {
+      const r = el.getBoundingClientRect();
+      if(r.top - viewportMid <= 0) activeChapterId = el.dataset.chapterId;
+    });
+    const chapter = getChapter(activeChapterId);
+    if(chapter) document.documentElement.style.setProperty("--accent-live", chapter.accent);
+    railChapters.querySelectorAll(".rail-chapter").forEach(el => {
+      el.classList.toggle("active", el.dataset.chapterId === activeChapterId);
+    });
+  }
+
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function parallax(){
+    if(reduceMotion) return;
+    const heroEl = $("hero");
+    const heroRect = heroEl.getBoundingClientRect();
+    if(heroRect.bottom > 0 && heroRect.top < window.innerHeight){
+      const progress = Math.min(Math.max(-heroRect.top / heroRect.height, 0), 1);
+      const img = heroWrap.querySelector(".media-el");
+      if(img) img.style.transform = `scale(${1.06 + progress * 0.08})`;
+    }
+    document.querySelectorAll(".chapter-cover").forEach(cover => {
+      const r = cover.getBoundingClientRect();
+      if(r.bottom < -200 || r.top > window.innerHeight + 200) return;
+      const progress = Math.min(Math.max((window.innerHeight - r.top) / (window.innerHeight + r.height), 0), 1);
+      const img = cover.querySelector(".media-el");
+      if(img) img.style.transform = `translateY(${(progress - 0.5) * 26}px) scale(1.08)`;
+    });
+  }
+
+  let ticking = false;
+  window.addEventListener("scroll", () => {
+    if(!ticking){ requestAnimationFrame(() => { updateScroll(); ticking = false; }); ticking = true; }
+  }, { passive:true });
+  window.addEventListener("resize", updateScroll);
+
+  /* cursor tilt on hero + chapter covers */
+  if(!reduceMotion){
+    document.addEventListener("mousemove", (e) => {
+      const target = e.target.closest(".hero, .chapter-cover");
+      if(!target) return;
+      const rect = target.getBoundingClientRect();
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      const media = target.querySelector(".media-fill .media-el");
+      if(media) media.style.transform = `translate(${relX * -10}px, ${relY * -8}px) scale(1.07)`;
+    });
+  }
+
+  /* ---------------- media modal ---------------- */
+  const backdrop = $("mediaModalBackdrop");
+  function openMediaModal(target){
+    modalTarget = target;
+    modalType = "image";
+    modalVideoTab = "link";
+    $("mediaUrl").value = ""; $("mediaFile").value = "";
+    $("videoUrl").value = ""; $("videoFile").value = "";
+    $("optAutoplay").checked = false; $("optLoop").checked = false; $("optMuted").checked = false;
+    setModalType("image");
+    setVideoTab("link");
+    backdrop.classList.add("open");
+    $("mediaUrl").focus();
+  }
+  function closeMediaModal(){ backdrop.classList.remove("open"); modalTarget = null; }
+  $("modalCancel").addEventListener("click", closeMediaModal);
+  backdrop.addEventListener("click", (e) => { if(e.target === backdrop) closeMediaModal(); });
+
+  function setModalType(type){
+    modalType = type;
+    $("typeTabs").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.type === type));
+    $("imageFields").classList.toggle("field-hidden", type === "video");
+    $("videoFields").classList.toggle("field-hidden", type !== "video");
+  }
+  $("typeTabs").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-type]");
+    if(b) setModalType(b.dataset.type);
+  });
+  function setVideoTab(tab){
+    modalVideoTab = tab;
+    $("videoSubtabs").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.vtab === tab));
+    $("videoLinkField").classList.toggle("field-hidden", tab !== "link");
+    $("videoUploadField").classList.toggle("field-hidden", tab !== "upload");
+  }
+  $("videoSubtabs").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-vtab]");
+    if(b) setVideoTab(b.dataset.vtab);
+  });
+  $("optAutoplay").addEventListener("change", (e) => {
+    if(e.target.checked){ $("optMuted").checked = true; $("optMuted").disabled = true; }
+    else { $("optMuted").disabled = false; }
+  });
+
+  $("modalSave").addEventListener("click", () => {
     if(!modalTarget) return;
-    if(modalTarget.type === "hero"){
-      state.heroImage = src;
-      heroImg.src = src;
-    } else {
-      var entry = state.entries.find(function(e){ return e.id === modalTarget.id; });
-      if(entry){
-        entry.image = src;
-        var section = document.getElementById("entry-" + entry.id);
-        if(section) section.querySelector(".entry-figure img").src = src;
+    const target = modalTarget; // snapshot: closeMediaModal() nulls modalTarget before async FileReader callbacks fire
+    if(modalType === "image" || modalType === "gif"){
+      if($("mediaFile").files[0]){
+        const reader = new FileReader();
+        reader.onload = () => applyMedia(target, { kind:modalType, src:reader.result, embed:false });
+        reader.readAsDataURL($("mediaFile").files[0]);
+      } else if($("mediaUrl").value.trim()){
+        applyMedia(target, { kind:modalType, src:$("mediaUrl").value.trim(), embed:false });
+      }
+      closeMediaModal();
+      return;
+    }
+    // video
+    const opts = { autoplay:$("optAutoplay").checked, loop:$("optLoop").checked, muted:$("optMuted").checked };
+    if(modalVideoTab === "upload" && $("videoFile").files[0]){
+      const reader = new FileReader();
+      reader.onload = () => applyMedia(target, { kind:"video", src:reader.result, embed:false, ...opts });
+      reader.readAsDataURL($("videoFile").files[0]);
+      closeMediaModal();
+      return;
+    }
+    const url = $("videoUrl").value.trim();
+    if(url){
+      const parsed = parseVideoUrl(url);
+      if(parsed){
+        applyMedia(target, { kind:"video", src: buildEmbedUrl(parsed, opts), embed:true, ...opts });
+      } else {
+        applyMedia(target, { kind:"video", src:url, embed:false, ...opts });
       }
     }
+    closeMediaModal();
+  });
+
+  function applyMedia(target, media){
+    if(!target) return;
+    let container;
+    if(target.scope === "hero"){
+      state.meta.heroMedia = media;
+      container = heroWrap;
+    } else if(target.scope === "chapterCover"){
+      getChapter(target.chapterId).cover = media;
+      container = document.querySelector(`.media-fill[data-media-scope="chapterCover"][data-chapter-id="${cssEscape(target.chapterId)}"]`);
+    } else if(target.scope === "entryMedia"){
+      getEntry(target.chapterId, target.entryId).media = media;
+      container = document.querySelector(`.media-fill[data-media-scope="entryMedia"][data-entry-id="${cssEscape(target.entryId)}"]`);
+    }
+    if(container) container.innerHTML = mediaMarkup(media);
     saveState();
   }
 
   /* ---------------- export / import / reset ---------------- */
-  $("btnExport").addEventListener("click", function(){
-    var blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
-    var a = document.createElement("a");
+  $("btnExport").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
+    const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "timeline-dashboard-content.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    a.download = "chapters-dashboard-content.json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
   });
-
-  $("fileImport").addEventListener("change", function(e){
-    var file = e.target.files[0];
+  $("fileImport").addEventListener("change", (e) => {
+    const file = e.target.files[0];
     if(!file) return;
-    var reader = new FileReader();
-    reader.onload = function(){
+    const reader = new FileReader();
+    reader.onload = () => {
       try{
-        var data = JSON.parse(reader.result);
-        if(!data.entries || !Array.isArray(data.entries)) throw new Error("Invalid file");
-        state = data;
-        saveState();
-        render();
-      }catch(err){
-        alert("That file doesn't look like a valid timeline export.");
-      }
+        const data = JSON.parse(reader.result);
+        if(!data.chapters || !Array.isArray(data.chapters)) throw new Error("Invalid file");
+        state = data; saveState(); render();
+      }catch(err){ alert("That file doesn't look like a valid dashboard export."); }
     };
     reader.readAsText(file);
     e.target.value = "";
   });
-
-  $("btnReset").addEventListener("click", function(){
+  $("btnReset").addEventListener("click", () => {
     if(!confirm("Reset to the demo content? Your edits will be lost unless exported.")) return;
-    state = defaultData();
-    saveState();
-    render();
+    state = defaultData(); saveState(); render();
   });
+  $("railAddChapter").addEventListener("click", () => insertChapter(state.chapters.length));
 
   /* ---------------- theme ---------------- */
-  var THEME_KEY = "timeline-dashboard-theme";
-  function applyTheme(t){
-    if(t){ document.documentElement.setAttribute("data-theme", t); }
-    else { document.documentElement.removeAttribute("data-theme"); }
-  }
-  var savedTheme = null;
+  const THEME_KEY = "chapters-dashboard-theme";
+  function applyTheme(t){ if(t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme"); }
+  let savedTheme = null;
   try{ savedTheme = localStorage.getItem(THEME_KEY); }catch(e){}
   applyTheme(savedTheme);
-  $("btnTheme").addEventListener("click", function(){
-    var current = document.documentElement.getAttribute("data-theme");
-    var next = current === "dark" ? "light" : (current === "light" ? null : "dark");
+  $("btnTheme").addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme");
+    const next = current === "dark" ? "light" : (current === "light" ? null : "dark");
     applyTheme(next);
-    try{
-      if(next) localStorage.setItem(THEME_KEY, next);
-      else localStorage.removeItem(THEME_KEY);
-    }catch(e){}
+    try{ if(next) localStorage.setItem(THEME_KEY, next); else localStorage.removeItem(THEME_KEY); }catch(e){}
   });
 
   /* ---------------- init ---------------- */
   render();
-  parallaxHero();
+  updateScroll();
 })();
 </script>
 </body>
