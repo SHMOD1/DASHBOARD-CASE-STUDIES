@@ -1,0 +1,1089 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Editable Timeline Dashboard</title>
+<style>
+  :root{
+    --bg:#f6f2e8;
+    --bg-alt:#ece5d4;
+    --paper:#fbf8f1;
+    --ink:#20242b;
+    --ink-soft:#5b6270;
+    --ink-faint:#8a8f99;
+    --accent:#7c2a2a;
+    --accent-2:#b3893a;
+    --line:#d9d0ba;
+    --line-strong:#b8ac8d;
+    --chrome-bg:#181a1f;
+    --chrome-ink:#e7e2d4;
+    --radius:2px;
+    --serif: Georgia, 'Iowan Old Style', 'Palatino Linotype', 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  [data-theme="dark"]{
+    --bg:#14151a;
+    --bg-alt:#1b1d24;
+    --paper:#1c1e25;
+    --ink:#eae6da;
+    --ink-soft:#b3aea0;
+    --ink-faint:#7d7a72;
+    --accent:#d98a8a;
+    --accent-2:#e0bd76;
+    --line:#33323a;
+    --line-strong:#4a4840;
+    --chrome-bg:#0b0c0f;
+    --chrome-ink:#e7e2d4;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14151a;
+      --bg-alt:#1b1d24;
+      --paper:#1c1e25;
+      --ink:#eae6da;
+      --ink-soft:#b3aea0;
+      --ink-faint:#7d7a72;
+      --accent:#d98a8a;
+      --accent-2:#e0bd76;
+      --line:#33323a;
+      --line-strong:#4a4840;
+      --chrome-bg:#0b0c0f;
+      --chrome-ink:#e7e2d4;
+    }
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;cursor:pointer;}
+
+  /* ---------- app chrome (dashboard controls) ---------- */
+  .chrome{
+    position:sticky;
+    top:0;
+    z-index:60;
+    background:var(--chrome-bg);
+    color:var(--chrome-ink);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 20px;
+    font-size:12px;
+    letter-spacing:.04em;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .chrome-brand{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    text-transform:uppercase;
+    font-size:11px;
+    opacity:.85;
+  }
+  .chrome-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2);}
+  .chrome-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .chrome button, .chrome label.file-btn{
+    background:transparent;
+    border:1px solid rgba(231,226,212,.28);
+    color:var(--chrome-ink);
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    transition:background .15s, border-color .15s;
+  }
+  .chrome button:hover, .chrome label.file-btn:hover{
+    background:rgba(231,226,212,.1);
+    border-color:rgba(231,226,212,.5);
+  }
+  .chrome button.primary{
+    background:var(--accent-2);
+    border-color:var(--accent-2);
+    color:#1a1508;
+    font-weight:700;
+  }
+  .chrome button.primary.on{
+    background:#3f7d5c;
+    border-color:#3f7d5c;
+    color:#eafff1;
+  }
+  .chrome input[type=file]{display:none;}
+  .chrome-hint{
+    font-size:10.5px;
+    color:var(--ink-faint);
+    opacity:.7;
+    display:none;
+  }
+  body.edit-on .chrome-hint{display:inline;}
+
+  /* ---------- site header / masthead ---------- */
+  .masthead{
+    text-align:center;
+    padding:34px 20px 22px;
+    border-bottom:1px solid var(--line);
+    background:var(--paper);
+  }
+  .masthead-brand{
+    font-family:var(--serif);
+    font-size:15px;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--accent);
+  }
+  .masthead-sub{
+    margin-top:4px;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative;
+    min-height:78vh;
+    display:flex;
+    align-items:flex-end;
+    background-size:cover;
+    background-position:center;
+    overflow:hidden;
+  }
+  .hero-img{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;
+    transform:scale(1.08);
+    transition:transform .6s ease;
+    will-change:transform;
+  }
+  .hero-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(15,15,18,.15) 0%, rgba(15,15,18,.35) 45%, rgba(12,12,14,.92) 100%);
+  }
+  .hero-content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:1180px;
+    margin:0 auto;
+    padding:60px 40px 46px;
+    color:#f4efe2;
+  }
+  .hero-eyebrow{
+    font-size:12px;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:#e2c07e;
+    margin-bottom:14px;
+    font-weight:600;
+  }
+  .hero-name{
+    font-family:var(--serif);
+    font-size:clamp(38px,6vw,72px);
+    line-height:1.02;
+    margin:0 0 10px;
+    font-weight:400;
+  }
+  .hero-role{
+    font-size:clamp(15px,2vw,19px);
+    color:#d9d2bf;
+    font-weight:400;
+    margin-bottom:6px;
+  }
+  .hero-dates{
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#a99f86;
+    margin-bottom:22px;
+  }
+  .hero-intro{
+    max-width:640px;
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.6;
+    color:#ece6d6;
+  }
+  .hero-edit-btn{
+    position:absolute;
+    top:16px;right:16px;
+    z-index:3;
+    background:rgba(0,0,0,.55);
+    color:#fff;
+    border:1px solid rgba(255,255,255,.4);
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    display:none;
+  }
+  body.edit-on .hero-edit-btn{display:inline-block;}
+
+  [contenteditable="true"]{
+    outline:none;
+  }
+  body.edit-on [data-editable]{
+    outline:1px dashed rgba(179,137,58,.6);
+    outline-offset:3px;
+    border-radius:2px;
+    cursor:text;
+    transition:background .15s;
+  }
+  body.edit-on [data-editable]:hover,
+  body.edit-on [data-editable]:focus{
+    background:rgba(179,137,58,.12);
+  }
+  body.edit-on .hero-content [data-editable]:hover,
+  body.edit-on .hero-content [data-editable]:focus{
+    background:rgba(226,192,126,.16);
+  }
+
+  /* ---------- layout: timeline + entries ---------- */
+  .layout{
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:230px 1fr;
+    gap:0 48px;
+    padding:64px 40px 40px;
+    align-items:start;
+  }
+
+  .rail{
+    position:sticky;
+    top:64px;
+    align-self:start;
+    padding-top:6px;
+  }
+  .rail-title{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--ink-faint);
+    margin:0 0 18px;
+  }
+  .rail-track{
+    position:relative;
+    padding-left:22px;
+  }
+  .rail-track::before{
+    content:"";
+    position:absolute;
+    left:5px;top:4px;bottom:4px;
+    width:1px;
+    background:var(--line);
+  }
+  .rail-progress{
+    position:absolute;
+    left:5px;top:4px;
+    width:1px;
+    height:0%;
+    background:var(--accent);
+    transition:height .12s linear;
+  }
+  .rail-item{
+    position:relative;
+    padding:0 0 30px;
+    cursor:pointer;
+  }
+  .rail-item:last-child{padding-bottom:2px;}
+  .rail-dot{
+    position:absolute;
+    left:-22px;top:2px;
+    width:11px;height:11px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--line-strong);
+    transition:all .2s ease;
+  }
+  .rail-year{
+    font-family:var(--serif);
+    font-size:19px;
+    color:var(--ink-faint);
+    transition:color .2s ease;
+    line-height:1.2;
+  }
+  .rail-label{
+    font-size:11.5px;
+    color:var(--ink-faint);
+    margin-top:2px;
+    max-width:170px;
+    transition:color .2s ease;
+  }
+  .rail-item.active .rail-dot{
+    background:var(--accent);
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px rgba(124,42,42,.15);
+  }
+  .rail-item.active .rail-year{color:var(--ink);font-weight:600;}
+  .rail-item.active .rail-label{color:var(--ink-soft);}
+  .rail-item:hover .rail-year{color:var(--accent);}
+
+  .rail-add{
+    margin-left:-2px;
+    margin-top:6px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    background:none;
+    border:1px dashed var(--line-strong);
+    color:var(--ink-soft);
+    padding:7px 12px;
+    border-radius:20px;
+    display:none;
+  }
+  body.edit-on .rail-add{display:inline-block;}
+
+  /* ---------- entries ---------- */
+  .entries{display:flex;flex-direction:column;gap:96px;}
+  .entry{
+    opacity:0;
+    transform:translateY(26px);
+    transition:opacity .7s ease, transform .7s ease;
+    position:relative;
+  }
+  .entry.in-view{opacity:1;transform:translateY(0);}
+
+  .entry-toolbar{
+    display:none;
+    gap:8px;
+    margin-bottom:10px;
+  }
+  body.edit-on .entry-toolbar{display:flex;}
+  .entry-toolbar button{
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink-soft);
+    padding:5px 10px;
+    border-radius:14px;
+  }
+  .entry-toolbar button:hover{border-color:var(--accent);color:var(--accent);}
+  .entry-toolbar button.danger:hover{border-color:#a33;color:#a33;}
+
+  .entry-figure{
+    position:relative;
+    border-radius:var(--radius);
+    overflow:hidden;
+    margin-bottom:26px;
+    background:var(--bg-alt);
+    aspect-ratio:16/9;
+  }
+  .entry-figure img{width:100%;height:100%;object-fit:cover;}
+  .entry-figure .img-overlay{
+    position:absolute;inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(20,18,14,.45);
+    color:#fff;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    opacity:0;
+    transition:opacity .15s;
+  }
+  body.edit-on .entry-figure .img-overlay{display:flex;cursor:pointer;}
+  .entry-figure:hover .img-overlay{opacity:1;}
+  .entry-caption{
+    font-size:11px;
+    color:var(--ink-faint);
+    margin-top:8px;
+    font-style:italic;
+  }
+
+  .entry-eyebrow{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .entry-year-tag{
+    font-family:var(--serif);
+    font-size:14px;
+    color:var(--accent);
+    letter-spacing:.04em;
+  }
+  .entry-rule{flex:1;height:1px;background:var(--line);}
+
+  .entry-title{
+    font-family:var(--serif);
+    font-size:clamp(24px,3vw,32px);
+    font-weight:400;
+    margin:0 0 16px;
+    line-height:1.15;
+  }
+  .entry-text{
+    font-size:16px;
+    line-height:1.75;
+    color:var(--ink-soft);
+    max-width:64ch;
+  }
+  .entry-text p{margin:0 0 14px;}
+  .entry-text p:last-child{margin-bottom:0;}
+
+  .add-between{
+    display:none;
+    align-items:center;
+    gap:10px;
+    color:var(--ink-faint);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin:-64px 0 0;
+  }
+  body.edit-on .add-between{display:flex;}
+  .add-between::before,.add-between::after{content:"";flex:1;height:1px;background:var(--line);}
+  .add-between button{
+    background:var(--paper);
+    border:1px solid var(--line-strong);
+    padding:5px 12px;
+    border-radius:14px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .add-between button:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ---------- footer ---------- */
+  .site-footer{
+    margin-top:80px;
+    padding:34px 40px 60px;
+    text-align:center;
+    border-top:1px solid var(--line);
+    color:var(--ink-faint);
+    font-size:12px;
+    letter-spacing:.03em;
+  }
+  .site-footer strong{color:var(--ink-soft);}
+
+  /* ---------- image edit modal ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;
+    background:rgba(10,10,12,.55);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:100;
+    padding:20px;
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal{
+    background:var(--paper);
+    color:var(--ink);
+    width:100%;max-width:420px;
+    border-radius:6px;
+    padding:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+  }
+  .modal h3{margin:0 0 4px;font-family:var(--serif);font-weight:400;font-size:19px;}
+  .modal p.hint{margin:0 0 16px;font-size:12px;color:var(--ink-faint);}
+  .modal input[type=text]{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--line-strong);
+    border-radius:4px;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:13px;
+    margin-bottom:12px;
+  }
+  .modal-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;}
+  .modal-row .or{font-size:11px;color:var(--ink-faint);text-transform:uppercase;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
+  .modal-actions button{
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:12px;
+    border:1px solid var(--line-strong);
+    background:transparent;
+    color:var(--ink-soft);
+  }
+  .modal-actions button.primary{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  label.file-btn{display:inline-block;}
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 860px){
+    .layout{grid-template-columns:1fr;padding:40px 22px;}
+    .rail{
+      position:static;
+      display:flex;
+      overflow-x:auto;
+      gap:22px;
+      padding-bottom:14px;
+      margin-bottom:38px;
+      border-bottom:1px solid var(--line);
+    }
+    .rail-track{padding-left:0;display:flex;gap:22px;}
+    .rail-track::before{display:none;}
+    .rail-progress{display:none;}
+    .rail-item{padding:0;flex:0 0 auto;}
+    .rail-dot{display:none;}
+    .rail-add{margin-top:0;}
+    .entries{gap:64px;}
+    .add-between{margin-top:0;}
+    .hero-content{padding:40px 22px 32px;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- dashboard control chrome -->
+  <div class="chrome">
+    <div class="chrome-brand"><span class="chrome-dot"></span> Editable Timeline Dashboard</div>
+    <div class="chrome-actions">
+      <span class="chrome-hint">Click any text or image below to edit it</span>
+      <button id="btnEdit" class="primary">Edit Mode: Off</button>
+      <button id="btnExport">Export JSON</button>
+      <label class="file-btn">Import JSON<input type="file" id="fileImport" accept="application/json" /></label>
+      <button id="btnReset">Reset Demo</button>
+      <button id="btnTheme">Toggle Theme</button>
+    </div>
+  </div>
+
+  <header class="masthead">
+    <div class="masthead-brand">Timeline Archive</div>
+    <div class="masthead-sub">A Scrolling Profile Template</div>
+  </header>
+
+  <!-- hero -->
+  <section class="hero" id="hero">
+    <img class="hero-img" id="heroImg" alt="" />
+    <div class="hero-scrim"></div>
+    <button class="hero-edit-btn" id="btnHeroImg" type="button">Change Photo</button>
+    <div class="hero-content">
+      <div class="hero-eyebrow" id="heroEyebrow" data-editable contenteditable="false"></div>
+      <h1 class="hero-name" id="heroName" data-editable contenteditable="false"></h1>
+      <div class="hero-role" id="heroRole" data-editable contenteditable="false"></div>
+      <div class="hero-dates" id="heroDates" data-editable contenteditable="false"></div>
+      <p class="hero-intro" id="heroIntro" data-editable contenteditable="false"></p>
+    </div>
+  </section>
+
+  <!-- timeline + entries -->
+  <div class="layout">
+    <nav class="rail" id="rail">
+      <div class="rail-title">Timeline</div>
+      <div class="rail-track" id="railTrack">
+        <div class="rail-progress" id="railProgress"></div>
+      </div>
+      <button class="rail-add" id="railAdd" type="button">+ Add entry</button>
+    </nav>
+
+    <main class="entries" id="entries"></main>
+  </div>
+
+  <footer class="site-footer">
+    <strong>Editable Timeline Dashboard</strong> — a reusable scrollytelling template.
+    Replace the sample copy and photos with your own content: profiles, product histories, case studies, or company timelines.
+  </footer>
+
+  <!-- image edit modal -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal">
+      <h3>Update Image</h3>
+      <p class="hint">Paste an image URL, or upload a file from your device.</p>
+      <input type="text" id="modalUrl" placeholder="https://example.com/photo.jpg" />
+      <div class="modal-row">
+        <label class="file-btn" style="border:1px solid var(--line-strong);padding:8px 14px;border-radius:20px;font-size:12px;color:var(--ink-soft);">
+          Upload file<input type="file" id="modalFile" accept="image/*" />
+        </label>
+        <span class="or">or paste URL above</span>
+      </div>
+      <div class="modal-actions">
+        <button id="modalCancel">Cancel</button>
+        <button id="modalSave" class="primary">Save Image</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORAGE_KEY = "timeline-dashboard-state-v1";
+
+  /* ---------------- placeholder image generator ---------------- */
+  var PALETTES = [
+    ["#3a3226","#7c2a2a"],
+    ["#22303a","#3a6e7a"],
+    ["#2c2417","#b3893a"],
+    ["#26221f","#5b6a4f"],
+    ["#241f2e","#6e4a8c"],
+    ["#1f2a2c","#2f7d6b"]
+  ];
+  function placeholder(seed, label){
+    var p = PALETTES[Math.abs(seed) % PALETTES.length];
+    var initial = (label || "?").trim().charAt(0).toUpperCase() || "?";
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675">' +
+      '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
+      '<stop offset="0%" stop-color="' + p[0] + '"/>' +
+      '<stop offset="100%" stop-color="' + p[1] + '"/>' +
+      '</linearGradient></defs>' +
+      '<rect width="1200" height="675" fill="url(#g)"/>' +
+      '<circle cx="600" cy="300" r="150" fill="rgba(255,255,255,0.06)"/>' +
+      '<circle cx="600" cy="300" r="90" fill="rgba(255,255,255,0.07)"/>' +
+      '<text x="600" y="330" font-family="Georgia, serif" font-size="120" fill="rgba(255,255,255,0.55)" text-anchor="middle">' + initial + '</text>' +
+      '<text x="600" y="590" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="4" fill="rgba(255,255,255,0.55)" text-anchor="middle">SAMPLE IMAGE</text>' +
+      '</svg>';
+    return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+  }
+
+  /* ---------------- default dummy content ---------------- */
+  function defaultData(){
+    return {
+      eyebrow: "PROFILE ARCHIVE · CASE FILE NO. 07",
+      name: "Elena Marsh",
+      role: "Cultural Envoy & Diplomat",
+      dates: "1998 — Present",
+      intro: "A chronicle of appointments, initiatives, and turning points across a quarter-century of cultural diplomacy. Scroll to follow the timeline, or switch on Edit Mode above to make this page your own.",
+      heroImage: placeholder(1, "E"),
+      entries: [
+        {
+          id: "e1", year: "1998", title: "Early Appointment",
+          text: "<p>Began a first posting abroad after completing postgraduate studies in international relations, taking on protocol and cultural-liaison duties within a small regional mission.</p><p>These early years established a reputation for careful, relationship-first diplomacy.</p>",
+          image: placeholder(11, "1998")
+        },
+        {
+          id: "e2", year: "2003", title: "First Overseas Posting",
+          text: "<p>Assigned to a mid-sized embassy abroad, leading a small team responsible for public programming and academic exchange partnerships.</p><p>Launched a scholarship initiative that would later be adopted as a national model.</p>",
+          image: placeholder(12, "2003")
+        },
+        {
+          id: "e3", year: "2008", title: "Crisis Response",
+          text: "<p>Coordinated an emergency response effort during a period of regional instability, managing communications between local authorities and displaced nationals.</p><p>The work drew recognition for calm, methodical leadership under pressure.</p>",
+          image: placeholder(13, "2008")
+        },
+        {
+          id: "e4", year: "2013", title: "Cultural Initiative Launch",
+          text: "<p>Founded a touring exhibition program pairing contemporary artists with historical archives, shown in twelve cities over three years.</p><p>The program remains one of the most cited examples of soft-power cultural exchange from this period.</p>",
+          image: placeholder(14, "2013")
+        },
+        {
+          id: "e5", year: "2019", title: "Distinguished Service Recognition",
+          text: "<p>Received a distinguished service honor for two decades of continuous diplomatic and cultural work, marking a transition into a senior advisory role.</p>",
+          image: placeholder(15, "2019")
+        },
+        {
+          id: "e6", year: "2024", title: "Present Day",
+          text: "<p>Now serves as senior advisor to incoming envoys, mentoring the next generation of cultural diplomats and documenting institutional knowledge for the archive.</p>",
+          image: placeholder(16, "2024")
+        }
+      ]
+    };
+  }
+
+  var state = loadState() || defaultData();
+  var editOn = false;
+  var modalTarget = null; // {type:'hero'} or {type:'entry', id:'e1'}
+
+  /* ---------------- persistence ---------------- */
+  function saveState(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+
+  /* ---------------- DOM refs ---------------- */
+  var $ = function(id){ return document.getElementById(id); };
+  var heroImg = $("heroImg"), heroEyebrow = $("heroEyebrow"), heroName = $("heroName"),
+      heroRole = $("heroRole"), heroDates = $("heroDates"), heroIntro = $("heroIntro"),
+      railTrack = $("railTrack"), railProgress = $("railProgress"), entriesEl = $("entries");
+
+  /* ---------------- render ---------------- */
+  function renderHero(){
+    heroImg.src = state.heroImage;
+    heroEyebrow.textContent = state.eyebrow;
+    heroName.textContent = state.name;
+    heroRole.textContent = state.role;
+    heroDates.textContent = state.dates;
+    heroIntro.textContent = state.intro;
+  }
+
+  function entryLabel(entry){
+    return entry.title || "Untitled";
+  }
+
+  function render(){
+    renderHero();
+
+    // rail
+    railTrack.innerHTML = "";
+    railTrack.appendChild(railProgress);
+    state.entries.forEach(function(entry){
+      var item = document.createElement("div");
+      item.className = "rail-item";
+      item.dataset.id = entry.id;
+      item.innerHTML =
+        '<div class="rail-dot"></div>' +
+        '<div class="rail-year">' + escapeHtml(entry.year) + '</div>' +
+        '<div class="rail-label">' + escapeHtml(entryLabel(entry)) + '</div>';
+      item.addEventListener("click", function(){
+        var target = document.getElementById("entry-" + entry.id);
+        if(target) target.scrollIntoView({behavior:"smooth", block:"center"});
+      });
+      railTrack.appendChild(item);
+    });
+
+    // entries
+    entriesEl.innerHTML = "";
+    state.entries.forEach(function(entry, idx){
+      entriesEl.appendChild(buildAddBetween(idx));
+      entriesEl.appendChild(buildEntry(entry, idx));
+    });
+    entriesEl.appendChild(buildAddBetween(state.entries.length));
+
+    observeEntries();
+    updateActiveNav();
+  }
+
+  function buildAddBetween(index){
+    var wrap = document.createElement("div");
+    wrap.className = "add-between";
+    var btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = "+ Insert entry here";
+    btn.addEventListener("click", function(){ insertEntry(index); });
+    wrap.appendChild(btn);
+    return wrap;
+  }
+
+  function buildEntry(entry, idx){
+    var section = document.createElement("section");
+    section.className = "entry";
+    section.id = "entry-" + entry.id;
+    section.dataset.id = entry.id;
+
+    var toolbar = document.createElement("div");
+    toolbar.className = "entry-toolbar";
+    toolbar.innerHTML =
+      '<button type="button" data-act="up">↑ Move up</button>' +
+      '<button type="button" data-act="down">↓ Move down</button>' +
+      '<button type="button" class="danger" data-act="delete">✕ Delete</button>';
+    toolbar.querySelector('[data-act="up"]').addEventListener("click", function(){ moveEntry(entry.id, -1); });
+    toolbar.querySelector('[data-act="down"]').addEventListener("click", function(){ moveEntry(entry.id, 1); });
+    toolbar.querySelector('[data-act="delete"]').addEventListener("click", function(){ deleteEntry(entry.id); });
+    section.appendChild(toolbar);
+
+    var fig = document.createElement("div");
+    fig.className = "entry-figure";
+    var img = document.createElement("img");
+    img.src = entry.image;
+    img.alt = entryLabel(entry);
+    var overlay = document.createElement("div");
+    overlay.className = "img-overlay";
+    overlay.textContent = "Change Image";
+    overlay.addEventListener("click", function(){ openImageModal({type:"entry", id:entry.id}); });
+    fig.appendChild(img);
+    fig.appendChild(overlay);
+    section.appendChild(fig);
+
+    var eyebrow = document.createElement("div");
+    eyebrow.className = "entry-eyebrow";
+    var yearTag = document.createElement("span");
+    yearTag.className = "entry-year-tag";
+    yearTag.setAttribute("data-editable","");
+    yearTag.setAttribute("contenteditable","false");
+    yearTag.textContent = entry.year;
+    yearTag.addEventListener("input", function(){
+      entry.year = yearTag.textContent;
+      syncRailFor(entry);
+      saveState();
+    });
+    var rule = document.createElement("span");
+    rule.className = "entry-rule";
+    eyebrow.appendChild(yearTag);
+    eyebrow.appendChild(rule);
+    section.appendChild(eyebrow);
+
+    var title = document.createElement("h2");
+    title.className = "entry-title";
+    title.setAttribute("data-editable","");
+    title.setAttribute("contenteditable","false");
+    title.textContent = entry.title;
+    title.addEventListener("input", function(){
+      entry.title = title.textContent;
+      syncRailFor(entry);
+      saveState();
+    });
+    section.appendChild(title);
+
+    var text = document.createElement("div");
+    text.className = "entry-text";
+    text.setAttribute("data-editable","");
+    text.setAttribute("contenteditable","false");
+    text.innerHTML = entry.text;
+    text.addEventListener("input", function(){
+      entry.text = text.innerHTML;
+      saveState();
+    });
+    section.appendChild(text);
+
+    return section;
+  }
+
+  function syncRailFor(entry){
+    var item = railTrack.querySelector('.rail-item[data-id="' + cssEscape(entry.id) + '"]');
+    if(!item) return;
+    item.querySelector(".rail-year").textContent = entry.year;
+    item.querySelector(".rail-label").textContent = entryLabel(entry);
+  }
+
+  function escapeHtml(str){
+    var d = document.createElement("div");
+    d.textContent = str == null ? "" : String(str);
+    return d.innerHTML;
+  }
+  function cssEscape(id){
+    return String(id).replace(/["\\]/g, "\\$&");
+  }
+
+  /* ---------------- entry mutations ---------------- */
+  function newId(){
+    return "e" + Math.random().toString(36).slice(2, 9);
+  }
+  function insertEntry(index){
+    var n = state.entries.length + 1;
+    var entry = {
+      id: newId(),
+      year: String(new Date().getFullYear()),
+      title: "New Entry",
+      text: "<p>Describe what happened during this period. Click to edit this text.</p>",
+      image: placeholder(n, "New")
+    };
+    state.entries.splice(index, 0, entry);
+    saveState();
+    render();
+  }
+  function deleteEntry(id){
+    if(state.entries.length <= 1){
+      alert("At least one entry is required.");
+      return;
+    }
+    if(!confirm("Delete this timeline entry?")) return;
+    state.entries = state.entries.filter(function(e){ return e.id !== id; });
+    saveState();
+    render();
+  }
+  function moveEntry(id, dir){
+    var i = state.entries.findIndex(function(e){ return e.id === id; });
+    var j = i + dir;
+    if(i < 0 || j < 0 || j >= state.entries.length) return;
+    var tmp = state.entries[i];
+    state.entries[i] = state.entries[j];
+    state.entries[j] = tmp;
+    saveState();
+    render();
+    var el = document.getElementById("entry-" + id);
+    if(el) el.scrollIntoView({behavior:"smooth", block:"center"});
+  }
+
+  /* ---------------- scroll: active nav + progress + reveal ---------------- */
+  var io;
+  function observeEntries(){
+    if(io) io.disconnect();
+    io = new IntersectionObserver(function(list){
+      list.forEach(function(e){
+        if(e.isIntersecting) e.target.classList.add("in-view");
+      });
+    }, {threshold:0.12});
+    document.querySelectorAll(".entry").forEach(function(el){ io.observe(el); });
+  }
+
+  function updateActiveNav(){
+    var entries = Array.prototype.slice.call(document.querySelectorAll(".entry"));
+    if(!entries.length) return;
+    var viewportMid = window.innerHeight * 0.4;
+    var activeId = entries[0].dataset.id;
+    for(var i=0;i<entries.length;i++){
+      var r = entries[i].getBoundingClientRect();
+      if(r.top - viewportMid <= 0) activeId = entries[i].dataset.id;
+    }
+    railTrack.querySelectorAll(".rail-item").forEach(function(item){
+      item.classList.toggle("active", item.dataset.id === activeId);
+    });
+
+    // progress line: from top of first entry to bottom of active point
+    var first = entries[0].getBoundingClientRect();
+    var last = entries[entries.length-1].getBoundingClientRect();
+    var totalHeight = (last.bottom - first.top);
+    var scrolled = Math.min(Math.max(viewportMid - first.top, 0), totalHeight);
+    var pct = totalHeight > 0 ? (scrolled / totalHeight) * 100 : 0;
+    railProgress.style.height = pct + "%";
+  }
+
+  var ticking = false;
+  window.addEventListener("scroll", function(){
+    if(!ticking){
+      window.requestAnimationFrame(function(){
+        updateActiveNav();
+        parallaxHero();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, {passive:true});
+  window.addEventListener("resize", updateActiveNav);
+
+  function parallaxHero(){
+    var hero = $("hero");
+    var rect = hero.getBoundingClientRect();
+    if(rect.bottom < 0 || rect.top > window.innerHeight) return;
+    var progress = Math.min(Math.max(-rect.top / rect.height, 0), 1);
+    heroImg.style.transform = "scale(" + (1.08 + progress*0.06) + ")";
+  }
+
+  /* ---------------- edit mode ---------------- */
+  function setEditMode(on){
+    editOn = on;
+    document.body.classList.toggle("edit-on", on);
+    $("btnEdit").textContent = "Edit Mode: " + (on ? "On" : "Off");
+    $("btnEdit").classList.toggle("on", on);
+    document.querySelectorAll("[data-editable]").forEach(function(el){
+      el.setAttribute("contenteditable", on ? "true" : "false");
+    });
+  }
+  $("btnEdit").addEventListener("click", function(){ setEditMode(!editOn); });
+
+  $("btnHeroImg").addEventListener("click", function(){ openImageModal({type:"hero"}); });
+
+  $("railAdd").addEventListener("click", function(){ insertEntry(state.entries.length); });
+
+  heroEyebrow.addEventListener("input", function(){ state.eyebrow = heroEyebrow.textContent; saveState(); });
+  heroName.addEventListener("input", function(){ state.name = heroName.textContent; saveState(); });
+  heroRole.addEventListener("input", function(){ state.role = heroRole.textContent; saveState(); });
+  heroDates.addEventListener("input", function(){ state.dates = heroDates.textContent; saveState(); });
+  heroIntro.addEventListener("input", function(){ state.intro = heroIntro.textContent; saveState(); });
+
+  /* ---------------- image modal ---------------- */
+  var backdrop = $("modalBackdrop"), modalUrl = $("modalUrl"), modalFile = $("modalFile");
+  function openImageModal(target){
+    modalTarget = target;
+    modalUrl.value = "";
+    modalFile.value = "";
+    backdrop.classList.add("open");
+    modalUrl.focus();
+  }
+  function closeImageModal(){
+    backdrop.classList.remove("open");
+    modalTarget = null;
+  }
+  $("modalCancel").addEventListener("click", closeImageModal);
+  backdrop.addEventListener("click", function(e){ if(e.target === backdrop) closeImageModal(); });
+
+  $("modalSave").addEventListener("click", function(){
+    if(modalFile.files && modalFile.files[0]){
+      var reader = new FileReader();
+      reader.onload = function(){
+        applyImage(reader.result);
+        closeImageModal();
+      };
+      reader.readAsDataURL(modalFile.files[0]);
+      return;
+    }
+    var url = modalUrl.value.trim();
+    if(url){
+      applyImage(url);
+    }
+    closeImageModal();
+  });
+
+  function applyImage(src){
+    if(!modalTarget) return;
+    if(modalTarget.type === "hero"){
+      state.heroImage = src;
+      heroImg.src = src;
+    } else {
+      var entry = state.entries.find(function(e){ return e.id === modalTarget.id; });
+      if(entry){
+        entry.image = src;
+        var section = document.getElementById("entry-" + entry.id);
+        if(section) section.querySelector(".entry-figure img").src = src;
+      }
+    }
+    saveState();
+  }
+
+  /* ---------------- export / import / reset ---------------- */
+  $("btnExport").addEventListener("click", function(){
+    var blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "timeline-dashboard-content.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+
+  $("fileImport").addEventListener("change", function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try{
+        var data = JSON.parse(reader.result);
+        if(!data.entries || !Array.isArray(data.entries)) throw new Error("Invalid file");
+        state = data;
+        saveState();
+        render();
+      }catch(err){
+        alert("That file doesn't look like a valid timeline export.");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  });
+
+  $("btnReset").addEventListener("click", function(){
+    if(!confirm("Reset to the demo content? Your edits will be lost unless exported.")) return;
+    state = defaultData();
+    saveState();
+    render();
+  });
+
+  /* ---------------- theme ---------------- */
+  var THEME_KEY = "timeline-dashboard-theme";
+  function applyTheme(t){
+    if(t){ document.documentElement.setAttribute("data-theme", t); }
+    else { document.documentElement.removeAttribute("data-theme"); }
+  }
+  var savedTheme = null;
+  try{ savedTheme = localStorage.getItem(THEME_KEY); }catch(e){}
+  applyTheme(savedTheme);
+  $("btnTheme").addEventListener("click", function(){
+    var current = document.documentElement.getAttribute("data-theme");
+    var next = current === "dark" ? "light" : (current === "light" ? null : "dark");
+    applyTheme(next);
+    try{
+      if(next) localStorage.setItem(THEME_KEY, next);
+      else localStorage.removeItem(THEME_KEY);
+    }catch(e){}
+  });
+
+  /* ---------------- init ---------------- */
+  render();
+  parallaxHero();
+})();
+</script>
+</body>
+</html>
