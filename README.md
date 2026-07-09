@@ -13,6 +13,14 @@ case-study or narrative content.
 
 Open `index.html` directly in a browser — no build step or server required.
 
+**Opening cover:** the hero is a distinct, centered "presented by" title page — a logo row
+(add/remove/replace each logo image in Edit Mode), a "Presents" label, the big title and
+subtitle, and a "Scroll down" prompt with a circular button, all on a light cream backdrop.
+It ships with placeholder logo badges and an abstract pale background graphic (both clearly
+marked as placeholders) so you can drop in your own branding and cover image. This styling is
+scoped only to the opening hero — every chapter cover and entry keeps its own full-bleed,
+bottom-left layout untouched.
+
 **Brand system (from the client's "Campaign Branding Guidelines" deck):**
 - Colors are the exact documented hex values — Primary: `#0DBFDB` (cyan), `#005BA6` (blue),
   `#413C3F` (charcoal). Secondary: `#134370` (navy), `#61C9E1` (sky), `#FFDE17` (yellow),
