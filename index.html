@@ -173,8 +173,8 @@
   .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
     font-weight:700;color:var(--ink-faint);}
   .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:var(--ink-soft);margin-bottom:10px;}
-  .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--bg);
-    border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(0,91,166,.35);
+  .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--bg);
+    border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(13,191,219,.4);
     animation:bob 2.2s ease-in-out infinite;transition:transform .15s ease;}
   .hero-scrolldown-btn:hover{transform:scale(1.08);}
   @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
@@ -194,74 +194,60 @@
   .rail{
     position:sticky;top:49px;z-index:20;flex:0 0 420px;width:420px;
     height:calc(100vh - 49px);height:calc(100svh - 49px);overflow:hidden;align-self:flex-start;
-    background:linear-gradient(180deg, rgba(246,236,214,.9) 0%, rgba(246,236,214,.78) 45%, rgba(246,236,214,.9) 100%);
+    background:linear-gradient(180deg, rgba(65,60,63,.97) 0%, rgba(42,39,41,.95) 45%, rgba(65,60,63,.97) 100%);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-    border-left:1px solid rgba(65,60,63,.15);
-    box-shadow:-24px 0 60px rgba(65,50,20,.15);color:#413c3f;
-  }
-  [data-theme="dark"] .rail{
-    background:linear-gradient(180deg, rgba(28,24,18,.88) 0%, rgba(28,24,18,.76) 45%, rgba(28,24,18,.88) 100%);
-    border-left-color:rgba(246,236,214,.15);color:#f6ecdc;
+    border-left:1px solid rgba(13,191,219,.3);
+    box-shadow:-24px 0 60px rgba(0,0,0,.35);color:#0dbfdb;
   }
   .rail-inner{position:absolute;left:0;right:0;top:0;padding:36px 30px 60vh;will-change:transform;}
-  .rail-title{font-family:var(--font-body);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:rgba(65,60,63,.6);margin:0 0 22px;font-weight:700;}
-  [data-theme="dark"] .rail-title{color:rgba(246,236,214,.55);}
+  .rail-title{font-family:var(--font-body);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:rgba(13,191,219,.65);margin:0 0 22px;font-weight:700;}
 
   .rail-chapter{margin-bottom:26px;}
   .rail-chapter-head{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;padding:2px 0;}
   .rail-chapter-dot{width:17px;height:17px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);flex:0 0 auto;
-    transition:background .5s ease;box-shadow:0 1px 3px rgba(65,50,20,.35);}
+    transition:background .5s ease;box-shadow:0 1px 3px rgba(0,0,0,.45);}
   .rail-chapter-title{font-family:var(--font-main);font-size:23px;font-weight:800;letter-spacing:-.01em;line-height:1.12;
-    flex:1;transition:color .4s ease;color:rgba(65,60,63,.9);}
-  .rail-chapter.active .rail-chapter-title{color:var(--ink);}
-  [data-theme="dark"] .rail-chapter-title{color:rgba(246,236,214,.88);}
-  [data-theme="dark"] .rail-chapter.active .rail-chapter-title{color:#fff;}
-  .rail-chevron{background:none;border:0;color:rgba(65,60,63,.5);font-size:13px;padding:2px;transition:transform .2s ease;}
-  [data-theme="dark"] .rail-chevron{color:rgba(246,236,214,.5);}
+    flex:1;transition:color .4s ease;color:rgba(13,191,219,.72);}
+  .rail-chapter.active .rail-chapter-title{color:#0dbfdb;}
+  .rail-chevron{background:none;border:0;color:rgba(13,191,219,.55);font-size:13px;padding:2px;transition:transform .2s ease;}
   .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
 
-  .rail-entries{position:relative;padding-left:34px;margin-top:16px;overflow:hidden;transition:max-height .35s ease;}
+  .rail-entries{position:relative;padding-left:42px;margin-top:16px;overflow:hidden;transition:max-height .35s ease;}
   .rail-chapter.collapsed .rail-entries{max-height:0 !important;margin-top:0;}
   /* the wavy "riverbed" line and its accent-colored "water" fill share one tile geometry
-     (a gentle S-curve) so they align perfectly; both drift slowly downward for a free-flowing feel */
+     (a bold S-curve) so they align perfectly; both drift slowly downward for a free-flowing feel */
   .rail-track-line{
-    position:absolute;left:2px;top:4px;bottom:4px;width:16px;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='56'%3E%3Cpath d='M8 0 C13 10 3 18 8 28 C13 38 3 46 8 56' fill='none' stroke='%23c9b489' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:repeat-y;animation:railFlow 3.6s linear infinite;
-  }
-  [data-theme="dark"] .rail-track-line{
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='56'%3E%3Cpath d='M8 0 C13 10 3 18 8 28 C13 38 3 46 8 56' fill='none' stroke='%23524a4e' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    position:absolute;left:0;top:4px;bottom:4px;width:22px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='56'%3E%3Cpath d='M11 0 C19 10 3 18 11 28 C19 38 3 46 11 56' fill='none' stroke='rgba(13,191,219,0.4)' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:repeat-y;animation:railFlow 2.6s linear infinite;
   }
   .rail-progress-fill{
-    position:absolute;left:2px;top:4px;width:16px;height:0%;background:var(--accent-live);
+    position:absolute;left:0;top:4px;width:22px;height:0%;background:var(--accent-live);
     transition:height .12s linear, background-color .5s ease;
-    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='56'%3E%3Cpath d='M8 0 C13 10 3 18 8 28 C13 38 3 46 8 56' fill='none' stroke='%23000' stroke-width='2.8' stroke-linecap='round'/%3E%3C/svg%3E");
-    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='56'%3E%3Cpath d='M8 0 C13 10 3 18 8 28 C13 38 3 46 8 56' fill='none' stroke='%23000' stroke-width='2.8' stroke-linecap='round'/%3E%3C/svg%3E");
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='56'%3E%3Cpath d='M11 0 C19 10 3 18 11 28 C19 38 3 46 11 56' fill='none' stroke='%23000' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='56'%3E%3Cpath d='M11 0 C19 10 3 18 11 28 C19 38 3 46 11 56' fill='none' stroke='%23000' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
     -webkit-mask-repeat:repeat-y;mask-repeat:repeat-y;
-    animation:railFlow 3.6s linear infinite;
+    animation:railFlow 2.6s linear infinite;
+    filter:drop-shadow(0 0 6px rgba(13,191,219,.55));
   }
   @keyframes railFlow{from{background-position-y:0; -webkit-mask-position-y:0; mask-position-y:0;} to{background-position-y:56px; -webkit-mask-position-y:56px; mask-position-y:56px;}}
   .rail-item{position:relative;padding:0 0 20px;cursor:pointer;}
   .rail-item:last-child{padding-bottom:2px;}
-  .rail-dot{position:absolute;left:-32px;top:3px;width:14px;height:14px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
-    background:rgba(246,236,214,.95);border:2px solid rgba(65,60,63,.4);transition:all .2s ease;box-shadow:0 1px 2px rgba(65,50,20,.25);}
-  [data-theme="dark"] .rail-dot{background:rgba(28,24,18,.9);border-color:rgba(246,236,214,.4);}
-  .rail-year{font-family:var(--font-main);font-weight:800;font-size:21px;letter-spacing:-.01em;color:rgba(65,60,63,.6);transition:color .2s ease;line-height:1.2;}
-  .rail-label{font-family:var(--font-body);font-size:13px;font-weight:600;color:rgba(65,60,63,.48);margin-top:2px;transition:color .2s ease;}
-  [data-theme="dark"] .rail-year{color:rgba(246,236,214,.6);}
-  [data-theme="dark"] .rail-label{color:rgba(246,236,214,.45);}
-  .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);box-shadow:0 0 0 5px rgba(13,191,219,.18), 0 1px 3px rgba(65,50,20,.3);}
-  .rail-item.active .rail-year{color:var(--ink);font-weight:800;}
-  .rail-item.active .rail-label{color:rgba(65,60,63,.8);}
-  [data-theme="dark"] .rail-item.active .rail-year{color:#fff;}
-  [data-theme="dark"] .rail-item.active .rail-label{color:rgba(246,236,214,.85);}
-  .rail-item:hover .rail-year{color:var(--accent);}
+  .rail-dot{position:absolute;left:-40px;top:1px;width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
+    background:rgba(13,191,219,.14);border:2.5px solid rgba(13,191,219,.6);transition:all .2s ease;box-shadow:0 1px 3px rgba(0,0,0,.4);}
+  .rail-year{font-family:var(--font-main);font-weight:800;font-size:21px;letter-spacing:-.01em;color:rgba(13,191,219,.55);transition:color .2s ease;line-height:1.2;}
+  .rail-label{font-family:var(--font-body);font-size:13px;font-weight:600;color:rgba(13,191,219,.4);margin-top:2px;transition:color .2s ease;}
+  .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);
+    box-shadow:0 0 0 7px rgba(13,191,219,.28), 0 1px 3px rgba(0,0,0,.4);animation:dropletGlow 2.2s ease-in-out infinite;}
+  @keyframes dropletGlow{0%,100%{box-shadow:0 0 0 5px rgba(13,191,219,.3), 0 1px 3px rgba(0,0,0,.4);}50%{box-shadow:0 0 0 10px rgba(13,191,219,.12), 0 1px 3px rgba(0,0,0,.4);}}
+  .rail-item.active .rail-year{color:#0dbfdb;font-weight:800;}
+  .rail-item.active .rail-label{color:rgba(13,191,219,.85);}
+  .rail-item:hover .rail-year{color:#0dbfdb;}
 
   .rail-add-entry{margin-left:0;margin-top:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-    background:none;border:1px dashed rgba(65,60,63,.32);color:rgba(65,60,63,.75);padding:6px 12px;border-radius:20px;}
+    background:none;border:1px dashed rgba(13,191,219,.4);color:rgba(13,191,219,.85);padding:6px 12px;border-radius:20px;}
   .rail-add-chapter{margin-top:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-    background:none;border:1px dashed rgba(65,60,63,.32);color:rgba(65,60,63,.75);padding:10px 16px;border-radius:20px;width:100%;}
-  [data-theme="dark"] .rail-add-entry, [data-theme="dark"] .rail-add-chapter{border-color:rgba(246,236,214,.3);color:rgba(246,236,214,.75);}
+    background:none;border:1px dashed rgba(13,191,219,.4);color:rgba(13,191,219,.85);padding:10px 16px;border-radius:20px;width:100%;}
 
   /* ---------- "you are here" popup: pops up fresh each time the active chapter/entry changes ---------- */
   .position-popup{
@@ -321,6 +307,31 @@
 
   /* ---------- entry ---------- */
   .entry-content{opacity:.55;transform:scale(.94);transform-origin:left center;}
+
+  /* ---------- optional per-section popup box (left side): free-floating text + image/gif card ---------- */
+  .callout-box{
+    position:absolute;top:12%;left:6%;z-index:3;width:min(300px, 78%);
+    background:#0dbfdb;color:#413c3f;border-radius:12px;padding:16px 18px 18px;
+    box-shadow:0 18px 40px rgba(13,191,219,.4);
+    transform-origin:left top;opacity:.5;transform:scale(.9);
+  }
+  .callout-media-frame{position:relative;width:100%;height:140px;border-radius:8px;overflow:hidden;
+    background:rgba(65,60,63,.14);margin-bottom:12px;}
+  .callout-media-frame .media-empty{background:rgba(65,60,63,.1);color:rgba(65,60,63,.65);}
+  .callout-text{font-family:var(--font-body);font-size:14.5px;font-weight:600;line-height:1.5;}
+  .callout-remove{
+    position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-radius:50%;
+    background:#413c3f;color:#0dbfdb;border:2px solid #0dbfdb;font-size:11px;line-height:1;cursor:pointer;
+  }
+  .callout-add-btn{
+    position:absolute;top:12%;left:6%;z-index:3;font-size:11.5px;font-weight:700;text-transform:uppercase;
+    letter-spacing:.05em;background:rgba(13,191,219,.14);border:1.5px dashed #0dbfdb;color:#0dbfdb;
+    padding:9px 16px;border-radius:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  }
+  .callout-add-btn:hover{background:rgba(13,191,219,.26);}
+  @media (max-width: 720px){
+    .callout-box, .callout-add-btn{left:5%;width:min(240px, 82%);top:10%;}
+  }
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
   .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:var(--accent-2);letter-spacing:.04em;transition:color .5s ease;}
@@ -538,7 +549,7 @@
 <script>
 (() => {
   "use strict";
-  const STORAGE_KEY = "storymap-dashboard-state-v9";
+  const STORAGE_KEY = "storymap-dashboard-state-v10";
   const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
@@ -676,11 +687,14 @@
         {
           id:"c1", title:"The Vanishing Lakes", subtitle:"Mapping a century of urban lake loss, 1900–1990", accent: ACCENTS[0],
           cover: { kind:"image", src: placeholder(21,"1"), embed:false },
+          callout: { enabled:true, text:"Optional popup box — add a quick stat, quote, or side note here, with its own image or GIF.",
+            media:{ kind:"image", src: placeholder(22,"i"), embed:false } },
           entries: [
             {
               id:"e1", year:"1905", title:"A City Built on a Thousand Tanks",
               media:{ kind:"image", src: placeholder(31,"05"), embed:false },
               caption:"Sample caption — replace with your own source line.",
+              callout: { enabled:true, text:"This box is fully optional — remove it with the ✕, or add one to any section with \"+ Add popup box\".", media:null },
               blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
                 html:"<p>The city's water once moved through a chain of interconnected tanks and lakes, each overflow feeding the next down the valley. The system stored the monsoon for the dry months ahead.</p>" },
                 { ...newMediaBlock({ kind:"image", src: placeholder(41,"1"), embed:false }), size:"M", align:"left",
@@ -869,6 +883,7 @@
     mainEl.innerHTML = state.chapters.map(renderChapter).join("") +
       `<div class="add-chapter-row edit-only"><button type="button" data-act="addChapter" data-index="${state.chapters.length}">+ Add chapter at end</button></div>`;
 
+    syncEditableAttrs();
     updateScroll();
   }
 
@@ -912,6 +927,28 @@
       </div>`;
   }
 
+  function renderCallout(scope, chapterId, entryId, callout){
+    const c = callout || { enabled:false, text:"", media:null };
+    const idAttrs = entryId
+      ? `data-callout-scope="${scope}" data-chapter-id="${chapterId}" data-entry-id="${entryId}"`
+      : `data-callout-scope="${scope}" data-chapter-id="${chapterId}"`;
+    if(!c.enabled){
+      return `<button type="button" class="callout-add-btn edit-only" data-act="addCallout" ${idAttrs}>+ Add popup box</button>`;
+    }
+    const bindType = scope === "chapterCover" ? "chapterCalloutText" : "entryCalloutText";
+    const mediaScope = scope === "chapterCover" ? "chapterCalloutMedia" : "entryCalloutMedia";
+    const hasMedia = !!(c.media && c.media.src);
+    const mediaHtml = `<div class="callout-media-frame${hasMedia ? "" : " edit-only"}">
+           <div class="media-fill" data-media-scope="${mediaScope}" ${idAttrs}>${mediaMarkup(c.media)}</div>
+         </div>`;
+    return `
+      <div class="callout-box" ${idAttrs}>
+        <button type="button" class="callout-remove edit-only" data-act="removeCallout" ${idAttrs}>✕</button>
+        ${mediaHtml}
+        <div class="callout-text" data-editable data-bind-type="${bindType}" ${idAttrs} contenteditable="false">${escapeHtml(c.text || "Optional note — click to edit, or leave blank.")}</div>
+      </div>`;
+  }
+
   function renderChapter(chapter, idx){
     const entriesHtml = chapter.entries.map((entry, i) => renderAddBetween(chapter.id, i) + renderEntry(chapter, entry)).join("")
       + renderAddBetween(chapter.id, chapter.entries.length);
@@ -925,6 +962,7 @@
             <button type="button" data-act="moveChapter" data-dir="1" data-chapter-id="${chapter.id}">↓ Move</button>
             <button type="button" class="danger" data-act="deleteChapter" data-chapter-id="${chapter.id}">✕ Delete Chapter</button>
           </div>
+          ${renderCallout("chapterCover", chapter.id, null, chapter.callout)}
           <div class="chapter-cover-content">
             <div class="chapter-index">Chapter 0${idx + 1}</div>
             <h2 class="chapter-title" data-editable data-bind-type="chapterTitle" data-chapter-id="${chapter.id}" contenteditable="false">${escapeHtml(chapter.title)}</h2>
@@ -953,6 +991,7 @@
           <button type="button" data-act="moveEntry" data-dir="1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↓ Move down</button>
           <button type="button" class="danger" data-act="deleteEntry" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">✕ Delete</button>
         </div>
+        ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
         <div class="entry-content">
           <div class="entry-eyebrow">
             <span class="entry-year-tag" data-editable data-bind-type="entryYear" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.year)}</span>
@@ -1096,6 +1135,22 @@
     state.meta.logos = (state.meta.logos || []).filter(l => l.id !== logoId);
     saveState(); renderHeroLogos();
   }
+  function calloutOwner(scope, chapterId, entryId){
+    return scope === "chapterCover" ? getChapter(chapterId) : getEntry(chapterId, entryId);
+  }
+  function addCallout(scope, chapterId, entryId){
+    const owner = calloutOwner(scope, chapterId, entryId);
+    if(!owner) return;
+    if(!owner.callout) owner.callout = { enabled:true, text:"", media:null };
+    else owner.callout.enabled = true;
+    saveState(); render();
+  }
+  function removeCallout(scope, chapterId, entryId){
+    const owner = calloutOwner(scope, chapterId, entryId);
+    if(!owner || !owner.callout) return;
+    owner.callout.enabled = false;
+    saveState(); render();
+  }
   function deleteBlock(chapterId, entryId, blockId){
     const entry = getEntry(chapterId, entryId);
     if(entry.blocks.length <= 1){ alert("Each entry needs at least one block."); return; }
@@ -1112,12 +1167,19 @@
   }
 
   /* ---------------- edit mode ---------------- */
+  // re-applied after every render() too, since render() rebuilds DOM nodes fresh with
+  // contenteditable="false" baked into their markup — without this, anything added while
+  // already in Edit Mode (a new chapter/entry/block/popup box) would look editable (dashed
+  // outline) but silently refuse to accept typing.
+  function syncEditableAttrs(){
+    document.querySelectorAll("[data-editable]").forEach(el => el.setAttribute("contenteditable", editOn ? "true" : "false"));
+  }
   function setEditMode(on){
     editOn = on;
     document.body.classList.toggle("edit-on", on);
     $("btnEdit").textContent = "Edit Mode: " + (on ? "On" : "Off");
     $("btnEdit").classList.toggle("on", on);
-    document.querySelectorAll("[data-editable]").forEach(el => el.setAttribute("contenteditable", on ? "true" : "false"));
+    syncEditableAttrs();
   }
   $("btnEdit").addEventListener("click", () => setEditMode(!editOn));
 
@@ -1145,6 +1207,10 @@
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     } else if(bt === "blockMediaCaption"){
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).caption = el.textContent;
+    } else if(bt === "chapterCalloutText"){
+      getChapter(el.dataset.chapterId).callout.text = el.textContent;
+    } else if(bt === "entryCalloutText"){
+      getEntry(el.dataset.chapterId, el.dataset.entryId).callout.text = el.textContent;
     }
     debouncedSave();
   });
@@ -1235,6 +1301,10 @@
       addMediaBlock(btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "removeLogo"){
       removeHeroLogo(btn.dataset.logoId);
+    } else if(act === "addCallout"){
+      addCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
+    } else if(act === "removeCallout"){
+      removeCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "moveBlock"){
       moveBlock(btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId, parseInt(btn.dataset.dir, 10));
     } else if(act === "deleteBlock"){
@@ -1417,6 +1487,7 @@
     document.querySelectorAll(".chapter-title, .entry-title").forEach(el => applyZoom(el, 0.88, 0.3, 0.55));
     document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => applyZoom(el, 0.95, 0.4, 0.5));
     document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, 0.45, 0.5));
+    document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, 0.5, 0.55));
   }
 
   // the rail is a sticky column, not a fixed overlay, so it scrolls together with the
@@ -1592,6 +1663,12 @@
       const logo = (state.meta.logos || []).find(l => l.id === target.logoId);
       if(logo) logo.media = media;
       container = document.querySelector(`.media-fill[data-media-scope="heroLogo"][data-logo-id="${cssEscape(target.logoId)}"]`);
+    } else if(target.scope === "chapterCalloutMedia"){
+      getChapter(target.chapterId).callout.media = media;
+      container = document.querySelector(`.media-fill[data-media-scope="chapterCalloutMedia"][data-chapter-id="${cssEscape(target.chapterId)}"]`);
+    } else if(target.scope === "entryCalloutMedia"){
+      getEntry(target.chapterId, target.entryId).callout.media = media;
+      container = document.querySelector(`.media-fill[data-media-scope="entryCalloutMedia"][data-entry-id="${cssEscape(target.entryId)}"]`);
     }
     if(container) container.innerHTML = mediaMarkup(media);
     saveState();

@@ -43,19 +43,25 @@ bottom-left layout untouched.
   alignment per block) and **inline media blocks** — additional images/GIFs/videos dropped
   into the same text flow as smaller inset cards (S/M/L/Full width, left/center/right
   aligned, with their own caption), distinct from the entry's full-bleed background.
-- The timeline is a bold, wide (420px) cream/beige glass panel that sits **in the normal page
-  flow** next to the chapters/entries column and sticks to the top of the viewport as you
-  scroll — it's part of the page, not a floating overlay, and releases/scrolls away naturally
-  once you pass the last chapter. It's styled like a river drawn on paper — a wavy, gently
-  flowing line (animated, continuously drifting) connects water-droplet-shaped markers instead
-  of a straight rail, with much bigger, heavier chapter/year typography for a stronger visual
-  presence. Its content pans vertically in lockstep with the page's scroll position, so the
-  timeline visibly scrolls together with the sections rather than sitting static; clicking any
-  chapter/entry still jumps the main scroll straight to it. The active chapter's accent color
-  washes across the panel, the top progress bar, and pull-quote borders as you scroll.
+- The timeline is a bold, wide (420px) panel that sits **in the normal page flow** next to
+  the chapters/entries column and sticks to the top of the viewport as you scroll — it's part
+  of the page, not a floating overlay, and releases/scrolls away naturally once you pass the
+  last chapter. It's styled like a river drawn on paper — a bold, wavy flowing line (animated,
+  continuously drifting) connects water-droplet-shaped markers instead of a straight rail, on
+  a solid dark-charcoal (`#413C3F`) backdrop with bright cyan (`#0DBFDB`) text and glowing
+  droplet markers, independent of the light/dark theme toggle. Its content pans vertically in
+  lockstep with the page's scroll position, so the timeline visibly scrolls together with the
+  sections rather than sitting static; clicking any chapter/entry still jumps the main scroll
+  straight to it. The active chapter's accent color washes across the progress fill and
+  pull-quote borders as you scroll.
 - A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
   no further scrolling.
+- Every chapter cover and entry can carry an **optional popup box** on the left side — a
+  small cyan (`#0DBFDB`) card for a free-form note plus an optional image/GIF, separate from
+  the main text and inline media blocks. It's off by default; add one with **+ Add popup
+  box**, edit its text and swap its image the same way as everywhere else, and remove it any
+  time with the ✕ on the card.
 - Sections don't just fade in once — every chapter cover and entry continuously zooms in and
   out as it moves through the viewport, driven live by scroll position (not a one-time
   reveal), so the effect is fully smooth and reversible in both scroll directions. The zoom
@@ -67,8 +73,13 @@ bottom-left layout untouched.
   zooms/pans (plus a cursor-tilt effect), and the smaller inline media-overlay images/GIFs
   inside the text flow get their own independent, subtler scroll-linked drift on top of the
   new zoom-in/out motion.
-- The overall UI chrome (top bar, timeline panel, position popup) uses a cream/beige palette;
-  the brand's navy is kept for the dark theme toggle instead.
+- Scrolling with a mouse wheel/trackpad glides between sections with inertia — each tick eases
+  the page toward its target position over several frames instead of jumping straight there.
+  Keyboard, scrollbar, and touch scrolling stay native.
+- The primary UI palette is the brand's exact hex values throughout: text and buttons in
+  `#005BA6` (blue), interactive/live highlights in `#0DBFDB` (cyan), and secondary accents in
+  `#413C3F` (charcoal) — including the per-chapter marker colors in the timeline, which cycle
+  through just these three. The dark theme toggle keeps its own separate palette.
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
