@@ -21,17 +21,17 @@
     --bg:#f6ecdc;
     --bg-alt:#efe1c8;
     --paper:#f6ecdc;
-    --ink:#413c3f;
-    --ink-soft:#807973;
-    --ink-faint:#a39d97;
+    --ink:#005ba6;
+    --ink-soft:#3d7fae;
+    --ink-faint:#7ba3c4;
     --accent:#0dbfdb;
     --accent-live:#0dbfdb;
-    --accent-2:#ffde17;
+    --accent-2:#413c3f;
     --line:#e0d0ac;
     --line-strong:#c9b489;
     --chrome-bg:#efe1c8;
-    --chrome-ink:#413c3f;
-    --chrome-border:rgba(65,60,63,.24);
+    --chrome-ink:#005ba6;
+    --chrome-border:rgba(0,91,166,.28);
     --radius:3px;
     /* brand type: "Intercom" (headings/sub-headings/quotes) has no free public release, so it's
        named first for anyone with it licensed/installed locally, then falls back to Poppins — the
@@ -86,7 +86,7 @@
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]) .chrome button:hover, :root:not([data-theme="light"]) .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
   }
-  .chrome button.primary{background:var(--accent-2);border-color:var(--accent-2);color:#241f13;font-weight:700;}
+  .chrome button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-2);font-weight:700;}
   .chrome button.primary.on{background:#3f7d5c;border-color:#3f7d5c;color:#eafff1;}
   .chrome-hint{font-size:10.5px;color:var(--ink-faint);opacity:.7;display:none;}
   body.edit-on .chrome-hint{display:inline;}
@@ -173,8 +173,8 @@
   .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
     font-weight:700;color:var(--ink-faint);}
   .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:var(--ink-soft);margin-bottom:10px;}
-  .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--bg);
-    border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(13,191,219,.35);
+  .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--ink);color:var(--bg);
+    border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(0,91,166,.35);
     animation:bob 2.2s ease-in-out infinite;transition:transform .15s ease;}
   .hero-scrolldown-btn:hover{transform:scale(1.08);}
   @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
@@ -406,7 +406,7 @@
   .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
   .modal-actions button{padding:8px 16px;border-radius:20px;font-size:12px;border:1px solid var(--line-strong);
     background:transparent;color:var(--ink-soft);}
-  .modal-actions button.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .modal-actions button.primary{background:var(--ink);border-color:var(--ink);color:#fff;}
   label.file-btn{display:inline-block;}
   .modal input[type=file]{display:none;}
 
@@ -538,7 +538,7 @@
 <script>
 (() => {
   "use strict";
-  const STORAGE_KEY = "storymap-dashboard-state-v8";
+  const STORAGE_KEY = "storymap-dashboard-state-v9";
   const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
@@ -643,7 +643,7 @@
   ];
   // brand secondary palette (navy substituted with primary blue/cyan variants for on-photo legibility;
   // exact navy 134370 is used for the app chrome bar instead, where a dark tone is wanted)
-  const ACCENTS = ["#0dbfdb","#61c9e1","#ffde17","#53b94e","#8b5e3c","#005ba6"];
+  const ACCENTS = ["#005ba6","#0dbfdb","#413c3f"];
 
   function blockMeta(type){ return BLOCK_TYPES.find(b => b.type === type) || BLOCK_TYPES[2]; }
   function newBlock(type){
@@ -756,7 +756,7 @@
           ]
         },
         {
-          id:"c4", title:"Community Water Guardians", subtitle:"Neighborhoods restoring lakes and wetlands, 2015–present", accent: ACCENTS[3],
+          id:"c4", title:"Community Water Guardians", subtitle:"Neighborhoods restoring lakes and wetlands, 2015–present", accent: ACCENTS[3 % ACCENTS.length],
           cover: { kind:"image", src: placeholder(24,"4"), embed:false },
           entries: [
             {
@@ -1439,6 +1439,47 @@
     if(!ticking){ requestAnimationFrame(() => { updateScroll(); ticking = false; }); ticking = true; }
   }, { passive:true });
   window.addEventListener("resize", updateScroll);
+
+  /* inertia-smoothed wheel scroll: instead of jumping straight to each wheel tick's
+     raw scroll delta, ease the real document scroll position toward a running target
+     every frame, so motion between sections glides continuously rather than stepping
+     section-to-section. Keyboard/scrollbar/touch scrolling stay native (untouched). */
+  if(!reduceMotion){
+    let smoothTarget = window.scrollY;
+    let smoothCurrent = window.scrollY;
+    let smoothRunning = false;
+
+    function maxScroll(){
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    }
+    function normalizedDelta(e){
+      if(e.deltaMode === 1) return e.deltaY * 18;
+      if(e.deltaMode === 2) return e.deltaY * window.innerHeight;
+      return e.deltaY;
+    }
+    function smoothStep(){
+      smoothCurrent += (smoothTarget - smoothCurrent) * 0.12;
+      if(Math.abs(smoothTarget - smoothCurrent) < 0.4){ smoothCurrent = smoothTarget; }
+      window.scrollTo({ top: smoothCurrent, left: 0, behavior: "instant" });
+      if(smoothCurrent !== smoothTarget){
+        requestAnimationFrame(smoothStep);
+      } else {
+        smoothRunning = false;
+      }
+    }
+    window.addEventListener("wheel", (e) => {
+      if(backdrop.classList.contains("open")) return;
+      e.preventDefault();
+      smoothTarget = Math.min(Math.max(smoothTarget + normalizedDelta(e), 0), maxScroll());
+      if(!smoothRunning){ smoothRunning = true; requestAnimationFrame(smoothStep); }
+    }, { passive:false });
+    window.addEventListener("scroll", () => {
+      if(!smoothRunning){ smoothTarget = window.scrollY; smoothCurrent = window.scrollY; }
+    }, { passive:true });
+    window.addEventListener("resize", () => {
+      smoothTarget = Math.min(smoothTarget, maxScroll());
+    });
+  }
 
   /* cursor tilt on every slide type */
   if(!reduceMotion){
