@@ -57,11 +57,17 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 - A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
   no further scrolling.
-- Every chapter cover and entry can carry an **optional popup box** on the left side — a
-  dark-charcoal (`#413C3F`) card with cyan (`#0DBFDB`) text for a free-form note plus an
-  optional image/GIF, separate from the main text and inline media blocks. It's off by
-  default; add one with **+ Add popup box**, edit its text and swap its image the same way as
-  everywhere else, and remove it any time with the ✕ on the card.
+- Every chapter cover and entry can carry an **optional popup box** hugging the left edge — a
+  small round mascot tab that reveals a brand-blue (`#005BA6`) card with white text on hover
+  (or tap/focus), for a free-form note plus an optional image/GIF, separate from the main text
+  and inline media blocks. It's off by default; add one with **+ Add popup box**, edit its
+  text and swap its image the same way as everywhere else, and remove it any time with the ✕.
+- A chapter cover or entry with **no background image set** falls back to solid brand-blue
+  (`#005BA6`) instead of a generic placeholder pattern, since it's a full-bleed section
+  background.
+- The **"CHAPTER 0X"** eyebrow label and each entry's year tag are brand-yellow (`#FBE847`).
+- A small original brand mascot — a cyan/yellow water-drop blob character — appears in a few
+  spots: bobbing in the hero's corner, as the popup box's hover tab, and in the footer.
 - Sections don't just fade in once — every chapter cover and entry continuously zooms in and
   out as it moves through the viewport, driven live by scroll position (not a one-time
   reveal), so the effect is fully smooth and reversible in both scroll directions. The zoom
