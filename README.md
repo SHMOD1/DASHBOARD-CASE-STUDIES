@@ -15,11 +15,11 @@ Open `index.html` directly in a browser — no build step or server required.
 
 **Opening cover:** the hero is a distinct, centered "presented by" title page — a logo row
 (add/remove/replace each logo image in Edit Mode), a "Presents" label, the big title and
-subtitle, and a "Scroll down" prompt with a circular button, all on a light cream backdrop.
-It ships with placeholder logo badges and an abstract pale background graphic (both clearly
-marked as placeholders) so you can drop in your own branding and cover image. This styling is
-scoped only to the opening hero — every chapter cover and entry keeps its own full-bleed,
-bottom-left layout untouched.
+subtitle, and a "Scroll down" prompt with a circular button, all on a solid brand-blue
+(`#005BA6`) backdrop with white text. It ships with placeholder logo badges and an abstract
+pale-line background graphic (both clearly marked as placeholders) so you can drop in your
+own branding and cover image. This styling is scoped only to the opening hero — every
+chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 
 **Brand system (from the client's "Campaign Branding Guidelines" deck):**
 - Colors are the exact documented hex values — Primary: `#0DBFDB` (cyan), `#005BA6` (blue),
@@ -43,25 +43,25 @@ bottom-left layout untouched.
   alignment per block) and **inline media blocks** — additional images/GIFs/videos dropped
   into the same text flow as smaller inset cards (S/M/L/Full width, left/center/right
   aligned, with their own caption), distinct from the entry's full-bleed background.
-- The timeline is a bold, wide (420px) panel that sits **in the normal page flow** next to
-  the chapters/entries column and sticks to the top of the viewport as you scroll — it's part
-  of the page, not a floating overlay, and releases/scrolls away naturally once you pass the
-  last chapter. It's styled like a river drawn on paper — a bold, wavy flowing line (animated,
-  continuously drifting) connects water-droplet-shaped markers instead of a straight rail, on
-  a solid dark-charcoal (`#413C3F`) backdrop with bright cyan (`#0DBFDB`) text and glowing
-  droplet markers, independent of the light/dark theme toggle. Its content pans vertically in
-  lockstep with the page's scroll position, so the timeline visibly scrolls together with the
-  sections rather than sitting static; clicking any chapter/entry still jumps the main scroll
-  straight to it. The active chapter's accent color washes across the progress fill and
-  pull-quote borders as you scroll.
+- The timeline is a **thin strip** (~90px) that sits **in the normal page flow** next to the
+  chapters/entries column and sticks to the top of the viewport as you scroll — it's part of
+  the page, not a floating overlay, and releases/scrolls away naturally once you pass the
+  last chapter. It shows just a thick, bold, flowing "water" line (animated, continuously
+  drifting) connecting large water-droplet-shaped markers, on a solid dark-charcoal
+  (`#413C3F`) backdrop with bright cyan (`#0DBFDB`) glow, independent of the light/dark theme
+  toggle. Chapter/entry titles don't take up permanent space — hover any droplet to pop up
+  its title next to it; click any droplet to jump the main scroll straight there. Its content
+  pans vertically in lockstep with the page's scroll position, so the timeline visibly scrolls
+  together with the sections rather than sitting static. The active chapter's accent color
+  washes across the progress fill and pull-quote borders as you scroll.
 - A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
   no further scrolling.
 - Every chapter cover and entry can carry an **optional popup box** on the left side — a
-  small cyan (`#0DBFDB`) card for a free-form note plus an optional image/GIF, separate from
-  the main text and inline media blocks. It's off by default; add one with **+ Add popup
-  box**, edit its text and swap its image the same way as everywhere else, and remove it any
-  time with the ✕ on the card.
+  dark-charcoal (`#413C3F`) card with cyan (`#0DBFDB`) text for a free-form note plus an
+  optional image/GIF, separate from the main text and inline media blocks. It's off by
+  default; add one with **+ Add popup box**, edit its text and swap its image the same way as
+  everywhere else, and remove it any time with the ✕ on the card.
 - Sections don't just fade in once — every chapter cover and entry continuously zooms in and
   out as it moves through the viewport, driven live by scroll position (not a one-time
   reveal), so the effect is fully smooth and reversible in both scroll directions. The zoom
@@ -91,8 +91,8 @@ bottom-left layout untouched.
   an inline media block — and click **Change Media** to set an Image, GIF, or Video — paste a
   URL (including YouTube/Vimeo links, which embed automatically) or upload a file, with
   autoplay/loop/muted options for video.
-- **+ Add chapter**, **+ Add entry**, **+ Insert entry here**, move-up/down, and delete
-  controls let you fully restructure the story.
+- **+ Add chapter at end**, **+ Insert entry here**, move-up/down, and delete controls (in
+  the main content column) let you fully restructure the story.
 - **Export JSON** downloads your content; **Import JSON** loads it back in (or share it with
   someone else). **Reset Demo** restores the sample content.
 - Edits autosave to the browser's local storage, so a refresh won't lose your work.

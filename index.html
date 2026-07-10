@@ -138,17 +138,14 @@
   /* ---------- hero / opening cover: a distinct "presented by" title page — light,
      centered, logo row up top, scroll-down button at the bottom. Scoped to .hero only;
      chapter covers and entries keep their own bottom-left full-bleed treatment. ---------- */
+  .hero{align-items:center;background:#005ba6;}
   .hero-scrim{
     background:linear-gradient(180deg,
-      color-mix(in srgb, var(--bg) 88%, transparent) 0%,
-      color-mix(in srgb, var(--bg) 45%, transparent) 38%,
-      color-mix(in srgb, var(--bg) 45%, transparent) 62%,
-      color-mix(in srgb, var(--bg) 90%, transparent) 100%);
+      rgba(0,20,45,.3) 0%, rgba(0,20,45,0) 18%, rgba(0,20,45,0) 82%, rgba(0,20,45,.35) 100%);
   }
-  .hero{align-items:center;}
   .hero .hero-content{
     display:flex;flex-direction:column;align-items:center;text-align:center;
-    padding:9vh 7%;gap:6px;color:var(--ink);
+    padding:9vh 7%;gap:6px;color:#fff;
   }
 
   .hero-logos-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:34px;}
@@ -158,21 +155,21 @@
   .hero-logo-item .media-empty{font-size:9px;padding:6px;}
   .hero-logo-item .media-empty .icon{font-size:16px;}
   .hero-logo-remove{position:absolute;top:-8px;right:-8px;z-index:4;width:18px;height:18px;border-radius:50%;
-    background:var(--ink);color:var(--bg);border:none;font-size:10px;line-height:1;cursor:pointer;}
+    background:#fff;color:#413c3f;border:none;font-size:10px;line-height:1;cursor:pointer;}
   .hero-add-logo{font-size:10px;text-transform:uppercase;letter-spacing:.06em;background:none;
-    border:1px dashed var(--line-strong);color:var(--ink-soft);padding:6px 12px;border-radius:20px;}
+    border:1px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:20px;}
   .hero-presents{font-family:var(--font-body);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-    font-weight:700;color:var(--ink-faint);}
+    font-weight:700;color:rgba(255,255,255,.8);}
 
   .hero-cover-title{font-family:var(--font-main);font-size:clamp(36px,6vw,72px);line-height:1.04;margin:0 0 14px;
-    font-weight:800;letter-spacing:-.01em;color:var(--ink);}
-  .hero-cover-subtitle{font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:var(--ink-soft);
+    font-weight:800;letter-spacing:-.01em;color:#fff;}
+  .hero-cover-subtitle{font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.88);
     font-weight:400;max-width:620px;line-height:1.55;}
 
   .hero-scrolldown{margin-top:56px;display:flex;flex-direction:column;align-items:center;gap:5px;}
   .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-    font-weight:700;color:var(--ink-faint);}
-  .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:var(--ink-soft);margin-bottom:10px;}
+    font-weight:700;color:rgba(255,255,255,.8);}
+  .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:rgba(255,255,255,.88);margin-bottom:10px;}
   .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--bg);
     border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(13,191,219,.4);
     animation:bob 2.2s ease-in-out infinite;transition:transform .15s ease;}
@@ -184,70 +181,78 @@
     .hero-logo-item{width:90px;height:38px;}
   }
 
-  /* ---------- timeline rail: no longer a fixed overlay — it's a real column in the page
-     flow, sticky within that column so it scrolls together with the chapters (releasing
-     once they end) instead of floating detached over the whole site. Bigger, bolder type
-     so it reads as a headline element in its own right, not a compact nav footnote.
-     Styled like a river drawn on paper: cream/beige glass, a wavy flowing "water" line
-     connecting droplet-shaped markers instead of a straight rail. ---------- */
+  /* ---------- timeline rail: a thin strip, sticky within the page flow so it scrolls
+     together with the chapters (releasing once they end) instead of floating detached
+     over the whole site. Just the flowing water line and droplet markers — chapter/entry
+     titles live in a hover popup instead of taking up permanent width. ---------- */
   .layout-wrap{display:flex;align-items:flex-start;}
   .rail{
-    position:sticky;top:49px;z-index:20;flex:0 0 420px;width:420px;
+    position:sticky;top:49px;z-index:20;flex:0 0 92px;width:92px;
     height:calc(100vh - 49px);height:calc(100svh - 49px);overflow:hidden;align-self:flex-start;
     background:linear-gradient(180deg, rgba(65,60,63,.97) 0%, rgba(42,39,41,.95) 45%, rgba(65,60,63,.97) 100%);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
     border-left:1px solid rgba(13,191,219,.3);
     box-shadow:-24px 0 60px rgba(0,0,0,.35);color:#0dbfdb;
   }
-  .rail-inner{position:absolute;left:0;right:0;top:0;padding:36px 30px 60vh;will-change:transform;}
-  .rail-title{font-family:var(--font-body);font-size:12px;text-transform:uppercase;letter-spacing:.18em;color:rgba(13,191,219,.65);margin:0 0 22px;font-weight:700;}
+  .rail-inner{position:absolute;left:0;right:0;top:0;padding:28px 0 60vh;will-change:transform;}
+  .rail-title, .rail-chapter-title, .rail-year, .rail-label{display:none;}
 
-  .rail-chapter{margin-bottom:26px;}
-  .rail-chapter-head{display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;padding:2px 0;}
-  .rail-chapter-dot{width:17px;height:17px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);flex:0 0 auto;
-    transition:background .5s ease;box-shadow:0 1px 3px rgba(0,0,0,.45);}
-  .rail-chapter-title{font-family:var(--font-main);font-size:23px;font-weight:800;letter-spacing:-.01em;line-height:1.12;
-    flex:1;transition:color .4s ease;color:rgba(13,191,219,.72);}
-  .rail-chapter.active .rail-chapter-title{color:#0dbfdb;}
-  .rail-chevron{background:none;border:0;color:rgba(13,191,219,.55);font-size:13px;padding:2px;transition:transform .2s ease;}
+  .rail-chapter{margin-bottom:16px;}
+  .rail-chapter-head{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;user-select:none;padding:2px 0;}
+  .rail-chapter-dot{width:28px;height:38px;flex:0 0 auto;transition:background .5s ease;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
+    -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
+  }
+  .rail-chevron{background:none;border:0;color:rgba(13,191,219,.55);font-size:12px;padding:2px;transition:transform .2s ease;}
   .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
 
-  .rail-entries{position:relative;padding-left:42px;margin-top:16px;overflow:hidden;transition:max-height .35s ease;}
+  .rail-entries{position:relative;margin-top:10px;overflow:hidden;transition:max-height .35s ease;}
   .rail-chapter.collapsed .rail-entries{max-height:0 !important;margin-top:0;}
   /* the wavy "riverbed" line and its accent-colored "water" fill share one tile geometry
-     (a bold S-curve) so they align perfectly; both drift slowly downward for a free-flowing feel */
+     (a bold, thick S-curve) so they align perfectly; both drift downward for a free-flowing
+     feel — a real flowing current, not a straight rail */
   .rail-track-line{
-    position:absolute;left:0;top:4px;bottom:4px;width:22px;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='56'%3E%3Cpath d='M11 0 C19 10 3 18 11 28 C19 38 3 46 11 56' fill='none' stroke='rgba(13,191,219,0.4)' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
-    background-repeat:repeat-y;animation:railFlow 2.6s linear infinite;
+    position:absolute;left:50%;transform:translateX(-50%);top:4px;bottom:4px;width:30px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='rgba(13,191,219,0.4)' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:repeat-y;animation:railFlow 2.1s linear infinite;
   }
   .rail-progress-fill{
-    position:absolute;left:0;top:4px;width:22px;height:0%;background:var(--accent-live);
+    position:absolute;left:50%;transform:translateX(-50%);top:4px;width:30px;height:0%;background:var(--accent-live);
     transition:height .12s linear, background-color .5s ease;
-    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='56'%3E%3Cpath d='M11 0 C19 10 3 18 11 28 C19 38 3 46 11 56' fill='none' stroke='%23000' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
-    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='56'%3E%3Cpath d='M11 0 C19 10 3 18 11 28 C19 38 3 46 11 56' fill='none' stroke='%23000' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E");
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='%23000' stroke-width='8.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='%23000' stroke-width='8.5' stroke-linecap='round'/%3E%3C/svg%3E");
     -webkit-mask-repeat:repeat-y;mask-repeat:repeat-y;
-    animation:railFlow 2.6s linear infinite;
-    filter:drop-shadow(0 0 6px rgba(13,191,219,.55));
+    animation:railFlow 2.1s linear infinite;
+    filter:drop-shadow(0 0 8px rgba(13,191,219,.65));
   }
-  @keyframes railFlow{from{background-position-y:0; -webkit-mask-position-y:0; mask-position-y:0;} to{background-position-y:56px; -webkit-mask-position-y:56px; mask-position-y:56px;}}
-  .rail-item{position:relative;padding:0 0 20px;cursor:pointer;}
-  .rail-item:last-child{padding-bottom:2px;}
-  .rail-dot{position:absolute;left:-40px;top:1px;width:18px;height:18px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);
-    background:rgba(13,191,219,.14);border:2.5px solid rgba(13,191,219,.6);transition:all .2s ease;box-shadow:0 1px 3px rgba(0,0,0,.4);}
-  .rail-year{font-family:var(--font-main);font-weight:800;font-size:21px;letter-spacing:-.01em;color:rgba(13,191,219,.55);transition:color .2s ease;line-height:1.2;}
-  .rail-label{font-family:var(--font-body);font-size:13px;font-weight:600;color:rgba(13,191,219,.4);margin-top:2px;transition:color .2s ease;}
-  .rail-item.active .rail-dot{background:var(--accent-live);border-color:var(--accent-live);
-    box-shadow:0 0 0 7px rgba(13,191,219,.28), 0 1px 3px rgba(0,0,0,.4);animation:dropletGlow 2.2s ease-in-out infinite;}
-  @keyframes dropletGlow{0%,100%{box-shadow:0 0 0 5px rgba(13,191,219,.3), 0 1px 3px rgba(0,0,0,.4);}50%{box-shadow:0 0 0 10px rgba(13,191,219,.12), 0 1px 3px rgba(0,0,0,.4);}}
-  .rail-item.active .rail-year{color:#0dbfdb;font-weight:800;}
-  .rail-item.active .rail-label{color:rgba(13,191,219,.85);}
-  .rail-item:hover .rail-year{color:#0dbfdb;}
+  @keyframes railFlow{from{background-position-y:0; -webkit-mask-position-y:0; mask-position-y:0;} to{background-position-y:60px; -webkit-mask-position-y:60px; mask-position-y:60px;}}
+  .rail-item{position:relative;height:52px;cursor:pointer;}
+  .rail-dot{position:absolute;left:50%;top:6px;width:24px;height:33px;transform:translateX(-50%);
+    background:rgba(13,191,219,.4);transition:all .2s ease;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
+    -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
+  }
+  .rail-item.active .rail-dot{background:var(--accent-live);
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,.4)) drop-shadow(0 0 9px rgba(13,191,219,.7));
+    animation:dropletGlow 2.2s ease-in-out infinite;}
+  @keyframes dropletGlow{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.14);}}
+  .rail-item:hover .rail-dot{background:rgba(13,191,219,.75);}
 
-  .rail-add-entry{margin-left:0;margin-top:6px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
-    background:none;border:1px dashed rgba(13,191,219,.4);color:rgba(13,191,219,.85);padding:6px 12px;border-radius:20px;}
-  .rail-add-chapter{margin-top:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-    background:none;border:1px dashed rgba(13,191,219,.4);color:rgba(13,191,219,.85);padding:10px 16px;border-radius:20px;width:100%;}
+  /* floating popup that shows a chapter/entry's title next to its droplet on hover,
+     since the thin strip no longer has room for inline text */
+  .rail-hover-popup{
+    position:fixed;z-index:90;background:#413c3f;color:#0dbfdb;
+    padding:9px 16px;border-radius:8px;font-family:var(--font-main);font-weight:700;font-size:14.5px;
+    white-space:nowrap;box-shadow:0 12px 28px rgba(0,0,0,.4);pointer-events:none;
+    opacity:0;transform:translate(-100%,-50%);transition:opacity .15s ease;
+    border:1px solid rgba(13,191,219,.4);max-width:min(60vw, 320px);white-space:normal;
+  }
+  .rail-hover-popup.visible{opacity:1;}
+  .rail-hover-popup-eyebrow{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+    color:rgba(13,191,219,.65);margin-bottom:2px;}
 
   /* ---------- "you are here" popup: pops up fresh each time the active chapter/entry changes ---------- */
   .position-popup{
@@ -277,14 +282,10 @@
   }
 
   @media (max-width: 860px){
-    .rail{flex:0 0 56px;width:56px;border-left:none;}
-    .rail-inner{padding:20px 10px 60vh;}
-    .rail-title, .rail-chapter-title, .rail-year, .rail-label, .rail-add-entry, .rail-add-chapter{display:none;}
-    .rail-chapter{margin-bottom:10px;}
-    .rail-entries{padding-left:0;margin-top:6px;}
-    .rail-track-line, .rail-progress-fill{left:auto;right:8px;}
-    .rail-dot{left:auto;right:0;}
-    .rail-chapter-head{justify-content:center;}
+    .rail{flex:0 0 72px;width:72px;border-left:none;}
+    .rail-inner{padding:20px 0 60vh;}
+    .rail-chapter-dot{width:24px;height:33px;}
+    .rail-dot{width:20px;height:27px;}
   }
 
   /* ---------- main / chapters ---------- */
@@ -311,24 +312,25 @@
   /* ---------- optional per-section popup box (left side): free-floating text + image/gif card ---------- */
   .callout-box{
     position:absolute;top:12%;left:6%;z-index:3;width:min(300px, 78%);
-    background:#0dbfdb;color:#413c3f;border-radius:12px;padding:16px 18px 18px;
-    box-shadow:0 18px 40px rgba(13,191,219,.4);
+    background:#413c3f;color:#0dbfdb;border-radius:12px;padding:16px 18px 18px;
+    border:1px solid rgba(13,191,219,.4);
+    box-shadow:0 18px 40px rgba(0,0,0,.45), 0 0 24px rgba(13,191,219,.2);
     transform-origin:left top;opacity:.5;transform:scale(.9);
   }
   .callout-media-frame{position:relative;width:100%;height:140px;border-radius:8px;overflow:hidden;
-    background:rgba(65,60,63,.14);margin-bottom:12px;}
-  .callout-media-frame .media-empty{background:rgba(65,60,63,.1);color:rgba(65,60,63,.65);}
+    background:rgba(13,191,219,.1);margin-bottom:12px;}
+  .callout-media-frame .media-empty{background:rgba(13,191,219,.08);color:rgba(13,191,219,.6);}
   .callout-text{font-family:var(--font-body);font-size:14.5px;font-weight:600;line-height:1.5;}
   .callout-remove{
     position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-radius:50%;
-    background:#413c3f;color:#0dbfdb;border:2px solid #0dbfdb;font-size:11px;line-height:1;cursor:pointer;
+    background:#0dbfdb;color:#413c3f;border:2px solid #413c3f;font-size:11px;line-height:1;cursor:pointer;
   }
   .callout-add-btn{
     position:absolute;top:12%;left:6%;z-index:3;font-size:11.5px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.05em;background:rgba(13,191,219,.14);border:1.5px dashed #0dbfdb;color:#0dbfdb;
+    letter-spacing:.05em;background:rgba(65,60,63,.85);border:1.5px dashed #0dbfdb;color:#0dbfdb;
     padding:9px 16px;border-radius:20px;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
   }
-  .callout-add-btn:hover{background:rgba(13,191,219,.26);}
+  .callout-add-btn:hover{background:rgba(65,60,63,1);}
   @media (max-width: 720px){
     .callout-box, .callout-add-btn{left:5%;width:min(240px, 82%);top:10%;}
   }
@@ -489,10 +491,10 @@
       <div class="rail-inner" id="railInner">
         <div class="rail-title">Chapters &amp; Timelines</div>
         <div id="railChapters"></div>
-        <button class="rail-add-chapter edit-only" id="railAddChapter" type="button">+ Add chapter</button>
       </div>
     </nav>
   </div>
+  <div class="rail-hover-popup" id="railHoverPopup"></div>
 
   <footer class="site-footer">
     <strong>Editable Storymap Dashboard</strong> — a reusable, full-bleed scrollytelling template.
@@ -601,8 +603,8 @@
   // not any specific artwork, so it's safe as a default and obviously meant to be replaced
   function coverPlaceholder(){
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900">
-      <rect width="1600" height="900" fill="#f2e8d4"/>
-      <g stroke="#c9b489" stroke-width="1.2" fill="none" opacity="0.4">
+      <rect width="1600" height="900" fill="#005ba6"/>
+      <g stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.22">
         <circle cx="260" cy="180" r="130"/>
         <circle cx="1300" cy="700" r="220"/>
         <circle cx="820" cy="470" r="340"/>
@@ -610,15 +612,15 @@
         <path d="M-20,240 Q520,140 1040,250 T1620,210"/>
         <path d="M-20,860 Q500,800 900,850 T1620,820"/>
       </g>
-      <text x="800" y="90" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="18" letter-spacing="3" fill="#a89871" text-anchor="middle" opacity="0.65">COVER BACKGROUND — REPLACE VIA CHANGE MEDIA</text>
+      <text x="800" y="90" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="18" letter-spacing="3" fill="#ffffff" text-anchor="middle" opacity="0.5">COVER BACKGROUND — REPLACE VIA CHANGE MEDIA</text>
       </svg>`;
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
   // a dashed placeholder "badge" standing in for a real logo image
   function logoPlaceholder(label){
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="260" height="96">
-      <rect x="3" y="3" width="254" height="90" rx="10" fill="none" stroke="#807973" stroke-width="1.6" stroke-dasharray="6 5"/>
-      <text x="130" y="55" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="20" letter-spacing="1" fill="#807973" text-anchor="middle">${escapeHtml(label)}</text>
+      <rect x="3" y="3" width="254" height="90" rx="10" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-dasharray="6 5" opacity="0.7"/>
+      <text x="130" y="55" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="20" letter-spacing="1" fill="#ffffff" text-anchor="middle">${escapeHtml(label)}</text>
       </svg>`;
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
@@ -922,7 +924,6 @@
           <div class="rail-track-line"></div>
           <div class="rail-progress-fill" data-chapter-id="${chapter.id}"></div>
           ${entries}
-          <button type="button" class="rail-add-entry edit-only" data-act="addEntry" data-chapter-id="${chapter.id}" data-index="${chapter.entries.length}">+ Add entry</button>
         </div>
       </div>`;
   }
@@ -1505,6 +1506,37 @@
     railInner.style.transform = `translateY(${(-progress * range).toFixed(1)}px)`;
   }
 
+  // the thin rail strip has no room for inline titles, so show them in a floating popup
+  // next to the hovered droplet instead
+  const railHoverPopup = $("railHoverPopup");
+  function showRailHoverPopup(anchorEl, eyebrow, label){
+    if(!anchorEl) return;
+    const r = anchorEl.getBoundingClientRect();
+    railHoverPopup.innerHTML = (eyebrow ? `<span class="rail-hover-popup-eyebrow">${escapeHtml(eyebrow)}</span>` : "") + escapeHtml(label);
+    railHoverPopup.style.left = (r.left - 10) + "px";
+    railHoverPopup.style.top = (r.top + r.height / 2) + "px";
+    railHoverPopup.classList.add("visible");
+  }
+  function hideRailHoverPopup(){ railHoverPopup.classList.remove("visible"); }
+  document.addEventListener("mouseover", (e) => {
+    const item = e.target.closest(".rail-item");
+    const head = !item && e.target.closest(".rail-chapter-head");
+    if(item){
+      const entry = getEntry(item.dataset.chapterId, item.dataset.id);
+      if(entry) showRailHoverPopup(item.querySelector(".rail-dot"), entry.year, entryLabel(entry));
+    } else if(head){
+      const chapter = getChapter(head.dataset.chapterId);
+      if(chapter) showRailHoverPopup(head.querySelector(".rail-chapter-dot"), "Chapter", chapter.title);
+    }
+  });
+  document.addEventListener("mouseout", (e) => {
+    const from = e.target.closest(".rail-item, .rail-chapter-head");
+    if(!from) return;
+    const to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".rail-item, .rail-chapter-head");
+    if(to !== from) hideRailHoverPopup();
+  });
+  window.addEventListener("scroll", hideRailHoverPopup, { passive:true });
+
   let ticking = false;
   window.addEventListener("scroll", () => {
     if(!ticking){ requestAnimationFrame(() => { updateScroll(); ticking = false; }); ticking = true; }
@@ -1700,7 +1732,6 @@
     if(!confirm("Reset to the demo content? Your edits will be lost unless exported.")) return;
     state = defaultData(); saveState(); render();
   });
-  $("railAddChapter").addEventListener("click", () => insertChapter(state.chapters.length));
   $("heroAddLogo").addEventListener("click", addHeroLogo);
   $("heroScrollBtn").addEventListener("click", () => {
     document.querySelector(".chapter")?.scrollIntoView({ behavior:"smooth", block:"start" });
