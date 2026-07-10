@@ -40,9 +40,11 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   full-screen slide too.
 - Each entry's media (image / GIF / video) fills the whole screen behind the text, with a
   mix of **text blocks** (Heading, Subheading, Body, Pull quote, Caption — pick font, size,
-  alignment per block) and **inline media blocks** — additional images/GIFs/videos dropped
-  into the same text flow as smaller inset cards (S/M/L/Full width, left/center/right
-  aligned, with their own caption), distinct from the entry's full-bleed background.
+  alignment, color per block) and **inline media blocks** — additional images/GIFs/videos
+  dropped into the same text flow as smaller inset cards (S/M/L/Full width, with their own
+  caption), distinct from the entry's full-bleed background. New blocks lay out left to
+  right, side by side, wrapping to a new row only when they run out of horizontal space
+  (a "Full width" media block always claims its own row) — not stacked one under another.
 - The timeline is a **thin strip** (~90px) that sits **in the normal page flow** next to the
   chapters/entries column and sticks to the top of the viewport as you scroll — it's part of
   the page, not a floating overlay, and releases/scrolls away naturally once you pass the
