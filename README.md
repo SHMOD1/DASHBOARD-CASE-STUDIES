@@ -57,11 +57,17 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 - A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
   no further scrolling.
-- Every chapter cover and entry can carry an **optional popup box** hugging the left edge — a
-  small round mascot tab that reveals a brand-blue (`#005BA6`) card with white text on hover
-  (or tap/focus), for a free-form note plus an optional image/GIF, separate from the main text
-  and inline media blocks. It's off by default; add one with **+ Add popup box**, edit its
-  text and swap its image the same way as everywhere else, and remove it any time with the ✕.
+- The hero, every chapter cover, and every entry can carry an **optional popup box** hugging
+  the left edge — a small round mascot tab that reveals a brand-blue (`#005BA6`) card with
+  white text on hover (or tap/focus), for a free-form note plus an optional image/GIF,
+  separate from the main text and inline media blocks. It's off by default; add one with
+  **+ Add popup box**, edit its text and swap its image the same way as everywhere else, and
+  remove it any time with the ✕.
+- Every image/video/GIF — the hero, a chapter cover, an entry's full-bleed background, or an
+  inline media block — can carry **draggable text-box annotations** pinned directly onto it,
+  the way a scrollytelling infographic labels a photo. In Edit Mode, click **+ Text Box** to
+  drop one on, drag it anywhere by its ⠿⠿ handle, and style it with its own toolbar (font,
+  size, bold, italic, color) independent of every other text on the page.
 - A chapter cover or entry with **no background image set** falls back to solid brand-blue
   (`#005BA6`) instead of a generic placeholder pattern, since it's a full-bleed section
   background.
@@ -90,9 +96,14 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
   every text block.
-- Each text block gets its own floating toolbar: style, font, size, alignment, bold/italic,
-  reorder, delete. Use **+ Add text block** to add more, or **+ Add image / video / GIF** to
-  drop in an inline media overlay (its toolbar controls size and alignment instead).
+- Each text block gets its own floating toolbar: style, font, size, alignment, bold, italic,
+  and a color swatch for the text itself, plus reorder/delete. Use **+ Add text block** to add
+  more, or **+ Add image / video / GIF** to drop in an inline media overlay (its toolbar
+  controls size and alignment instead).
+- Every chapter/page is fully reorderable — **↑/↓ Move** on a chapter or entry, and **+
+  Insert entry here** to drop a new page anywhere in the sequence — regardless of what mix of
+  text, media, and annotations that page contains, so pages of different styles can be
+  freely rearranged.
 - Hover any image/video — the entry's full-bleed background, a chapter cover, the hero, or
   an inline media block — and click **Change Media** to set an Image, GIF, or Video — paste a
   URL (including YouTube/Vimeo links, which embed automatically) or upload a file, with

@@ -357,6 +357,49 @@
     .callout-box, .callout-add-btn{left:3%;top:10%;}
     .callout-box:hover .callout-content, .callout-box:focus-within .callout-content, .callout-box.open .callout-content{max-width:min(220px, 74vw);}
   }
+  /* the hero's callout box positions itself just like every other one — this mount just
+     needs to not add its own box so the absolute positioning is relative to .hero */
+  .hero-callout-mount{display:contents;}
+
+  /* ---------- draggable text-box annotations: free-floating labels pinned onto any
+     image/video/GIF (full-bleed backgrounds or inline media blocks), for on-image
+     annotation the way a scrollytelling infographic would ---------- */
+  .annotation-layer{position:absolute;inset:0;z-index:40;pointer-events:none;}
+  .annotation{
+    position:absolute;transform:translate(-50%,-50%);max-width:70%;pointer-events:none;
+    display:flex;align-items:center;gap:6px;
+  }
+  body.edit-on .annotation{pointer-events:auto;}
+  .annotation-text{
+    background:rgba(0,0,0,.32);border-radius:4px;padding:4px 9px;text-shadow:0 2px 6px rgba(0,0,0,.5);
+    line-height:1.35;word-break:break-word;
+  }
+  body.edit-on .annotation-text{outline:1px dashed rgba(255,255,255,.5);outline-offset:2px;cursor:text;}
+  .annotation-drag-handle{
+    display:none;flex:0 0 auto;cursor:grab;color:#fff;font-size:13px;letter-spacing:-2px;
+    background:rgba(0,91,166,.9);border-radius:4px;padding:3px 4px;touch-action:none;user-select:none;
+  }
+  body.edit-on .annotation-drag-handle{display:block;}
+  .annotation-drag-handle:active{cursor:grabbing;}
+  .annotation-toolbar{
+    display:none;position:absolute;bottom:100%;left:0;margin-bottom:6px;gap:4px;align-items:center;
+    background:#413c3f;border-radius:8px;padding:5px;box-shadow:0 10px 24px rgba(0,0,0,.4);white-space:nowrap;
+  }
+  body.edit-on .annotation:focus-within .annotation-toolbar,
+  body.edit-on .annotation:hover .annotation-toolbar{display:flex;}
+  .annotation-toolbar select, .annotation-toolbar button, .annotation-toolbar input[type=color]{
+    font-size:11px;border-radius:4px;border:1px solid rgba(13,191,219,.4);background:#2f2b2d;color:#0dbfdb;
+    padding:2px 4px;cursor:pointer;
+  }
+  .annotation-toolbar input[type=color]{padding:0;width:22px;height:22px;}
+  .annotation-add-btn{
+    position:absolute;left:50%;bottom:14px;transform:translateX(-50%);z-index:2;
+    font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(0,0,0,.5);border:1.5px dashed #0dbfdb;color:#0dbfdb;
+    padding:7px 14px;border-radius:20px;pointer-events:auto;
+  }
+  .annotation-add-btn:hover{background:rgba(0,0,0,.7);}
+  .block-color-input{width:26px;height:24px;padding:1px;cursor:pointer;border-radius:4px;}
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
   .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;}
@@ -504,7 +547,9 @@
 
   <section class="hero" id="hero">
     <div class="media-fill" id="heroMediaWrap" data-media-scope="hero"></div>
+    <div class="annotation-layer" id="heroAnnotationLayer"></div>
     <div class="scrim hero-scrim"></div>
+    <div class="hero-callout-mount" id="heroCalloutMount"></div>
     <div class="hero-mascot" aria-hidden="true">
       <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
         <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
@@ -635,7 +680,7 @@
 <script>
 (() => {
   "use strict";
-  const STORAGE_KEY = "storymap-dashboard-state-v10";
+  const STORAGE_KEY = "storymap-dashboard-state-v11";
   const $ = (id) => document.getElementById(id);
 
   /* ---------------- placeholder image generator ---------------- */
@@ -808,6 +853,7 @@
               media:{ kind:"image", src: placeholder(31,"05"), embed:false },
               caption:"Sample caption — replace with your own source line.",
               callout: { enabled:true, text:"This box is fully optional — remove it with the ✕, or add one to any section with \"+ Add popup box\".", media:null },
+              annotations:[ { id:newId(), x:78, y:22, text:"Drag me anywhere on the image", font:FONT_OPTIONS[0].value, size:"M", bold:true, italic:false, color:"#ffde17" } ],
               blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
                 html:"<p>The city's water once moved through a chain of interconnected tanks and lakes, each overflow feeding the next down the valley. The system stored the monsoon for the dry months ahead.</p>" },
                 { ...newMediaBlock({ kind:"image", src: placeholder(41,"1"), embed:false }), size:"M", align:"left",
@@ -991,6 +1037,8 @@
     renderHeroText();
     heroWrap.innerHTML = mediaMarkup(state.meta.heroMedia);
     renderHeroLogos();
+    $("heroCalloutMount").innerHTML = renderCallout("hero", null, null, state.meta.callout);
+    $("heroAnnotationLayer").innerHTML = renderAnnotationItems("hero", null, null, null, state.meta.annotations);
 
     railChapters.innerHTML = state.chapters.map(renderRailChapter).join("");
     mainEl.innerHTML = state.chapters.map(renderChapter).join("") +
@@ -1041,14 +1089,14 @@
 
   function renderCallout(scope, chapterId, entryId, callout){
     const c = callout || { enabled:false, text:"", media:null };
-    const idAttrs = entryId
-      ? `data-callout-scope="${scope}" data-chapter-id="${chapterId}" data-entry-id="${entryId}"`
-      : `data-callout-scope="${scope}" data-chapter-id="${chapterId}"`;
+    const idAttrs = `data-callout-scope="${scope}"` +
+      (chapterId ? ` data-chapter-id="${chapterId}"` : "") +
+      (entryId ? ` data-entry-id="${entryId}"` : "");
     if(!c.enabled){
       return `<button type="button" class="callout-add-btn edit-only" data-act="addCallout" ${idAttrs}>+ Add popup box</button>`;
     }
-    const bindType = scope === "chapterCover" ? "chapterCalloutText" : "entryCalloutText";
-    const mediaScope = scope === "chapterCover" ? "chapterCalloutMedia" : "entryCalloutMedia";
+    const bindType = scope + "CalloutText";
+    const mediaScope = scope + "CalloutMedia";
     const hasMedia = !!(c.media && c.media.src);
     const mediaHtml = `<div class="callout-media-frame${hasMedia ? "" : " edit-only"}">
            <div class="media-fill" data-media-scope="${mediaScope}" ${idAttrs}>${mediaMarkup(c.media)}</div>
@@ -1064,6 +1112,66 @@
       </div>`;
   }
 
+  /* ---------------- draggable text-box annotations over any image/video/GIF ---------------- */
+  const ANNOTATION_SIZE_PX = { S:14, M:19, L:27 };
+  function annotationIdAttrs(scope, chapterId, entryId, blockId){
+    return `data-a-scope="${scope}"` +
+      (chapterId ? ` data-chapter-id="${chapterId}"` : "") +
+      (entryId ? ` data-entry-id="${entryId}"` : "") +
+      (blockId ? ` data-block-id="${blockId}"` : "");
+  }
+  function getAnnotation(scope, chapterId, entryId, blockId, annotationId){
+    const owner = sectionOwner(scope, chapterId, entryId, blockId);
+    return owner && owner.annotations && owner.annotations.find(a => a.id === annotationId);
+  }
+  function addAnnotation(scope, chapterId, entryId, blockId){
+    const owner = sectionOwner(scope, chapterId, entryId, blockId);
+    if(!owner) return;
+    if(!owner.annotations) owner.annotations = [];
+    owner.annotations.push({ id:newId(), x:50, y:50, text:"New label", font:FONT_OPTIONS[1].value, size:"M", bold:false, italic:false, color:"#ffffff" });
+    saveState(); render();
+  }
+  function deleteAnnotation(scope, chapterId, entryId, blockId, annotationId){
+    const owner = sectionOwner(scope, chapterId, entryId, blockId);
+    if(!owner || !owner.annotations) return;
+    owner.annotations = owner.annotations.filter(a => a.id !== annotationId);
+    saveState(); render();
+  }
+  function renderAnnotationItems(scope, chapterId, entryId, blockId, list){
+    const idAttrs = annotationIdAttrs(scope, chapterId, entryId, blockId);
+    const items = (list || []).map(a => renderAnnotation(a, idAttrs)).join("");
+    return items + `<button type="button" class="annotation-add-btn edit-only" data-act="addAnnotation" ${idAttrs}>+ Text Box</button>`;
+  }
+  function renderAnnotation(a, idAttrs){
+    const px = ANNOTATION_SIZE_PX[a.size] || ANNOTATION_SIZE_PX.M;
+    const textStyle = `font-family:${a.font};font-size:${px}px;color:${a.color || "#ffffff"};font-weight:${a.bold ? 700 : 400};font-style:${a.italic ? "italic" : "normal"};`;
+    const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===a.font?"selected":""}>${f.label}</option>`).join("");
+    const optSizes = ["S","M","L"].map(s => `<option value="${s}" ${s===a.size?"selected":""}>${s}</option>`).join("");
+    return `
+      <div class="annotation" data-annotation-id="${a.id}" ${idAttrs} style="left:${a.x}%;top:${a.y}%;">
+        <div class="annotation-drag-handle edit-only" title="Drag to move">⠿⠿</div>
+        <div class="annotation-toolbar edit-only">
+          <select data-act="annoStyle" data-field="font" data-annotation-id="${a.id}" ${idAttrs}>${optFonts}</select>
+          <select data-act="annoStyle" data-field="size" data-annotation-id="${a.id}" ${idAttrs}>${optSizes}</select>
+          <button type="button" data-act="annoFormat" data-cmd="bold" data-annotation-id="${a.id}" ${idAttrs}><b>B</b></button>
+          <button type="button" data-act="annoFormat" data-cmd="italic" data-annotation-id="${a.id}" ${idAttrs}><i>I</i></button>
+          <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#ffffff"}">
+          <button type="button" class="danger" data-act="deleteAnnotation" data-annotation-id="${a.id}" ${idAttrs}>✕</button>
+        </div>
+        <div class="annotation-text" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "Type here…")}</div>
+      </div>`;
+  }
+  function applyAnnotationStyle(a){
+    const el = document.querySelector(`.annotation-text[data-annotation-id="${cssEscape(a.id)}"]`);
+    if(!el) return;
+    const px = ANNOTATION_SIZE_PX[a.size] || ANNOTATION_SIZE_PX.M;
+    el.style.fontFamily = a.font;
+    el.style.fontSize = px + "px";
+    el.style.color = a.color || "#ffffff";
+    el.style.fontWeight = a.bold ? "700" : "400";
+    el.style.fontStyle = a.italic ? "italic" : "normal";
+  }
+
   function renderChapter(chapter, idx){
     const entriesHtml = chapter.entries.map((entry, i) => renderAddBetween(chapter.id, i) + renderEntry(chapter, entry)).join("")
       + renderAddBetween(chapter.id, chapter.entries.length);
@@ -1071,6 +1179,7 @@
       <section class="chapter" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}">
         <div class="chapter-cover" data-chapter-id="${chapter.id}">
           <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover)}</div>
+          <div class="annotation-layer">${renderAnnotationItems("chapterCover", chapter.id, null, null, chapter.annotations)}</div>
           <div class="scrim"></div>
           <div class="chapter-toolbar edit-only">
             <button type="button" data-act="moveChapter" data-dir="-1" data-chapter-id="${chapter.id}">↑ Move</button>
@@ -1100,6 +1209,7 @@
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media)}</div>
+        <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
         <div class="scrim"></div>
         <div class="entry-toolbar edit-only">
           <button type="button" data-act="moveEntry" data-dir="-1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↑ Move up</button>
@@ -1128,7 +1238,7 @@
   function renderBlock(chapterId, entryId, block){
     if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block);
     const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
-    const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};`;
+    const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};${block.color ? `color:${block.color};` : ""}`;
     const optTypes = BLOCK_TYPES.map(t => `<option value="${t.type}" ${t.type===block.type?"selected":""}>${t.label}</option>`).join("");
     const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===block.font?"selected":""}>${f.label}</option>`).join("");
     const sizes = ["S","M","L","XL"];
@@ -1144,6 +1254,7 @@
           <select data-act="blockStyle" data-field="align" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optAligns}</select>
           <button type="button" data-act="blockFormat" data-cmd="bold" data-block-id="${block.id}"><b>B</b></button>
           <button type="button" data-act="blockFormat" data-cmd="italic" data-block-id="${block.id}"><i>I</i></button>
+          <input type="color" class="block-color-input" title="Text color" data-act="blockColor" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}" value="${block.color || "#ffffff"}">
           <span class="spacer"></span>
           <button type="button" data-act="moveBlock" data-dir="-1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↑</button>
           <button type="button" data-act="moveBlock" data-dir="1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↓</button>
@@ -1172,6 +1283,7 @@
         </div>
         <div class="block-media">
           <div class="media-fill" data-media-scope="blockMedia" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${mediaMarkup(block.media)}</div>
+          <div class="annotation-layer">${renderAnnotationItems("blockMedia", chapterId, entryId, block.id, block.annotations)}</div>
         </div>
         <div class="block-media-caption" data-editable data-bind-type="blockMediaCaption"
              data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}"
@@ -1250,18 +1362,24 @@
     state.meta.logos = (state.meta.logos || []).filter(l => l.id !== logoId);
     saveState(); renderHeroLogos();
   }
-  function calloutOwner(scope, chapterId, entryId){
-    return scope === "chapterCover" ? getChapter(chapterId) : getEntry(chapterId, entryId);
+  // shared owner-lookup for anything that attaches to a "media surface" — the optional
+  // popup box and the draggable text-box annotations both use this across all four scopes
+  function sectionOwner(scope, chapterId, entryId, blockId){
+    if(scope === "hero") return state.meta;
+    if(scope === "chapterCover") return getChapter(chapterId);
+    if(scope === "entry" || scope === "entryMedia") return getEntry(chapterId, entryId);
+    if(scope === "blockMedia") return getBlock(chapterId, entryId, blockId);
+    return null;
   }
   function addCallout(scope, chapterId, entryId){
-    const owner = calloutOwner(scope, chapterId, entryId);
+    const owner = sectionOwner(scope, chapterId, entryId);
     if(!owner) return;
     if(!owner.callout) owner.callout = { enabled:true, text:"", media:null };
     else owner.callout.enabled = true;
     saveState(); render();
   }
   function removeCallout(scope, chapterId, entryId){
-    const owner = calloutOwner(scope, chapterId, entryId);
+    const owner = sectionOwner(scope, chapterId, entryId);
     if(!owner || !owner.callout) return;
     owner.callout.enabled = false;
     saveState(); render();
@@ -1322,10 +1440,12 @@
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     } else if(bt === "blockMediaCaption"){
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).caption = el.textContent;
-    } else if(bt === "chapterCalloutText"){
-      getChapter(el.dataset.chapterId).callout.text = el.textContent;
-    } else if(bt === "entryCalloutText"){
-      getEntry(el.dataset.chapterId, el.dataset.entryId).callout.text = el.textContent;
+    } else if(bt && bt.endsWith("CalloutText")){
+      const owner = sectionOwner(bt.slice(0, -"CalloutText".length), el.dataset.chapterId, el.dataset.entryId);
+      if(owner && owner.callout) owner.callout.text = el.textContent;
+    } else if(bt === "annotationText"){
+      const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
+      if(a) a.text = el.textContent;
     }
     debouncedSave();
   });
@@ -1357,6 +1477,17 @@
       b[el.dataset.field] = el.value;
       applyMediaBlockStyle(el.dataset.blockId, b);
       saveState();
+    } else if(el.matches('[data-act="blockColor"]')){
+      const b = getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId);
+      b.color = el.value;
+      applyBlockStyle(el.dataset.blockId, b);
+      saveState();
+    } else if(el.matches('[data-act="annoStyle"]')){
+      const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
+      if(a){ a[el.dataset.field] = el.value; applyAnnotationStyle(a); saveState(); }
+    } else if(el.matches('[data-act="annoColor"]')){
+      const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
+      if(a){ a.color = el.value; applyAnnotationStyle(a); saveState(); }
     }
   });
   function applyMediaBlockStyle(blockId, block){
@@ -1372,6 +1503,7 @@
     el.style.fontFamily = block.font;
     el.style.fontSize = px + "px";
     el.style.textAlign = block.align;
+    el.style.color = block.color || "";
   }
 
   /* ---------------- delegated click (all buttons + media overlays + rail nav) ---------------- */
@@ -1422,6 +1554,13 @@
       removeCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "toggleCallout"){
       btn.closest(".callout-box").classList.toggle("open");
+    } else if(act === "addAnnotation"){
+      addAnnotation(btn.dataset.aScope, btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId);
+    } else if(act === "deleteAnnotation"){
+      deleteAnnotation(btn.dataset.aScope, btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId, btn.dataset.annotationId);
+    } else if(act === "annoFormat"){
+      const a = getAnnotation(btn.dataset.aScope, btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId, btn.dataset.annotationId);
+      if(a){ a[btn.dataset.cmd] = !a[btn.dataset.cmd]; applyAnnotationStyle(a); saveState(); }
     } else if(act === "moveBlock"){
       moveBlock(btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId, parseInt(btn.dataset.dir, 10));
     } else if(act === "deleteBlock"){
@@ -1700,6 +1839,38 @@
     });
   }
 
+  /* ---------------- drag-to-reposition for text-box annotations (Edit Mode only, via a
+     dedicated drag handle so it never conflicts with clicking into the text to edit it) --- */
+  let annoDrag = null;
+  document.addEventListener("pointerdown", (e) => {
+    if(!editOn) return;
+    const handle = e.target.closest(".annotation-drag-handle");
+    if(!handle) return;
+    const anno = handle.closest(".annotation");
+    const layer = anno.closest(".annotation-layer");
+    if(!layer) return;
+    annoDrag = { anno, rect: layer.getBoundingClientRect(), x: null, y: null };
+    e.preventDefault();
+  });
+  document.addEventListener("pointermove", (e) => {
+    if(!annoDrag) return;
+    const { anno, rect } = annoDrag;
+    const x = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
+    const y = Math.min(100, Math.max(0, ((e.clientY - rect.top) / rect.height) * 100));
+    anno.style.left = x + "%";
+    anno.style.top = y + "%";
+    annoDrag.x = x; annoDrag.y = y;
+  });
+  window.addEventListener("pointerup", () => {
+    if(!annoDrag) return;
+    const { anno, x, y } = annoDrag;
+    if(x != null && y != null){
+      const a = getAnnotation(anno.dataset.aScope, anno.dataset.chapterId, anno.dataset.entryId, anno.dataset.blockId, anno.dataset.annotationId);
+      if(a){ a.x = x; a.y = y; saveState(); }
+    }
+    annoDrag = null;
+  });
+
   /* cursor tilt on every slide type */
   if(!reduceMotion){
     document.addEventListener("mousemove", (e) => {
@@ -1811,12 +1982,15 @@
       const logo = (state.meta.logos || []).find(l => l.id === target.logoId);
       if(logo) logo.media = media;
       container = document.querySelector(`.media-fill[data-media-scope="heroLogo"][data-logo-id="${cssEscape(target.logoId)}"]`);
-    } else if(target.scope === "chapterCalloutMedia"){
-      getChapter(target.chapterId).callout.media = media;
-      container = document.querySelector(`.media-fill[data-media-scope="chapterCalloutMedia"][data-chapter-id="${cssEscape(target.chapterId)}"]`);
-    } else if(target.scope === "entryCalloutMedia"){
-      getEntry(target.chapterId, target.entryId).callout.media = media;
-      container = document.querySelector(`.media-fill[data-media-scope="entryCalloutMedia"][data-entry-id="${cssEscape(target.entryId)}"]`);
+    } else if(target.scope && target.scope.endsWith("CalloutMedia")){
+      const scope = target.scope.slice(0, -"CalloutMedia".length);
+      const owner = sectionOwner(scope, target.chapterId, target.entryId);
+      if(owner && owner.callout){
+        owner.callout.media = media;
+        const sel = `.media-fill[data-media-scope="${target.scope}"]` +
+          (target.entryId ? `[data-entry-id="${cssEscape(target.entryId)}"]` : (target.chapterId ? `[data-chapter-id="${cssEscape(target.chapterId)}"]` : ""));
+        container = document.querySelector(sel);
+      }
     }
     if(container) container.innerHTML = mediaMarkup(media);
     saveState();
