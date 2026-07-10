@@ -43,19 +43,30 @@ bottom-left layout untouched.
   alignment per block) and **inline media blocks** — additional images/GIFs/videos dropped
   into the same text flow as smaller inset cards (S/M/L/Full width, left/center/right
   aligned, with their own caption), distinct from the entry's full-bleed background.
-- The timeline is a full-height, cream/beige glass panel spanning the entire right edge of
-  the screen, styled like a river drawn on paper — a wavy, gently flowing line (animated,
-  continuously drifting) connects water-droplet-shaped markers instead of a straight rail.
-  Its content pans vertically in lockstep with the page's scroll position, so the timeline
-  visibly scrolls together with the sections rather than sitting static; clicking any
+- The timeline is a bold, wide (420px) cream/beige glass panel that sits **in the normal page
+  flow** next to the chapters/entries column and sticks to the top of the viewport as you
+  scroll — it's part of the page, not a floating overlay, and releases/scrolls away naturally
+  once you pass the last chapter. It's styled like a river drawn on paper — a wavy, gently
+  flowing line (animated, continuously drifting) connects water-droplet-shaped markers instead
+  of a straight rail, with much bigger, heavier chapter/year typography for a stronger visual
+  presence. Its content pans vertically in lockstep with the page's scroll position, so the
+  timeline visibly scrolls together with the sections rather than sitting static; clicking any
   chapter/entry still jumps the main scroll straight to it. The active chapter's accent color
   washes across the panel, the top progress bar, and pull-quote borders as you scroll.
 - A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
   no further scrolling.
+- Sections don't just fade in once — every chapter cover and entry continuously zooms in and
+  out as it moves through the viewport, driven live by scroll position (not a one-time
+  reveal), so the effect is fully smooth and reversible in both scroll directions. The zoom
+  is layered across multiple elements independently — the section's content wrapper, its
+  title, each text block, and each inline media card all scale/fade at their own pace and
+  transform-origin — so the whole section feels like it's continuously breathing in and out
+  of focus as you scroll, rather than static boxed content.
 - Every media layer moves with scroll: the full-bleed background of each slide continuously
   zooms/pans (plus a cursor-tilt effect), and the smaller inline media-overlay images/GIFs
-  inside the text flow get their own independent, subtler scroll-linked drift.
+  inside the text flow get their own independent, subtler scroll-linked drift on top of the
+  new zoom-in/out motion.
 - The overall UI chrome (top bar, timeline panel, position popup) uses a cream/beige palette;
   the brand's navy is kept for the dark theme toggle instead.
 
