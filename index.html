@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,19 +40,12 @@
     --font-main: 'Intercom', 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     --font-body: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   }
+  /* dark theme is now the permanent, only theme (set via data-theme="dark" on <html>) */
   [data-theme="dark"]{
     --bg:#221f22; --bg-alt:#2b272a; --paper:#262226; --ink:#f8f3ef;
     --ink-soft:#d5cec6; --ink-faint:#968f89; --accent:#35d6ef; --accent-live:#35d6ef;
     --accent-2:#ffde17; --line:#3a3438; --line-strong:#524a4e;
     --chrome-bg:#0c2038; --chrome-ink:#f8f3ef; --chrome-border:rgba(231,226,212,.28);
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#221f22; --bg-alt:#2b272a; --paper:#262226; --ink:#f8f3ef;
-      --ink-soft:#d5cec6; --ink-faint:#968f89; --accent:#35d6ef; --accent-live:#35d6ef;
-      --accent-2:#ffde17; --line:#3a3438; --line-strong:#524a4e;
-      --chrome-bg:#0c2038; --chrome-ink:#f8f3ef; --chrome-border:rgba(231,226,212,.28);
-    }
   }
 
   *{box-sizing:border-box;}
@@ -83,9 +76,6 @@
   }
   .chrome button:hover, .chrome label.file-btn:hover{background:rgba(65,60,63,.08);border-color:var(--accent);}
   [data-theme="dark"] .chrome button:hover, [data-theme="dark"] .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .chrome button:hover, :root:not([data-theme="light"]) .chrome label.file-btn:hover{background:rgba(231,226,212,.1);border-color:rgba(231,226,212,.5);}
-  }
   .chrome button.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-2);font-weight:700;}
   .chrome button.primary.on{background:#3f7d5c;border-color:#3f7d5c;color:#eafff1;}
   .chrome-hint{font-size:10.5px;color:var(--ink-faint);opacity:.7;display:none;}
@@ -534,7 +524,6 @@
       <button id="btnExport">Export JSON</button>
       <label class="file-btn">Import JSON<input type="file" id="fileImport" accept="application/json" /></label>
       <button id="btnReset">Reset Demo</button>
-      <button id="btnTheme">Toggle Theme</button>
     </div>
   </div>
 
@@ -2026,19 +2015,6 @@
   $("heroAddLogo").addEventListener("click", addHeroLogo);
   $("heroScrollBtn").addEventListener("click", () => {
     document.querySelector(".chapter")?.scrollIntoView({ behavior:"smooth", block:"start" });
-  });
-
-  /* ---------------- theme ---------------- */
-  const THEME_KEY = "storymap-dashboard-theme";
-  function applyTheme(t){ if(t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme"); }
-  let savedTheme = null;
-  try{ savedTheme = localStorage.getItem(THEME_KEY); }catch(e){}
-  applyTheme(savedTheme);
-  $("btnTheme").addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : (current === "light" ? null : "dark");
-    applyTheme(next);
-    try{ if(next) localStorage.setItem(THEME_KEY, next); else localStorage.removeItem(THEME_KEY); }catch(e){}
   });
 
   /* ---------------- init ---------------- */
