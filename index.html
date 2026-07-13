@@ -120,7 +120,7 @@
 
   /* ---------- full-bleed story slides (hero / chapter cover / entry share this) ---------- */
   .hero, .chapter-cover, .entry{
-    position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
+    position:sticky;top:0;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
   }
   /* dark at both the top and bottom edges so consecutive full-bleed slides blend at the seam
      instead of cutting hard from one photo straight into the next */
@@ -1679,14 +1679,21 @@
     media.style.transform = `scale(${scale}) translate(${tilt.x}px, ${(panY + tilt.y).toFixed(1)}px)`;
     media.style.opacity = edgeFade(progress).toFixed(2);
   }
+  // sections are position:sticky and stacked by DOM order (z-index), so as each one
+  // scrolls into its pinned spot it dissolves in over whichever section is still pinned
+  // underneath it — a cross-fade instead of a hard cut between sections
   function slideMotion(){
     if(reduceMotion) return;
-    document.querySelectorAll(".hero, .chapter-cover, .entry").forEach(slide => {
+    document.querySelectorAll(".hero, .chapter-cover, .entry").forEach((slide, i) => {
+      slide.style.zIndex = i + 1;
       const r = slide.getBoundingClientRect();
       if(r.bottom < -400 || r.top > window.innerHeight + 400) return;
       const progress = slideProgress(r);
       slide.dataset.progress = progress.toFixed(3);
       applySlideTransform(slide, progress);
+      const fadeZone = window.innerHeight * 0.55;
+      const fadeIn = r.top >= 0 ? (fadeZone - Math.min(r.top, fadeZone)) / fadeZone : 1;
+      slide.style.opacity = Math.max(0, Math.min(1, fadeIn)).toFixed(2);
     });
   }
 

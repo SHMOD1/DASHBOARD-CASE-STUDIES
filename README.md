@@ -76,13 +76,16 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 - The **"CHAPTER 0X"** eyebrow label and each entry's year tag are brand-yellow (`#FBE847`).
 - A small original brand mascot — a cyan/yellow water-drop blob character — appears in a few
   spots: bobbing in the hero's corner, as the popup box's hover tab, and in the footer.
-- Sections don't just fade in once — every chapter cover and entry continuously zooms in and
-  out as it moves through the viewport, driven live by scroll position (not a one-time
-  reveal), so the effect is fully smooth and reversible in both scroll directions. The zoom
-  is layered across multiple elements independently — the section's content wrapper, its
-  title, each text block, and each inline media card all scale/fade at their own pace and
-  transform-origin — so the whole section feels like it's continuously breathing in and out
-  of focus as you scroll, rather than static boxed content.
+- Sections don't scroll past each other — each full-bleed slide (hero, chapter cover, entry)
+  pins in place as it reaches the top of the viewport, and the next one dissolves in on top
+  of it as you keep scrolling, crossfading between slides instead of a hard cut.
+- On top of that crossfade, sections don't just fade in once — every chapter cover and entry
+  continuously zooms in and out as it moves through the viewport, driven live by scroll
+  position (not a one-time reveal), so the effect is fully smooth and reversible in both
+  scroll directions. The zoom is layered across multiple elements independently — the
+  section's content wrapper, its title, each text block, and each inline media card all
+  scale/fade at their own pace and transform-origin — so the whole section feels like it's
+  continuously breathing in and out of focus as you scroll, rather than static boxed content.
 - Every media layer moves with scroll: the full-bleed background of each slide continuously
   zooms/pans (plus a cursor-tilt effect), and the smaller inline media-overlay images/GIFs
   inside the text flow get their own independent, subtler scroll-linked drift on top of the
