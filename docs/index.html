@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Editable Storymap Dashboard</title>
+<title>The Water City — Storymap Dashboard</title>
 <!-- Brand body font (Open Sans, per brand guidelines). Requires a live connection to fonts.googleapis.com —
      this <link> is a no-op in network-sandboxed previews (falls back to system sans) but works normally
      once this file is opened in a regular browser. "Intercom", the brand heading font, has no public CDN
@@ -518,17 +518,6 @@
 
   <div id="progressBar"></div>
 
-  <div class="chrome">
-    <div class="chrome-brand"><span class="chrome-dot"></span> Editable Storymap Dashboard</div>
-    <div class="chrome-actions">
-      <span class="chrome-hint">Click text or media below to edit it</span>
-      <button id="btnEdit" class="primary">Edit Mode: Off</button>
-      <button id="btnExport">Export JSON</button>
-      <label class="file-btn">Import JSON<input type="file" id="fileImport" accept="application/json" /></label>
-      <button id="btnReset">Reset Demo</button>
-    </div>
-  </div>
-
   <div class="position-popup" id="positionPopup">
     <span class="position-popup-drop">💧</span>
     <span class="position-popup-text">
@@ -950,16 +939,14 @@
     };
   }
 
-  let state = loadState() || defaultData();
+  let state = defaultData();
   let editOn = false;
   let modalTarget = null;
   let modalType = "image";
   let modalVideoTab = "link";
 
-  function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
-  function loadState(){
-    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
-  }
+  function saveState(){}
+  function loadState(){ return null; }
   let saveTimer = null;
   function debouncedSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 300); }
 
@@ -1406,7 +1393,6 @@
     $("btnEdit").classList.toggle("on", on);
     syncEditableAttrs();
   }
-  $("btnEdit").addEventListener("click", () => setEditMode(!editOn));
 
   /* ---------------- delegated input (typing) ---------------- */
   document.addEventListener("input", (e) => {
@@ -1974,32 +1960,6 @@
     saveState();
   }
 
-  /* ---------------- export / import / reset ---------------- */
-  $("btnExport").addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "storymap-dashboard-content.json";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  });
-  $("fileImport").addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try{
-        const data = JSON.parse(reader.result);
-        if(!data.chapters || !Array.isArray(data.chapters)) throw new Error("Invalid file");
-        state = data; saveState(); render();
-      }catch(err){ alert("That file doesn't look like a valid dashboard export."); }
-    };
-    reader.readAsText(file);
-    e.target.value = "";
-  });
-  $("btnReset").addEventListener("click", () => {
-    if(!confirm("Reset to the demo content? Your edits will be lost unless exported.")) return;
-    state = defaultData(); saveState(); render();
-  });
   $("heroAddLogo").addEventListener("click", addHeroLogo);
   $("heroScrollBtn").addEventListener("click", () => {
     document.querySelector(".chapter")?.scrollIntoView({ behavior:"smooth", block:"start" });
