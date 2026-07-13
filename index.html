@@ -50,7 +50,7 @@
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
   img,video{max-width:100%;display:block;}
   button{font-family:inherit;cursor:pointer;}
   select,input[type=text]{font-family:inherit;}
@@ -121,6 +121,7 @@
   /* ---------- full-bleed story slides (hero / chapter cover / entry share this) ---------- */
   .hero, .chapter-cover, .entry{
     position:sticky;top:0;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
+    transform-origin:center center;
   }
   /* dark at both the top and bottom edges so consecutive full-bleed slides blend at the seam
      instead of cutting hard from one photo straight into the next */
@@ -355,7 +356,7 @@
   /* ---------- draggable text-box annotations: free-floating labels pinned onto any
      image/video/GIF (full-bleed backgrounds or inline media blocks), for on-image
      annotation the way a scrollytelling infographic would ---------- */
-  .annotation-layer{position:absolute;inset:0;z-index:40;pointer-events:none;}
+  .annotation-layer{position:absolute;inset:0;z-index:200;pointer-events:none;}
   .annotation{
     position:absolute;transform:translate(-50%,-50%);max-width:70%;pointer-events:none;
     display:flex;align-items:center;gap:6px;
@@ -1650,12 +1651,11 @@
     popupHideTimer = setTimeout(() => popup.classList.remove("visible"), 2600);
   }
 
-  /* every hero / chapter cover / entry is a full-bleed "slide" whose background media
-     continuously scales and pans while the slide is anywhere in the viewport, plus a
-     cursor-tilt offset layered on top — both combine into one transform per slide so
-     scroll and mouse motion never fight over the same inline style. */
+  /* every hero / chapter cover / entry is a full-bleed "slide" that arrives zoomed way out
+     (tiny, distant) and grows to fill the screen as it scrolls into place — like zooming
+     in from orbit down to a location on a map — then holds at full scale until the next
+     slide zooms in on top of it. */
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const tiltState = new WeakMap();
 
   function slideProgress(rect){
     const vh = window.innerHeight;
@@ -1663,25 +1663,22 @@
     const traveled = vh - rect.top;
     return Math.min(Math.max(traveled / total, 0), 1);
   }
-  // soft opacity taper at the very start/end of a slide's time in the viewport, so each
-  // photo gently resolves in and out at the seam instead of cutting hard into the next
-  function edgeFade(progress){
-    const fadeIn = Math.min(progress / 0.14, 1);
-    const fadeOut = Math.min((1 - progress) / 0.14, 1);
-    return Math.min(fadeIn, fadeOut) * 0.5 + 0.5;
+  function applySlideZoom(slide, r){
+    const vh = window.innerHeight;
+    let scale, opacity;
+    if(r.top > 0){
+      const t = Math.max(0, Math.min(1, 1 - r.top / (vh * 0.95)));
+      scale = 0.3 + t * 0.7;
+      opacity = Math.max(0, Math.min(1, t / 0.3));
+    } else {
+      scale = 1;
+      opacity = 1;
+    }
+    slide.style.transform = `scale(${scale.toFixed(3)})`;
+    slide.style.opacity = opacity.toFixed(2);
   }
-  function applySlideTransform(slideEl, progress){
-    const media = slideEl.querySelector(".media-fill .media-el");
-    if(!media) return;
-    const tilt = tiltState.get(slideEl) || { x:0, y:0 };
-    const scale = 1.08 + progress * 0.18;
-    const panY = (progress - 0.5) * 70;
-    media.style.transform = `scale(${scale}) translate(${tilt.x}px, ${(panY + tilt.y).toFixed(1)}px)`;
-    media.style.opacity = edgeFade(progress).toFixed(2);
-  }
-  // sections are position:sticky and stacked by DOM order (z-index), so as each one
-  // scrolls into its pinned spot it dissolves in over whichever section is still pinned
-  // underneath it — a cross-fade instead of a hard cut between sections
+  // sections are position:sticky and stacked by DOM order (z-index), so each one zooms in
+  // on top of whichever slide is still pinned underneath it
   function slideMotion(){
     if(reduceMotion) return;
     document.querySelectorAll(".hero, .chapter-cover, .entry").forEach((slide, i) => {
@@ -1690,10 +1687,7 @@
       if(r.bottom < -400 || r.top > window.innerHeight + 400) return;
       const progress = slideProgress(r);
       slide.dataset.progress = progress.toFixed(3);
-      applySlideTransform(slide, progress);
-      const fadeZone = window.innerHeight * 0.55;
-      const fadeIn = r.top >= 0 ? (fadeZone - Math.min(r.top, fadeZone)) / fadeZone : 1;
-      slide.style.opacity = Math.max(0, Math.min(1, fadeIn)).toFixed(2);
+      applySlideZoom(slide, r);
     });
   }
 
@@ -1867,20 +1861,6 @@
     }
     annoDrag = null;
   });
-
-  /* cursor tilt on every slide type */
-  if(!reduceMotion){
-    document.addEventListener("mousemove", (e) => {
-      const target = e.target.closest(".hero, .chapter-cover, .entry");
-      if(!target) return;
-      const rect = target.getBoundingClientRect();
-      const relX = (e.clientX - rect.left) / rect.width - 0.5;
-      const relY = (e.clientY - rect.top) / rect.height - 0.5;
-      tiltState.set(target, { x: relX * -16, y: relY * -12 });
-      const progress = parseFloat(target.dataset.progress || "0.5");
-      applySlideTransform(target, progress);
-    });
-  }
 
   /* ---------------- media modal ---------------- */
   const backdrop = $("mediaModalBackdrop");

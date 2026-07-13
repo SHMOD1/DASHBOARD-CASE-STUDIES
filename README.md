@@ -77,19 +77,17 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 - A small original brand mascot — a cyan/yellow water-drop blob character — appears in a few
   spots: bobbing in the hero's corner, as the popup box's hover tab, and in the footer.
 - Sections don't scroll past each other — each full-bleed slide (hero, chapter cover, entry)
-  pins in place as it reaches the top of the viewport, and the next one dissolves in on top
-  of it as you keep scrolling, crossfading between slides instead of a hard cut.
-- On top of that crossfade, sections don't just fade in once — every chapter cover and entry
-  continuously zooms in and out as it moves through the viewport, driven live by scroll
-  position (not a one-time reveal), so the effect is fully smooth and reversible in both
-  scroll directions. The zoom is layered across multiple elements independently — the
-  section's content wrapper, its title, each text block, and each inline media card all
-  scale/fade at their own pace and transform-origin — so the whole section feels like it's
-  continuously breathing in and out of focus as you scroll, rather than static boxed content.
-- Every media layer moves with scroll: the full-bleed background of each slide continuously
-  zooms/pans (plus a cursor-tilt effect), and the smaller inline media-overlay images/GIFs
-  inside the text flow get their own independent, subtler scroll-linked drift on top of the
-  new zoom-in/out motion.
+  pins in place at the top of the viewport, and the next one arrives zoomed way out (tiny
+  and distant, like a location seen from orbit) and grows to fill the whole screen as you
+  keep scrolling, zooming in on top of whichever slide is still pinned underneath it —
+  a Google Earth-style dive into each section instead of a hard cut or a plain scroll past.
+- Within that, the section's content still has its own layered zoom: its content wrapper,
+  title, each text block, and each inline media card all scale/fade in at their own pace and
+  transform-origin as they scroll into place, driven live by scroll position (not a one-time
+  reveal) so it's fully smooth and reversible in both scroll directions.
+- Every media layer moves with scroll: the smaller inline media-overlay images/GIFs inside
+  the text flow get their own independent, subtler scroll-linked drift on top of the
+  section-level zoom.
 - Scrolling with a mouse wheel/trackpad glides between sections with inertia — each tick eases
   the page toward its target position over several frames instead of jumping straight there.
   Keyboard, scrollbar, and touch scrolling stay native.
