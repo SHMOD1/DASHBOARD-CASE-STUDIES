@@ -322,6 +322,21 @@
   .entry[data-page-type="intro"] .entry-content{text-align:center;transform-origin:center center;}
   .entry[data-page-type="intro"] .entry-title{font-size:clamp(32px,5.5vw,64px);max-width:800px;margin-left:auto;margin-right:auto;}
   .entry[data-page-type="intro"] .entry-caption{font-size:16px;font-style:normal;max-width:640px;margin:14px auto 0;}
+  /* a short optional instruction line (e.g. "click and hold to enlarge") plus a "Dive In"
+     button that jumps straight to the next slide, so an intro page gives a reader a clear
+     way to start, not just a title to read past */
+  .entry-hint{
+    display:inline-block;background:#53b94e;color:#134370;font-family:var(--font-body);
+    font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:6px 14px;border-radius:6px;
+    margin-top:14px;text-shadow:none;min-width:40px;min-height:1em;
+  }
+  .entry-intro-cta{
+    display:inline-block;margin-top:22px;background:#53b94e;color:#005ba6;font-family:var(--font-main);
+    font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+    border:2px solid #005ba6;border-radius:24px;padding:12px 30px;cursor:pointer;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .entry-intro-cta:hover{transform:translateY(-2px) scale(1.03);background:#63c95c;}
 
   /* page type (d) Grid — same template as Full Background, just a wider content column so
      the freeform box grid has more room */
@@ -437,6 +452,9 @@
     background:#ffde17;color:#155724;border-radius:3px;padding:1px 5px;text-shadow:none;
     line-height:1.35;word-break:break-word;font-weight:700;
   }
+  /* "Stat Chip" preset — a small rounded pill for a short number/label overlaid on media,
+     like a "YEAR: 1854" callout, as distinct from the longer highlighter-marker style above */
+  .annotation-text.chip-stat{background:#53b94e;border-radius:20px;padding:3px 14px;}
   body.edit-on .annotation-text{outline:1px dashed rgba(0,0,0,.45);outline-offset:2px;cursor:text;}
   .annotation-drag-handle{
     display:none;flex:0 0 auto;cursor:grab;color:#fff;font-size:13px;letter-spacing:-2px;
@@ -963,6 +981,8 @@
     if(pageType === "background" || pageType === "grid"){
       entry.blocks = [ newBlock("body") ];
       if(pageType === "grid") entry.gridColumns = 3;
+    } else if(pageType === "intro"){
+      entry.hint = "";
     } else if(pageType === "sequence"){
       entry.sequence = [
         { id:newId(), media:{ kind:"image", src:placeholder(s, "1"), embed:false }, text:"" },
@@ -1670,6 +1690,7 @@
         if(!entry.blocks) entry.blocks = [];
         if(!entry.sequence) entry.sequence = [];
         if(entry.pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
+        if(entry.pageType === "intro" && entry.hint == null) entry.hint = "";
       });
     });
     return data;
@@ -1871,10 +1892,15 @@
     const textStyle = `font-family:${a.font};font-size:${px}px;color:${a.color || "#155724"};font-weight:${a.bold ? 700 : 400};font-style:${a.italic ? "italic" : "normal"};`;
     const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===a.font?"selected":""}>${f.label}</option>`).join("");
     const optSizes = ["S","M","L"].map(s => `<option value="${s}" ${s===a.size?"selected":""}>${s}</option>`).join("");
+    const chipClass = a.chip === "stat" ? " chip-stat" : "";
     return `
       <div class="annotation" data-annotation-id="${a.id}" ${idAttrs} style="left:${a.x}%;top:${a.y}%;">
         <div class="annotation-drag-handle edit-only" title="Drag to move">⠿⠿</div>
         <div class="annotation-toolbar edit-only">
+          <select data-act="annoChip" title="Highlight or stat chip" data-annotation-id="${a.id}" ${idAttrs}>
+            <option value="" ${a.chip!=="stat"?"selected":""}>Highlight</option>
+            <option value="stat" ${a.chip==="stat"?"selected":""}>Stat Chip</option>
+          </select>
           <select data-act="annoStyle" data-field="font" data-annotation-id="${a.id}" ${idAttrs}>${optFonts}</select>
           <select data-act="annoStyle" data-field="size" data-annotation-id="${a.id}" ${idAttrs}>${optSizes}</select>
           <button type="button" data-act="annoFormat" data-cmd="bold" data-annotation-id="${a.id}" ${idAttrs}><b>B</b></button>
@@ -1882,7 +1908,7 @@
           <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#155724"}">
           <button type="button" class="danger" data-act="deleteAnnotation" data-annotation-id="${a.id}" ${idAttrs}>✕</button>
         </div>
-        <div class="annotation-text" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "Type here…")}</div>
+        <div class="annotation-text${chipClass}" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "Type here…")}</div>
       </div>`;
   }
   function applyAnnotationStyle(a){
@@ -1894,6 +1920,7 @@
     el.style.color = a.color || "#155724";
     el.style.fontWeight = a.bold ? "700" : "400";
     el.style.fontStyle = a.italic ? "italic" : "normal";
+    el.classList.toggle("chip-stat", a.chip === "stat");
   }
 
   function renderChapter(chapter, idx){
@@ -1997,6 +2024,8 @@
         <div class="entry-content">
           <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
           <div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>
+          <div class="entry-hint${entry.hint ? "" : " edit-only"}" data-editable data-bind-type="entryHint" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.hint || "")}</div>
+          <button type="button" class="entry-intro-cta" data-act="introDiveIn" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">Dive In ↓</button>
         </div>
       </section>`;
   }
@@ -2290,6 +2319,8 @@
       syncRailEntry(el.dataset.entryId);
     } else if(bt === "entryCaption"){
       getEntry(el.dataset.chapterId, el.dataset.entryId).caption = el.textContent;
+    } else if(bt === "entryHint"){
+      getEntry(el.dataset.chapterId, el.dataset.entryId).hint = el.textContent;
     } else if(bt === "blockHtml"){
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     } else if(bt === "blockMediaCaption"){
@@ -2345,6 +2376,19 @@
     } else if(el.matches('[data-act="annoColor"]')){
       const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
       if(a){ a.color = el.value; applyAnnotationStyle(a); saveState(); }
+    } else if(el.matches('[data-act="annoChip"]')){
+      // the "Stat Chip" preset (small green pill, blue text) is a package deal like the
+      // reference site's YEAR/POPULATION callouts — switching it re-picks a text color
+      // that actually reads against the new background, same as picking any other preset
+      const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
+      if(a){
+        a.chip = el.value;
+        a.color = el.value === "stat" ? "#005ba6" : "#155724";
+        applyAnnotationStyle(a);
+        const colorInput = el.closest(".annotation-toolbar")?.querySelector('[data-act="annoColor"]');
+        if(colorInput) colorInput.value = a.color;
+        saveState();
+      }
     } else if(el.matches('[data-act="entryPageType"]')){
       changeEntryPageType(el.dataset.chapterId, el.dataset.entryId, el.value);
     } else if(el.matches('[data-act="entryGridColumns"]')){
@@ -2391,6 +2435,10 @@
       if(editOn){ openRailRename("entry", btn.dataset.chapterId, btn.dataset.id); return; }
       releaseGate(); // an explicit rail jump always overrides the section-hold
       document.getElementById("entry-" + btn.dataset.id)?.scrollIntoView({behavior:"smooth", block:"start"});
+    } else if(act === "introDiveIn"){
+      if(editOn) return;
+      releaseGate();
+      scrollToNextSlide(document.getElementById("entry-" + btn.dataset.entryId));
     } else if(act === "toggleChapter"){
       if(editOn){ openRailRename("chapter", btn.dataset.chapterId, null); return; }
       const wrap = railChapters.querySelector(`.rail-chapter[data-chapter-id="${cssEscape(btn.dataset.chapterId)}"]`);
@@ -2635,6 +2683,14 @@
     gateReady = true;
     scrollCeiling = Infinity;
     if(setSmoothCeiling) setSmoothCeiling(Infinity);
+  }
+  // used by the Section Intro page's "Dive In" button: advance straight to whatever full-bleed
+  // slide (hero/chapter-cover/entry) comes right after this one in the stacked scroll order
+  function scrollToNextSlide(fromEl){
+    if(!fromEl) return;
+    const slides = Array.from(document.querySelectorAll(".hero, .chapter-cover, .entry"));
+    const next = slides[slides.indexOf(fromEl) + 1];
+    if(next) next.scrollIntoView({behavior:"smooth", block:"start"});
   }
   function getSlideBackgroundMedia(slide){
     if(slide.id === "hero") return state.meta.heroMedia;

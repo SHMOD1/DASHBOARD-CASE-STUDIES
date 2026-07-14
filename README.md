@@ -63,9 +63,12 @@ to that green; you can still pick any color per annotation from its toolbar's co
     images/GIFs/videos dropped into the same text flow as smaller inset cards, with their own
     caption. New blocks lay out left to right, side by side, wrapping to a new row only when
     they run out of horizontal space — not stacked one under another.
-  - **Section Intro** — a simpler, centered divider page: full-bleed background plus just a
+  - **Section Intro** — a simpler, centered divider page: full-bleed background plus a
     heading and a line of text, no block grid — good for introducing a sub-section
-    mid-chapter without the weight of a full entry.
+    mid-chapter without the weight of a full entry. It also carries an optional short **hint**
+    line (e.g. "Click and hold to enlarge any image") in a small green pill, and a **"Dive
+    In"** button that smooth-scrolls straight to the next slide — a clear, deliberate way to
+    start the section instead of just reading past a title.
   - **Grid** — every block on the page, text or media alike, snaps into an even N-per-row
     grid instead of the freeform flow the other types use — pick 2, 3, or 4 columns per row
     from a control in the page's toolbar. A media block set to "Full width" still breaks out
@@ -110,7 +113,10 @@ to that green; you can still pick any color per annotation from its toolbar's co
   inline media block — can carry **draggable text-box annotations** pinned directly onto it,
   the way a scrollytelling infographic labels a photo. In Edit Mode, click **+ Text Box** to
   drop one on, drag it anywhere by its ⠿⠿ handle, and style it with its own toolbar (font,
-  size, bold, italic, color) independent of every other text on the page.
+  size, bold, italic, color) independent of every other text on the page. Its toolbar also has
+  a **Highlight / Stat Chip** style switch — Highlight is the default tight yellow marker-style
+  box; Stat Chip is a small rounded green pill (with matching blue text) for a short number or
+  label overlaid on the media, like a "YEAR: 1854" callout on a map.
 - A chapter cover or entry with **no background image set** falls back to solid brand-blue
   (`#005BA6`) instead of a generic placeholder pattern, since it's a full-bleed section
   background.
