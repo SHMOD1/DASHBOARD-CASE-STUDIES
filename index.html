@@ -950,245 +950,688 @@
   /* ---------------- default dummy content ---------------- */
   function defaultData(){
     return {
-      meta: {
-        title: "How Does Water Move Through the City?",
-        subtitle: "Three cities engineered water away from view — and paid for it with fragmented ecologies, disconnected neighborhoods, and floods that pipes alone couldn't hold. This is how each one began designing with water instead.",
-        presentsLabel: "A BLUE-GREEN INFRASTRUCTURE STORYMAP",
-        scrollLabel: "SCROLL",
-        scrollCue: "Explore the case studies",
-        heroMedia: { kind:"image", src: coverPlaceholder(), embed:false },
-        logos: []
+  "meta": {
+    "title": "How Does Water Move Through The City?",
+    "subtitle": "Three cities engineered water away from view — and paid for\nit with fragmented ecologies, disconnected neighborhoods, and floods that pipes\nalone couldn't hold. This is how each one began designing with water instead.",
+    "presentsLabel": "PRESENTS",
+    "scrollLabel": "SCROLL DOWN",
+    "scrollCue": "Explore the chapters",
+    "heroMedia": {
+      "kind": "image",
+      "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22%23005ba6%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.2%22%20fill%3D%22none%22%20opacity%3D%220.22%22%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22260%22%20cy%3D%22180%22%20r%3D%22130%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%221300%22%20cy%3D%22700%22%20r%3D%22220%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22820%22%20cy%3D%22470%22%20r%3D%22340%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M-20%2C680%20Q400%2C580%20800%2C680%20T1620%2C630%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M-20%2C240%20Q520%2C140%201040%2C250%20T1620%2C210%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M-20%2C860%20Q500%2C800%20900%2C850%20T1620%2C820%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%2290%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2218%22%20letter-spacing%3D%223%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20opacity%3D%220.5%22%3ECOVER%20BACKGROUND%20%E2%80%94%20REPLACE%20VIA%20CHANGE%20MEDIA%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+      "embed": false
+    },
+    "logos": [
+      {
+        "id": "idmk6vt4g",
+        "media": {
+          "kind": "image",
+          "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2296%22%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%22254%22%20height%3D%2290%22%20rx%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%226%205%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22130%22%20y%3D%2255%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2220%22%20letter-spacing%3D%221%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EYOUR%20LOGO%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+          "embed": false
+        }
       },
-      chapters: [
+      {
+        "id": "idq0jonlw",
+        "media": {
+          "kind": "image",
+          "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2296%22%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%22254%22%20height%3D%2290%22%20rx%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%226%205%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22130%22%20y%3D%2255%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2220%22%20letter-spacing%3D%221%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EPARTNER%20LOGO%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+          "embed": false
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "idn6zq188",
+        "x": 69.00369003690037,
+        "y": 56.69456066945606,
+        "text": "Water",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "S",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      },
+      {
+        "id": "id8vi4j8c",
+        "x": 71.74486030574592,
+        "y": 52.82426778242678,
+        "text": "PRIMARY LENS",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "M",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      },
+      {
+        "id": "id3and48t",
+        "x": 72.16657880864523,
+        "y": 60.56485355648535,
+        "text": "SECONDARY LENS",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "M",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      },
+      {
+        "id": "iddnu55no",
+        "x": 75.06589351607802,
+        "y": 64.1213389121339,
+        "text": "Space . Policy . Technology . Community",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "S",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "c2",
+      "title": "Setting Context",
+      "subtitle": "Tujung, California",
+      "accent": "#0dbfdb",
+      "cover": {
+        "kind": "image",
+        "src": "assets/c2-cover.png",
+        "embed": false
+      },
+      "entries": [
         {
-          id:"c1", title:"Tujunga Wash Greenway", subtitle:"Los Angeles, California — Corridor Scale", accent: ACCENTS[0],
-          cover: { kind:"image", src: placeholder(1,"LA"), embed:false },
-          entries: [
+          "id": "idhn6wmr0",
+          "pageType": "background",
+          "year": "2026",
+          "title": "Flow",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "assets/c2-idhn6wmr0-media.png",
+            "embed": false
+          },
+          "blocks": [
             {
-              id:"e1", pageType:"background", year:"01", title:"Tujunga Wash Greenway",
-              media:{ kind:"image", src: placeholder(11,"Map"), embed:false },
-              caption:"Tujunga Wash · 34.216°N, 118.376°W — 520.48 km² above site. Replace this background with a real site photo or the map screenshot.",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Los Angeles grew up around an extensive network of rivers, creeks, washes, and flood channels. One of them — the Tujunga Wash — historically carried water from the San Gabriel Mountains down through the city to the Los Angeles River, and on to the Pacific.</p>" },
-                { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left", html:"The Historical Path" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p class=\"pill-row\"><span>Mountains</span><span>Streams</span><span>Tujunga Wash</span><span>LA River</span><span>Pacific Ocean</span></p><p>As urbanization increased, most of this watershed was engineered to move water away as quickly as possible. The wash stopped being a living system and became, simply, flood-control infrastructure.</p>" }
-              ]
+              "id": "id6u3vd78",
+              "type": "subheading",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\">Los Angeles grew up around an extensive network of rivers,\ncreeks, washes, and flood channels. One of them — the Tujunga Wash —\nhistorically carried water from the San Gabriel Mountains down through the city\nto the Los Angeles River, and on to the Pacific.<o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "idqsnhzsr",
+          "pageType": "background",
+          "year": "2026",
+          "title": "Tujunga  ",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "assets/c2-idqsnhzsr-media.png",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "id05w7892",
+              "type": "subheading",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\">As urbanization increased, most of this watershed was\nengineered to move water away as quickly as possible. The wash stopped being a\nliving system and became, simply, flood-control infrastructure.<o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "e3",
+          "year": "1995",
+          "title": "The Rise of the Borewell",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2313301a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2353b94e%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E9%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "caption": "",
+          "blocks": [
+            {
+              "id": "idxghz394",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>With surface water sources shrinking, households and apartment blocks turn underground, drilling private borewells to make up the shortfall. Within a decade, tens of thousands are in operation across the city, mostly unregulated and unmetered.</p>"
             },
             {
-              id:"e2", pageType:"background", year:"—", title:"What Was Lost",
-              media:{ kind:"image", src: placeholder(12,"Lost"), embed:false },
-              caption:"Natural watershed → concrete channel → disconnected city",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>〜 Hydrology</strong>Natural hydrological processes were disrupted.</div><div class=\"card-chip\"><strong>❧ Ecology</strong>Ecological connections were fragmented.</div><div class=\"card-chip\"><strong>◍ Community</strong>Communities were disconnected from the waterway.</div><div class=\"card-chip\"><strong>↓ Recharge</strong>Opportunities for infiltration and habitat were reduced.</div></div>" },
-                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"“The system was efficient at moving water — but poor at supporting resilience.”" }
-              ]
+              "id": "idhmd5eo1",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23332b06%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23ffde17%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E4%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "caption": "A drilling rig — a small, left-aligned inline overlay.",
+              "size": "S",
+              "align": "left"
             },
             {
-              id:"e3", pageType:"background", year:"—", title:"Water Was Moving Too Fast",
-              media:{ kind:"image", src: placeholder(13,"Fast"), embed:false },
-              caption:"Diagnosis — traditional flood infrastructure follows one principle: convey water away, quickly.",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>Increased Runoff</strong>Stormwater rapidly enters channels.</div><div class=\"card-chip\"><strong>Reduced Infiltration</strong>Less water recharges groundwater.</div><div class=\"card-chip\"><strong>Ecological Fragmentation</strong>Habitats become disconnected.</div><div class=\"card-chip\"><strong>Single-Purpose Infrastructure</strong>Channels perform only one function.</div></div>" },
-                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"The traditional response: build more engineered infrastructure. Instead, they asked — can we restore watershed functions without removing flood protection?" }
-              ]
+              "id": "id9e30lzg",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Each new borewell is a private solution to a shared problem — and each one lowers the water table a little further for every neighbor drawing from the same aquifer.</p>"
+            }
+          ],
+          "pageType": "sequence",
+          "sequence": [
+            {
+              "id": "id3ex5il8",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23332b06%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23ffde17%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E1%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "text": ""
             },
             {
-              id:"e4", pageType:"background", year:"—", title:"Reconnect the Watershed",
-              media:{ kind:"image", src: placeholder(14,"Shift"), embed:false },
-              caption:"The shift in thinking — instead of rebuilding the channel, restore everything around it.",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>Water</strong>Restore ecological and hydrological functions.</div><div class=\"card-chip\"><strong>Landscape</strong>Create continuous green infrastructure.</div><div class=\"card-chip\"><strong>Communities</strong>Improve access and awareness.</div></div>" }
-              ]
-            },
-            {
-              id:"e5", pageType:"background", year:"—", title:"Four Watershed Functions",
-              media:{ kind:"image", src: placeholder(15,"Funnel"), embed:false },
-              caption:"Water system strategy",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<ol><li><strong>Convey</strong> — move stormwater safely.</li><li><strong>Slow</strong> — reduce runoff velocity.</li><li><strong>Store</strong> — increase opportunities for temporary retention.</li><li><strong>Infiltrate</strong> — support groundwater recharge.</li></ol><p>On the ground, this became a physical greenway network:</p><ul><li><strong>Greenway Network</strong> — a continuous corridor alongside the wash</li><li><strong>Native Vegetation</strong> — restoration that improved ecological performance</li><li><strong>Habitat Connectivity</strong> — wildlife movement across fragmented urban areas</li><li><strong>Watershed Awareness</strong> — residents understand how neighborhoods relate to water</li></ul>" }
-              ]
-            },
-            {
-              id:"e6", pageType:"background", year:"—", title:"What the Greenway Achieved",
-              media:{ kind:"image", src: placeholder(16,"Impact"), embed:false },
-              caption:"Measured impact",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>Environmental</strong>Restored habitat, better infiltration, improved biodiversity.</div><div class=\"card-chip\"><strong>Social</strong>Cycling &amp; walking access, environmental education, community ownership.</div><div class=\"card-chip\"><strong>Economic</strong>Lower long-term maintenance, better ecosystem performance.</div><div class=\"card-chip\"><strong>Planning</strong>A prototype for watershed-scale restoration elsewhere.</div></div>" }
-              ]
-            },
-            {
-              id:"e6b", pageType:"sequence", year:"Reference", title:"Urban Water Infrastructure — A Diagram Sequence",
-              caption:"", media:null, blocks:[], annotations:[], callout:null,
-              sequence:[
-                { id:newId(), media:{ kind:"image", src: placeholder(48,"Upload Image 1"), embed:false },
-                  text:"Flow Diagram: The Process of Urban Disconnection — a natural watershed becomes a concrete channel, then a fully disconnected city, losing ecosystem services, groundwater recharge, and biodiversity along the way." },
-                { id:newId(), media:{ kind:"image", src: placeholder(49,"Upload Image 2"), embed:false },
-                  text:"What Was Lost — flooding was reduced, but natural hydrological processes were disrupted, communities were cut off from the waterway, and opportunities for infiltration and habitat were reduced. Efficient at moving water, poor at supporting resilience." },
-                { id:newId(), media:{ kind:"image", src: placeholder(50,"Upload Image 3"), embed:false },
-                  text:"Tujunga Wash Greenway, Los Angeles — a real-world retrofit of an existing concrete channel: constructed stream, bioswales, native vegetation, permeable trails, and public space with educational signage." },
-                { id:newId(), media:{ kind:"image", src: placeholder(51,"Upload Image 4"), embed:false },
-                  text:"The Urban Water Cycle — from mountain source through treatment and distribution to consumption, then wastewater and stormwater collection, treatment, and return to the environment. This is a Scroll Sequence page — each image is its own step; scroll to move through them." }
-              ]
-            },
-            {
-              id:"e6c", pageType:"grid", gridColumns:3, year:"Reference", title:"Site Photos — 3 Per Row",
-              media:{ kind:"image", src: placeholder(52,"Grid"), embed:false }, caption:"", annotations:[], callout:null,
-              blocks:[
-                { ...newMediaBlock({ kind:"image", src: placeholder(53,"1"), embed:false }), size:"M", align:"left", caption:"Photo 1" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(54,"2"), embed:false }), size:"M", align:"left", caption:"Photo 2" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(55,"3"), embed:false }), size:"M", align:"left", caption:"Photo 3" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(56,"4"), embed:false }), size:"M", align:"left", caption:"Photo 4" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(57,"5"), embed:false }), size:"M", align:"left", caption:"Photo 5" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(58,"6"), embed:false }), size:"M", align:"left", caption:"Photo 6" }
-              ]
-            },
-            {
-              id:"e7", pageType:"background", year:"—", title:"Comparing Systems",
-              media:{ kind:"image", src: placeholder(17,"Compare"), embed:false },
-              caption:"Three watersheds, one pattern",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<table><tr><th></th><th>Tujunga Wash</th><th>Adyar River</th><th>Bengaluru (K&amp;C Valley)</th></tr>"
-                    + "<tr><td><strong>Scale</strong></td><td>Corridor</td><td>River Basin</td><td>Valley System</td></tr>"
-                    + "<tr><td><strong>Length</strong></td><td>~21 km</td><td>~42.5 km</td><td>~48 km</td></tr>"
-                    + "<tr><td><strong>Catchment</strong></td><td>~583 sq km</td><td>700–860 sq km</td><td>~550 sq km</td></tr>"
-                    + "<tr><td><strong>Water Bodies Connected</strong></td><td>Tributary system</td><td>~200 tanks / lakes</td><td>60+ lakes</td></tr>"
-                    + "<tr><td><strong>Main Challenge</strong></td><td>Channelization</td><td>Urban flooding</td><td>Fragmented connectivity</td></tr>"
-                    + "<tr><td><strong>Main Lesson</strong></td><td>Reconnect corridors</td><td>Restore river systems</td><td>Reconnect rajakaluves</td></tr></table>" }
-              ]
+              "id": "idbtwk6gv",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%232b2013%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%238b5e3c%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E2%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "text": ""
             }
           ]
         },
         {
-          id:"c2", title:"Cloudburst Management Plan", subtitle:"Copenhagen, Denmark", accent: ACCENTS[1],
-          cover: { kind:"image", src: placeholder(2,"CPH"), embed:false },
-          entries: [
+          "id": "id30goaqn",
+          "pageType": "sequence",
+          "year": "2026",
+          "title": "Historical Flow",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2313301a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2353b94e%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "blocks": [
             {
-              id:"e8", pageType:"background", year:"02", title:"Cloudburst Management Plan",
-              media:{ kind:"image", src: placeholder(21,"Map"), embed:false },
-              caption:"Copenhagen · 55.676°N, 12.568°E — Cloudburst 2011",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>In July 2011, an extreme cloudburst overwhelmed Copenhagen's drainage system. Streets became rivers, basements flooded, and infrastructure suffered major damage — proof that conventional underground drainage alone could not keep up with increasingly intense rainfall.</p>" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>150mm</strong>of rain</div><div class=\"card-chip\"><strong>3 hrs</strong>duration</div><div class=\"card-chip\"><strong>Existing sewers failed</strong>huge economic damage</div></div>" }
-              ]
+              "id": "idv3kjt3c",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Write your paragraph text here. Use the toolbar above to change its style, font, size, or alignment.</p>"
             },
             {
-              id:"e9", pageType:"background", year:"—", title:"Everything Depended on Pipes",
-              media:{ kind:"image", src: placeholder(22,"Old"), embed:false },
-              caption:"The old system — Rain → Sewer → Treatment Plant → Sea",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<ul><li>Sewers exceeded capacity during extreme storms</li><li>Surface flooding across the city</li><li>High economic losses</li><li>Climate change increasing rainfall intensity</li></ul>" },
-                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"“Can streets become rivers before rivers become disasters?”" }
-              ]
+              "id": "idjwuekh6",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "assets/c2-id30goaqn-block2.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "L",
+              "align": "right"
             },
             {
-              id:"e10", pageType:"background", year:"—", title:"Don't Enlarge Pipes. Redesign the City.",
-              media:{ kind:"image", src: placeholder(23,"Strategy"), embed:false },
-              caption:"The strategy — the city becomes part of the stormwater system.",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Instead of relying solely on underground infrastructure, Copenhagen redesigned the city itself to become part of the stormwater system.</p><div class=\"card-strip\"><div class=\"card-chip\"><strong>Blue-Green Corridors</strong></div><div class=\"card-chip\"><strong>Floodable Parks</strong></div><div class=\"card-chip\"><strong>Water Plazas</strong></div><div class=\"card-chip\"><strong>Retention Landscapes</strong></div><div class=\"card-chip\"><strong>Streets as Temporary Channels</strong></div><div class=\"card-chip\"><strong>Surface Flow Routing Networks</strong></div></div>" }
-              ]
-            },
-            {
-              id:"e11", pageType:"background", year:"—", title:"Capture → Slow → Store → Route → Release",
-              media:{ kind:"image", src: placeholder(24,"Journey"), embed:false },
-              caption:"The water journey",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p class=\"pill-row\"><span>Capture</span><span>Slow</span><span>Store</span><span>Route</span><span>Release</span></p><ul><li>Reduced flood risk</li><li>Lower infrastructure damage</li><li>Increased public open space</li><li>Improved climate resilience</li><li>Multi-functional landscapes</li></ul>" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>150mm</strong>design rainfall standard</div><div class=\"card-chip\"><strong>300+</strong>cloudburst projects citywide</div><div class=\"card-chip\"><strong>1-in-100</strong>year storm protection target</div></div>" }
-              ]
-            },
-            {
-              id:"e12", pageType:"background", year:"Synthesis", title:"Five Lessons for Reconnecting Waterways",
-              media:{ kind:"image", src: placeholder(25,"Lessons"), embed:false },
-              caption:"",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<ol><li>Treat drains as part of larger watersheds.</li><li>Design corridors that convey, slow, store, and infiltrate water.</li><li>Integrate ecology into flood-management systems.</li><li>Reconnect fragmented water networks.</li><li>Use greenways and public space to reveal hidden hydrological systems.</li></ol>" }
-              ]
+              "id": "id6pt0330",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": null,
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left"
             }
-          ]
+          ],
+          "sequence": [
+            {
+              "id": "idkovvlsh",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%232b2013%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%238b5e3c%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E1%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "text": ""
+            },
+            {
+              "id": "iddodllee",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23332b06%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23ffde17%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E2%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "text": ""
+            }
+          ],
+          "annotations": [],
+          "callout": null
         },
         {
-          id:"c3", title:"Bengaluru Dialogue", subtitle:"A comparable system, fragmented", accent: ACCENTS[2],
-          cover: { kind:"image", src: placeholder(3,"BLR"), embed:false },
-          entries: [
+          "id": "id3ra0t6w",
+          "pageType": "background",
+          "year": "2026",
+          "title": "Historical Path",
+          "caption": "https://lariver.lacity.gov/",
+          "media": {
+            "kind": "image",
+            "src": "assets/c2-id3ra0t6w-media.jpg",
+            "embed": false
+          },
+          "blocks": [
             {
-              id:"e13", pageType:"background", year:"03", title:"Bengaluru Dialogue",
-              media:{ kind:"image", src: placeholder(31,"Map"), embed:false },
-              caption:"Bengaluru · 12.972°N, 77.595°E — K&C Valley · 60+ lakes",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Bengaluru's rajakaluves perform a role similar to the wash and the cloudburst corridors — connecting lakes across valleys. Many of these connections have become fragmented by encroachment and disconnected planning.</p><p class=\"pill-row\"><span>Lake</span><span>Rajakaluve</span><span>Lake</span><span>Valley</span><span>River</span></p>" },
-                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"“Can rajakaluves become watershed corridors — rather than simply stormwater drains?” The shift: from a drainage-centric approach to a blue-green infrastructure approach." }
-              ]
+              "id": "id2deug78",
+              "type": "subheading",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\">As urbanization increased, most of this watershed was\nengineered to move water away as quickly as possible. The wash stopped being a\nliving system and became, simply, flood-control infrastructure.<o:p></o:p></p>",
+              "color": "#ffffff"
             },
             {
-              id:"e14", pageType:"background", year:"—", title:"Designing the Journey of Water",
-              media:{ kind:"image", src: placeholder(32,"Framework"), embed:false },
-              caption:"Bengaluru Water Design Framework — every intervention should answer these questions",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<ol><li>Where does water come from?</li><li>Where should it travel?</li><li>Where should it slow?</li><li>Where should it stay?</li></ol>" }
-              ]
-            },
-            {
-              id:"e15", pageType:"background", year:"—", title:"Every Project, Evaluated at Multiple Scales",
-              media:{ kind:"image", src: placeholder(33,"Scales"), embed:false },
-              caption:"Evaluating every scale",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<table><tr><th>Scale</th><th>Example</th><th>Design Question</th></tr>"
-                    + "<tr><td><strong>Site</strong></td><td>Building, campus</td><td>Can this capture rain?</td></tr>"
-                    + "<tr><td><strong>Street</strong></td><td>Complete street</td><td>Can this route water safely?</td></tr>"
-                    + "<tr><td><strong>Neighbourhood</strong></td><td>Parks, schools</td><td>Can this store floodwater?</td></tr>"
-                    + "<tr><td><strong>Valley</strong></td><td>Rajakaluve</td><td>Can this reconnect lakes?</td></tr>"
-                    + "<tr><td><strong>City</strong></td><td>Entire watershed</td><td>Does this reduce downstream flooding?</td></tr></table>" }
-              ]
-            },
-            {
-              id:"e16", pageType:"background", year:"—", title:"Choose the Right Intervention",
-              media:{ kind:"image", src: placeholder(34,"Pairs"), embed:false },
-              caption:"Applying the framework — problem → design response",
-              blocks:[
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<table><tr><th>Problem</th><th>Design Response</th></tr>"
-                    + "<tr><td>Fast runoff</td><td>Bioswales, tree trenches</td></tr>"
-                    + "<tr><td>Encroached rajakaluve</td><td>Corridor restoration</td></tr>"
-                    + "<tr><td>Flooding junction</td><td>Water plaza</td></tr>"
-                    + "<tr><td>Overflowing lake</td><td>Floodable park</td></tr>"
-                    + "<tr><td>Heat island</td><td>Urban forest</td></tr>"
-                    + "<tr><td>Concrete drain</td><td>Green corridor</td></tr>"
-                    + "<tr><td>Low groundwater</td><td>Recharge landscape</td></tr>"
-                    + "<tr><td>Missing public space</td><td>Blue-green park</td></tr></table>" }
-              ]
-            },
-            {
-              id:"e17", pageType:"intro", year:"Closing", title:"Every city already has a water system.",
-              media:{ kind:"image", src: placeholder(35,"Close"), embed:false },
-              caption:"The question is not “How do we remove water?” — it is “How do we design with it?”"
+              "id": "idx30tqxj",
+              "type": "subheading",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\"><b>Mountains&nbsp; </b>→ &nbsp;<b>Streams&nbsp;\n</b>→ <b>Tujunga Wash&nbsp;&nbsp; </b>→<b>LA\nRiver&nbsp; </b>→&nbsp; <b>Pacific Ocean<o:p></o:p></b></p>",
+              "color": "#062490"
             }
-          ]
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "idxo2q9fq",
+          "pageType": "grid",
+          "year": "2026",
+          "title": "When Engineering Replaced Ecology",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "assets/c2-idxo2q9fq-media.jpg",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idjm1t2y4",
+              "type": "subheading",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\"><i>Natural watershed → concrete channel → disconnected city</i><o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "e4",
+          "year": "2012",
+          "title": "A Falling Water Table",
+          "media": {
+            "kind": "video",
+            "src": null,
+            "embed": false
+          },
+          "caption": "Video slot — add a link or upload a clip via Change Media.",
+          "blocks": [
+            {
+              "id": "idl1ybrs1",
+              "type": "quote",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "“Every year the drill goes a little deeper, and the water comes back a little less.”"
+            },
+            {
+              "id": "idbin0nco",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Well depths that once reached water at 150 feet now go past 1,000. Tanker trucks become a daily fixture in neighborhoods where the pumps have run dry, and water itself turns into a line item in every household budget.</p>"
+            }
+          ],
+          "pageType": "background",
+          "sequence": []
         }
       ]
-    };
+    },
+    {
+      "id": "c1",
+      "title": "Ta",
+      "subtitle": "Mapping a century of urban lake loss, 1900–1990",
+      "accent": "#005ba6",
+      "cover": {
+        "kind": "image",
+        "src": "assets/c1-cover.png",
+        "embed": false
+      },
+      "callout": {
+        "enabled": true,
+        "text": "Optional popup box — add a quick stat, quote, or side note here, with its own image or GIF.",
+        "media": {
+          "kind": "image",
+          "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%232b2013%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%238b5e3c%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3EI%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+          "embed": false
+        }
+      },
+      "entries": [
+        {
+          "id": "e1",
+          "year": "1905",
+          "title": "A City Built on a Thousand Tanks",
+          "media": {
+            "kind": "video",
+            "src": "assets/c1-e1-media.mp4",
+            "embed": false,
+            "autoplay": true,
+            "loop": true,
+            "muted": true
+          },
+          "caption": "Sample caption — replace with your own source line.",
+          "callout": {
+            "enabled": true,
+            "text": "This box is fully optional — remove it with the ✕, or add one to any section with \"+ Add popup box\".",
+            "media": null
+          },
+          "annotations": [
+            {
+              "id": "id4ma34go",
+              "x": 49.473684210526315,
+              "y": 63.07531380753139,
+              "text": "Drag me anywhere on the image",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "bold": true,
+              "italic": false,
+              "color": "#ffde17"
+            }
+          ],
+          "blocks": [
+            {
+              "id": "idfhnq941",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>"
+            }
+          ],
+          "pageType": "sequence",
+          "sequence": [
+            {
+              "id": "idnh5rqpj",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23332b06%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23ffde17%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E1%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "text": ""
+            },
+            {
+              "id": "idq5eg3zo",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230e2f3d%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2361c9e1%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E2%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "text": ""
+            }
+          ]
+        },
+        {
+          "id": "e2",
+          "year": "1985",
+          "title": "Encroachment Accelerates",
+          "media": {
+            "kind": "gif",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g32%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23332b06%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23ffde17%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g32)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22450%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.12)%22%3E%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22r%22%20values%3D%2290%3B170%3B90%22%20dur%3D%223.2s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22opacity%22%20values%3D%220.16%3B0.05%3B0.16%22%20dur%3D%223.2s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22450%22%20r%3D%2260%22%20fill%3D%22rgba(255%2C255%2C255%2C0.18)%22%3E%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22cy%22%20values%3D%22450%3B390%3B450%22%20dur%3D%222.4s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22465%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E8%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22opacity%22%20values%3D%220.55%3B0.85%3B0.55%22%20dur%3D%222.4s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2224%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3EANIMATED%20GIF%20DEMO%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "caption": "A full-bleed animated GIF background — swap in your own via Change Media.",
+          "blocks": [
+            {
+              "id": "idnxr0sxj",
+              "type": "subheading",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "Wetlands become real estate"
+            },
+            {
+              "id": "idrisdc4c",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>As the city grows outward, lakebeds and buffer zones are drained, filled, and built over. What were once flood-absorbing wetlands become bus depots, stadiums, and housing layouts.</p><p>By the end of the decade, more than half of the historic tank network has been lost or fragmented beyond repair.</p>"
+            },
+            {
+              "id": "idt8c1xj3",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230e2f3d%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2361c9e1%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E3%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "caption": "A before/after comparison — a good candidate for a real photo pair.",
+              "size": "M",
+              "align": "right"
+            }
+          ],
+          "pageType": "background",
+          "sequence": []
+        }
+      ],
+      "annotations": []
+    },
+    {
+      "id": "c3",
+      "title": "Harvesting the Monsoon",
+      "subtitle": "Rainwater harvesting and citizen-led recharge, 2000–2020",
+      "accent": "#413c3f",
+      "cover": {
+        "kind": "image",
+        "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2340%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23005ba6%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E3%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+        "embed": false
+      },
+      "entries": [
+        {
+          "id": "e5",
+          "year": "2003",
+          "title": "A Rooftop Revolution",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%232b2013%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%238b5e3c%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E0%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "caption": "",
+          "blocks": [
+            {
+              "id": "idzcnqmoq",
+              "type": "subheading",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "Every roof becomes a catchment"
+            },
+            {
+              "id": "idpi56lea",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>A new building code requires rainwater harvesting structures on every plot above a certain size. Roofs, once purely functional, are re-engineered as the first stage of a recharge system that feeds storage tanks and percolation pits below.</p>"
+            },
+            {
+              "id": "idhvlza5u",
+              "type": "media",
+              "media": {
+                "kind": "gif",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g42%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2b38%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230dbfdb%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g42)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22450%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.12)%22%3E%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22r%22%20values%3D%2290%3B170%3B90%22%20dur%3D%223.2s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22opacity%22%20values%3D%220.16%3B0.05%3B0.16%22%20dur%3D%223.2s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22450%22%20r%3D%2260%22%20fill%3D%22rgba(255%2C255%2C255%2C0.18)%22%3E%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22cy%22%20values%3D%22450%3B390%3B450%22%20dur%3D%222.4s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fcircle%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22465%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E2%0A%20%20%20%20%20%20%20%20%3Canimate%20attributeName%3D%22opacity%22%20values%3D%220.55%3B0.85%3B0.55%22%20dur%3D%222.4s%22%20repeatCount%3D%22indefinite%22%2F%3E%0A%20%20%20%20%20%20%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2224%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3EANIMATED%20GIF%20DEMO%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "caption": "A small animated GIF overlay, right-aligned — size and alignment are per-block.",
+              "size": "S",
+              "align": "right"
+            }
+          ],
+          "pageType": "background",
+          "sequence": []
+        },
+        {
+          "id": "e6",
+          "year": "2018",
+          "title": "Recharge Wells Return",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2340%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23005ba6%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E1%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "caption": "",
+          "blocks": [
+            {
+              "id": "id79nspaz",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Old, disused open wells — once filled in or forgotten — are cleaned out and reopened as recharge points. Community groups map thousands of them across the city, turning neglected infrastructure back into working water assets.</p>"
+            },
+            {
+              "id": "id6k3t69w",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2313301a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2353b94e%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E5%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "caption": "A large, center-aligned overlay — good for a hero-style inline photo.",
+              "size": "L",
+              "align": "center"
+            },
+            {
+              "id": "id3wg0zx6",
+              "type": "caption",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "Source: replace with your own citation or data credit."
+            }
+          ],
+          "pageType": "background",
+          "sequence": []
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "title": "Community Water Guardians",
+      "subtitle": "Neighborhoods restoring lakes and wetlands, 2015–present",
+      "accent": "#005ba6",
+      "cover": {
+        "kind": "image",
+        "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2b38%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230dbfdb%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E4%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+        "embed": false
+      },
+      "entries": [
+        {
+          "id": "e7",
+          "year": "2016",
+          "title": "Citizens Reclaim a Lake",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2b38%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230dbfdb%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E1%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "caption": "",
+          "blocks": [
+            {
+              "id": "id72fvi7v",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>A residents' association adopts a neglected lake choked with weeds and waste, organizing weekend clean-up drives and lobbying the city for de-silting and fencing. Within two years, migratory birds return for the first time in a generation.</p>"
+            },
+            {
+              "id": "idk47m76z",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%232b2013%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%238b5e3c%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E6%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "caption": "Volunteers at a clean-up drive.",
+              "size": "M",
+              "align": "left"
+            }
+          ],
+          "pageType": "background",
+          "sequence": []
+        },
+        {
+          "id": "e8",
+          "year": "2024",
+          "title": "A Living Case Study",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230e2f3d%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2361c9e1%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E2%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "caption": "",
+          "blocks": [
+            {
+              "id": "ida1aup94",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Today the model has spread to dozens of lakes across the city, each with its own citizen stewardship group, monitoring water quality and pushing back against fresh encroachment.</p>"
+            },
+            {
+              "id": "ids0zzxgk",
+              "type": "quote",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "“The lake didn't need an expert. It needed a neighborhood that refused to look away.”"
+            },
+            {
+              "id": "idmp36wq2",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2340%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23005ba6%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3E7%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+                "embed": false
+              },
+              "caption": "A full-width closing image — this template is yours to fill with a real case study.",
+              "size": "Full",
+              "align": "center"
+            }
+          ],
+          "pageType": "background",
+          "sequence": []
+        }
+      ]
+    }
+  ]
+};
   }
 
   // older saved states (and the shipped demo content) predate the pageType system — every

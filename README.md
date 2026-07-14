@@ -2,15 +2,20 @@
 
 ## Editable Storymap Dashboard
 
-`index.html` is a self-contained, single-file, full-bleed storymap — every hero, chapter
-cover, and entry is a true full-screen (100vh) slide with its background image/GIF/video
-filling the entire viewport edge-to-edge at full opacity, arriving with a Google Earth-style
-zoom as you scroll, not a static boxed layout. It ships with dummy sample content ("The Water
-City" — urban water resilience case studies in four chapters: vanishing lakes, groundwater
-depletion, rainwater harvesting, and community restoration) so you can reshape it for any
-other chapter-based case-study or narrative content.
+`index.html` is a full-bleed storymap — every hero, chapter cover, and entry is a true
+full-screen (100vh) slide with its background image/GIF/video filling the entire viewport
+edge-to-edge at full opacity, arriving with a Google Earth-style zoom as you scroll, not a
+static boxed layout. It ships with a real blue-green infrastructure case study ("How Does
+Water Move Through the City?" — Tujunga Wash Greenway, Copenhagen's Cloudburst Management
+Plan, and the Bengaluru Dialogue) so you can see the template in use, and you can reshape it
+for any other chapter-based case-study or narrative content.
 
-Open `index.html` directly in a browser — no build step or server required.
+Open `index.html` directly in a browser — no build step or server required. The large photos
+and video used by the shipped case study live as separate files under `assets/` rather than
+embedded inline, so `index.html` itself stays small and fast to load — everything you upload
+yourself in Edit Mode still saves as an inline data URL as before (see "Editing" below), so if
+you want a future edit's large media split out into `assets/` the same way, export your JSON
+and ask for it to be baked in that way again.
 
 **Opening cover:** the hero is a distinct, centered "presented by" title page — a logo row
 (add/remove/replace each logo image in Edit Mode), a "Presents" label, the big title and
