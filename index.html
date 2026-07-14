@@ -426,7 +426,7 @@
   .block--caption{color:rgba(240,241,250,.6);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
 
   /* ---------- inline media-overlay blocks (images/GIFs/video dropped into the text flow) ---------- */
-  .block-media-wrap{flex:0 0 auto;max-width:100%;transform-origin:center;opacity:.45;transform:scale(.92);}
+  .block-media-wrap{flex:0 0 auto;max-width:100%;transform-origin:center;opacity:1;transform:scale(.92);}
   .block-media-wrap.block-media--S{width:260px;}
   .block-media-wrap.block-media--M{width:400px;}
   .block-media-wrap.block-media--L{width:600px;}
@@ -483,8 +483,10 @@
     box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:88vh;overflow-y:auto;}
   .modal h3{margin:0 0 4px;font-family:var(--font-main);font-weight:800;font-size:19px;}
   .modal p.hint{margin:0 0 16px;font-size:12px;color:var(--ink-faint);}
-  .modal input[type=text]{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:4px;
+  .modal input[type=text], .modal input[type=number]{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:4px;
     background:var(--bg);color:var(--ink);font-size:13px;margin-bottom:12px;}
+  .modal input[type=number]{width:120px;}
+  .hold-label{display:block;font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
   .modal-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
   .modal-row .or{font-size:11px;color:var(--ink-faint);text-transform:uppercase;}
   .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
@@ -659,6 +661,16 @@
           <label><input type="checkbox" id="optLoop" /> Loop</label>
           <label><input type="checkbox" id="optMuted" /> Muted</label>
         </div>
+        <p class="hint field-hidden" id="bgVideoHint">This is a section background, so it always autoplays muted
+          automatically — Autoplay/Muted above are ignored here. Check Loop if you want it to repeat.</p>
+      </div>
+
+      <div id="holdField" class="field-hidden">
+        <label class="hold-label" for="optHoldSeconds">Hold this section until media finishes (seconds)</label>
+        <input type="number" id="optHoldSeconds" min="1" max="60" step="1" placeholder="auto" />
+        <p class="hint">Uploaded/direct video files auto-detect their own length. GIFs and YouTube/Vimeo links
+          can't report when they're done playing, so this section will hold for however many seconds you set
+          here before the next one is allowed to transition in — leave blank to use the default.</p>
       </div>
 
       <div class="modal-actions">
@@ -992,7 +1004,13 @@
     return "";
   }
 
-  function mediaMarkup(media){
+  // a chapter/hero/entry's full-bleed background media (as opposed to an inline block's
+  // media, a hero logo, or a popup-box callout's media) always autoplays muted and gates
+  // the section-to-section transition until it finishes playing
+  const BACKGROUND_SCOPES = ["hero", "chapterCover", "entryMedia"];
+  function isBackgroundTarget(target){ return !!target && BACKGROUND_SCOPES.includes(target.scope); }
+
+  function mediaMarkup(media, isBackground){
     if(!media || !media.src){
       const icon = media && media.kind === "video" ? "▶" : "🖼";
       const label = media && media.kind === "video" ? "No video added yet" : (media && media.kind === "gif" ? "No GIF added yet" : "No image added yet");
@@ -1004,12 +1022,13 @@
       if(media.embed){
         inner = `<div class="video-frame"><iframe src="${escapeHtml(media.src)}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy" allowfullscreen></iframe></div>`;
       } else {
+        const autoplay = isBackground || media.autoplay;
         const attrs = [
-          media.autoplay ? "autoplay" : "",
+          autoplay ? "autoplay" : "",
           media.loop ? "loop" : "",
-          (media.autoplay || media.muted) ? "muted" : "",
+          (autoplay || media.muted) ? "muted" : "",
           "playsinline",
-          "controls"
+          isBackground ? "" : "controls"
         ].filter(Boolean).join(" ");
         inner = `<video class="media-el" ${attrs} src="${escapeHtml(media.src)}"></video>`;
       }
@@ -1026,7 +1045,7 @@
 
   function render(){
     renderHeroText();
-    heroWrap.innerHTML = mediaMarkup(state.meta.heroMedia);
+    heroWrap.innerHTML = mediaMarkup(state.meta.heroMedia, true);
     renderHeroLogos();
     $("heroCalloutMount").innerHTML = renderCallout("hero", null, null, state.meta.callout);
     $("heroAnnotationLayer").innerHTML = renderAnnotationItems("hero", null, null, null, state.meta.annotations);
@@ -1169,7 +1188,7 @@
     return `
       <section class="chapter" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}">
         <div class="chapter-cover" data-chapter-id="${chapter.id}">
-          <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover)}</div>
+          <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover, true)}</div>
           <div class="annotation-layer">${renderAnnotationItems("chapterCover", chapter.id, null, null, chapter.annotations)}</div>
           <div class="scrim"></div>
           <div class="chapter-toolbar edit-only">
@@ -1199,7 +1218,7 @@
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}">
-        <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media)}</div>
+        <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
         <div class="scrim"></div>
         <div class="entry-toolbar edit-only">
@@ -1517,6 +1536,7 @@
     const act = btn.dataset.act;
 
     if(act === "jumpEntry"){
+      releaseGate(); // an explicit rail jump always overrides the section-hold
       document.getElementById("entry-" + btn.dataset.id)?.scrollIntoView({behavior:"smooth", block:"start"});
     } else if(act === "toggleChapter"){
       const wrap = railChapters.querySelector(`.rail-chapter[data-chapter-id="${cssEscape(btn.dataset.chapterId)}"]`);
@@ -1663,32 +1683,113 @@
     const traveled = vh - rect.top;
     return Math.min(Math.max(traveled / total, 0), 1);
   }
+  // full opacity throughout — no fade on the background media as it zooms in, only scale
   function applySlideZoom(slide, r){
     const vh = window.innerHeight;
-    let scale, opacity;
+    let scale;
     if(r.top > 0){
       const t = Math.max(0, Math.min(1, 1 - r.top / (vh * 0.95)));
       scale = 0.3 + t * 0.7;
-      opacity = Math.max(0, Math.min(1, t / 0.3));
     } else {
       scale = 1;
-      opacity = 1;
     }
     slide.style.transform = `scale(${scale.toFixed(3)})`;
-    slide.style.opacity = opacity.toFixed(2);
   }
   // sections are position:sticky and stacked by DOM order (z-index), so each one zooms in
   // on top of whichever slide is still pinned underneath it
   function slideMotion(){
-    if(reduceMotion) return;
-    document.querySelectorAll(".hero, .chapter-cover, .entry").forEach((slide, i) => {
+    const vh = window.innerHeight;
+    const slides = document.querySelectorAll(".hero, .chapter-cover, .entry");
+    let activeIdx = -1;
+    slides.forEach((slide, i) => {
       slide.style.zIndex = i + 1;
       const r = slide.getBoundingClientRect();
-      if(r.bottom < -400 || r.top > window.innerHeight + 400) return;
+      if(r.top <= 0) activeIdx = i;
+      if(reduceMotion) return;
+      if(r.bottom < -400 || r.top > vh + 400) return;
       const progress = slideProgress(r);
       slide.dataset.progress = progress.toFixed(3);
       applySlideZoom(slide, r);
     });
+    updateMediaGate(slides, activeIdx < 0 ? 0 : activeIdx, vh);
+  }
+
+  /* ---------------- section-hold gate: the current slide's background video/GIF has to
+     finish playing (or its hold timer run out) before scrolling is allowed to advance far
+     enough for the next slide to zoom in over it. Scrolling back up is always free, and the
+     last slide never holds — so the footer and its controls stay reachable no matter what. */
+  let gateSlideEl = null;
+  let gateReady = true;
+  let scrollCeiling = Infinity;
+  let gateReleaseTimer = null;
+  let gateSafetyTimer = null;
+  let setSmoothCeiling = null; // wired up by the wheel-scroll block below
+
+  function clampScrollToGate(){
+    if(setSmoothCeiling) setSmoothCeiling(scrollCeiling);
+    if(window.scrollY > scrollCeiling){
+      window.scrollTo({ top: scrollCeiling, left:0, behavior:"instant" });
+    }
+  }
+  function releaseGate(){
+    clearTimeout(gateReleaseTimer); clearTimeout(gateSafetyTimer);
+    gateReleaseTimer = null; gateSafetyTimer = null;
+    gateReady = true;
+    scrollCeiling = Infinity;
+    if(setSmoothCeiling) setSmoothCeiling(Infinity);
+  }
+  function getSlideBackgroundMedia(slide){
+    if(slide.id === "hero") return state.meta.heroMedia;
+    if(slide.classList.contains("chapter-cover")){ const c = getChapter(slide.dataset.chapterId); return c && c.cover; }
+    if(slide.classList.contains("entry")){ const e = getEntry(slide.dataset.chapterId, slide.dataset.id); return e && e.media; }
+    return null;
+  }
+  function startMediaWatch(slide){
+    clearTimeout(gateReleaseTimer); clearTimeout(gateSafetyTimer);
+    gateReleaseTimer = null; gateSafetyTimer = null;
+    gateReady = false;
+    const media = getSlideBackgroundMedia(slide);
+    if(reduceMotion || !media || !media.src){ releaseGate(); return; }
+    const fill = slide.querySelector(
+      '.media-fill[data-media-scope="hero"], .media-fill[data-media-scope="chapterCover"], .media-fill[data-media-scope="entryMedia"]');
+    const video = fill && fill.querySelector("video.media-el");
+    if(media.kind === "video" && !media.embed && video){
+      video.addEventListener("error", releaseGate, { once:true });
+      const arm = () => {
+        clearTimeout(gateSafetyTimer);
+        const dur = video.duration;
+        gateReleaseTimer = setTimeout(releaseGate, (isFinite(dur) && dur > 0 ? dur : 15) * 1000);
+      };
+      if(video.readyState >= 1){ arm(); }
+      else {
+        video.addEventListener("loadedmetadata", arm, { once:true });
+        gateSafetyTimer = setTimeout(releaseGate, 15000); // in case metadata never arrives
+      }
+      try{ video.currentTime = 0; }catch(err){}
+      const p = video.play();
+      if(p && p.catch) p.catch(releaseGate); // autoplay blocked — don't trap the visitor
+    } else if(media.kind === "gif" || (media.kind === "video" && media.embed)){
+      const fallback = media.kind === "gif" ? 4 : 6;
+      const secs = (media.holdSeconds && media.holdSeconds > 0) ? media.holdSeconds : fallback;
+      gateReleaseTimer = setTimeout(releaseGate, secs * 1000);
+    } else {
+      releaseGate(); // plain image, or no media set — nothing to wait for
+    }
+  }
+  function updateMediaGate(slides, activeIdx, vh){
+    if(!slides.length) return;
+    // never hold scroll hostage while actively editing content — only gate the reading view
+    if(editOn){ if(scrollCeiling !== Infinity) releaseGate(); return; }
+    const activeSlide = slides[activeIdx];
+    if(activeSlide !== gateSlideEl){
+      gateSlideEl = activeSlide;
+      startMediaWatch(activeSlide);
+      // freeze scroll right where this slide just finished settling in — before this point
+      // the slide hadn't fully arrived yet, so there's nothing to hold for
+      if(!gateReady && activeIdx < slides.length - 1) scrollCeiling = window.scrollY;
+    }
+    if(gateReady || activeIdx >= slides.length - 1) scrollCeiling = Infinity;
+    clampScrollToGate();
   }
 
   // inline media-overlay blocks get their own, smaller-scale scroll-linked drift so they
@@ -1718,12 +1819,14 @@
     const norm = Math.min(dist / (vh * spread), 1);
     return 1 - norm;
   }
+  // minOpacity === null skips the fade entirely (full opacity throughout) — used for media
+  // so it's never dimmed, only scaled, while text/UI chrome still fades in as before
   function applyZoom(el, minScale, minOpacity, spread){
     const r = el.getBoundingClientRect();
     if(r.bottom < -150 || r.top > window.innerHeight + 150) return;
     const p = centerProgress(r, spread);
     el.style.transform = `scale(${(minScale + (1 - minScale) * p).toFixed(3)})`;
-    el.style.opacity = (minOpacity + (1 - minOpacity) * p).toFixed(2);
+    if(minOpacity !== null) el.style.opacity = (minOpacity + (1 - minOpacity) * p).toFixed(2);
   }
   // zoom in/out applies at two layered levels — the section's content block as a whole,
   // and each individual title/text-block/media-overlay within it — so scrolling through a
@@ -1733,7 +1836,7 @@
     document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => applyZoom(el, 0.94, 0.55, 0.7));
     document.querySelectorAll(".chapter-title, .entry-title").forEach(el => applyZoom(el, 0.88, 0.3, 0.55));
     document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => applyZoom(el, 0.95, 0.4, 0.5));
-    document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, 0.45, 0.5));
+    document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, null, 0.5));
     document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, 0.5, 0.55));
   }
 
@@ -1797,6 +1900,7 @@
     let smoothTarget = window.scrollY;
     let smoothCurrent = window.scrollY;
     let smoothRunning = false;
+    setSmoothCeiling = (ceiling) => { smoothTarget = Math.min(smoothTarget, ceiling); };
 
     function maxScroll(){
       return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -1819,7 +1923,7 @@
     window.addEventListener("wheel", (e) => {
       if(backdrop.classList.contains("open")) return;
       e.preventDefault();
-      smoothTarget = Math.min(Math.max(smoothTarget + normalizedDelta(e), 0), maxScroll());
+      smoothTarget = Math.min(Math.max(smoothTarget + normalizedDelta(e), 0), Math.min(maxScroll(), scrollCeiling));
       if(!smoothRunning){ smoothRunning = true; requestAnimationFrame(smoothStep); }
     }, { passive:false });
     window.addEventListener("scroll", () => {
@@ -1871,6 +1975,7 @@
     $("mediaUrl").value = ""; $("mediaFile").value = "";
     $("videoUrl").value = ""; $("videoFile").value = "";
     $("optAutoplay").checked = false; $("optLoop").checked = false; $("optMuted").checked = false;
+    $("optHoldSeconds").value = "";
     setModalType("image");
     setVideoTab("link");
     backdrop.classList.add("open");
@@ -1885,6 +1990,8 @@
     $("typeTabs").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.type === type));
     $("imageFields").classList.toggle("field-hidden", type === "video");
     $("videoFields").classList.toggle("field-hidden", type !== "video");
+    $("holdField").classList.toggle("field-hidden", type === "image");
+    $("bgVideoHint").classList.toggle("field-hidden", !(type === "video" && isBackgroundTarget(modalTarget)));
   }
   $("typeTabs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-type]");
@@ -1908,19 +2015,28 @@
   $("modalSave").addEventListener("click", () => {
     if(!modalTarget) return;
     const target = modalTarget; // snapshot: closeMediaModal() nulls modalTarget before async FileReader callbacks fire
+    const holdSeconds = parseFloat($("optHoldSeconds").value) || undefined;
     if(modalType === "image" || modalType === "gif"){
+      const extra = modalType === "gif" ? { holdSeconds } : {};
       if($("mediaFile").files[0]){
         const reader = new FileReader();
-        reader.onload = () => applyMedia(target, { kind:modalType, src:reader.result, embed:false });
+        reader.onload = () => applyMedia(target, { kind:modalType, src:reader.result, embed:false, ...extra });
         reader.readAsDataURL($("mediaFile").files[0]);
       } else if($("mediaUrl").value.trim()){
-        applyMedia(target, { kind:modalType, src:$("mediaUrl").value.trim(), embed:false });
+        applyMedia(target, { kind:modalType, src:$("mediaUrl").value.trim(), embed:false, ...extra });
       }
       closeMediaModal();
       return;
     }
-    // video
-    const opts = { autoplay:$("optAutoplay").checked, loop:$("optLoop").checked, muted:$("optMuted").checked };
+    // video — a section background always autoplays muted so it can actually play and hold
+    // the section until it finishes, regardless of the Autoplay/Muted checkboxes
+    const isBg = isBackgroundTarget(target);
+    const opts = {
+      autoplay: isBg ? true : $("optAutoplay").checked,
+      loop: $("optLoop").checked,
+      muted: isBg ? true : $("optMuted").checked,
+      holdSeconds
+    };
     if(modalVideoTab === "upload" && $("videoFile").files[0]){
       const reader = new FileReader();
       reader.onload = () => applyMedia(target, { kind:"video", src:reader.result, embed:false, ...opts });
@@ -1969,8 +2085,10 @@
         container = document.querySelector(sel);
       }
     }
-    if(container) container.innerHTML = mediaMarkup(media);
+    if(container) container.innerHTML = mediaMarkup(media, isBackgroundTarget(target));
     saveState();
+    // media just changed — force the section-hold gate to re-evaluate against the new media
+    gateSlideEl = null;
   }
 
   /* ---------------- export / import / reset ---------------- */
@@ -2001,6 +2119,7 @@
   });
   $("heroAddLogo").addEventListener("click", addHeroLogo);
   $("heroScrollBtn").addEventListener("click", () => {
+    if(!gateReady) return; // hero's background media is still playing/holding
     document.querySelector(".chapter")?.scrollIntoView({ behavior:"smooth", block:"start" });
   });
 

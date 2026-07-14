@@ -4,12 +4,11 @@
 
 `index.html` is a self-contained, single-file, full-bleed storymap — every hero, chapter
 cover, and entry is a true full-screen (100vh) slide with its background image/GIF/video
-filling the entire viewport edge-to-edge, continuously zooming and panning as you scroll
-(plus a subtle cursor-tilt effect and a soft cross-fade at the seam between slides), not a
-static boxed layout. It ships with dummy sample content ("The Water City" — urban water
-resilience case studies in four chapters: vanishing lakes, groundwater depletion, rainwater
-harvesting, and community restoration) so you can reshape it for any other chapter-based
-case-study or narrative content.
+filling the entire viewport edge-to-edge at full opacity, arriving with a Google Earth-style
+zoom as you scroll, not a static boxed layout. It ships with dummy sample content ("The Water
+City" — urban water resilience case studies in four chapters: vanishing lakes, groundwater
+depletion, rainwater harvesting, and community restoration) so you can reshape it for any
+other chapter-based case-study or narrative content.
 
 Open `index.html` directly in a browser — no build step or server required.
 
@@ -81,10 +80,21 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   and distant, like a location seen from orbit) and grows to fill the whole screen as you
   keep scrolling, zooming in on top of whichever slide is still pinned underneath it —
   a Google Earth-style dive into each section instead of a hard cut or a plain scroll past.
+  Background media is never dimmed or faded during this — only scale changes, so a video or
+  GIF background stays fully visible and readable throughout the whole arrival.
+- **A section holds until its background media is done.** If a chapter cover or entry's
+  full-bleed background is a video or GIF, scrolling forward into the *next* section is held
+  back until that media finishes — an uploaded/linked video auto-detects its own length; a
+  GIF or an embedded YouTube/Vimeo video (which can't report when they're "done") instead
+  hold for a set number of seconds you choose in the Change Media modal (defaults to a few
+  seconds, editable per media). Scrolling *back* up is always free, the very last section
+  never holds, and jumping via the timeline rail always overrides the hold — so nothing is
+  ever unreachable. Background video always autoplays muted so it can actually play.
 - Within that, the section's content still has its own layered zoom: its content wrapper,
-  title, each text block, and each inline media card all scale/fade in at their own pace and
+  title, each text block, and each inline media card all scale in at their own pace and
   transform-origin as they scroll into place, driven live by scroll position (not a one-time
-  reveal) so it's fully smooth and reversible in both scroll directions.
+  reveal) so it's fully smooth and reversible in both scroll directions. Text/UI chrome still
+  fades in as it arrives; every media element (background or inline) stays at full opacity.
 - Every media layer moves with scroll: the smaller inline media-overlay images/GIFs inside
   the text flow get their own independent, subtler scroll-linked drift on top of the
   section-level zoom.
@@ -94,7 +104,7 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 - The primary UI palette is the brand's exact hex values throughout: text and buttons in
   `#005BA6` (blue), interactive/live highlights in `#0DBFDB` (cyan), and secondary accents in
   `#413C3F` (charcoal) — including the per-chapter marker colors in the timeline, which cycle
-  through just these three. The dark theme toggle keeps its own separate palette.
+  through just these three. The site is locked to this one dark theme.
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
@@ -110,7 +120,10 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 - Hover any image/video — the entry's full-bleed background, a chapter cover, the hero, or
   an inline media block — and click **Change Media** to set an Image, GIF, or Video — paste a
   URL (including YouTube/Vimeo links, which embed automatically) or upload a file, with
-  autoplay/loop/muted options for video.
+  loop/autoplay/muted options for an inline media block's video. A section *background*
+  video always autoplays muted automatically (so it can hold the section, see above) — the
+  modal shows a "Hold this section until media finishes" field instead for background GIFs
+  and video, letting you set how many seconds to hold.
 - **+ Add chapter at end**, **+ Insert entry here**, move-up/down, and delete controls (in
   the main content column) let you fully restructure the story.
 - **Export JSON** downloads your content; **Import JSON** loads it back in (or share it with
@@ -119,7 +132,6 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   Uploaded files are stored as data URLs — large video uploads can hit the browser's
   storage limit, so linking to hosted video (or a YouTube/Vimeo URL) scales better than
   uploading.
-- **Toggle Theme** switches between light and dark palettes.
 
 **Note on video embeds:** YouTube/Vimeo iframes require a live internet connection in the
 browser viewing the page — they won't load in network-sandboxed previews, only in a normal
