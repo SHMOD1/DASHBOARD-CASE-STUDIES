@@ -43,16 +43,16 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   - **Full Background** — the classic entry: full-bleed image/GIF/video behind the text,
     with a mix of **text blocks** (Heading, Subheading, Body, Pull quote, Caption — pick
     font, size, alignment, color per block) and **inline media blocks** — additional
-    images/GIFs/videos dropped into the same text flow as smaller inset cards (S/M/L/Full
-    width, with their own caption). New blocks lay out left to right, side by side, wrapping
-    to a new row only when they run out of horizontal space (a "Full width" media block
-    always claims its own row) — not stacked one under another.
+    images/GIFs/videos dropped into the same text flow as smaller inset cards, with their own
+    caption. New blocks lay out left to right, side by side, wrapping to a new row only when
+    they run out of horizontal space — not stacked one under another.
   - **Section Intro** — a simpler, centered divider page: full-bleed background plus just a
     heading and a line of text, no block grid — good for introducing a sub-section
     mid-chapter without the weight of a full entry.
-  - **Grid** — the same full-bleed-background-plus-block-grid template as Full Background,
-    just with a wider content column so a freeform grid of text/media boxes (added one at a
-    time, same as above) has more room to spread across rows and columns.
+  - **Grid** — every block on the page, text or media alike, snaps into an even N-per-row
+    grid instead of the freeform flow the other types use — pick 2, 3, or 4 columns per row
+    from a control in the page's toolbar. A media block set to "Full width" still breaks out
+    to span the entire row (handy for a table or a wide photo among a grid of smaller ones).
   - **Scroll Sequence** — a stack of full-bleed image steps with an optional caption on each.
     Add images with **+ Add image**, give each one its own text, and reorder/remove them from
     each step's toolbar. On the published page, scrolling into a Scroll Sequence page steps
@@ -146,6 +146,11 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   video always autoplays muted automatically (so it can hold the section, see above) — the
   modal shows a "Hold this section until media finishes" field instead for background GIFs
   and video, letting you set how many seconds to hold.
+- An inline media block always takes the true shape of whatever you upload — portrait, square,
+  panoramic, anything — instead of being cropped into one fixed box shape; only a YouTube/
+  Vimeo embed keeps the standard 16:9 video shape, since an embed has no size of its own to
+  take. Its S/M/L/Full setting still controls how wide it sits in the flow (or, on a Grid
+  page, "Full" spans the entire row instead of one column).
 - **+ Add chapter at end**, **+ Insert entry here**, move-up/down, and delete controls (in
   the main content column) let you fully restructure the story.
 - **Export JSON** downloads your content; **Import JSON** loads it back in (or share it with
