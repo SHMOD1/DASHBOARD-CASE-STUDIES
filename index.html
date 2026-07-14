@@ -529,20 +529,21 @@
   .block--heading{font-weight:800;letter-spacing:-.01em;line-height:1.7;text-shadow:none;
     display:inline;background:#005ba6;color:#fff;padding:.08em .4em;border-radius:4px;
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
-  .block--subheading{font-weight:700;line-height:1.7;letter-spacing:.01em;text-shadow:none;
-    display:inline;background:#005ba6;color:#fff;padding:.08em .4em;border-radius:4px;
-    box-decoration-break:clone;-webkit-box-decoration-break:clone;}
-  /* wrap long headings/subheadings within a readable column so the per-line highlight
+  /* wrap long headings within a readable column so the per-line highlight
      (box-decoration-break:clone above) actually produces multiple highlighted lines
      instead of one long bar running off the edge of the screen */
-  .block-wrap:has(.block--heading), .block-wrap:has(.block--subheading){max-width:700px;}
-  .block--body{line-height:1.75;background:#f8f3ef;color:#2b2b2b;padding:20px 24px;border-radius:12px;text-shadow:none;}
-  .block--quote{font-style:italic;font-weight:600;line-height:1.6;color:#fff;position:relative;
-    background:rgba(19,67,112,.55);padding:18px 22px 18px 50px;border-radius:8px;text-shadow:none;}
-  .block--quote::before{content:"\201C";position:absolute;left:12px;top:2px;font-family:Georgia,"Times New Roman",serif;
-    font-style:normal;font-weight:800;font-size:2.6em;line-height:1;color:#0dbfdb;}
-  .block--caption{color:#fff;letter-spacing:.02em;font-style:italic;background:rgba(0,0,0,.42);
-    padding:10px 16px;border-radius:6px;display:inline-block;text-shadow:none;}
+  .block-wrap:has(.block--heading){max-width:700px;}
+  /* every text box that isn't a heading — Subheading, Body, Pull quote, Caption — shares the
+     same plain white/cream card look, so only headings carry the blue highlight treatment */
+  .block--body, .block--subheading, .block--quote, .block--caption{
+    background:#f8f3ef;color:#2b2b2b;padding:20px 24px;border-radius:12px;text-shadow:none;
+  }
+  .block--body{line-height:1.75;}
+  .block--subheading{font-weight:700;line-height:1.5;letter-spacing:.01em;}
+  .block--quote{font-style:italic;font-weight:600;line-height:1.6;position:relative;padding-left:50px;}
+  .block--quote::before{content:"\201C";position:absolute;left:14px;top:14px;font-family:Georgia,"Times New Roman",serif;
+    font-style:normal;font-weight:800;font-size:2.6em;line-height:1;color:#005ba6;}
+  .block--caption{letter-spacing:.02em;font-style:italic;padding:10px 16px;}
   /* on the published page, a text box with nothing typed into it shows no highlight at all —
      no colored box with nothing in it — but Edit Mode keeps the box visible so there's still
      something there to click on and type into */
@@ -1309,7 +1310,7 @@
               "size": "M",
               "align": "left",
               "html": "<p class=\"MsoNormal\">As urbanization increased, most of this watershed was\nengineered to move water away as quickly as possible. The wash stopped being a\nliving system and became, simply, flood-control infrastructure.<o:p></o:p></p>",
-              "color": "#ffffff"
+              "color": ""
             },
             {
               "id": "idx30tqxj",

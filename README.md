@@ -41,14 +41,15 @@ untouched, and Section Intro pages carry just their optional hint line, no butto
   grotesque weight) — swap in a hosted `@font-face` for Intercom if you have the license files.
   Both fonts are also the top two choices in every text block's font dropdown in Edit Mode.
 
-**Text styling — highlighter-marker look:** chapter titles, entry titles, and Heading/
-Subheading text blocks render as tight, per-line blue (`#005BA6`) highlight bars behind
-white text (using `box-decoration-break`, so each wrapped line gets its own tightly-fit
-rectangle rather than one big box) — the hero's own title skips this since the hero page is
-already a solid blue backdrop. Body text blocks sit on a single cohesive cream (`#F8F3EF`)
-card with dark text instead of a per-line highlight, matching how a paragraph actually reads.
-Pull quotes and captions/citations both sit on a dark, semi-transparent bar with italic type;
-pull quotes additionally carry a large decorative opening quotation mark. Draggable text-box
+**Text styling — highlighter-marker look:** chapter titles, entry titles, and Heading text
+blocks are the only text carrying the blue (`#005BA6`) highlight — chapter/entry titles and
+Heading render as tight, per-line highlight bars behind white text (using
+`box-decoration-break`, so each wrapped line gets its own tightly-fit rectangle rather than
+one big box); the hero's own title skips this since the hero page is already a solid blue
+backdrop. Every other text block type — Subheading, Body, Pull quote, and Caption — shares
+one plain cream (`#F8F3EF`) card look with dark text, so a page's text reads as a stack of
+plain white cards under its blue heading, not a wall of color. Pull quotes keep a large
+decorative opening quotation mark; captions/citations stay italic. Draggable text-box
 annotations use dark green (`#155724`) text, tightly padded, on a solid yellow (`#FFDE17`)
 highlight — chosen for readable contrast against that yellow. Newly-added annotations default
 to that green; you can still pick any color per annotation from its toolbar's color swatch.
