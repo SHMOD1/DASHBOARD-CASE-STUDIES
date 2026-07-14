@@ -74,13 +74,17 @@ to that green; you can still pick any color per annotation from its toolbar's co
     grid instead of the freeform flow the other types use — pick 2, 3, or 4 columns per row
     from a control in the page's toolbar. A media block set to "Full width" still breaks out
     to span the entire row (handy for a table or a wide photo among a grid of smaller ones).
-  - **Scroll Sequence** — a stack of full-bleed image steps with an optional caption on each.
-    Add images with **+ Add image**, give each one its own text, and reorder/remove them from
-    each step's toolbar. On the published page, scrolling into a Scroll Sequence page steps
-    through its images one at a time — the page holds in place and *won't* advance to the
-    next chapter/entry until every image has been shown; scrolling back up steps back through
-    them the same way. It's built on the same section-hold mechanism as background
-    video/GIF (see below), just gated on "every image shown" instead of "media finished."
+  - **Scroll Sequence** — a stack of image steps, each shown centered and at its own natural
+    size/shape (never cropped) on a plain solid brand-blue field, rather than a busy full-bleed
+    photo — so the picture stays a clear focal point and any annotation text on it stays
+    easy to read. Add images with **+ Add image**, give each one its own text, and
+    reorder/remove them from each step's toolbar. On the published page, scrolling into a
+    Scroll Sequence page steps through its images one at a time, slowly cross-dissolving each
+    into the next (like a looping GIF) rather than cutting — the page holds in place and
+    *won't* advance to the next chapter/entry until every image has been shown; scrolling back
+    up steps back through them the same way. It's built on the same section-hold mechanism as
+    background video/GIF (see below), just gated on "every image shown" instead of
+    "media finished."
     This wheel-driven stepping only applies to mouse/trackpad scrolling — keyboard, scrollbar,
     and touch scrolling pass straight through to the next page instead of stepping. Each step
     can also carry its own **draggable text-box annotations** (**+ Text Box**), the same
