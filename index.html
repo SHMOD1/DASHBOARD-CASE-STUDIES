@@ -328,6 +328,14 @@
      the freeform box grid has more room */
   .entry[data-page-type="grid"] .entry-content{max-width:1680px;}
 
+  /* page type (b) Full Background — no scrim, no opacity ever (see contentZoomMotion): the
+     background image stays completely clean and clear, so legibility comes from a text
+     shadow on the content instead of dimming the photo underneath it */
+  .entry[data-page-type="background"] .entry-content{text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);opacity:1;}
+  .entry[data-page-type="background"] .entry-title{opacity:1;}
+  .entry[data-page-type="background"] .block-wrap{opacity:1;}
+  .entry[data-page-type="background"] .block--quote{border-left-color:rgba(255,255,255,.85);}
+
   /* ---------- page type (c) Scroll Sequence: a stack of full-bleed steps, one visible at a
      time, crossfaded by JS as the reader scrolls through them; each step carries its own
      optional caption text ---------- */
@@ -1459,11 +1467,14 @@
     const captionHtml = entry.caption
       ? `<div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption)}</div>`
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
+    // "Full Background" keeps the image completely clean — no scrim, no opacity fade ever
+    // (see contentZoomMotion) — legibility comes from a text-shadow on the content instead
+    const scrimHtml = variant === "background" ? "" : '<div class="scrim"></div>';
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
-        <div class="scrim"></div>
+        ${scrimHtml}
         ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
         <div class="entry-content">
@@ -2233,9 +2244,20 @@
   // section feels like a continuous, multi-layered transition instead of static content
   function contentZoomMotion(){
     if(reduceMotion) return;
-    document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => applyZoom(el, 0.94, 0.55, 0.7));
-    document.querySelectorAll(".chapter-title, .entry-title").forEach(el => applyZoom(el, 0.88, 0.3, 0.55));
-    document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => applyZoom(el, 0.95, 0.4, 0.5));
+    // "Full Background" pages never fade — no opacity at any point, even mid-transition —
+    // so their image stays completely clean; everywhere else keeps the usual fade-in
+    document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => {
+      const clean = el.closest('.entry[data-page-type="background"]');
+      applyZoom(el, 0.94, clean ? null : 0.55, 0.7);
+    });
+    document.querySelectorAll(".chapter-title, .entry-title").forEach(el => {
+      const clean = el.closest('.entry[data-page-type="background"]');
+      applyZoom(el, 0.88, clean ? null : 0.3, 0.55);
+    });
+    document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => {
+      const clean = el.closest('.entry[data-page-type="background"]');
+      applyZoom(el, 0.95, clean ? null : 0.4, 0.5);
+    });
     document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, null, 0.5));
     document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, 0.5, 0.55));
   }
