@@ -508,7 +508,11 @@
      ratio — except a video EMBED (YouTube/Vimeo iframe), which has no intrinsic size of its
      own to size from, so that alone keeps the standard 16:9 video shape */
   .block-media{position:relative;border-radius:8px;overflow:hidden;background:var(--bg-alt);
+    min-height:180px;
     box-shadow:0 20px 45px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.1);}
+  /* a block with no media set yet has no <img>/<video> to size itself from — .media-empty
+     and .media-overlay are both position:absolute, so without this min-height the box (and
+     its clickable "Change Media" button) collapses to zero height and can't be clicked */
   .block-media .media-fill{position:static;}
   .block-media .media-fill .media-el{height:auto;object-fit:initial;}
   .block-media .video-frame{aspect-ratio:16/9;}
