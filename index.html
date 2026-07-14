@@ -523,6 +523,16 @@
     font-style:normal;font-weight:800;font-size:2.6em;line-height:1;color:#0dbfdb;}
   .block--caption{color:#fff;letter-spacing:.02em;font-style:italic;background:rgba(0,0,0,.42);
     padding:10px 16px;border-radius:6px;display:inline-block;text-shadow:none;}
+  /* on the published page, a text box with nothing typed into it shows no highlight at all —
+     no colored box with nothing in it — but Edit Mode keeps the box visible so there's still
+     something there to click on and type into */
+  body:not(.edit-on) .chapter-title.text-empty, body:not(.edit-on) .entry-title.text-empty,
+  body:not(.edit-on) .block--heading.text-empty, body:not(.edit-on) .block--subheading.text-empty,
+  body:not(.edit-on) .block--body.text-empty, body:not(.edit-on) .block--quote.text-empty,
+  body:not(.edit-on) .block--caption.text-empty, body:not(.edit-on) .annotation-text.text-empty{
+    background:none;box-shadow:none;padding:0;border:none;min-width:0;min-height:0;
+  }
+  body:not(.edit-on) .block--quote.text-empty::before{display:none;}
   .block table{border-collapse:collapse;width:100%;max-width:820px;font-size:13.5px;}
   .block table th, .block table td{border:1px solid rgba(255,255,255,.22);padding:8px 12px;text-align:left;}
   .block table th{background:rgba(255,255,255,.1);text-transform:uppercase;font-size:11px;letter-spacing:.06em;}
@@ -1786,7 +1796,20 @@
 
     syncEditableAttrs();
     syncRailDraggable();
+    refreshEmptyHighlights();
     updateScroll();
+  }
+
+  // any of these highlight/box treatments should disappear on the published page when the
+  // text box behind them is actually empty, rather than showing a colored box with nothing
+  // in it — but only on the published view; Edit Mode keeps the box visible so there's still
+  // something to click on to type into it
+  const EMPTY_HIGHLIGHT_SELECTOR = ".chapter-title, .entry-title, .block--heading, " +
+    ".block--subheading, .block--body, .block--quote, .block--caption, .annotation-text";
+  function refreshEmptyHighlights(){
+    document.querySelectorAll(EMPTY_HIGHLIGHT_SELECTOR).forEach(el => {
+      el.classList.toggle("text-empty", el.textContent.trim() === "");
+    });
   }
 
   function renderHeroText(){
@@ -1904,7 +1927,7 @@
           <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#155724"}">
           <button type="button" class="danger" data-act="deleteAnnotation" data-annotation-id="${a.id}" ${idAttrs}>✕</button>
         </div>
-        <div class="annotation-text${chipClass}" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "Type here…")}</div>
+        <div class="annotation-text${chipClass}" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "")}</div>
       </div>`;
   }
   function applyAnnotationStyle(a){
@@ -2330,6 +2353,7 @@
       const s = getSequenceStep(el.dataset.chapterId, el.dataset.entryId, el.dataset.stepId);
       if(s) s.text = el.textContent;
     }
+    if(el.matches(EMPTY_HIGHLIGHT_SELECTOR)) el.classList.toggle("text-empty", el.textContent.trim() === "");
     debouncedSave();
   });
 

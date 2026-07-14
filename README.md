@@ -162,6 +162,10 @@ to that green; you can still pick any color per annotation from its toolbar's co
   and a color swatch for the text itself, plus reorder/delete. Use **+ Add text block** to add
   more, or **+ Add image / video / GIF** to drop in an inline media overlay (its toolbar
   controls size and alignment instead).
+- Chapter/entry titles, text blocks, and annotations all carry a highlight/box background
+  behind their text — but only when there's actually text in them. Clear all the text out of
+  one and its highlight disappears on the published page, so a reader never sees an empty
+  colored box; in Edit Mode the box stays put so you can always find it and type into it again.
 - Every chapter/page is fully reorderable — **↑/↓ Move** on a chapter or entry (or drag it
   in the timeline rail, see above), and the 4 "**+** *page type*" buttons between pages drop
   a new page of that type anywhere in the sequence — regardless of what mix of page types a
