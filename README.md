@@ -35,15 +35,33 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 
 **Structure:**
 - A full-screen hero, then any number of **chapters** — each with its own full-bleed cover
-  image/video, title, subtitle, accent color, and its own timeline of **entries**, each a
-  full-screen slide too.
-- Each entry's media (image / GIF / video) fills the whole screen behind the text, with a
-  mix of **text blocks** (Heading, Subheading, Body, Pull quote, Caption — pick font, size,
-  alignment, color per block) and **inline media blocks** — additional images/GIFs/videos
-  dropped into the same text flow as smaller inset cards (S/M/L/Full width, with their own
-  caption), distinct from the entry's full-bleed background. New blocks lay out left to
-  right, side by side, wrapping to a new row only when they run out of horizontal space
-  (a "Full width" media block always claims its own row) — not stacked one under another.
+  image/video, title, subtitle, accent color, and its own timeline of **entries** (pages),
+  each a full-screen slide too.
+- Every entry is one of **4 page types**, switchable any time from a dropdown in its
+  toolbar, and picked up front via the 4 buttons ("+ Full Background", "+ Section Intro",
+  "+ Grid", "+ Scroll Sequence") wherever you'd insert a new page:
+  - **Full Background** — the classic entry: full-bleed image/GIF/video behind the text,
+    with a mix of **text blocks** (Heading, Subheading, Body, Pull quote, Caption — pick
+    font, size, alignment, color per block) and **inline media blocks** — additional
+    images/GIFs/videos dropped into the same text flow as smaller inset cards (S/M/L/Full
+    width, with their own caption). New blocks lay out left to right, side by side, wrapping
+    to a new row only when they run out of horizontal space (a "Full width" media block
+    always claims its own row) — not stacked one under another.
+  - **Section Intro** — a simpler, centered divider page: full-bleed background plus just a
+    heading and a line of text, no block grid — good for introducing a sub-section
+    mid-chapter without the weight of a full entry.
+  - **Grid** — the same full-bleed-background-plus-block-grid template as Full Background,
+    just with a wider content column so a freeform grid of text/media boxes (added one at a
+    time, same as above) has more room to spread across rows and columns.
+  - **Scroll Sequence** — a stack of full-bleed image steps with an optional caption on each.
+    Add images with **+ Add image**, give each one its own text, and reorder/remove them from
+    each step's toolbar. On the published page, scrolling into a Scroll Sequence page steps
+    through its images one at a time — the page holds in place and *won't* advance to the
+    next chapter/entry until every image has been shown; scrolling back up steps back through
+    them the same way. It's built on the same section-hold mechanism as background
+    video/GIF (see below), just gated on "every image shown" instead of "media finished."
+    This wheel-driven stepping only applies to mouse/trackpad scrolling — keyboard, scrollbar,
+    and touch scrolling pass straight through to the next page instead of stepping.
 - The timeline is a **thin strip** (~90px) that sits **in the normal page flow** next to the
   chapters/entries column and sticks to the top of the viewport as you scroll — it's part of
   the page, not a floating overlay, and releases/scrolls away naturally once you pass the
@@ -51,7 +69,11 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   drifting) connecting large water-droplet-shaped markers, on a solid dark-charcoal
   (`#413C3F`) backdrop with bright cyan (`#0DBFDB`) glow, independent of the light/dark theme
   toggle. Chapter/entry titles don't take up permanent space — hover any droplet to pop up
-  its title next to it; click any droplet to jump the main scroll straight there. Its content
+  its title next to it; click any droplet to jump the main scroll straight there. In Edit
+  Mode, the rail is itself editable and reorderable: **drag** any droplet to reorder chapters
+  (drag a chapter's head) or entries (drag an entry, including onto a *different* chapter to
+  move it there), and **click** a droplet to rename its chapter/entry right from the sidebar,
+  in the same popup that normally just shows the title on hover. Its content
   pans vertically in lockstep with the page's scroll position, so the timeline visibly scrolls
   together with the sections rather than sitting static. The active chapter's accent color
   washes across the progress fill and pull-quote borders as you scroll.
@@ -113,10 +135,10 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
   and a color swatch for the text itself, plus reorder/delete. Use **+ Add text block** to add
   more, or **+ Add image / video / GIF** to drop in an inline media overlay (its toolbar
   controls size and alignment instead).
-- Every chapter/page is fully reorderable — **↑/↓ Move** on a chapter or entry, and **+
-  Insert entry here** to drop a new page anywhere in the sequence — regardless of what mix of
-  text, media, and annotations that page contains, so pages of different styles can be
-  freely rearranged.
+- Every chapter/page is fully reorderable — **↑/↓ Move** on a chapter or entry (or drag it
+  in the timeline rail, see above), and the 4 "**+** *page type*" buttons between pages drop
+  a new page of that type anywhere in the sequence — regardless of what mix of page types a
+  chapter contains, so different page types can be freely rearranged together.
 - Hover any image/video — the entry's full-bleed background, a chapter cover, the hero, or
   an inline media block — and click **Change Media** to set an Image, GIF, or Video — paste a
   URL (including YouTube/Vimeo links, which embed automatically) or upload a file, with
@@ -136,3 +158,7 @@ chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
 **Note on video embeds:** YouTube/Vimeo iframes require a live internet connection in the
 browser viewing the page — they won't load in network-sandboxed previews, only in a normal
 browser.
+
+**Note on the page-type system:** content saved before page types existed (and the shipped
+demo content) loads in as **Full Background** pages automatically — nothing changes visually
+until you deliberately switch a page's type or add a new one of a different type.
