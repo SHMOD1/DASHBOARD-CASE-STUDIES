@@ -480,6 +480,18 @@
   .block--quote{font-style:italic;font-weight:600;line-height:1.5;border-left:3px solid var(--accent-2);
     padding-left:18px;color:#fff;transition:border-color .5s ease;}
   .block--caption{color:rgba(240,241,250,.6);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
+  .block table{border-collapse:collapse;width:100%;max-width:820px;font-size:13.5px;}
+  .block table th, .block table td{border:1px solid rgba(255,255,255,.22);padding:8px 12px;text-align:left;}
+  .block table th{background:rgba(255,255,255,.1);text-transform:uppercase;font-size:11px;letter-spacing:.06em;}
+  .block ul, .block ol{padding-left:22px;margin:0 0 12px;}
+  .block li{margin-bottom:8px;}
+  .block .card-strip{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0;}
+  .block .card-chip{flex:1 1 180px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+    border-radius:10px;padding:14px 16px;}
+  .block .card-chip strong{display:block;margin-bottom:4px;color:#fff;}
+  .block .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+  .block .pill-row span{background:var(--accent-live,var(--accent));color:#08131c;font-weight:700;font-size:12.5px;
+    padding:7px 16px;border-radius:20px;}
 
   /* ---------- inline media-overlay blocks (images/GIFs/video dropped into the text flow) ---------- */
   .block-media-wrap{flex:0 0 auto;max-width:100%;transform-origin:center;opacity:1;transform:scale(.92);}
@@ -922,119 +934,82 @@
   function defaultData(){
     return {
       meta: {
-        title: "The Water City",
-        subtitle: "The story of a growing city's water, seen through its lakes, wells, and neighborhoods.",
-        presentsLabel: "PRESENTS",
-        scrollLabel: "SCROLL DOWN",
-        scrollCue: "Explore the chapters",
+        title: "How Does Water Move Through the City?",
+        subtitle: "Three cities engineered water away from view — and paid for it with fragmented ecologies, disconnected neighborhoods, and floods that pipes alone couldn't hold. This is how each one began designing with water instead.",
+        presentsLabel: "A BLUE-GREEN INFRASTRUCTURE STORYMAP",
+        scrollLabel: "SCROLL",
+        scrollCue: "Explore the case studies",
         heroMedia: { kind:"image", src: coverPlaceholder(), embed:false },
-        logos: [
-          { id:newId(), media:{ kind:"image", src: logoPlaceholder("YOUR LOGO"), embed:false } },
-          { id:newId(), media:{ kind:"image", src: logoPlaceholder("PARTNER LOGO"), embed:false } }
-        ]
+        logos: []
       },
       chapters: [
         {
-          id:"c1", title:"The Vanishing Lakes", subtitle:"Mapping a century of urban lake loss, 1900–1990", accent: ACCENTS[0],
-          cover: { kind:"image", src: placeholder(21,"1"), embed:false },
-          callout: { enabled:true, text:"Optional popup box — add a quick stat, quote, or side note here, with its own image or GIF.",
-            media:{ kind:"image", src: placeholder(22,"i"), embed:false } },
+          id:"c1", title:"Tujunga Wash Greenway", subtitle:"Los Angeles, California — Corridor Scale", accent: ACCENTS[0],
+          cover: { kind:"image", src: placeholder(1,"LA"), embed:false },
           entries: [
             {
-              id:"e1", year:"1905", title:"A City Built on a Thousand Tanks",
-              media:{ kind:"image", src: placeholder(31,"05"), embed:false },
-              caption:"Sample caption — replace with your own source line.",
-              callout: { enabled:true, text:"This box is fully optional — remove it with the ✕, or add one to any section with \"+ Add popup box\".", media:null },
-              annotations:[ { id:newId(), x:78, y:22, text:"Drag me anywhere on the image", font:FONT_OPTIONS[0].value, size:"M", bold:true, italic:false, color:"#ffde17" } ],
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                html:"<p>The city's water once moved through a chain of interconnected tanks and lakes, each overflow feeding the next down the valley. The system stored the monsoon for the dry months ahead.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(41,"1"), embed:false }), size:"M", align:"left",
-                  caption:"An inline overlay image — this sits inside the text flow, separate from the full-bleed background. Add as many as you like via \"+ Add image / video / GIF\"." },
+              id:"e1", pageType:"background", year:"01", title:"Tujunga Wash Greenway",
+              media:{ kind:"image", src: placeholder(11,"Map"), embed:false },
+              caption:"Tujunga Wash · 34.216°N, 118.376°W — 520.48 km² above site. Replace this background with a real site photo or the map screenshot.",
+              blocks:[
                 { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>" } ]
+                  html:"<p>Los Angeles grew up around an extensive network of rivers, creeks, washes, and flood channels. One of them — the Tujunga Wash — historically carried water from the San Gabriel Mountains down through the city to the Los Angeles River, and on to the Pacific.</p>" },
+                { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left", html:"The Historical Path" },
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p class=\"pill-row\"><span>Mountains</span><span>Streams</span><span>Tujunga Wash</span><span>LA River</span><span>Pacific Ocean</span></p><p>As urbanization increased, most of this watershed was engineered to move water away as quickly as possible. The wash stopped being a living system and became, simply, flood-control infrastructure.</p>" }
+              ]
             },
             {
-              id:"e2", year:"1985", title:"Encroachment Accelerates",
-              media:{ kind:"gif", src: animatedPlaceholder(32,"85"), embed:false },
-              caption:"A full-bleed animated GIF background — swap in your own via Change Media.",
-              blocks:[ { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"Wetlands become real estate" },
+              id:"e2", pageType:"background", year:"—", title:"What Was Lost",
+              media:{ kind:"image", src: placeholder(12,"Lost"), embed:false },
+              caption:"Natural watershed → concrete channel → disconnected city",
+              blocks:[
                 { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>As the city grows outward, lakebeds and buffer zones are drained, filled, and built over. What were once flood-absorbing wetlands become bus depots, stadiums, and housing layouts.</p><p>By the end of the decade, more than half of the historic tank network has been lost or fragmented beyond repair.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(43,"3"), embed:false }), size:"M", align:"right",
-                  caption:"A before/after comparison — a good candidate for a real photo pair." } ]
-            }
-          ]
-        },
-        {
-          id:"c2", title:"Groundwater Under Pressure", subtitle:"Borewells, depletion, and a city drinking itself dry, 1990–2015", accent: ACCENTS[1],
-          cover: { kind:"image", src: placeholder(22,"2"), embed:false },
-          entries: [
-            {
-              id:"e3", year:"1995", title:"The Rise of the Borewell",
-              media:{ kind:"image", src: placeholder(33,"95"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>With surface water sources shrinking, households and apartment blocks turn underground, drilling private borewells to make up the shortfall. Within a decade, tens of thousands are in operation across the city, mostly unregulated and unmetered.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(44,"4"), embed:false }), size:"S", align:"left",
-                  caption:"A drilling rig — a small, left-aligned inline overlay." },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Each new borewell is a private solution to a shared problem — and each one lowers the water table a little further for every neighbor drawing from the same aquifer.</p>" } ]
+                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>〜 Hydrology</strong>Natural hydrological processes were disrupted.</div><div class=\"card-chip\"><strong>❧ Ecology</strong>Ecological connections were fragmented.</div><div class=\"card-chip\"><strong>◍ Community</strong>Communities were disconnected from the waterway.</div><div class=\"card-chip\"><strong>↓ Recharge</strong>Opportunities for infiltration and habitat were reduced.</div></div>" },
+                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
+                  html:"“The system was efficient at moving water — but poor at supporting resilience.”" }
+              ]
             },
             {
-              id:"e4", year:"2012", title:"A Falling Water Table",
-              media:{ kind:"video", src:null, embed:false },
-              caption:"Video slot — add a link or upload a clip via Change Media.",
-              blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                html:"“Every year the drill goes a little deeper, and the water comes back a little less.”" },
+              id:"e3", pageType:"background", year:"—", title:"Water Was Moving Too Fast",
+              media:{ kind:"image", src: placeholder(13,"Fast"), embed:false },
+              caption:"Diagnosis — traditional flood infrastructure follows one principle: convey water away, quickly.",
+              blocks:[
                 { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Well depths that once reached water at 150 feet now go past 1,000. Tanker trucks become a daily fixture in neighborhoods where the pumps have run dry, and water itself turns into a line item in every household budget.</p>" } ]
-            }
-          ]
-        },
-        {
-          id:"c3", title:"Harvesting the Monsoon", subtitle:"Rainwater harvesting and citizen-led recharge, 2000–2020", accent: ACCENTS[2],
-          cover: { kind:"image", src: placeholder(23,"3"), embed:false },
-          entries: [
-            {
-              id:"e5", year:"2003", title:"A Rooftop Revolution",
-              media:{ kind:"image", src: placeholder(34,"03"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"Every roof becomes a catchment" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>A new building code requires rainwater harvesting structures on every plot above a certain size. Roofs, once purely functional, are re-engineered as the first stage of a recharge system that feeds storage tanks and percolation pits below.</p>" },
-                { ...newMediaBlock({ kind:"gif", src: animatedPlaceholder(42,"2"), embed:false }), size:"S", align:"right",
-                  caption:"A small animated GIF overlay, right-aligned — size and alignment are per-block." } ]
+                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>Increased Runoff</strong>Stormwater rapidly enters channels.</div><div class=\"card-chip\"><strong>Reduced Infiltration</strong>Less water recharges groundwater.</div><div class=\"card-chip\"><strong>Ecological Fragmentation</strong>Habitats become disconnected.</div><div class=\"card-chip\"><strong>Single-Purpose Infrastructure</strong>Channels perform only one function.</div></div>" },
+                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
+                  html:"The traditional response: build more engineered infrastructure. Instead, they asked — can we restore watershed functions without removing flood protection?" }
+              ]
             },
             {
-              id:"e6", year:"2018", title:"Recharge Wells Return",
-              media:{ kind:"image", src: placeholder(35,"18"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Old, disused open wells — once filled in or forgotten — are cleaned out and reopened as recharge points. Community groups map thousands of them across the city, turning neglected infrastructure back into working water assets.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(45,"5"), embed:false }), size:"L", align:"center",
-                  caption:"A large, center-aligned overlay — good for a hero-style inline photo." },
-                { id:newId(), type:"caption", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"Source: replace with your own citation or data credit." } ]
-            }
-          ]
-        },
-        {
-          id:"c4", title:"Community Water Guardians", subtitle:"Neighborhoods restoring lakes and wetlands, 2015–present", accent: ACCENTS[3 % ACCENTS.length],
-          cover: { kind:"image", src: placeholder(24,"4"), embed:false },
-          entries: [
-            {
-              id:"e7", year:"2016", title:"Citizens Reclaim a Lake",
-              media:{ kind:"image", src: placeholder(36,"16"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>A residents' association adopts a neglected lake choked with weeds and waste, organizing weekend clean-up drives and lobbying the city for de-silting and fencing. Within two years, migratory birds return for the first time in a generation.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(46,"6"), embed:false }), size:"M", align:"left",
-                  caption:"Volunteers at a clean-up drive." } ]
+              id:"e4", pageType:"background", year:"—", title:"Reconnect the Watershed",
+              media:{ kind:"image", src: placeholder(14,"Shift"), embed:false },
+              caption:"The shift in thinking — instead of rebuilding the channel, restore everything around it.",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>Water</strong>Restore ecological and hydrological functions.</div><div class=\"card-chip\"><strong>Landscape</strong>Create continuous green infrastructure.</div><div class=\"card-chip\"><strong>Communities</strong>Improve access and awareness.</div></div>" }
+              ]
             },
             {
-              id:"e7b", pageType:"sequence", year:"Reference", title:"Urban Water Infrastructure — A Diagram Sequence",
+              id:"e5", pageType:"background", year:"—", title:"Four Watershed Functions",
+              media:{ kind:"image", src: placeholder(15,"Funnel"), embed:false },
+              caption:"Water system strategy",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<ol><li><strong>Convey</strong> — move stormwater safely.</li><li><strong>Slow</strong> — reduce runoff velocity.</li><li><strong>Store</strong> — increase opportunities for temporary retention.</li><li><strong>Infiltrate</strong> — support groundwater recharge.</li></ol><p>On the ground, this became a physical greenway network:</p><ul><li><strong>Greenway Network</strong> — a continuous corridor alongside the wash</li><li><strong>Native Vegetation</strong> — restoration that improved ecological performance</li><li><strong>Habitat Connectivity</strong> — wildlife movement across fragmented urban areas</li><li><strong>Watershed Awareness</strong> — residents understand how neighborhoods relate to water</li></ul>" }
+              ]
+            },
+            {
+              id:"e6", pageType:"background", year:"—", title:"What the Greenway Achieved",
+              media:{ kind:"image", src: placeholder(16,"Impact"), embed:false },
+              caption:"Measured impact",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>Environmental</strong>Restored habitat, better infiltration, improved biodiversity.</div><div class=\"card-chip\"><strong>Social</strong>Cycling &amp; walking access, environmental education, community ownership.</div><div class=\"card-chip\"><strong>Economic</strong>Lower long-term maintenance, better ecosystem performance.</div><div class=\"card-chip\"><strong>Planning</strong>A prototype for watershed-scale restoration elsewhere.</div></div>" }
+              ]
+            },
+            {
+              id:"e6b", pageType:"sequence", year:"Reference", title:"Urban Water Infrastructure — A Diagram Sequence",
               caption:"", media:null, blocks:[], annotations:[], callout:null,
               sequence:[
                 { id:newId(), media:{ kind:"image", src: placeholder(48,"Upload Image 1"), embed:false },
@@ -1048,15 +1023,138 @@
               ]
             },
             {
-              id:"e8", year:"2024", title:"A Living Case Study",
-              media:{ kind:"image", src: placeholder(37,"24"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Today the model has spread to dozens of lakes across the city, each with its own citizen stewardship group, monitoring water quality and pushing back against fresh encroachment.</p>" },
+              id:"e7", pageType:"grid", year:"—", title:"Comparing Systems",
+              media:{ kind:"image", src: placeholder(17,"Compare"), embed:false },
+              caption:"Three watersheds, one pattern",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<table><tr><th></th><th>Tujunga Wash</th><th>Adyar River</th><th>Bengaluru (K&amp;C Valley)</th></tr>"
+                    + "<tr><td><strong>Scale</strong></td><td>Corridor</td><td>River Basin</td><td>Valley System</td></tr>"
+                    + "<tr><td><strong>Length</strong></td><td>~21 km</td><td>~42.5 km</td><td>~48 km</td></tr>"
+                    + "<tr><td><strong>Catchment</strong></td><td>~583 sq km</td><td>700–860 sq km</td><td>~550 sq km</td></tr>"
+                    + "<tr><td><strong>Water Bodies Connected</strong></td><td>Tributary system</td><td>~200 tanks / lakes</td><td>60+ lakes</td></tr>"
+                    + "<tr><td><strong>Main Challenge</strong></td><td>Channelization</td><td>Urban flooding</td><td>Fragmented connectivity</td></tr>"
+                    + "<tr><td><strong>Main Lesson</strong></td><td>Reconnect corridors</td><td>Restore river systems</td><td>Reconnect rajakaluves</td></tr></table>" }
+              ]
+            }
+          ]
+        },
+        {
+          id:"c2", title:"Cloudburst Management Plan", subtitle:"Copenhagen, Denmark", accent: ACCENTS[1],
+          cover: { kind:"image", src: placeholder(2,"CPH"), embed:false },
+          entries: [
+            {
+              id:"e8", pageType:"background", year:"02", title:"Cloudburst Management Plan",
+              media:{ kind:"image", src: placeholder(21,"Map"), embed:false },
+              caption:"Copenhagen · 55.676°N, 12.568°E — Cloudburst 2011",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>In July 2011, an extreme cloudburst overwhelmed Copenhagen's drainage system. Streets became rivers, basements flooded, and infrastructure suffered major damage — proof that conventional underground drainage alone could not keep up with increasingly intense rainfall.</p>" },
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>150mm</strong>of rain</div><div class=\"card-chip\"><strong>3 hrs</strong>duration</div><div class=\"card-chip\"><strong>Existing sewers failed</strong>huge economic damage</div></div>" }
+              ]
+            },
+            {
+              id:"e9", pageType:"background", year:"—", title:"Everything Depended on Pipes",
+              media:{ kind:"image", src: placeholder(22,"Old"), embed:false },
+              caption:"The old system — Rain → Sewer → Treatment Plant → Sea",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<ul><li>Sewers exceeded capacity during extreme storms</li><li>Surface flooding across the city</li><li>High economic losses</li><li>Climate change increasing rainfall intensity</li></ul>" },
                 { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"“The lake didn't need an expert. It needed a neighborhood that refused to look away.”" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(47,"7"), embed:false }), size:"Full", align:"center",
-                  caption:"A full-width closing image — this template is yours to fill with a real case study." } ]
+                  html:"“Can streets become rivers before rivers become disasters?”" }
+              ]
+            },
+            {
+              id:"e10", pageType:"grid", year:"—", title:"Don't Enlarge Pipes. Redesign the City.",
+              media:{ kind:"image", src: placeholder(23,"Strategy"), embed:false },
+              caption:"The strategy — the city becomes part of the stormwater system.",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>Instead of relying solely on underground infrastructure, Copenhagen redesigned the city itself to become part of the stormwater system.</p><div class=\"card-strip\"><div class=\"card-chip\"><strong>Blue-Green Corridors</strong></div><div class=\"card-chip\"><strong>Floodable Parks</strong></div><div class=\"card-chip\"><strong>Water Plazas</strong></div><div class=\"card-chip\"><strong>Retention Landscapes</strong></div><div class=\"card-chip\"><strong>Streets as Temporary Channels</strong></div><div class=\"card-chip\"><strong>Surface Flow Routing Networks</strong></div></div>" }
+              ]
+            },
+            {
+              id:"e11", pageType:"background", year:"—", title:"Capture → Slow → Store → Route → Release",
+              media:{ kind:"image", src: placeholder(24,"Journey"), embed:false },
+              caption:"The water journey",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p class=\"pill-row\"><span>Capture</span><span>Slow</span><span>Store</span><span>Route</span><span>Release</span></p><ul><li>Reduced flood risk</li><li>Lower infrastructure damage</li><li>Increased public open space</li><li>Improved climate resilience</li><li>Multi-functional landscapes</li></ul>" },
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<div class=\"card-strip\"><div class=\"card-chip\"><strong>150mm</strong>design rainfall standard</div><div class=\"card-chip\"><strong>300+</strong>cloudburst projects citywide</div><div class=\"card-chip\"><strong>1-in-100</strong>year storm protection target</div></div>" }
+              ]
+            },
+            {
+              id:"e12", pageType:"background", year:"Synthesis", title:"Five Lessons for Reconnecting Waterways",
+              media:{ kind:"image", src: placeholder(25,"Lessons"), embed:false },
+              caption:"",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<ol><li>Treat drains as part of larger watersheds.</li><li>Design corridors that convey, slow, store, and infiltrate water.</li><li>Integrate ecology into flood-management systems.</li><li>Reconnect fragmented water networks.</li><li>Use greenways and public space to reveal hidden hydrological systems.</li></ol>" }
+              ]
+            }
+          ]
+        },
+        {
+          id:"c3", title:"Bengaluru Dialogue", subtitle:"A comparable system, fragmented", accent: ACCENTS[2],
+          cover: { kind:"image", src: placeholder(3,"BLR"), embed:false },
+          entries: [
+            {
+              id:"e13", pageType:"background", year:"03", title:"Bengaluru Dialogue",
+              media:{ kind:"image", src: placeholder(31,"Map"), embed:false },
+              caption:"Bengaluru · 12.972°N, 77.595°E — K&C Valley · 60+ lakes",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<p>Bengaluru's rajakaluves perform a role similar to the wash and the cloudburst corridors — connecting lakes across valleys. Many of these connections have become fragmented by encroachment and disconnected planning.</p><p class=\"pill-row\"><span>Lake</span><span>Rajakaluve</span><span>Lake</span><span>Valley</span><span>River</span></p>" },
+                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
+                  html:"“Can rajakaluves become watershed corridors — rather than simply stormwater drains?” The shift: from a drainage-centric approach to a blue-green infrastructure approach." }
+              ]
+            },
+            {
+              id:"e14", pageType:"background", year:"—", title:"Designing the Journey of Water",
+              media:{ kind:"image", src: placeholder(32,"Framework"), embed:false },
+              caption:"Bengaluru Water Design Framework — every intervention should answer these questions",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<ol><li>Where does water come from?</li><li>Where should it travel?</li><li>Where should it slow?</li><li>Where should it stay?</li></ol>" }
+              ]
+            },
+            {
+              id:"e15", pageType:"grid", year:"—", title:"Every Project, Evaluated at Multiple Scales",
+              media:{ kind:"image", src: placeholder(33,"Scales"), embed:false },
+              caption:"Evaluating every scale",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<table><tr><th>Scale</th><th>Example</th><th>Design Question</th></tr>"
+                    + "<tr><td><strong>Site</strong></td><td>Building, campus</td><td>Can this capture rain?</td></tr>"
+                    + "<tr><td><strong>Street</strong></td><td>Complete street</td><td>Can this route water safely?</td></tr>"
+                    + "<tr><td><strong>Neighbourhood</strong></td><td>Parks, schools</td><td>Can this store floodwater?</td></tr>"
+                    + "<tr><td><strong>Valley</strong></td><td>Rajakaluve</td><td>Can this reconnect lakes?</td></tr>"
+                    + "<tr><td><strong>City</strong></td><td>Entire watershed</td><td>Does this reduce downstream flooding?</td></tr></table>" }
+              ]
+            },
+            {
+              id:"e16", pageType:"background", year:"—", title:"Choose the Right Intervention",
+              media:{ kind:"image", src: placeholder(34,"Pairs"), embed:false },
+              caption:"Applying the framework — problem → design response",
+              blocks:[
+                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
+                  html:"<table><tr><th>Problem</th><th>Design Response</th></tr>"
+                    + "<tr><td>Fast runoff</td><td>Bioswales, tree trenches</td></tr>"
+                    + "<tr><td>Encroached rajakaluve</td><td>Corridor restoration</td></tr>"
+                    + "<tr><td>Flooding junction</td><td>Water plaza</td></tr>"
+                    + "<tr><td>Overflowing lake</td><td>Floodable park</td></tr>"
+                    + "<tr><td>Heat island</td><td>Urban forest</td></tr>"
+                    + "<tr><td>Concrete drain</td><td>Green corridor</td></tr>"
+                    + "<tr><td>Low groundwater</td><td>Recharge landscape</td></tr>"
+                    + "<tr><td>Missing public space</td><td>Blue-green park</td></tr></table>" }
+              ]
+            },
+            {
+              id:"e17", pageType:"intro", year:"Closing", title:"Every city already has a water system.",
+              media:{ kind:"image", src: placeholder(35,"Close"), embed:false },
+              caption:"The question is not “How do we remove water?” — it is “How do we design with it?”"
             }
           ]
         }
