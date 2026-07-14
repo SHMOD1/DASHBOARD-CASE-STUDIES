@@ -46,9 +46,9 @@ already a solid blue backdrop. Body text blocks sit on a single cohesive cream (
 card with dark text instead of a per-line highlight, matching how a paragraph actually reads.
 Pull quotes and captions/citations both sit on a dark, semi-transparent bar with italic type;
 pull quotes additionally carry a large decorative opening quotation mark. Draggable text-box
-annotations use blue (`#005BA6`) text on a solid yellow (`#FFDE17`) highlight — newly-added
-annotations default to that blue text color (existing annotations keep whatever color you'd
-already set for them).
+annotations use dark green (`#155724`) text, tightly padded, on a solid yellow (`#FFDE17`)
+highlight — chosen for readable contrast against that yellow. Newly-added annotations default
+to that green; you can still pick any color per annotation from its toolbar's color swatch.
 
 **Structure:**
 - A full-screen hero, then any number of **chapters** — each with its own full-bleed cover
