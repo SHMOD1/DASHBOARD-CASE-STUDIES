@@ -6,10 +6,11 @@
 full-screen (100vh) slide with its background image/GIF/video filling the entire viewport
 edge-to-edge, arriving with a slow, gentle cross-dissolve as you scroll — the same crossfade
 used between Scroll Sequence steps — not a static boxed layout. It ships with a real
-blue-green infrastructure case study ("How Does
-Water Move Through the City?" — Tujunga Wash Greenway, Copenhagen's Cloudburst Management
-Plan, and the Bengaluru Dialogue) so you can see the template in use, and you can reshape it
-for any other chapter-based case-study or narrative content.
+case study, "How Does Water Move Through the City?", tracing Los Angeles's Tujunga Wash
+watershed across four chapters — the historical setting, a century of urban lake loss,
+citizen-led rainwater harvesting and groundwater recharge, and neighborhoods restoring lakes
+and wetlands today — so you can see the template in use, and you can reshape it for any other
+chapter-based case-study or narrative content.
 
 Open `index.html` directly in a browser — no build step or server required. The large photos
 and video used by the shipped case study live as separate files under `assets/` rather than
