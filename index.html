@@ -123,10 +123,6 @@
     position:sticky;top:0;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
     transform-origin:center center;
   }
-  /* dark at both the top and bottom edges so consecutive full-bleed slides blend at the seam
-     instead of cutting hard from one photo straight into the next */
-  .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(180deg, rgba(6,7,20,.62) 0%, rgba(6,7,20,.05) 16%, rgba(6,7,20,.05) 40%, rgba(6,7,20,.3) 55%, rgba(5,6,18,.92) 100%);}
   .hero-content, .chapter-cover-content, .entry-content{
     position:relative;z-index:2;width:100%;max-width:1320px;margin:0 auto;
     padding:0 7% 9vh;color:#f3f3fa;
@@ -136,10 +132,6 @@
      centered, logo row up top, scroll-down button at the bottom. Scoped to .hero only;
      chapter covers and entries keep their own bottom-left full-bleed treatment. ---------- */
   .hero{align-items:center;background:#005ba6;}
-  .hero-scrim{
-    background:linear-gradient(180deg,
-      rgba(0,20,45,.3) 0%, rgba(0,20,45,0) 18%, rgba(0,20,45,0) 82%, rgba(0,20,45,.35) 100%);
-  }
   .hero .hero-content{
     display:flex;flex-direction:column;align-items:center;text-align:center;
     padding:9vh 7%;gap:6px;color:#fff;
@@ -159,9 +151,9 @@
     font-weight:700;color:rgba(255,255,255,.8);}
 
   .hero-cover-title{font-family:var(--font-main);font-size:clamp(36px,6vw,72px);line-height:1.04;margin:0 0 14px;
-    font-weight:800;letter-spacing:-.01em;color:#fff;}
+    font-weight:800;letter-spacing:-.01em;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
   .hero-cover-subtitle{font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.88);
-    font-weight:400;max-width:620px;line-height:1.55;}
+    font-weight:400;max-width:620px;line-height:1.55;text-shadow:0 2px 8px rgba(0,0,0,.7);}
 
   .hero-scrolldown{margin-top:56px;display:flex;flex-direction:column;align-items:center;gap:5px;}
   .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
@@ -301,11 +293,12 @@
   .main{display:flex;flex-direction:column;flex:1 1 auto;min-width:0;}
   .chapter{display:flex;flex-direction:column;}
 
-  .chapter-index{font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fbe847;margin-bottom:10px;font-weight:700;}
+  .chapter-index{font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fbe847;margin-bottom:10px;font-weight:700;
+    text-shadow:0 2px 8px rgba(0,0,0,.7);}
   .chapter-title{font-family:var(--font-main);font-size:clamp(28px,4.4vw,48px);font-weight:800;letter-spacing:-.01em;margin:0 0 10px;line-height:1.08;
-    transform-origin:left center;opacity:.35;transform:scale(.88);}
-  .chapter-subtitle{font-family:var(--font-body);font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;}
-  .chapter-cover-content{opacity:.55;transform:scale(.94);transform-origin:left center;}
+    transform-origin:left center;transform:scale(.88);text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
+  .chapter-subtitle{font-family:var(--font-body);font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;text-shadow:0 2px 8px rgba(0,0,0,.7);}
+  .chapter-cover-content{transform:scale(.94);transform-origin:left center;}
 
   .chapter-toolbar, .entry-toolbar{position:absolute;top:16px;right:16px;z-index:3;gap:8px;}
   .chapter-toolbar button, .entry-toolbar button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
@@ -316,7 +309,10 @@
   .chapter-entries{display:flex;flex-direction:column;}
 
   /* ---------- entry ---------- */
-  .entry-content{opacity:.55;transform:scale(.94);transform-origin:left center;}
+  /* no scrim anywhere in the dashboard — every background image/video/GIF stays completely
+     clean and clear, at every scroll position, so legibility comes from a text-shadow on
+     the content instead of dimming the media underneath it */
+  .entry-content{transform:scale(.94);transform-origin:left center;text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
 
   /* page type (a) Section Intro — centered divider page, no block grid */
   .entry[data-page-type="intro"]{align-items:center;}
@@ -327,14 +323,6 @@
   /* page type (d) Grid — same template as Full Background, just a wider content column so
      the freeform box grid has more room */
   .entry[data-page-type="grid"] .entry-content{max-width:1680px;}
-
-  /* page type (b) Full Background — no scrim, no opacity ever (see contentZoomMotion): the
-     background image stays completely clean and clear, so legibility comes from a text
-     shadow on the content instead of dimming the photo underneath it */
-  .entry[data-page-type="background"] .entry-content{text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);opacity:1;}
-  .entry[data-page-type="background"] .entry-title{opacity:1;}
-  .entry[data-page-type="background"] .block-wrap{opacity:1;}
-  .entry[data-page-type="background"] .block--quote{border-left-color:rgba(255,255,255,.85);}
 
   /* ---------- page type (c) Scroll Sequence: a stack of full-bleed steps, one visible at a
      time, crossfaded by JS as the reader scrolls through them; each step carries its own
@@ -375,7 +363,7 @@
      free-floating text + image/gif card on hover, pushed to hug the left edge ---------- */
   .callout-box{
     position:absolute;top:12%;left:1.5%;z-index:3;display:flex;align-items:flex-start;
-    transform-origin:left top;opacity:.6;transform:scale(.92);
+    transform-origin:left top;transform:scale(.92);
   }
   .callout-tab{
     width:54px;height:54px;flex:0 0 auto;border-radius:50%;background:#005ba6;
@@ -458,16 +446,17 @@
   .block-color-input{width:26px;height:24px;padding:1px;cursor:pointer;border-radius:4px;}
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
-  .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;}
+  .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;
+    text-shadow:0 2px 8px rgba(0,0,0,.7);}
   .entry-rule{flex:1;height:1px;background:rgba(240,241,250,.3);max-width:120px;}
   .entry-title{font-family:var(--font-main);font-size:clamp(24px,3.2vw,40px);font-weight:800;letter-spacing:-.01em;margin:0 0 14px;line-height:1.16;max-width:820px;
-    transform-origin:left center;opacity:.3;transform:scale(.88);}
+    transform-origin:left center;transform:scale(.88);}
   .entry-caption{font-family:var(--font-body);font-size:12px;color:rgba(240,241,250,.65);margin:0 0 20px;font-style:italic;}
 
   /* ---------- text blocks: laid out horizontally, side by side, wrapping to a new row
      only when they run out of horizontal space ---------- */
   .entry-blocks{display:flex;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:18px 22px;}
-  .block-wrap{flex:0 0 auto;opacity:.4;transform:scale(.95);transform-origin:left center;}
+  .block-wrap{flex:0 0 auto;transform:scale(.95);transform-origin:left center;}
   .block-toolbar{gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;padding:6px 8px;
     background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:8px;backdrop-filter:blur(6px);}
   .block-toolbar select, .block-toolbar button{
@@ -621,7 +610,6 @@
   <section class="hero" id="hero">
     <div class="media-fill" id="heroMediaWrap" data-media-scope="hero"></div>
     <div class="annotation-layer" id="heroAnnotationLayer"></div>
-    <div class="scrim hero-scrim"></div>
     <div class="hero-callout-mount" id="heroCalloutMount"></div>
     <div class="hero-mascot" aria-hidden="true">
       <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
@@ -1417,7 +1405,6 @@
         <div class="chapter-cover" data-chapter-id="${chapter.id}">
           <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover, true)}</div>
           <div class="annotation-layer">${renderAnnotationItems("chapterCover", chapter.id, null, null, chapter.annotations)}</div>
-          <div class="scrim"></div>
           <div class="chapter-toolbar edit-only">
             <button type="button" data-act="moveChapter" data-dir="-1" data-chapter-id="${chapter.id}">↑ Move</button>
             <button type="button" data-act="moveChapter" data-dir="1" data-chapter-id="${chapter.id}">↓ Move</button>
@@ -1467,14 +1454,10 @@
     const captionHtml = entry.caption
       ? `<div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption)}</div>`
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
-    // "Full Background" keeps the image completely clean — no scrim, no opacity fade ever
-    // (see contentZoomMotion) — legibility comes from a text-shadow on the content instead
-    const scrimHtml = variant === "background" ? "" : '<div class="scrim"></div>';
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
-        ${scrimHtml}
         ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
         <div class="entry-content">
@@ -1502,7 +1485,6 @@
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="intro">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
-        <div class="scrim"></div>
         ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
         <div class="entry-content">
@@ -1522,7 +1504,6 @@
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="sequence">
         <div class="sequence-steps" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${stepsHtml}</div>
-        <div class="scrim"></div>
         ${entryToolbarHtml(chapter, entry)}
         <div class="sequence-progress">${dotsHtml}</div>
         <div class="sequence-add-row edit-only">
@@ -2241,25 +2222,17 @@
   }
   // zoom in/out applies at two layered levels — the section's content block as a whole,
   // and each individual title/text-block/media-overlay within it — so scrolling through a
-  // section feels like a continuous, multi-layered transition instead of static content
+  // section feels like a continuous, multi-layered transition instead of static content.
+  // Nothing in the dashboard ever fades — only scale changes — so every image, text block,
+  // and popup box stays fully clean and legible throughout the transition, not just on
+  // full-bleed backgrounds.
   function contentZoomMotion(){
     if(reduceMotion) return;
-    // "Full Background" pages never fade — no opacity at any point, even mid-transition —
-    // so their image stays completely clean; everywhere else keeps the usual fade-in
-    document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => {
-      const clean = el.closest('.entry[data-page-type="background"]');
-      applyZoom(el, 0.94, clean ? null : 0.55, 0.7);
-    });
-    document.querySelectorAll(".chapter-title, .entry-title").forEach(el => {
-      const clean = el.closest('.entry[data-page-type="background"]');
-      applyZoom(el, 0.88, clean ? null : 0.3, 0.55);
-    });
-    document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => {
-      const clean = el.closest('.entry[data-page-type="background"]');
-      applyZoom(el, 0.95, clean ? null : 0.4, 0.5);
-    });
+    document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => applyZoom(el, 0.94, null, 0.7));
+    document.querySelectorAll(".chapter-title, .entry-title").forEach(el => applyZoom(el, 0.88, null, 0.55));
+    document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => applyZoom(el, 0.95, null, 0.5));
     document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, null, 0.5));
-    document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, 0.5, 0.55));
+    document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, null, 0.55));
   }
 
   // the rail is a sticky column, not a fixed overlay, so it scrolls together with the
