@@ -121,7 +121,6 @@
   /* ---------- full-bleed story slides (hero / chapter cover / entry share this) ---------- */
   .hero, .chapter-cover, .entry{
     position:sticky;top:0;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
-    transform-origin:center center;
   }
   .hero-content, .chapter-cover-content, .entry-content{
     position:relative;z-index:2;width:100%;max-width:1320px;margin:0 auto;
@@ -293,11 +292,10 @@
   .chapter-index{font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fbe847;margin-bottom:10px;font-weight:700;
     text-shadow:0 2px 8px rgba(0,0,0,.7);}
   .chapter-title{font-family:var(--font-main);font-size:clamp(28px,4.4vw,48px);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.7;
-    transform-origin:left center;transform:scale(.88);text-shadow:none;
+    text-shadow:none;
     display:inline;background:#005ba6;color:#fff;padding:.1em .45em;border-radius:4px;
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
   .chapter-subtitle{font-family:var(--font-body);font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;text-shadow:0 2px 8px rgba(0,0,0,.7);margin-top:12px;}
-  .chapter-cover-content{transform:scale(.94);transform-origin:left center;}
 
   .chapter-toolbar, .entry-toolbar{position:absolute;top:16px;right:16px;z-index:3;gap:8px;}
   .chapter-toolbar button, .entry-toolbar button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
@@ -311,11 +309,11 @@
   /* no scrim anywhere in the dashboard — every background image/video/GIF stays completely
      clean and clear, at every scroll position, so legibility comes from a text-shadow on
      the content instead of dimming the media underneath it */
-  .entry-content{transform:scale(.94);transform-origin:left center;text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
+  .entry-content{text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
 
   /* page type (a) Section Intro — centered divider page, no block grid */
   .entry[data-page-type="intro"]{align-items:center;}
-  .entry[data-page-type="intro"] .entry-content{text-align:center;transform-origin:center center;}
+  .entry[data-page-type="intro"] .entry-content{text-align:center;}
   .entry[data-page-type="intro"] .entry-title{font-size:clamp(32px,5.5vw,64px);max-width:800px;margin-left:auto;margin-right:auto;}
   .entry[data-page-type="intro"] .entry-caption{font-size:16px;font-style:normal;max-width:640px;margin:14px auto 0;}
   /* a short optional instruction line (e.g. "click and hold to enlarge") plus a "Dive In"
@@ -333,6 +331,16 @@
     transition:transform .15s ease, background .15s ease;
   }
   .entry-intro-cta:hover{transform:translateY(-2px) scale(1.03);background:#63c95c;}
+
+  /* page type (b) Full Background — text blocks stack in a narrow card column pinned to the
+     true left edge (not centered, even on wide screens) so most of the frame stays clear for
+     the image/video behind it, instead of text spreading across most of the screen. The
+     title/caption above keep their own (wider) width — only the block stack narrows, since
+     each block already renders as its own card (see .block--body/.block--quote/
+     .block--caption above), so stacking them vertically reads as a tidy list of cards. */
+  .entry[data-page-type="background"] .entry-blocks{
+    flex-direction:column;align-items:stretch;max-width:min(36vw,460px);
+  }
 
   /* page type (d) Grid — same template as Full Background, just a wider content column so
      the freeform box grid has more room */
@@ -406,7 +414,6 @@
      free-floating text + image/gif card on hover, pushed to hug the left edge ---------- */
   .callout-box{
     position:absolute;top:12%;left:1.5%;z-index:3;display:flex;align-items:flex-start;
-    transform-origin:left top;transform:scale(.92);
   }
   .callout-tab{
     width:54px;height:54px;flex:0 0 auto;border-radius:50%;background:#005ba6;
@@ -496,7 +503,7 @@
     text-shadow:0 2px 8px rgba(0,0,0,.7);}
   .entry-rule{flex:1;height:1px;background:rgba(240,241,250,.3);max-width:120px;}
   .entry-title{font-family:var(--font-main);font-size:clamp(24px,3.2vw,40px);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.7;max-width:820px;
-    transform-origin:left center;transform:scale(.88);text-shadow:none;
+    text-shadow:none;
     display:inline;background:#005ba6;color:#fff;padding:.1em .45em;border-radius:4px;
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
   .entry-caption{font-family:var(--font-body);font-size:12px;color:rgba(240,241,250,.65);margin:12px 0 20px;font-style:italic;}
@@ -504,7 +511,7 @@
   /* ---------- text blocks: laid out horizontally, side by side, wrapping to a new row
      only when they run out of horizontal space ---------- */
   .entry-blocks{display:flex;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:18px 22px;}
-  .block-wrap{flex:0 0 auto;transform:scale(.95);transform-origin:left center;}
+  .block-wrap{flex:0 0 auto;}
   .block-toolbar{gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;padding:6px 8px;
     background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:8px;backdrop-filter:blur(6px);}
   .block-toolbar select, .block-toolbar button{
@@ -560,7 +567,7 @@
     padding:7px 16px;border-radius:20px;}
 
   /* ---------- inline media-overlay blocks (images/GIFs/video dropped into the text flow) ---------- */
-  .block-media-wrap{flex:0 0 auto;max-width:100%;transform-origin:center;opacity:1;transform:scale(.92);}
+  .block-media-wrap{flex:0 0 auto;max-width:100%;}
   .block-media-wrap.block-media--S{width:260px;}
   .block-media-wrap.block-media--M{width:400px;}
   .block-media-wrap.block-media--L{width:600px;}
@@ -2537,7 +2544,6 @@
     updateRailSync();
     slideMotion();
     blockMediaMotion();
-    contentZoomMotion();
   }
 
   function updateProgressBar(){
@@ -2650,10 +2656,11 @@
     popupHideTimer = setTimeout(() => popup.classList.remove("visible"), 2600);
   }
 
-  /* every hero / chapter cover / entry is a full-bleed "slide" that arrives zoomed way out
-     (tiny, distant) and grows to fill the screen as it scrolls into place — like zooming
-     in from orbit down to a location on a map — then holds at full scale until the next
-     slide zooms in on top of it. */
+  /* every hero / chapter cover / entry is a full-bleed "slide" that arrives with a slow,
+     gentle cross-dissolve as it scrolls into place — the same crossfade used between Scroll
+     Sequence steps — then holds at full opacity until the next slide fades in on top of it.
+     Everything inside a slide (title, text blocks, media) fades in as one unit along with it,
+     rather than animating separately. */
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function slideProgress(rect){
@@ -2662,17 +2669,15 @@
     const traveled = vh - rect.top;
     return Math.min(Math.max(traveled / total, 0), 1);
   }
-  // full opacity throughout — no fade on the background media as it zooms in, only scale
-  function applySlideZoom(slide, r){
+  function applySlideFade(slide, r){
     const vh = window.innerHeight;
-    let scale;
+    let opacity;
     if(r.top > 0){
-      const t = Math.max(0, Math.min(1, 1 - r.top / (vh * 0.95)));
-      scale = 0.3 + t * 0.7;
+      opacity = Math.max(0, Math.min(1, 1 - r.top / (vh * 0.95)));
     } else {
-      scale = 1;
+      opacity = 1;
     }
-    slide.style.transform = `scale(${scale.toFixed(3)})`;
+    slide.style.opacity = opacity.toFixed(3);
   }
   // sections are position:sticky and stacked by DOM order (z-index), so each one zooms in
   // on top of whichever slide is still pinned underneath it
@@ -2688,7 +2693,7 @@
       if(r.bottom < -400 || r.top > vh + 400) return;
       const progress = slideProgress(r);
       slide.dataset.progress = progress.toFixed(3);
-      applySlideZoom(slide, r);
+      applySlideFade(slide, r);
     });
     updateMediaGate(slides, activeIdx < 0 ? 0 : activeIdx, vh);
   }
@@ -2835,41 +2840,6 @@
       const scale = 1.04 + progress * 0.06;
       media.style.transform = `scale(${scale.toFixed(3)}) translateY(${pan.toFixed(1)}px)`;
     });
-  }
-
-  // 1 when an element's center aligns with the viewport's center, tapering to 0 the further
-  // it sits from that center — used to zoom content in as it arrives and back out as it
-  // leaves, so sections feel like a continuous, reversible transition rather than a static
-  // one-time reveal
-  function centerProgress(rect, spread){
-    const vh = window.innerHeight;
-    const elCenter = rect.top + rect.height / 2;
-    const dist = Math.abs(elCenter - vh / 2);
-    const norm = Math.min(dist / (vh * spread), 1);
-    return 1 - norm;
-  }
-  // minOpacity === null skips the fade entirely (full opacity throughout) — used for media
-  // so it's never dimmed, only scaled, while text/UI chrome still fades in as before
-  function applyZoom(el, minScale, minOpacity, spread){
-    const r = el.getBoundingClientRect();
-    if(r.bottom < -150 || r.top > window.innerHeight + 150) return;
-    const p = centerProgress(r, spread);
-    el.style.transform = `scale(${(minScale + (1 - minScale) * p).toFixed(3)})`;
-    if(minOpacity !== null) el.style.opacity = (minOpacity + (1 - minOpacity) * p).toFixed(2);
-  }
-  // zoom in/out applies at two layered levels — the section's content block as a whole,
-  // and each individual title/text-block/media-overlay within it — so scrolling through a
-  // section feels like a continuous, multi-layered transition instead of static content.
-  // Nothing in the dashboard ever fades — only scale changes — so every image, text block,
-  // and popup box stays fully clean and legible throughout the transition, not just on
-  // full-bleed backgrounds.
-  function contentZoomMotion(){
-    if(reduceMotion) return;
-    document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => applyZoom(el, 0.94, null, 0.7));
-    document.querySelectorAll(".chapter-title, .entry-title").forEach(el => applyZoom(el, 0.88, null, 0.55));
-    document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => applyZoom(el, 0.95, null, 0.5));
-    document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, null, 0.5));
-    document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, null, 0.55));
   }
 
   // the rail is a sticky column, not a fixed overlay, so it scrolls together with the

@@ -4,8 +4,9 @@
 
 `index.html` is a full-bleed storymap — every hero, chapter cover, and entry is a true
 full-screen (100vh) slide with its background image/GIF/video filling the entire viewport
-edge-to-edge at full opacity, arriving with a Google Earth-style zoom as you scroll, not a
-static boxed layout. It ships with a real blue-green infrastructure case study ("How Does
+edge-to-edge, arriving with a slow, gentle cross-dissolve as you scroll — the same crossfade
+used between Scroll Sequence steps — not a static boxed layout. It ships with a real
+blue-green infrastructure case study ("How Does
 Water Move Through the City?" — Tujunga Wash Greenway, Copenhagen's Cloudburst Management
 Plan, and the Bengaluru Dialogue) so you can see the template in use, and you can reshape it
 for any other chapter-based case-study or narrative content.
@@ -62,9 +63,10 @@ to that green; you can still pick any color per annotation from its toolbar's co
   - **Full Background** — the classic entry: full-bleed image/GIF/video behind the text,
     with a mix of **text blocks** (Heading, Subheading, Body, Pull quote, Caption — pick
     font, size, alignment, color per block) and **inline media blocks** — additional
-    images/GIFs/videos dropped into the same text flow as smaller inset cards, with their own
-    caption. New blocks lay out left to right, side by side, wrapping to a new row only when
-    they run out of horizontal space — not stacked one under another.
+    images/GIFs/videos dropped into the same text flow, with their own caption. Blocks stack
+    in a single narrow column pinned to the left edge (each one already reads as its own
+    card), leaving most of the screen clear for the image/video behind them, rather than text
+    spreading across most of the frame — the title above the blocks keeps its own wider width.
   - **Section Intro** — a simpler, centered divider page: full-bleed background plus a
     heading and a line of text, no block grid — good for introducing a sub-section
     mid-chapter without the weight of a full entry. It also carries an optional short **hint**
@@ -135,12 +137,11 @@ to that green; you can still pick any color per annotation from its toolbar's co
 - A small original brand mascot — a cyan/yellow water-drop blob character — appears in a few
   spots: bobbing in the hero's corner, as the popup box's hover tab, and in the footer.
 - Sections don't scroll past each other — each full-bleed slide (hero, chapter cover, entry)
-  pins in place at the top of the viewport, and the next one arrives zoomed way out (tiny
-  and distant, like a location seen from orbit) and grows to fill the whole screen as you
-  keep scrolling, zooming in on top of whichever slide is still pinned underneath it —
-  a Google Earth-style dive into each section instead of a hard cut or a plain scroll past.
-  Background media is never dimmed or faded during this — only scale changes, so a video or
-  GIF background stays fully visible and readable throughout the whole arrival.
+  pins in place at the top of the viewport, and the next one slowly cross-dissolves in on top
+  of whichever slide is still pinned underneath it as you keep scrolling — the exact same
+  gentle crossfade used between Scroll Sequence steps, everywhere in the dashboard, instead of
+  a hard cut or a plain scroll past. Everything inside a slide — title, text, media — arrives
+  together as one unit; nothing scales or zooms independently anymore.
 - **A section holds until its background media is done.** If a chapter cover or entry's
   full-bleed background is a video or GIF, scrolling forward into the *next* section is held
   back until that media finishes — an uploaded/linked video auto-detects its own length; a
@@ -149,14 +150,12 @@ to that green; you can still pick any color per annotation from its toolbar's co
   seconds, editable per media). Scrolling *back* up is always free, the very last section
   never holds, and jumping via the timeline rail always overrides the hold — so nothing is
   ever unreachable. Background video always autoplays muted so it can actually play.
-- Within that, the section's content still has its own layered zoom: its content wrapper,
-  title, each text block, and each inline media card all scale in at their own pace and
-  transform-origin as they scroll into place, driven live by scroll position (not a one-time
-  reveal) so it's fully smooth and reversible in both scroll directions. Text/UI chrome still
-  fades in as it arrives; every media element (background or inline) stays at full opacity.
-- Every media layer moves with scroll: the smaller inline media-overlay images/GIFs inside
-  the text flow get their own independent, subtler scroll-linked drift on top of the
-  section-level zoom.
+- The crossfade is driven live by scroll position (not a one-time reveal), so it's fully
+  smooth and reversible in both scroll directions, just like scrolling back up through a
+  Scroll Sequence steps back through its images.
+- Inline media-overlay images/GIFs inside the text flow still get their own small, independent
+  scroll-linked drift (a subtle pan/scale as you read past them) on top of the section-level
+  crossfade.
 - Scrolling with a mouse wheel/trackpad glides between sections with inertia — each tick eases
   the page toward its target position over several frames instead of jumping straight there.
   Keyboard, scrollbar, and touch scrolling stay native.
