@@ -161,11 +161,7 @@
   .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
     font-weight:700;color:rgba(255,255,255,.8);}
   .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:rgba(255,255,255,.88);margin-bottom:10px;}
-  .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--bg);
-    border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(13,191,219,.4);
-    animation:bob 2.2s ease-in-out infinite;transition:transform .15s ease;}
-  .hero-scrolldown-btn:hover{transform:scale(1.08);}
-  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+  .hero-dive-in-btn{margin-top:0;}
 
   @media (max-width: 860px){
     .hero-logos{gap:14px;}
@@ -706,7 +702,7 @@
       <div class="hero-scrolldown">
         <div class="hero-scrolldown-label" data-editable data-bind-type="meta" data-field="scrollLabel" contenteditable="false"></div>
         <div class="hero-scrolldown-cue" data-editable data-bind-type="meta" data-field="scrollCue" contenteditable="false"></div>
-        <button class="hero-scrolldown-btn" id="heroScrollBtn" type="button" aria-label="Scroll down">⌄</button>
+        <button class="entry-intro-cta hero-dive-in-btn" id="heroScrollBtn" type="button">DIVE IN ↓</button>
       </div>
     </div>
   </section>
@@ -2025,7 +2021,6 @@
           <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
           <div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>
           <div class="entry-hint${entry.hint ? "" : " edit-only"}" data-editable data-bind-type="entryHint" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.hint || "")}</div>
-          <button type="button" class="entry-intro-cta" data-act="introDiveIn" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">Dive In ↓</button>
         </div>
       </section>`;
   }
@@ -2435,10 +2430,6 @@
       if(editOn){ openRailRename("entry", btn.dataset.chapterId, btn.dataset.id); return; }
       releaseGate(); // an explicit rail jump always overrides the section-hold
       document.getElementById("entry-" + btn.dataset.id)?.scrollIntoView({behavior:"smooth", block:"start"});
-    } else if(act === "introDiveIn"){
-      if(editOn) return;
-      releaseGate();
-      scrollToNextSlide(document.getElementById("entry-" + btn.dataset.entryId));
     } else if(act === "toggleChapter"){
       if(editOn){ openRailRename("chapter", btn.dataset.chapterId, null); return; }
       const wrap = railChapters.querySelector(`.rail-chapter[data-chapter-id="${cssEscape(btn.dataset.chapterId)}"]`);
@@ -2683,14 +2674,6 @@
     gateReady = true;
     scrollCeiling = Infinity;
     if(setSmoothCeiling) setSmoothCeiling(Infinity);
-  }
-  // used by the Section Intro page's "Dive In" button: advance straight to whatever full-bleed
-  // slide (hero/chapter-cover/entry) comes right after this one in the stacked scroll order
-  function scrollToNextSlide(fromEl){
-    if(!fromEl) return;
-    const slides = Array.from(document.querySelectorAll(".hero, .chapter-cover, .entry"));
-    const next = slides[slides.indexOf(fromEl) + 1];
-    if(next) next.scrollIntoView({behavior:"smooth", block:"start"});
   }
   function getSlideBackgroundMedia(slide){
     if(slide.id === "hero") return state.meta.heroMedia;

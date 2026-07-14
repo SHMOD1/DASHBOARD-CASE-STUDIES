@@ -19,11 +19,13 @@ and ask for it to be baked in that way again.
 
 **Opening cover:** the hero is a distinct, centered "presented by" title page — a logo row
 (add/remove/replace each logo image in Edit Mode), a "Presents" label, the big title and
-subtitle, and a "Scroll down" prompt with a circular button, all on a solid brand-blue
-(`#005BA6`) backdrop with white text. It ships with placeholder logo badges and an abstract
-pale-line background graphic (both clearly marked as placeholders) so you can drop in your
-own branding and cover image. This styling is scoped only to the opening hero — every
-chapter cover and entry keeps its own full-bleed, bottom-left layout untouched.
+subtitle, a "Scroll down" prompt, and a **"Dive In" button** (green pill, blue text/border)
+that smooth-scrolls straight to the first chapter — all on a solid brand-blue (`#005BA6`)
+backdrop with white text. It ships with placeholder logo badges and an abstract pale-line
+background graphic (both clearly marked as placeholders) so you can drop in your own
+branding and cover image. This styling — and the Dive In button — is scoped only to the
+opening hero; every chapter cover and entry keeps its own full-bleed, bottom-left layout
+untouched, and Section Intro pages carry just their optional hint line, no button.
 
 **Brand system (from the client's "Campaign Branding Guidelines" deck):**
 - Colors are the exact documented hex values — Primary: `#0DBFDB` (cyan), `#005BA6` (blue),
@@ -66,9 +68,8 @@ to that green; you can still pick any color per annotation from its toolbar's co
   - **Section Intro** — a simpler, centered divider page: full-bleed background plus a
     heading and a line of text, no block grid — good for introducing a sub-section
     mid-chapter without the weight of a full entry. It also carries an optional short **hint**
-    line (e.g. "Click and hold to enlarge any image") in a small green pill, and a **"Dive
-    In"** button that smooth-scrolls straight to the next slide — a clear, deliberate way to
-    start the section instead of just reading past a title.
+    line (e.g. "Click and hold to enlarge any image") in a small green pill — the "Dive In"
+    button lives only on the opening hero (see "Opening cover" above), not on every intro page.
   - **Grid** — every block on the page, text or media alike, snaps into an even N-per-row
     grid instead of the freeform flow the other types use — pick 2, 3, or 4 columns per row
     from a control in the page's toolbar. A media block set to "Full width" still breaks out
