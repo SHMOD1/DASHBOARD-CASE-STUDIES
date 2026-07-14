@@ -260,10 +260,9 @@
   .position-popup{
     position:fixed;left:24px;bottom:26px;z-index:56;
     display:flex;align-items:center;gap:10px;
-    background:rgba(246,236,214,.92);color:var(--ink);
-    border:1px solid rgba(65,60,63,.18);border-radius:30px;
-    padding:9px 18px 9px 12px;box-shadow:0 14px 34px rgba(65,50,20,.22);
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    background:#53b94e;color:#005ba6;
+    border:2px solid #46a341;border-radius:12px;
+    padding:9px 18px 9px 12px;box-shadow:5px 5px 0 #134370;
     opacity:0;transform:translateY(10px) scale(.94);
     transition:opacity .3s ease, transform .3s ease;
     pointer-events:none;max-width:min(80vw, 360px);
@@ -271,13 +270,13 @@
   .position-popup.visible{opacity:1;transform:translateY(0) scale(1);}
   .position-popup.pop{animation:popupPop .5s cubic-bezier(.34,1.56,.64,1);}
   @keyframes popupPop{0%{transform:translateY(6px) scale(.9);}55%{transform:translateY(-3px) scale(1.05);}100%{transform:translateY(0) scale(1);}}
-  [data-theme="dark"] .position-popup{background:rgba(28,24,18,.9);color:#f6ecdc;border-color:rgba(246,236,214,.16);}
-  [data-theme="dark"] .position-popup-chapter{color:#61c9e1;}
+  [data-theme="dark"] .position-popup{background:#53b94e;color:#005ba6;border-color:#46a341;}
+  [data-theme="dark"] .position-popup-chapter{color:#134370;}
   .position-popup-drop{font-size:16px;line-height:1;animation:dropBob 2.4s ease-in-out infinite;}
   @keyframes dropBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
   .position-popup-text{display:flex;flex-direction:column;gap:1px;min-width:0;}
-  .position-popup-chapter{font-family:var(--font-body);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:#005ba6;font-weight:700;}
-  .position-popup-entry{font-family:var(--font-main);font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .position-popup-chapter{font-family:var(--font-body);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:#134370;font-weight:700;}
+  .position-popup-entry{font-family:var(--font-main);font-size:13.5px;font-weight:700;color:#005ba6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   @media (max-width: 860px){
     .position-popup{left:14px;right:70px;bottom:16px;max-width:none;padding:8px 14px 8px 10px;}
@@ -2443,6 +2442,7 @@
     const activeEntryId = updateActiveEntry();
     const activeChapterId = updateActiveChapterAccent();
     updatePositionPopup(activeChapterId, activeEntryId);
+    updateCalloutAutoOpen();
     updateRailSync();
     slideMotion();
     blockMediaMotion();
@@ -2497,6 +2497,43 @@
       el.classList.toggle("active", el.dataset.chapterId === activeChapterId);
     });
     return activeChapterId;
+  }
+
+  // the popup box (mascot tab, top-left of each slide) auto-opens a couple seconds after its
+  // slide becomes the active one, no hover/click needed — only for boxes we opened ourselves,
+  // so a box the visitor already opened/closed by hand is left exactly as they set it
+  function getActiveSlideEl(){
+    const viewportMid = window.innerHeight * 0.42;
+    let active = document.querySelector(".hero");
+    document.querySelectorAll(".hero, .chapter-cover, .entry").forEach(el => {
+      const r = el.getBoundingClientRect();
+      if(r.top - viewportMid <= 0) active = el;
+    });
+    return active;
+  }
+  let calloutAutoTimer = null;
+  let lastCalloutSlideEl = null;
+  const autoOpenedCallouts = new WeakSet();
+  function updateCalloutAutoOpen(){
+    const activeSlideEl = getActiveSlideEl();
+    if(activeSlideEl === lastCalloutSlideEl) return;
+    if(lastCalloutSlideEl){
+      const prevBox = lastCalloutSlideEl.querySelector(".callout-box");
+      if(prevBox && autoOpenedCallouts.has(prevBox)){
+        prevBox.classList.remove("open");
+        autoOpenedCallouts.delete(prevBox);
+      }
+    }
+    lastCalloutSlideEl = activeSlideEl;
+    if(calloutAutoTimer) clearTimeout(calloutAutoTimer);
+    calloutAutoTimer = setTimeout(() => {
+      if(getActiveSlideEl() !== activeSlideEl) return;
+      const box = activeSlideEl.querySelector(".callout-box");
+      if(box && !box.classList.contains("open")){
+        box.classList.add("open");
+        autoOpenedCallouts.add(box);
+      }
+    }, 2500);
   }
 
   // a small "you are here" chip that pops up fresh whenever the active chapter/entry changes,

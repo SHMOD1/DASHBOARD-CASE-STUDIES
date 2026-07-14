@@ -94,15 +94,18 @@ already set for them).
   pans vertically in lockstep with the page's scroll position, so the timeline visibly scrolls
   together with the sections rather than sitting static. The active chapter's accent color
   washes across the progress fill and pull-quote borders as you scroll.
-- A small "you are here" popup (bottom-left) pops up fresh with a droplet icon whenever the
+- A small "you are here" chip (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
-  no further scrolling.
+  no further scrolling — styled as a green (`#53B94E`) button with bold blue (`#005BA6`) text
+  and a hard, offset dark-navy (`#134370`) drop shadow.
 - The hero, every chapter cover, and every entry can carry an **optional popup box** hugging
-  the left edge — a small round mascot tab that reveals a brand-blue (`#005BA6`) card with
-  white text on hover (or tap/focus), for a free-form note plus an optional image/GIF,
-  separate from the main text and inline media blocks. It's off by default; add one with
-  **+ Add popup box**, edit its text and swap its image the same way as everywhere else, and
-  remove it any time with the ✕.
+  the top-left edge — a small round mascot tab that reveals a brand-blue (`#005BA6`) card with
+  white text, for a free-form note plus an optional image/GIF, separate from the main text and
+  inline media blocks. It opens on hover (or tap/focus) same as before, and now also **opens
+  itself automatically** a couple of seconds after its slide becomes the active one — so a
+  visitor who never hovers still sees it — while leaving alone any box a visitor has already
+  opened or closed by hand. It's off by default; add one with **+ Add popup box**, edit its
+  text and swap its image the same way as everywhere else, and remove it any time with the ✕.
 - Every image/video/GIF — the hero, a chapter cover, an entry's full-bleed background, or an
   inline media block — can carry **draggable text-box annotations** pinned directly onto it,
   the way a scrollytelling infographic labels a photo. In Edit Mode, click **+ Text Box** to
