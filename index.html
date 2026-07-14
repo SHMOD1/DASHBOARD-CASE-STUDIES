@@ -513,14 +513,18 @@
   .add-between, .add-entry-chapter{
     display:none;gap:10px;color:var(--ink-faint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;
     align-items:center;padding:14px 7%;background:var(--paper);border-bottom:1px solid var(--line);
+    position:relative;z-index:250;
   }
+  /* these sit in normal document flow between two full-bleed sticky slides — without a
+     z-index above the slide stack (see slideMotion's z-index assignment), a slide mid-zoom
+     can visually cover this row even while it's within the viewport */
   body.edit-on .add-between, body.edit-on .add-entry-chapter{display:flex;}
   .add-between::before,.add-between::after,.add-entry-chapter::before{content:"";flex:1;height:1px;background:var(--line);}
   .add-between button, .add-entry-chapter button{background:var(--bg);border:1px solid var(--line-strong);padding:5px 12px;
     border-radius:14px;color:var(--ink-soft);white-space:nowrap;}
   .add-between button:hover, .add-entry-chapter button:hover{border-color:var(--accent-live);color:var(--accent-live);}
 
-  .add-chapter-row{display:none;justify-content:center;padding:26px;background:var(--paper);}
+  .add-chapter-row{display:none;justify-content:center;padding:26px;background:var(--paper);position:relative;z-index:250;}
   body.edit-on .add-chapter-row{display:flex;}
   .add-chapter-row button{background:var(--bg);border:1px dashed var(--line-strong);padding:10px 20px;border-radius:22px;
     color:var(--ink-soft);font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
