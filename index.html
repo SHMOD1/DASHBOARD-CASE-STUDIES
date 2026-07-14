@@ -991,8 +991,8 @@
       entry.hint = "";
     } else if(pageType === "sequence"){
       entry.sequence = [
-        { id:newId(), media:{ kind:"image", src:placeholder(s, "1"), embed:false }, text:"" },
-        { id:newId(), media:{ kind:"image", src:placeholder(s + 1, "2"), embed:false }, text:"" }
+        { id:newId(), media:{ kind:"image", src:placeholder(s, "1"), embed:false }, text:"", annotations:[] },
+        { id:newId(), media:{ kind:"image", src:placeholder(s + 1, "2"), embed:false }, text:"", annotations:[] }
       ];
     }
     return entry;
@@ -1697,6 +1697,7 @@
         if(!entry.sequence) entry.sequence = [];
         if(entry.pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
         if(entry.pageType === "intro" && entry.hint == null) entry.hint = "";
+        entry.sequence.forEach(step => { if(!step.annotations) step.annotations = []; });
       });
     });
     return data;
@@ -2070,6 +2071,7 @@
     return `
       <div class="sequence-step${i === 0 ? " active" : ""}" data-step-id="${step.id}" data-index="${i}">
         <div class="media-fill" data-media-scope="sequenceStep" ${idAttrs}>${mediaMarkup(step.media, true)}</div>
+        <div class="annotation-layer">${renderAnnotationItems("sequenceStep", chapter.id, entry.id, step.id, step.annotations)}</div>
         <div class="sequence-step-index">${i + 1} / ${total}</div>
         <div class="sequence-step-toolbar">
           <button type="button" data-act="moveSequenceStep" data-dir="-1" ${idAttrs}>↑</button>
@@ -2090,7 +2092,7 @@
     if(!entry) return;
     if(!entry.sequence) entry.sequence = [];
     const n = entry.sequence.length;
-    entry.sequence.push({ id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), String(n+1)), embed:false }, text:"" });
+    entry.sequence.push({ id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), String(n+1)), embed:false }, text:"", annotations:[] });
     saveState(); render();
   }
   function moveSequenceStep(chapterId, entryId, stepId, dir){
@@ -2209,8 +2211,8 @@
     if(pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
     if(pageType === "sequence" && (!entry.sequence || !entry.sequence.length)){
       entry.sequence = [
-        { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "1"), embed:false }, text:"" },
-        { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "2"), embed:false }, text:"" }
+        { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "1"), embed:false }, text:"", annotations:[] },
+        { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "2"), embed:false }, text:"", annotations:[] }
       ];
     }
     saveState(); render();
@@ -2264,6 +2266,7 @@
     if(scope === "chapterCover") return getChapter(chapterId);
     if(scope === "entry" || scope === "entryMedia") return getEntry(chapterId, entryId);
     if(scope === "blockMedia") return getBlock(chapterId, entryId, blockId);
+    if(scope === "sequenceStep") return getSequenceStep(chapterId, entryId, blockId);
     return null;
   }
   function addCallout(scope, chapterId, entryId){

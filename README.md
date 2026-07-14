@@ -82,7 +82,13 @@ to that green; you can still pick any color per annotation from its toolbar's co
     them the same way. It's built on the same section-hold mechanism as background
     video/GIF (see below), just gated on "every image shown" instead of "media finished."
     This wheel-driven stepping only applies to mouse/trackpad scrolling — keyboard, scrollbar,
-    and touch scrolling pass straight through to the next page instead of stepping.
+    and touch scrolling pass straight through to the next page instead of stepping. Each step
+    can also carry its own **draggable text-box annotations** (**+ Text Box**), the same
+    movable, styleable labels available everywhere else — pinned to that one step, so a label
+    only shows up while its image is the one on screen.
+    In Edit Mode, every step in a Scroll Sequence page is shown stacked, one below another —
+    that's deliberate, so you can see and edit each one at once; it's only on the published
+    page that each new image replaces the last instead of scrolling past it.
 - The timeline is a **thin strip** (~90px) that sits **in the normal page flow** next to the
   chapters/entries column and sticks to the top of the viewport as you scroll — it's part of
   the page, not a floating overlay, and releases/scrolls away naturally once you pass the
