@@ -84,12 +84,12 @@ to that green; you can still pick any color per annotation from its toolbar's co
     photo — so the picture stays a clear focal point and any annotation text on it stays
     easy to read. Add images with **+ Add image**, give each one its own text, and
     reorder/remove them from each step's toolbar. On the published page, scrolling into a
-    Scroll Sequence page steps through its images one at a time, slowly cross-dissolving each
-    into the next (like a looping GIF) rather than cutting — the page holds in place and
-    *won't* advance to the next chapter/entry until every image has been shown; scrolling back
-    up steps back through them the same way. It's built on the same section-hold mechanism as
-    background video/GIF (see below), just gated on "every image shown" instead of
-    "media finished."
+    Scroll Sequence page steps through its images one at a time, each one instantly and
+    completely replacing the last — no fade or overlap between them — while the page holds
+    in place and *won't* advance to the next chapter/entry until every image has been shown;
+    scrolling back up steps back through them the same way. It's built on the same
+    section-hold mechanism as background video/GIF (see below), just gated on "every image
+    shown" instead of "media finished."
     This wheel-driven stepping only applies to mouse/trackpad scrolling — keyboard, scrollbar,
     and touch scrolling pass straight through to the next page instead of stepping. Each step
     can also carry its own **draggable text-box annotations** (**+ Text Box**), the same
@@ -156,8 +156,8 @@ to that green; you can still pick any color per annotation from its toolbar's co
 - This reveal is driven live by scroll position (not a one-time animation), so it's fully
   reversible — scrolling back up uncovers the previous section exactly the way it came, the
   same way scrolling back up through a Scroll Sequence steps back through its images (which
-  still cross-dissolve between each other — that per-step crossfade is unchanged, it's only
-  the section-to-section transition that's a clean, opaque reveal now).
+  swap instantly too, same as this — nothing in the dashboard fades/blends between two
+  sections or images anymore, at any point).
 - Inline media-overlay images/GIFs inside the text flow still get their own small, independent
   scroll-linked drift (a subtle pan/scale as you read past them).
 - Scrolling with a mouse wheel/trackpad glides between sections with inertia — each tick eases

@@ -353,13 +353,12 @@
   .entry[data-page-type="grid"] .add-block-row{grid-column:1/-1;}
 
   /* ---------- page type (c) Scroll Sequence: a stack of steps, one visible at a time,
-     slowly cross-dissolved by JS (like a looping GIF) as the reader scrolls through them —
-     on a plain solid-blue field rather than a busy full-bleed photo, so a step's own image
-     stays a clear, centered focal point and any annotation text on it reads easily; each
-     step carries its own optional caption text ---------- */
+     switched instantly by JS as the reader scrolls through them — never blended/overlapping
+     with the step before or after it — on a plain solid-blue field rather than a busy
+     full-bleed photo, so a step's own image stays a clear, centered focal point and any
+     annotation text on it reads easily; each step carries its own optional caption text */
   .sequence-steps{position:absolute;inset:0;}
-  .sequence-step{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 1.1s ease-in-out;
-    background:#005ba6;}
+  .sequence-step{position:absolute;inset:0;opacity:0;pointer-events:none;background:#005ba6;}
   .sequence-step.active{opacity:1;pointer-events:auto;z-index:1;}
   /* the image/GIF/video sits centered and large, at its own natural shape (never cropped) —
      the plain blue field around it is what stays constant, so only the picture changes */
