@@ -2662,11 +2662,11 @@
     popupHideTimer = setTimeout(() => popup.classList.remove("visible"), 2600);
   }
 
-  /* every hero / chapter cover / entry is a full-bleed "slide" that arrives with a slow,
-     gentle cross-dissolve as it scrolls into place — the same crossfade used between Scroll
-     Sequence steps — then holds at full opacity until the next slide fades in on top of it.
-     Everything inside a slide (title, text blocks, media) fades in as one unit along with it,
-     rather than animating separately. */
+  /* every hero / chapter cover / entry is a full-bleed "slide", stacked by DOM order via
+     z-index — as you scroll, the next slide rises up and covers whichever one is still
+     pinned underneath it. Slides stay at full opacity throughout (no fade/ghosting where
+     you'd see two sections blended together) — the smoothness comes entirely from the
+     inertia-eased wheel scroll (see below), not from any opacity transition. */
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function slideProgress(rect){
@@ -2675,18 +2675,6 @@
     const traveled = vh - rect.top;
     return Math.min(Math.max(traveled / total, 0), 1);
   }
-  function applySlideFade(slide, r){
-    const vh = window.innerHeight;
-    let opacity;
-    if(r.top > 0){
-      opacity = Math.max(0, Math.min(1, 1 - r.top / (vh * 0.95)));
-    } else {
-      opacity = 1;
-    }
-    slide.style.opacity = opacity.toFixed(3);
-  }
-  // sections are position:sticky and stacked by DOM order (z-index), so each one zooms in
-  // on top of whichever slide is still pinned underneath it
   function slideMotion(){
     const vh = window.innerHeight;
     const slides = document.querySelectorAll(".hero, .chapter-cover, .entry");
@@ -2697,9 +2685,7 @@
       if(r.top <= 0) activeIdx = i;
       if(reduceMotion) return;
       if(r.bottom < -400 || r.top > vh + 400) return;
-      const progress = slideProgress(r);
-      slide.dataset.progress = progress.toFixed(3);
-      applySlideFade(slide, r);
+      slide.dataset.progress = slideProgress(r).toFixed(3);
     });
     updateMediaGate(slides, activeIdx < 0 ? 0 : activeIdx, vh);
   }

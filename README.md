@@ -4,8 +4,9 @@
 
 `index.html` is a full-bleed storymap — every hero, chapter cover, and entry is a true
 full-screen (100vh) slide with its background image/GIF/video filling the entire viewport
-edge-to-edge, arriving with a slow, gentle cross-dissolve as you scroll — the same crossfade
-used between Scroll Sequence steps — not a static boxed layout. It ships with a real
+edge-to-edge, each one rising cleanly into full view as you scroll — no fade, so the
+incoming slide is never blended with whatever's still visible underneath it — not a static
+boxed layout. It ships with a real
 case study, "How Does Water Move Through the City?", tracing Los Angeles's Tujunga Wash
 watershed across four chapters — the historical setting, a century of urban lake loss,
 citizen-led rainwater harvesting and groundwater recharge, and neighborhoods restoring lakes
@@ -139,11 +140,11 @@ to that green; you can still pick any color per annotation from its toolbar's co
 - A small original brand mascot — a cyan/yellow water-drop blob character — appears in a few
   spots: bobbing in the hero's corner, as the popup box's hover tab, and in the footer.
 - Sections don't scroll past each other — each full-bleed slide (hero, chapter cover, entry)
-  pins in place at the top of the viewport, and the next one slowly cross-dissolves in on top
-  of whichever slide is still pinned underneath it as you keep scrolling — the exact same
-  gentle crossfade used between Scroll Sequence steps, everywhere in the dashboard, instead of
-  a hard cut or a plain scroll past. Everything inside a slide — title, text, media — arrives
-  together as one unit; nothing scales or zooms independently anymore.
+  pins in place at the top of the viewport, and the next one rises up and covers it cleanly
+  as you keep scrolling, always at full opacity — no fade, so the incoming section is never
+  blended or ghosted with whatever's still visible underneath it. Everything inside a slide —
+  title, text, media — arrives together as one unit; nothing scales, zooms, or fades
+  independently.
 - **A section holds until its background media is done.** If a chapter cover or entry's
   full-bleed background is a video or GIF, scrolling forward into the *next* section is held
   back until that media finishes — an uploaded/linked video auto-detects its own length; a
@@ -152,12 +153,13 @@ to that green; you can still pick any color per annotation from its toolbar's co
   seconds, editable per media). Scrolling *back* up is always free, the very last section
   never holds, and jumping via the timeline rail always overrides the hold — so nothing is
   ever unreachable. Background video always autoplays muted so it can actually play.
-- The crossfade is driven live by scroll position (not a one-time reveal), so it's fully
-  smooth and reversible in both scroll directions, just like scrolling back up through a
-  Scroll Sequence steps back through its images.
+- This reveal is driven live by scroll position (not a one-time animation), so it's fully
+  reversible — scrolling back up uncovers the previous section exactly the way it came, the
+  same way scrolling back up through a Scroll Sequence steps back through its images (which
+  still cross-dissolve between each other — that per-step crossfade is unchanged, it's only
+  the section-to-section transition that's a clean, opaque reveal now).
 - Inline media-overlay images/GIFs inside the text flow still get their own small, independent
-  scroll-linked drift (a subtle pan/scale as you read past them) on top of the section-level
-  crossfade.
+  scroll-linked drift (a subtle pan/scale as you read past them).
 - Scrolling with a mouse wheel/trackpad glides between sections with inertia — each tick eases
   the page toward its target position over several frames instead of jumping straight there.
   Keyboard, scrollbar, and touch scrolling stay native.
