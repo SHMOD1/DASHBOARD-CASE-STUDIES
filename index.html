@@ -3394,10 +3394,15 @@
     if(!m) return null;
     return { mime: m[1], base64: m[2] };
   }
+  // Hashes the base64 TEXT directly rather than decoding it to raw bytes first — base64 is
+  // already ASCII, so TextEncoder can turn it straight into bytes for SubtleCrypto with no
+  // atob() decode step at all. That decode (atob() to a binary string, then a manual
+  // byte-by-byte copy into a Uint8Array) was extra full-size copies of every file, on top of
+  // everything else already in memory; skipping it removes that entirely. Deterministic
+  // either way — same file content always produces the same hash — so this is safe to change
+  // without orphaning or duplicating anything already pushed under the old scheme.
   async function shortHashOfBase64(base64){
-    const binary = atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    const bytes = new TextEncoder().encode(base64);
     const digest = await crypto.subtle.digest("SHA-256", bytes);
     return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,"0")).join("").slice(0, 10);
   }
