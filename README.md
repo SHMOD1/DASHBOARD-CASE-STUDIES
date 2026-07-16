@@ -52,9 +52,10 @@ backdrop. Every other text block type — Subheading, Body, Pull quote, and Capt
 one plain cream (`#F8F3EF`) card look with dark text, so a page's text reads as a stack of
 plain white cards under its blue heading, not a wall of color. Pull quotes keep a large
 decorative opening quotation mark; captions/citations stay italic. Draggable text-box
-annotations use dark green (`#155724`) text, tightly padded, on a solid yellow (`#FFDE17`)
-highlight — chosen for readable contrast against that yellow. Newly-added annotations default
-to that green; you can still pick any color per annotation from its toolbar's color swatch.
+annotations use brand-blue (`#005BA6`) text, tightly padded, on a solid yellow (`#FFDE17`)
+highlight — the same blue used everywhere else, kept readable against that yellow. Newly-added
+annotations default to that blue (as does the "Stat Chip" preset's green pill); you can still
+pick any color per annotation from its toolbar's color swatch.
 
 **Structure:**
 - A full-screen hero, then any number of **chapters** — each with its own full-bleed cover

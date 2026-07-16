@@ -466,7 +466,7 @@
   }
   body.edit-on .annotation{pointer-events:auto;}
   .annotation-text{
-    background:#ffde17;color:#155724;border-radius:3px;padding:1px 5px;text-shadow:none;
+    background:#ffde17;color:#005ba6;border-radius:3px;padding:1px 5px;text-shadow:none;
     line-height:1.35;word-break:break-word;font-weight:700;
   }
   /* "Stat Chip" preset — a small rounded pill for a short number/label overlaid on media,
@@ -1064,7 +1064,7 @@
         "size": "S",
         "bold": true,
         "italic": false,
-        "color": "#155724"
+        "color": "#005ba6"
       },
       {
         "id": "id8vi4j8c",
@@ -1075,7 +1075,7 @@
         "size": "M",
         "bold": true,
         "italic": false,
-        "color": "#155724"
+        "color": "#005ba6"
       },
       {
         "id": "id3and48t",
@@ -1086,7 +1086,7 @@
         "size": "M",
         "bold": true,
         "italic": false,
-        "color": "#155724"
+        "color": "#005ba6"
       },
       {
         "id": "iddnu55no",
@@ -1097,7 +1097,7 @@
         "size": "S",
         "bold": true,
         "italic": false,
-        "color": "#155724"
+        "color": "#005ba6"
       }
     ]
   },
@@ -1220,7 +1220,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             },
             {
               "id": "idwm8drd9",
@@ -1231,7 +1231,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             },
             {
               "id": "idjkzbmy1",
@@ -1242,7 +1242,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             },
             {
               "id": "idvtwu2c0",
@@ -1253,7 +1253,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             },
             {
               "id": "id33l7ik7",
@@ -1264,7 +1264,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             },
             {
               "id": "idyci7i0y",
@@ -1275,7 +1275,7 @@
               "size": "L",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             },
             {
               "id": "idvz8wdir",
@@ -1286,7 +1286,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             }
           ],
           "callout": null,
@@ -1437,7 +1437,7 @@
               "size": "M",
               "bold": true,
               "italic": false,
-              "color": "#155724"
+              "color": "#005ba6"
             }
           ],
           "blocks": [
@@ -1921,7 +1921,7 @@
     const owner = sectionOwner(scope, chapterId, entryId, blockId);
     if(!owner) return;
     if(!owner.annotations) owner.annotations = [];
-    owner.annotations.push({ id:newId(), x:50, y:50, text:"New label", font:FONT_OPTIONS[1].value, size:"M", bold:false, italic:false, color:"#155724" });
+    owner.annotations.push({ id:newId(), x:50, y:50, text:"New label", font:FONT_OPTIONS[1].value, size:"M", bold:false, italic:false, color:"#005ba6" });
     saveState(); render();
   }
   function deleteAnnotation(scope, chapterId, entryId, blockId, annotationId){
@@ -1937,7 +1937,7 @@
   }
   function renderAnnotation(a, idAttrs){
     const px = ANNOTATION_SIZE_PX[a.size] || ANNOTATION_SIZE_PX.M;
-    const textStyle = `font-family:${a.font};font-size:${px}px;color:${a.color || "#155724"};font-weight:${a.bold ? 700 : 400};font-style:${a.italic ? "italic" : "normal"};`;
+    const textStyle = `font-family:${a.font};font-size:${px}px;color:${a.color || "#005ba6"};font-weight:${a.bold ? 700 : 400};font-style:${a.italic ? "italic" : "normal"};`;
     const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===a.font?"selected":""}>${f.label}</option>`).join("");
     const optSizes = ["S","M","L"].map(s => `<option value="${s}" ${s===a.size?"selected":""}>${s}</option>`).join("");
     const chipClass = a.chip === "stat" ? " chip-stat" : "";
@@ -1953,7 +1953,7 @@
           <select data-act="annoStyle" data-field="size" data-annotation-id="${a.id}" ${idAttrs}>${optSizes}</select>
           <button type="button" data-act="annoFormat" data-cmd="bold" data-annotation-id="${a.id}" ${idAttrs}><b>B</b></button>
           <button type="button" data-act="annoFormat" data-cmd="italic" data-annotation-id="${a.id}" ${idAttrs}><i>I</i></button>
-          <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#155724"}">
+          <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#005ba6"}">
           <button type="button" class="danger" data-act="deleteAnnotation" data-annotation-id="${a.id}" ${idAttrs}>✕</button>
         </div>
         <div class="annotation-text${chipClass}" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "")}</div>
@@ -1965,7 +1965,7 @@
     const px = ANNOTATION_SIZE_PX[a.size] || ANNOTATION_SIZE_PX.M;
     el.style.fontFamily = a.font;
     el.style.fontSize = px + "px";
-    el.style.color = a.color || "#155724";
+    el.style.color = a.color || "#005ba6";
     el.style.fontWeight = a.bold ? "700" : "400";
     el.style.fontStyle = a.italic ? "italic" : "normal";
     el.classList.toggle("chip-stat", a.chip === "stat");
@@ -2429,13 +2429,12 @@
       const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
       if(a){ a.color = el.value; applyAnnotationStyle(a); saveState(); }
     } else if(el.matches('[data-act="annoChip"]')){
-      // the "Stat Chip" preset (small green pill, blue text) is a package deal like the
-      // reference site's YEAR/POPULATION callouts — switching it re-picks a text color
-      // that actually reads against the new background, same as picking any other preset
+      // both the yellow Highlight and green Stat Chip presets use the same blue text —
+      // re-applying it here keeps the color swatch in sync when switching between them
       const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
       if(a){
         a.chip = el.value;
-        a.color = el.value === "stat" ? "#005ba6" : "#155724";
+        a.color = "#005ba6";
         applyAnnotationStyle(a);
         const colorInput = el.closest(".annotation-toolbar")?.querySelector('[data-act="annoColor"]');
         if(colorInput) colorInput.value = a.color;
