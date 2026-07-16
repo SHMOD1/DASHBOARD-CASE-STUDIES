@@ -13,12 +13,12 @@ citizen-led rainwater harvesting and groundwater recharge, and neighborhoods res
 and wetlands today — so you can see the template in use, and you can reshape it for any other
 chapter-based case-study or narrative content.
 
-Open `index.html` directly in a browser — no build step or server required. The large photos
-and video used by the shipped case study live as separate files under `assets/` rather than
-embedded inline, so `index.html` itself stays small and fast to load — everything you upload
-yourself in Edit Mode still saves as an inline data URL as before (see "Editing" below), so if
-you want a future edit's large media split out into `assets/` the same way, export your JSON
-and ask for it to be baked in that way again.
+Open `index.html` directly in a browser — no build step or server required. The photos and
+video used by the shipped case study are hosted externally (currently on Cloudflare R2, via
+the "Push to GitHub" media-hosting option below) rather than embedded inline or shipped in
+this repo's own `assets/` folder, so `index.html` itself stays small and fast to load —
+everything you upload yourself in Edit Mode still saves as an inline data URL locally as you
+work (see "Editing" below) until it's pushed.
 
 **Opening cover:** the hero is a distinct, centered "presented by" title page — a logo row
 (add/remove/replace each logo image in Edit Mode), a "Presents" label, the big title and
