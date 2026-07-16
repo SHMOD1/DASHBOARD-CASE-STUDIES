@@ -104,26 +104,33 @@ pick any color per annotation from its toolbar's color swatch.
   the page, not a floating overlay, and releases/scrolls away naturally once you pass the
   last chapter. It shows just a thick, bold, flowing "water" line (animated, continuously
   drifting) connecting large water-droplet-shaped markers, on a solid dark-charcoal
-  (`#413C3F`) backdrop with bright cyan (`#0DBFDB`) glow, independent of the light/dark theme
-  toggle. Chapter/entry titles don't take up permanent space — a popup automatically shows
+  (`#413C3F`) backdrop — recolored to a green/blue combination at the client's request: the
+  riverbed line and idle droplets are brand-blue (`#306EF8`), while the flowing "water" fill
+  and the active droplet are mint-green (`#7AF9B4`) with a blue glow, independent of the
+  light/dark theme toggle. (Each chapter still keeps its own identity color — cycling through
+  the brand's cyan/blue/charcoal accents — on its chapter-head marker specifically.)
+  Chapter/entry titles don't take up permanent space — a popup automatically shows
   the title of whichever chapter/entry is currently active as you scroll, right next to its
   droplet, no hovering needed; hover a different droplet to preview its title instead, and
-  moving away goes back to showing the current section. Click any droplet to jump the main
-  scroll straight there. In Edit Mode, the rail is itself editable and reorderable: **drag**
-  any droplet to reorder chapters (drag a chapter's head) or entries (drag an entry, including
-  onto a *different* chapter to move it there), and **click** a droplet to rename its
-  chapter/entry right from the sidebar, in that same popup. Its content
-  pans vertically in lockstep with the page's scroll position, so the timeline visibly scrolls
-  together with the sections rather than sitting static. The active chapter's accent color
-  washes across the progress fill and pull-quote borders as you scroll.
+  moving away goes back to showing the current section. The popup itself uses the same
+  green/blue "sticker" treatment as the rest of the dashboard's green UI (see below). Click
+  any droplet to jump the main scroll straight there. In Edit Mode, the rail is itself
+  editable and reorderable: **drag** any droplet to reorder chapters (drag a chapter's head)
+  or entries (drag an entry, including onto a *different* chapter to move it there), and
+  **click** a droplet to rename its chapter/entry right from the sidebar, in that same popup.
+  Its content pans vertically in lockstep with the page's scroll position, so the timeline
+  visibly scrolls together with the sections rather than sitting static.
 - A small "you are here" chip (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
   no further scrolling — styled as a mint-green (`#7AF9B4`) button with bold blue (`#005BA6`)
   border/text and a hard, offset dark-navy (`#134370`) drop shadow. This same green/blue-
   border/blue-shadow "sticker" treatment is shared by every green UI element in the
-  dashboard — this chip, the hero's "Dive In" button, a Section Intro page's hint pill, and
-  the annotation toolbar's "Stat Chip" style — using `#7AF9B4` rather than the brand deck's
-  documented `#53B94E` green (see "Brand system" above) at the client's request.
+  dashboard — this chip, the hero's "Dive In" button, a Section Intro page's hint pill, the
+  annotation toolbar's "Stat Chip" style, and the rail sidebar's title popup — using
+  `#7AF9B4` rather than the brand deck's documented `#53B94E` green (see "Brand system"
+  above) at the client's request. Anywhere a background image hasn't been set yet (a chapter
+  cover or entry background), the empty-media fallback is `#306EF8` rather than the brand
+  deck's plain `#005BA6` blue, for the same reason.
 - The hero, every chapter cover, and every entry can carry an **optional popup box** hugging
   the top-left edge — a small round mascot tab that reveals a brand-blue (`#005BA6`) card with
   white text, for a free-form note plus an optional image/GIF, separate from the main text and
@@ -173,7 +180,9 @@ pick any color per annotation from its toolbar's color swatch.
 - The primary UI palette is the brand's exact hex values throughout: text and buttons in
   `#005BA6` (blue), interactive/live highlights in `#0DBFDB` (cyan), and secondary accents in
   `#413C3F` (charcoal) — including the per-chapter marker colors in the timeline, which cycle
-  through just these three. The site is locked to this one dark theme.
+  through just these three. The site is locked to this one dark theme. (The rail's flowing
+  line, idle droplets, and title popup use the newer `#306EF8`/`#7AF9B4` green-blue combo
+  described above instead of the cyan.)
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
