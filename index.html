@@ -255,8 +255,8 @@
   .position-popup{
     position:fixed;left:24px;bottom:26px;z-index:56;
     display:flex;align-items:center;gap:10px;
-    background:#53b94e;color:#005ba6;
-    border:2px solid #46a341;border-radius:12px;
+    background:#7af9b4;color:#005ba6;
+    border:2px solid #005ba6;border-radius:12px;
     padding:9px 18px 9px 12px;box-shadow:5px 5px 0 #134370;
     opacity:0;transform:translateY(10px) scale(.94);
     transition:opacity .3s ease, transform .3s ease;
@@ -265,7 +265,7 @@
   .position-popup.visible{opacity:1;transform:translateY(0) scale(1);}
   .position-popup.pop{animation:popupPop .5s cubic-bezier(.34,1.56,.64,1);}
   @keyframes popupPop{0%{transform:translateY(6px) scale(.9);}55%{transform:translateY(-3px) scale(1.05);}100%{transform:translateY(0) scale(1);}}
-  [data-theme="dark"] .position-popup{background:#53b94e;color:#005ba6;border-color:#46a341;}
+  [data-theme="dark"] .position-popup{background:#7af9b4;color:#005ba6;border-color:#005ba6;}
   [data-theme="dark"] .position-popup-chapter{color:#134370;}
   .position-popup-drop{font-size:16px;line-height:1;animation:dropBob 2.4s ease-in-out infinite;}
   @keyframes dropBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
@@ -320,17 +320,19 @@
      button that jumps straight to the next slide, so an intro page gives a reader a clear
      way to start, not just a title to read past */
   .entry-hint{
-    display:inline-block;background:#53b94e;color:#134370;font-family:var(--font-body);
+    display:inline-block;background:#7af9b4;color:#134370;font-family:var(--font-body);
     font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:6px 14px;border-radius:6px;
     margin-top:14px;text-shadow:none;min-width:40px;min-height:1em;
+    border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;
   }
   .entry-intro-cta{
-    display:inline-block;margin-top:22px;background:#53b94e;color:#005ba6;font-family:var(--font-main);
+    display:inline-block;margin-top:22px;background:#7af9b4;color:#005ba6;font-family:var(--font-main);
     font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
     border:2px solid #005ba6;border-radius:24px;padding:12px 30px;cursor:pointer;
+    box-shadow:4px 4px 0 #134370;
     transition:transform .15s ease, background .15s ease;
   }
-  .entry-intro-cta:hover{transform:translateY(-2px) scale(1.03);background:#63c95c;}
+  .entry-intro-cta:hover{transform:translateY(-2px) scale(1.03);background:#95fbc4;}
 
   /* page type (b) Full Background — text blocks stack in a narrow card column pinned to the
      true left edge (not centered, even on wide screens) so most of the frame stays clear for
@@ -469,7 +471,8 @@
   }
   /* "Stat Chip" preset — a small rounded pill for a short number/label overlaid on media,
      like a "YEAR: 1854" callout, as distinct from the longer highlighter-marker style above */
-  .annotation-text.chip-stat{background:#53b94e;border-radius:20px;padding:3px 14px;}
+  .annotation-text.chip-stat{background:#7af9b4;border-radius:20px;padding:3px 14px;
+    border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;}
   body.edit-on .annotation-text{outline:1px dashed rgba(0,0,0,.45);outline-offset:2px;cursor:text;}
   .annotation-drag-handle{
     display:none;flex:0 0 auto;cursor:grab;color:#fff;font-size:13px;letter-spacing:-2px;

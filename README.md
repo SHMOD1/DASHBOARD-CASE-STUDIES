@@ -117,8 +117,12 @@ to that green; you can still pick any color per annotation from its toolbar's co
   washes across the progress fill and pull-quote borders as you scroll.
 - A small "you are here" chip (bottom-left) pops up fresh with a droplet icon whenever the
   active chapter/entry changes as you scroll, then fades out after a couple of seconds of
-  no further scrolling — styled as a green (`#53B94E`) button with bold blue (`#005BA6`) text
-  and a hard, offset dark-navy (`#134370`) drop shadow.
+  no further scrolling — styled as a mint-green (`#7AF9B4`) button with bold blue (`#005BA6`)
+  border/text and a hard, offset dark-navy (`#134370`) drop shadow. This same green/blue-
+  border/blue-shadow "sticker" treatment is shared by every green UI element in the
+  dashboard — this chip, the hero's "Dive In" button, a Section Intro page's hint pill, and
+  the annotation toolbar's "Stat Chip" style — using `#7AF9B4` rather than the brand deck's
+  documented `#53B94E` green (see "Brand system" above) at the client's request.
 - The hero, every chapter cover, and every entry can carry an **optional popup box** hugging
   the top-left edge — a small round mascot tab that reveals a brand-blue (`#005BA6`) card with
   white text, for a free-form note plus an optional image/GIF, separate from the main text and
