@@ -3334,11 +3334,23 @@
   function githubHeaders(token){
     return { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" };
   }
+  // extracts the most useful error text available from a failed response — GitHub usually
+  // sends JSON with a .message, but proxied 5xx errors (e.g. a request body that's too
+  // large) can come back as an empty or non-JSON body, and res.statusText is often empty
+  // too since Chrome doesn't surface a reason phrase for HTTP/2 responses
+  async function githubErrorText(res){
+    const raw = await res.text().catch(() => "");
+    try{
+      const parsed = JSON.parse(raw);
+      if(parsed && parsed.message) return parsed.message;
+    }catch(e){ /* not JSON */ }
+    return raw || res.statusText || "no further detail from GitHub";
+  }
   async function githubGetFile(owner, repo, path, branch, token){
     const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
     const res = await fetch(url, { headers: githubHeaders(token) });
     if(res.status === 404) return null;
-    if(!res.ok) throw new Error(`Couldn't read ${path} (${res.status}): ${(await res.json().catch(()=>({}))).message || res.statusText}`);
+    if(!res.ok) throw new Error(`Couldn't read ${path} (${res.status}): ${await githubErrorText(res)}`);
     return res.json();
   }
   async function githubPutFile(owner, repo, path, branch, token, base64Content, message, sha){
@@ -3350,7 +3362,12 @@
       headers: { ...githubHeaders(token), "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
-    if(!res.ok) throw new Error(`Couldn't write ${path} (${res.status}): ${(await res.json().catch(()=>({}))).message || res.statusText}`);
+    if(!res.ok){
+      const sizeNote = base64Content.length > 60_000_000
+        ? " — this file is large; GitHub's Contents API tops out well under its documented 100MB limit in practice, so this is likely a size problem, not a token/permission one."
+        : "";
+      throw new Error(`Couldn't write ${path} (${res.status}): ${await githubErrorText(res)}${sizeNote}`);
+    }
     return res.json();
   }
   // walks the whole content tree and collects every {kind, src} media object whose src is
@@ -3428,6 +3445,7 @@
     // value afterward — on success or failure — so your live editing session is untouched
     // either way; only the content actually committed to GitHub uses the relative paths.
     const restoreList = [];
+    const failures = [];
     try{
       setPushStatus("Preparing content...");
       const mediaObjs = collectMediaObjects(state);
@@ -3436,14 +3454,20 @@
         setPushStatus(`Uploading media ${i+1} of ${mediaObjs.length}...`);
         const parts = dataUriParts(m.src);
         if(!parts) continue;
-        const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
-        const hash = await shortHashOfBase64(parts.base64);
-        const assetPath = `assets/push-${hash}.${ext}`;
-        const existing = await githubGetFile(owner, repo, assetPath, branch, token);
-        await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
-          `Add media asset ${hash}`, existing && existing.sha);
-        restoreList.push({ obj: m, src: m.src });
-        m.src = assetPath;
+        // one oversized or flaky file shouldn't block every other upload — record it and
+        // move on, leaving that item embedded as-is; everything else still goes through
+        try{
+          const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
+          const hash = await shortHashOfBase64(parts.base64);
+          const assetPath = `assets/push-${hash}.${ext}`;
+          const existing = await githubGetFile(owner, repo, assetPath, branch, token);
+          await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
+            `Add media asset ${hash}`, existing && existing.sha);
+          restoreList.push({ obj: m, src: m.src });
+          m.src = assetPath;
+        }catch(mediaErr){
+          failures.push(mediaErr.message);
+        }
       }
 
       setPushStatus("Fetching current index.html...");
@@ -3468,7 +3492,10 @@
       await githubPutFile(owner, repo, "index.html", branch, token, utf8ToBase64(newHtml),
         "Update dashboard content via in-app push", htmlFile.sha);
 
-      setPushStatus(`Done — pushed ${restoreList.length} media file(s) and your content to ${owner}/${repo}@${branch}.`);
+      const doneMsg = `Done — pushed ${restoreList.length} media file(s) and your content to ${owner}/${repo}@${branch}.`;
+      setPushStatus(failures.length
+        ? `${doneMsg}\n${failures.length} file(s) failed and were left as-is (not pushed) — you can retry just those separately:\n${failures.join("\n")}`
+        : doneMsg);
     }catch(err){
       setPushStatus("Error: " + err.message);
     }finally{
