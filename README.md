@@ -251,6 +251,17 @@ pick any color per annotation from its toolbar's color swatch.
   broken here unless this page happens to be served from somewhere that also serves
   `assets/` (the repo itself, or a hosted copy) — the content itself is safe on GitHub either
   way, and a normal page load afterward (e.g. from the pushed copy) shows everything intact.
+  A "Where should images/video be uploaded?" dropdown in that same modal lets you send media
+  to **Cloudflare R2** instead of this repo's `assets/` folder — a better fit once total
+  media size climbs into the hundreds of MB, since GitHub's Contents API isn't really built
+  for large binary files and starts failing unpredictably around there, while R2 handles it
+  natively. This needs a small one-time setup (a Cloudflare R2 bucket plus a Worker that
+  accepts authenticated uploads and writes them into it) that a human has to do once in the
+  Cloudflare dashboard — ask for the Worker script and setup steps. Once configured, media
+  lands as public URLs instead of relative repo paths, your content still commits to GitHub
+  as usual either way, and switching to Cloudflare on a dashboard that already pushed some
+  media to GitHub in an earlier run pulls those files back and re-uploads them to Cloudflare
+  too, so everything ends up in one place instead of split across two hosts.
 
 **Note on video embeds:** YouTube/Vimeo iframes require a live internet connection in the
 browser viewing the page — they won't load in network-sandboxed previews, only in a normal

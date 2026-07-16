@@ -800,15 +800,32 @@
   <div class="modal-backdrop" id="githubModalBackdrop">
     <div class="modal">
       <h3>Push to GitHub</h3>
-      <p class="hint">Uploads every image/video in your current content to <code>assets/</code> as its own file
-        (never one giant blob), then commits your content as this file's new default. Needs a GitHub
-        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Personal
-        Access Token</a> with write access to this one repo — it's kept only in this browser tab's session
-        storage, never sent anywhere except directly to api.github.com.</p>
+      <p class="hint">Uploads every image/video in your current content to its own file (never one giant blob),
+        then commits your content as this file's new default.</p>
       <input type="text" id="ghOwner" placeholder="Repo owner (e.g. shmod1)" />
       <input type="text" id="ghRepo" placeholder="Repo name (e.g. dashboard-case-studies)" />
       <input type="text" id="ghBranch" placeholder="Branch (e.g. claude/editable-ambassador-dashboard-on41ir)" />
       <input type="text" id="ghToken" placeholder="GitHub Personal Access Token" autocomplete="off" />
+      <p class="hint">Needs a GitHub <a href="https://github.com/settings/personal-access-tokens/new"
+        target="_blank" rel="noopener">Personal Access Token</a> with write access to this one repo — it's kept
+        only in this browser tab's session storage, never sent anywhere except directly to api.github.com.</p>
+
+      <label class="hold-label" for="mediaHostChoice">Where should images/video be uploaded?</label>
+      <select id="mediaHostChoice" style="width:100%;padding:9px 10px;border:1px solid var(--line-strong);
+        border-radius:4px;background:var(--bg);color:var(--ink);font-size:13px;margin-bottom:12px;">
+        <option value="github">This repo's assets/ folder (default)</option>
+        <option value="cloudflare">Cloudflare R2 (better for large files)</option>
+      </select>
+
+      <div id="cloudflareFields" class="field-hidden">
+        <input type="text" id="cfWorkerUrl" placeholder="Worker URL (e.g. https://your-worker.you.workers.dev)" />
+        <input type="text" id="cfSecret" placeholder="Upload secret" autocomplete="off" />
+        <p class="hint">Media is PUT directly to your Cloudflare Worker, which stores it in your R2 bucket and
+          hands back a public URL — better suited to large files than GitHub's API. Your content (text/structure)
+          still commits to GitHub as usual; only the media upload path changes. Requires a one-time Worker/R2
+          setup — ask for the setup steps if you haven't done this yet.</p>
+      </div>
+
       <div id="ghPushStatus" class="hint" style="min-height:36px;white-space:pre-line;"></div>
       <div class="modal-actions">
         <button id="ghModalCancel" type="button">Close</button>
@@ -3370,29 +3387,66 @@
     }
     return res.json();
   }
-  // walks the whole content tree and collects every {kind, src} media object whose src is
-  // still an embedded base64 data: URI, wherever it lives (hero, covers, blocks, sequence
-  // steps, callouts, logos, the mascot...) — generic on purpose, so it never needs updating
-  // when a new kind of media field gets added elsewhere in the schema. Deliberately excludes
-  // the ";utf8,"-encoded placeholder SVGs (from placeholder()/animatedPlaceholder() above) —
-  // those are tiny, procedurally generated decoration, not real uploaded content worth its
-  // own file in the repo.
+  // matches every {kind, src} media object whose src is still an embedded base64 data: URI,
+  // wherever it lives (hero, covers, blocks, sequence steps, callouts, logos, the mascot...).
+  // Deliberately excludes the ";utf8,"-encoded placeholder SVGs (from placeholder()/
+  // animatedPlaceholder() above) — those are tiny, procedurally generated decoration, not
+  // real uploaded content worth its own file in the repo.
   const DATA_URI_BASE64_RE = /^data:[^;]+;base64,/;
-  function collectMediaObjects(node, found){
-    found = found || [];
-    if(!node || typeof node !== "object") return found;
-    if(Array.isArray(node)){ node.forEach(child => collectMediaObjects(child, found)); return found; }
-    if(typeof node.src === "string" && DATA_URI_BASE64_RE.test(node.src) &&
-       (node.kind === "image" || node.kind === "video" || node.kind === "gif")){
-      found.push(node);
-    }
-    Object.values(node).forEach(v => collectMediaObjects(v, found));
-    return found;
-  }
   function dataUriParts(dataUri){
     const m = dataUri.match(/^data:([^;]+);base64,([\s\S]*)$/);
     if(!m) return null;
     return { mime: m[1], base64: m[2] };
+  }
+  function base64ToBytes(base64){
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+  const EXT_MIME = Object.fromEntries(Object.entries(GH_MIME_EXT).map(([mime, ext]) => [ext, mime]));
+  // matches this file's own "assets/push-<hash>.<ext>" naming scheme specifically, so a
+  // Cloudflare migration pass can recognize files already pushed to GitHub and pull them
+  // back for re-upload, without touching any other assets/ path a real user might have
+  const GITHUB_ASSET_PATH_RE = /^assets\/(push-([a-f0-9]{10})\.([a-z0-9]+))$/;
+  async function githubGetRawBytes(owner, repo, path, branch, token){
+    const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(url, { headers: { ...githubHeaders(token), "Accept": "application/vnd.github.raw+json" } });
+    if(!res.ok) throw new Error(`Couldn't fetch ${path} from GitHub (${res.status}): ${await githubErrorText(res)}`);
+    return res.arrayBuffer();
+  }
+  async function uploadToCloudflare(workerUrl, secret, path, body, mime){
+    const url = `${workerUrl.replace(/\/$/, "")}/${path.split("/").map(encodeURIComponent).join("/")}`;
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${secret}`, "Content-Type": mime || "application/octet-stream" },
+      body
+    });
+    if(!res.ok){
+      const text = await res.text().catch(() => "");
+      throw new Error(`Couldn't upload ${path} to Cloudflare (${res.status}): ${text || res.statusText || "no further detail"}`);
+    }
+    const data = await res.json();
+    return data.url;
+  }
+  // finds every media object still worth touching for the chosen host: anything still
+  // embedded as a data: URI (never uploaded anywhere), plus — only when pushing to
+  // Cloudflare — anything already migrated to this repo's assets/ folder in an earlier
+  // GitHub push, so a switch to Cloudflare ends with everything consolidated in one place
+  // instead of split across two hosts
+  function collectPendingMedia(node, targetHost, found){
+    found = found || [];
+    if(!node || typeof node !== "object") return found;
+    if(Array.isArray(node)){ node.forEach(child => collectPendingMedia(child, targetHost, found)); return found; }
+    if(typeof node.src === "string" && (node.kind === "image" || node.kind === "video" || node.kind === "gif")){
+      if(DATA_URI_BASE64_RE.test(node.src)){
+        found.push({ obj: node, type: "dataUri" });
+      } else if(targetHost === "cloudflare" && GITHUB_ASSET_PATH_RE.test(node.src)){
+        found.push({ obj: node, type: "githubAsset" });
+      }
+    }
+    Object.values(node).forEach(v => collectPendingMedia(v, targetHost, found));
+    return found;
   }
   // Hashes the base64 TEXT directly rather than decoding it to raw bytes first — base64 is
   // already ASCII, so TextEncoder can turn it straight into bytes for SubtleCrypto with no
@@ -3427,13 +3481,18 @@
   }
 
   function setPushStatus(msg){ $("ghPushStatus").textContent = msg; }
-  const GH_SESSION_FIELDS = ["ghOwner", "ghRepo", "ghBranch", "ghToken"];
+  const GH_SESSION_FIELDS = ["ghOwner", "ghRepo", "ghBranch", "ghToken", "mediaHostChoice", "cfWorkerUrl", "cfSecret"];
   function loadGithubFieldsFromSession(){
     GH_SESSION_FIELDS.forEach(id => { const v = sessionStorage.getItem("gh_" + id); if(v) $(id).value = v; });
+    updateMediaHostFieldVisibility();
   }
   function saveGithubFieldsToSession(){
     GH_SESSION_FIELDS.forEach(id => sessionStorage.setItem("gh_" + id, $(id).value.trim()));
   }
+  function updateMediaHostFieldVisibility(){
+    $("cloudflareFields").classList.toggle("field-hidden", $("mediaHostChoice").value !== "cloudflare");
+  }
+  $("mediaHostChoice").addEventListener("change", updateMediaHostFieldVisibility);
 
   $("btnGithubPush").addEventListener("click", () => {
     loadGithubFieldsFromSession();
@@ -3450,8 +3509,15 @@
     const repo = $("ghRepo").value.trim();
     const branch = $("ghBranch").value.trim();
     const token = $("ghToken").value.trim();
+    const mediaHost = $("mediaHostChoice").value;
+    const cfWorkerUrl = $("cfWorkerUrl").value.trim();
+    const cfSecret = $("cfSecret").value.trim();
     if(!owner || !repo || !branch || !token){
       setPushStatus("Fill in the repo owner, repo name, branch, and token first.");
+      return;
+    }
+    if(mediaHost === "cloudflare" && (!cfWorkerUrl || !cfSecret)){
+      setPushStatus("Fill in the Cloudflare Worker URL and upload secret first.");
       return;
     }
     saveGithubFieldsToSession();
@@ -3465,34 +3531,48 @@
     // string becomes garbage-collectable for real. A push that fails partway through just
     // leaves whatever succeeded already swapped over and everything else still embedded —
     // clicking Push again picks up exactly where it left off, since already-migrated items
-    // no longer look like unpushed media to collectMediaObjects().
+    // no longer look like unpushed media to collectPendingMedia().
     let successCount = 0;
     const failures = [];
     try{
       setPushStatus("Preparing content...");
-      const mediaObjs = collectMediaObjects(state);
-      for(let i=0;i<mediaObjs.length;i++){
-        const m = mediaObjs[i];
-        setPushStatus(`Uploading media ${i+1} of ${mediaObjs.length}...`);
-        const parts = dataUriParts(m.src);
-        if(!parts) continue;
+      const pending = collectPendingMedia(state, mediaHost);
+      for(let i=0;i<pending.length;i++){
+        const { obj: m, type } = pending[i];
+        setPushStatus(`Uploading media ${i+1} of ${pending.length}...`);
         // one oversized or flaky file shouldn't block every other upload — record it and
-        // move on, leaving that item embedded as-is; everything else still goes through
+        // move on, leaving that item as-is; everything else still goes through
         try{
-          const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
-          const hash = await shortHashOfBase64(parts.base64);
-          const assetPath = `assets/push-${hash}.${ext}`;
-          const existing = await githubGetFile(owner, repo, assetPath, branch, token);
-          await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
-            `Add media asset ${hash}`, existing && existing.sha);
-          m.src = assetPath;
+          if(type === "dataUri"){
+            const parts = dataUriParts(m.src);
+            if(!parts) continue;
+            const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
+            const hash = await shortHashOfBase64(parts.base64);
+            const filename = `push-${hash}.${ext}`;
+            if(mediaHost === "cloudflare"){
+              m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, base64ToBytes(parts.base64), parts.mime);
+            } else {
+              const assetPath = `assets/${filename}`;
+              const existing = await githubGetFile(owner, repo, assetPath, branch, token);
+              await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
+                `Add media asset ${hash}`, existing && existing.sha);
+              m.src = assetPath;
+            }
+          } else if(type === "githubAsset"){
+            // already pushed to this repo's assets/ in an earlier run — pull it back and
+            // re-upload to Cloudflare so everything ends up in one place, not split in two
+            const match = m.src.match(GITHUB_ASSET_PATH_RE);
+            const filename = match[1], ext = match[3];
+            const bytes = await githubGetRawBytes(owner, repo, m.src, branch, token);
+            m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, bytes, EXT_MIME[ext]);
+          }
           successCount++;
           // persist to IndexedDB after EVERY file, not just at the end — a browser "Out of
           // Memory" tab crash kills the whole process outright rather than throwing a
           // catchable error, so the finally block below never runs either; without this,
           // every file that successfully uploads still gets lost locally (though never
-          // re-uploaded, since it's already safely on GitHub) the moment the tab dies,
-          // forcing every retry to start over from the full original size again
+          // re-uploaded, since it's already safely wherever it was just sent) the moment
+          // the tab dies, forcing every retry to start over from the full original size again
           await idbSaveState(state);
         }catch(mediaErr){
           failures.push(mediaErr.message);
@@ -3521,10 +3601,14 @@
       await githubPutFile(owner, repo, "index.html", branch, token, utf8ToBase64(newHtml),
         "Update dashboard content via in-app push", htmlFile.sha);
 
-      const doneMsg = `Done — pushed ${successCount} media file(s) and your content to ${owner}/${repo}@${branch}. ` +
-        `Your local copy now points at those same short paths too (so it stays light going forward) — ` +
-        `images may look broken right here unless this page is being viewed from somewhere that also serves ` +
-        `assets/ (the repo itself, or a hosted copy), but everything is safely on GitHub now.`;
+      const doneMsg = mediaHost === "cloudflare"
+        ? `Done — pushed ${successCount} media file(s) to Cloudflare and your content to ${owner}/${repo}@${branch}. ` +
+          `Your local copy now points at those same public URLs too (so it stays light going forward) — since ` +
+          `they're full URLs, images should keep working right here, not just once this is hosted elsewhere.`
+        : `Done — pushed ${successCount} media file(s) and your content to ${owner}/${repo}@${branch}. ` +
+          `Your local copy now points at those same short paths too (so it stays light going forward) — ` +
+          `images may look broken right here unless this page is being viewed from somewhere that also serves ` +
+          `assets/ (the repo itself, or a hosted copy), but everything is safely on GitHub now.`;
       setPushStatus(failures.length
         ? `${doneMsg}\n${failures.length} file(s) failed and are still embedded locally — just click Push again to retry them:\n${failures.join("\n")}`
         : doneMsg);
