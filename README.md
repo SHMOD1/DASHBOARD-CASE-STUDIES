@@ -151,11 +151,13 @@ pick any color per annotation from its toolbar's color swatch.
   (`#005BA6`) instead of a generic placeholder pattern, since it's a full-bleed section
   background.
 - The **"CHAPTER 0X"** eyebrow label and each entry's year tag are brand-yellow (`#FBE847`).
-- A small brand mascot — a cyan water-drop blob character with a yellow rim highlight,
-  matching the client's reference character art — appears in a few spots: bobbing in the
-  hero's corner, as the popup box's hover tab, and in the footer. It's cropped to just the
-  head/face (no arms or legs), so it reads cleanly as a small icon without ever looking
-  stretched or skewed.
+- A small brand mascot appears in a few spots: bobbing in the hero's corner, as the popup
+  box's hover tab, and in the footer. By default it's a hand-drawn cyan water-drop blob with
+  a yellow rim highlight, cropped to just the head/face (no arms or legs) so it reads cleanly
+  as a small icon without ever looking stretched or skewed — but in Edit Mode, the **"Change
+  Mascot Image"** button under the footer lets you upload your own mascot image (same
+  uploader as any other media in the dashboard), which then replaces it in all three spots
+  at once.
 - Sections don't scroll past each other — each full-bleed slide (hero, chapter cover, entry)
   pins in place at the top of the viewport, and the next one rises up and covers it cleanly
   as you keep scrolling, always at full opacity — no fade, so the incoming section is never

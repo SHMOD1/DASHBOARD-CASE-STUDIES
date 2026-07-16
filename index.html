@@ -623,13 +623,17 @@
 
   /* ---------- brand mascot: the client's cyan water-drop character, cropped to just its
      head/face (matching their reference art), used as a decorative touch in a few spots ---------- */
-  .mascot-icon{display:block;width:100%;height:100%;}
+  .mascot-icon{display:block;width:100%;height:100%;object-fit:contain;}
   .hero-mascot{position:absolute;right:6%;bottom:6%;width:96px;height:92px;z-index:2;
     animation:mascotBob 3.4s ease-in-out infinite;}
-  .hero-mascot svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.3));}
+  .hero-mascot svg, .hero-mascot img{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.3));}
   @keyframes mascotBob{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-10px) rotate(2deg);}}
   .footer-mascot{width:58px;height:56px;margin:0 auto 14px;}
-  .footer-mascot svg{width:100%;height:100%;display:block;}
+  .footer-mascot svg, .footer-mascot img{width:100%;height:100%;display:block;}
+  .mascot-change-btn{margin:0 auto 14px;background:none;border:1px solid var(--line-strong);
+    border-radius:20px;padding:5px 14px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-faint);cursor:pointer;}
+  .mascot-change-btn:hover{border-color:var(--accent);color:var(--accent);}
   @media (max-width: 720px){
     .hero-mascot{width:70px;height:67px;right:5%;bottom:4%;}
   }
@@ -700,20 +704,7 @@
     <div class="media-fill" id="heroMediaWrap" data-media-scope="hero"></div>
     <div class="annotation-layer" id="heroAnnotationLayer"></div>
     <div class="hero-callout-mount" id="heroCalloutMount"></div>
-    <div class="hero-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-          fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse cx="30" cy="63" rx="16" ry="11" fill="#7fecfb" opacity=".55"/>
-        <path d="M31 35 Q28 32 25 34" fill="none" stroke="#3a3542" stroke-width="2.6" stroke-linecap="round"/>
-        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
-        <circle cx="34" cy="47" r="2.6" fill="#ffe14d"/>
-        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
-        <circle cx="60" cy="47" r="2.6" fill="#ffe14d"/>
-        <path d="M39 61 Q50 69 61 61 Q59 68 50 69 Q41 68 39 61 Z" fill="#ffe14d" stroke="#3a3542" stroke-width="2.6" stroke-linejoin="round"/>
-      </svg>
-    </div>
+    <div class="hero-mascot" id="heroMascotIcon" aria-hidden="true"></div>
     <div class="hero-content">
       <div class="hero-logos-wrap">
         <div class="hero-logos" id="heroLogos"></div>
@@ -742,20 +733,8 @@
   <div class="rail-hover-popup" id="railHoverPopup"></div>
 
   <footer class="site-footer">
-    <div class="footer-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-          fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse cx="30" cy="63" rx="16" ry="11" fill="#7fecfb" opacity=".55"/>
-        <path d="M31 35 Q28 32 25 34" fill="none" stroke="#3a3542" stroke-width="2.6" stroke-linecap="round"/>
-        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
-        <circle cx="34" cy="47" r="2.6" fill="#ffe14d"/>
-        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
-        <circle cx="60" cy="47" r="2.6" fill="#ffe14d"/>
-        <path d="M39 61 Q50 69 61 61 Q59 68 50 69 Q41 68 39 61 Z" fill="#ffe14d" stroke="#3a3542" stroke-width="2.6" stroke-linejoin="round"/>
-      </svg>
-    </div>
+    <div class="footer-mascot" id="footerMascotIcon" aria-hidden="true"></div>
+    <button type="button" class="mascot-change-btn edit-only" data-act="changeMascot">Change Mascot Image</button>
     <strong>Editable Storymap Dashboard</strong> — a reusable, full-bleed scrollytelling template.
     Group your content into chapters, each with its own timeline, rich text styles, images, GIFs, and video.
   </footer>
@@ -894,11 +873,17 @@
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
 
-  // the client's mascot — a friendly cyan water-drop blob character with a yellow rim
-  // highlight — cropped to just its head/face, matching the reference character art (no
-  // arms or legs, so it reads cleanly as a small round tab icon without looking skewed)
+  // the mascot shown in the hero corner, the footer, and every popup-box tab. If the user
+  // has uploaded their own mascot image (Edit Mode → "Change Mascot Image"), that always
+  // wins; otherwise it falls back to a hand-drawn placeholder cropped to just the head/face
+  // (no arms or legs) so it reads cleanly as a small icon without ever looking skewed.
   function mascotSVG(extraClass){
-    return `<svg class="mascot-icon${extraClass ? " " + extraClass : ""}" viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    const cls = `mascot-icon${extraClass ? " " + extraClass : ""}`;
+    const m = state.meta.mascotMedia;
+    if(m && m.src){
+      return `<img class="${cls}" src="${escapeHtml(m.src)}" alt="" />`;
+    }
+    return `<svg class="${cls}" viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
         fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
       <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
@@ -1789,6 +1774,8 @@
     renderHeroLogos();
     $("heroCalloutMount").innerHTML = renderCallout("hero", null, null, state.meta.callout);
     $("heroAnnotationLayer").innerHTML = renderAnnotationItems("hero", null, null, null, state.meta.annotations);
+    $("heroMascotIcon").innerHTML = mascotSVG();
+    $("footerMascotIcon").innerHTML = mascotSVG();
 
     railChapters.innerHTML = state.chapters.map(renderRailChapter).join("");
     mainEl.innerHTML = state.chapters.map(renderChapter).join("") +
@@ -2491,6 +2478,8 @@
       removeCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "toggleCallout"){
       btn.closest(".callout-box").classList.toggle("open");
+    } else if(act === "changeMascot"){
+      openMediaModal({ scope:"mascot" });
     } else if(act === "addAnnotation"){
       addAnnotation(btn.dataset.aScope, btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId);
     } else if(act === "deleteAnnotation"){
@@ -3192,6 +3181,15 @@
       const logo = (state.meta.logos || []).find(l => l.id === target.logoId);
       if(logo) logo.media = media;
       container = document.querySelector(`.media-fill[data-media-scope="heroLogo"][data-logo-id="${cssEscape(target.logoId)}"]`);
+    } else if(target.scope === "mascot"){
+      // the mascot appears in several disjoint spots at once (hero corner, footer, and every
+      // popup-box tab) rather than one container, so it refreshes them all directly
+      state.meta.mascotMedia = media;
+      $("heroMascotIcon").innerHTML = mascotSVG();
+      $("footerMascotIcon").innerHTML = mascotSVG();
+      document.querySelectorAll(".callout-tab").forEach(el => { el.innerHTML = mascotSVG("callout-tab-icon"); });
+      saveState();
+      return;
     } else if(target.scope === "sequenceStep"){
       const step = getSequenceStep(target.chapterId, target.entryId, target.stepId);
       if(step) step.media = media;
