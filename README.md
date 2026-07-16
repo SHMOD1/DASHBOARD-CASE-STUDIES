@@ -220,10 +220,15 @@ pick any color per annotation from its toolbar's color swatch.
   the main content column) let you fully restructure the story.
 - **Export JSON** downloads your content; **Import JSON** loads it back in (or share it with
   someone else). **Reset Demo** restores the sample content.
-- Edits autosave to the browser's local storage, so a refresh won't lose your work.
-  Uploaded files are stored as data URLs — large video uploads can hit the browser's
-  storage limit, so linking to hosted video (or a YouTube/Vimeo URL) scales better than
-  uploading.
+- Edits autosave to the browser's IndexedDB storage, so a refresh won't lose your work.
+  (Earlier versions used `localStorage`, which caps out around 5-10MB — easy to blow through
+  once a few uploaded images/video are involved. IndexedDB scales into the hundreds of MB, so
+  heavy media-rich editing works entirely in the browser now. Anyone with edits saved under
+  the old `localStorage` key gets migrated over automatically, once, the first time they load
+  this version — nothing is lost.) Uploaded files are still stored as data URLs either way —
+  a *lot* of large video uploads can still make the page itself heavy to export/import, so
+  linking to hosted video (or a YouTube/Vimeo URL) scales better than uploading when you're
+  adding a lot of it.
 
 **Note on video embeds:** YouTube/Vimeo iframes require a live internet connection in the
 browser viewing the page — they won't load in network-sandboxed previews, only in a normal

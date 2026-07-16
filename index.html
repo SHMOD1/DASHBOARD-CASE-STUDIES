@@ -1686,16 +1686,66 @@
     });
     return data;
   }
-  let state = migrateState(loadState() || defaultData());
+  // state starts as the baked-in default and is swapped for whatever's in IndexedDB (if
+  // anything) once initState() resolves, just before the first render — see "init" at the
+  // bottom of this file. Autosave lives in IndexedDB rather than localStorage because
+  // localStorage tops out around 5-10MB, which heavy uploaded media (images/video as base64)
+  // blows through fast; IndexedDB scales into the hundreds of MB, comfortably enough to edit
+  // a media-heavy dashboard entirely in the browser without losing edits mid-session.
+  let state = migrateState(defaultData());
   let editOn = false;
   let modalTarget = null;
   let modalType = "image";
   let modalVideoTab = "link";
 
-  function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
-  function loadState(){
-    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+  const IDB_NAME = "storymap-dashboard-db";
+  const IDB_STORE = "state";
+  function idbOpen(){
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = () => { req.result.createObjectStore(IDB_STORE); };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
   }
+  async function idbSaveState(data){
+    try{
+      const db = await idbOpen();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        tx.objectStore(IDB_STORE).put(data, STORAGE_KEY);
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+    }catch(e){ /* storage unavailable — edits still work for this session, just won't persist */ }
+  }
+  async function idbLoadState(){
+    try{
+      const db = await idbOpen();
+      return await new Promise((resolve, reject) => {
+        const req = db.transaction(IDB_STORE, "readonly").objectStore(IDB_STORE).get(STORAGE_KEY);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => reject(req.error);
+      });
+    }catch(e){ return null; }
+  }
+  // one-time migration path: anyone with in-progress edits already sitting in the old
+  // localStorage key gets moved over automatically so nothing is lost by this switch
+  async function migrateLegacyLocalStorage(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return null;
+      const data = JSON.parse(raw);
+      await idbSaveState(data);
+      localStorage.removeItem(STORAGE_KEY);
+      return data;
+    }catch(e){ return null; }
+  }
+  async function initState(){
+    const loaded = (await idbLoadState()) || (await migrateLegacyLocalStorage());
+    if(loaded) state = migrateState(loaded);
+  }
+  function saveState(){ idbSaveState(state); }
   let saveTimer = null;
   function debouncedSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 300); }
 
@@ -3243,8 +3293,10 @@
   });
 
   /* ---------------- init ---------------- */
-  render();
-  updateScroll();
+  initState().then(() => {
+    render();
+    updateScroll();
+  });
 })();
 </script>
 </body>
