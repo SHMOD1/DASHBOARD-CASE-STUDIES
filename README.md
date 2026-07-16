@@ -104,12 +104,14 @@ to that green; you can still pick any color per annotation from its toolbar's co
   last chapter. It shows just a thick, bold, flowing "water" line (animated, continuously
   drifting) connecting large water-droplet-shaped markers, on a solid dark-charcoal
   (`#413C3F`) backdrop with bright cyan (`#0DBFDB`) glow, independent of the light/dark theme
-  toggle. Chapter/entry titles don't take up permanent space — hover any droplet to pop up
-  its title next to it; click any droplet to jump the main scroll straight there. In Edit
-  Mode, the rail is itself editable and reorderable: **drag** any droplet to reorder chapters
-  (drag a chapter's head) or entries (drag an entry, including onto a *different* chapter to
-  move it there), and **click** a droplet to rename its chapter/entry right from the sidebar,
-  in the same popup that normally just shows the title on hover. Its content
+  toggle. Chapter/entry titles don't take up permanent space — a popup automatically shows
+  the title of whichever chapter/entry is currently active as you scroll, right next to its
+  droplet, no hovering needed; hover a different droplet to preview its title instead, and
+  moving away goes back to showing the current section. Click any droplet to jump the main
+  scroll straight there. In Edit Mode, the rail is itself editable and reorderable: **drag**
+  any droplet to reorder chapters (drag a chapter's head) or entries (drag an entry, including
+  onto a *different* chapter to move it there), and **click** a droplet to rename its
+  chapter/entry right from the sidebar, in that same popup. Its content
   pans vertically in lockstep with the page's scroll position, so the timeline visibly scrolls
   together with the sections rather than sitting static. The active chapter's accent color
   washes across the progress fill and pull-quote borders as you scroll.

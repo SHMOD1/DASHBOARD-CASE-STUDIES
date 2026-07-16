@@ -2545,6 +2545,7 @@
     const activeEntryId = updateActiveEntry();
     const activeChapterId = updateActiveChapterAccent();
     updatePositionPopup(activeChapterId, activeEntryId);
+    updateActiveRailPopup(activeChapterId, activeEntryId);
     updateCalloutAutoOpen();
     updateRailSync();
     slideMotion();
@@ -2862,6 +2863,29 @@
   }
   function hideRailHoverPopup(){ if(!railRenaming) railHoverPopup.classList.remove("visible"); }
 
+  // the rail's title popup now shows automatically for whichever chapter/entry is currently
+  // active as you scroll, instead of only appearing on hover — hovering a different droplet
+  // still previews its title, and letting go reverts to showing the current section again
+  let railActiveChapterId = null, railActiveEntryId = null;
+  function showActiveRailPopup(){
+    if(railRenaming) return;
+    if(railActiveEntryId){
+      const item = railChapters.querySelector(`.rail-item[data-id="${cssEscape(railActiveEntryId)}"]`);
+      const entry = getEntry(railActiveChapterId, railActiveEntryId);
+      if(item && entry) showRailHoverPopup(item.querySelector(".rail-dot"), entry.year, entryLabel(entry));
+    } else if(railActiveChapterId){
+      const head = railChapters.querySelector(`.rail-chapter-head[data-chapter-id="${cssEscape(railActiveChapterId)}"]`);
+      const chapter = getChapter(railActiveChapterId);
+      if(head && chapter) showRailHoverPopup(head.querySelector(".rail-chapter-dot"), "Chapter", chapter.title);
+    }
+  }
+  function updateActiveRailPopup(activeChapterId, activeEntryId){
+    const changed = activeChapterId !== railActiveChapterId || activeEntryId !== railActiveEntryId;
+    railActiveChapterId = activeChapterId;
+    railActiveEntryId = activeEntryId;
+    if(changed) showActiveRailPopup();
+  }
+
   // click a droplet in Edit Mode to rename its chapter/entry title right from the sidebar,
   // instead of jumping/collapsing — reuses the same hover popup as an editable field
   function openRailRename(kind, chapterId, entryId){
@@ -2887,7 +2911,8 @@
       saveState();
       if(kind === "chapter") syncRailChapterTitle(chapterId); else syncRailEntry(entryId);
       railRenaming = false;
-      railHoverPopup.classList.remove("visible", "editing");
+      railHoverPopup.classList.remove("editing");
+      showActiveRailPopup(); // back to showing the current section instead of just hiding
     }
     input.addEventListener("blur", commit, { once:true });
     input.addEventListener("keydown", (e) => {
@@ -2911,9 +2936,8 @@
     const from = e.target.closest(".rail-item, .rail-chapter-head");
     if(!from) return;
     const to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".rail-item, .rail-chapter-head");
-    if(to !== from) hideRailHoverPopup();
+    if(to !== from) showActiveRailPopup(); // revert to the current section instead of hiding
   });
-  window.addEventListener("scroll", hideRailHoverPopup, { passive:true });
 
   /* ---------------- rail drag-and-drop reorder (chapters + entries), Edit Mode only —
      draggable is only turned on via syncRailDraggable() while editOn, so a reader's
