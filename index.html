@@ -108,7 +108,7 @@
      instead of the generic striped placeholder, since it's a full-bleed section background */
   .media-fill[data-media-scope="chapterCover"] .media-empty,
   .media-fill[data-media-scope="entryMedia"] .media-empty{
-    background:#005ba6;color:rgba(255,255,255,.85);
+    background:#306ef8;color:rgba(255,255,255,.85);
   }
   .media-overlay{
     position:absolute;inset:0;z-index:1;display:none;align-items:center;justify-content:center;
@@ -121,12 +121,7 @@
   /* ---------- full-bleed story slides (hero / chapter cover / entry share this) ---------- */
   .hero, .chapter-cover, .entry{
     position:sticky;top:0;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;
-    transform-origin:center center;
   }
-  /* dark at both the top and bottom edges so consecutive full-bleed slides blend at the seam
-     instead of cutting hard from one photo straight into the next */
-  .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
-    background:linear-gradient(180deg, rgba(6,7,20,.62) 0%, rgba(6,7,20,.05) 16%, rgba(6,7,20,.05) 40%, rgba(6,7,20,.3) 55%, rgba(5,6,18,.92) 100%);}
   .hero-content, .chapter-cover-content, .entry-content{
     position:relative;z-index:2;width:100%;max-width:1320px;margin:0 auto;
     padding:0 7% 9vh;color:#f3f3fa;
@@ -136,10 +131,6 @@
      centered, logo row up top, scroll-down button at the bottom. Scoped to .hero only;
      chapter covers and entries keep their own bottom-left full-bleed treatment. ---------- */
   .hero{align-items:center;background:#005ba6;}
-  .hero-scrim{
-    background:linear-gradient(180deg,
-      rgba(0,20,45,.3) 0%, rgba(0,20,45,0) 18%, rgba(0,20,45,0) 82%, rgba(0,20,45,.35) 100%);
-  }
   .hero .hero-content{
     display:flex;flex-direction:column;align-items:center;text-align:center;
     padding:9vh 7%;gap:6px;color:#fff;
@@ -158,20 +149,18 @@
   .hero-presents{font-family:var(--font-body);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
     font-weight:700;color:rgba(255,255,255,.8);}
 
+  /* the hero's own backdrop is already solid brand blue, so its title skips the highlight
+     treatment used elsewhere — a blue box on a blue background would be invisible */
   .hero-cover-title{font-family:var(--font-main);font-size:clamp(36px,6vw,72px);line-height:1.04;margin:0 0 14px;
-    font-weight:800;letter-spacing:-.01em;color:#fff;}
+    font-weight:800;letter-spacing:-.01em;color:#fff;text-shadow:none;}
   .hero-cover-subtitle{font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.88);
-    font-weight:400;max-width:620px;line-height:1.55;}
+    font-weight:400;max-width:620px;line-height:1.55;text-shadow:0 2px 8px rgba(0,0,0,.7);}
 
   .hero-scrolldown{margin-top:56px;display:flex;flex-direction:column;align-items:center;gap:5px;}
   .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
     font-weight:700;color:rgba(255,255,255,.8);}
   .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:rgba(255,255,255,.88);margin-bottom:10px;}
-  .hero-scrolldown-btn{width:46px;height:46px;border-radius:50%;background:var(--accent);color:var(--bg);
-    border:none;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 10px 26px rgba(13,191,219,.4);
-    animation:bob 2.2s ease-in-out infinite;transition:transform .15s ease;}
-  .hero-scrolldown-btn:hover{transform:scale(1.08);}
-  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+  .hero-dive-in-btn{margin-top:0;}
 
   @media (max-width: 860px){
     .hero-logos{gap:14px;}
@@ -188,8 +177,8 @@
     height:calc(100vh - 49px);height:calc(100svh - 49px);overflow:hidden;align-self:flex-start;
     background:linear-gradient(180deg, rgba(65,60,63,.97) 0%, rgba(42,39,41,.95) 45%, rgba(65,60,63,.97) 100%);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-    border-left:1px solid rgba(13,191,219,.3);
-    box-shadow:-24px 0 60px rgba(0,0,0,.35);color:#0dbfdb;
+    border-left:1px solid rgba(48,110,248,.4);
+    box-shadow:-24px 0 60px rgba(0,0,0,.35);color:#306ef8;
   }
   .rail-inner{position:absolute;left:0;right:0;top:0;padding:28px 0 60vh;will-change:transform;}
   .rail-title, .rail-chapter-title, .rail-year, .rail-label{display:none;}
@@ -202,7 +191,7 @@
     mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
     -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
   }
-  .rail-chevron{background:none;border:0;color:rgba(13,191,219,.55);font-size:12px;padding:2px;transition:transform .2s ease;}
+  .rail-chevron{background:none;border:0;color:rgba(48,110,248,.65);font-size:12px;padding:2px;transition:transform .2s ease;}
   .rail-chapter.collapsed .rail-chevron{transform:rotate(-90deg);}
 
   .rail-entries{position:relative;margin-top:10px;overflow:hidden;transition:max-height .35s ease;}
@@ -212,53 +201,63 @@
      feel — a real flowing current, not a straight rail */
   .rail-track-line{
     position:absolute;left:50%;transform:translateX(-50%);top:4px;bottom:4px;width:30px;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='rgba(13,191,219,0.4)' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='rgba(48,110,248,0.45)' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat:repeat-y;animation:railFlow 2.1s linear infinite;
   }
   .rail-progress-fill{
-    position:absolute;left:50%;transform:translateX(-50%);top:4px;width:30px;height:0%;background:var(--accent-live);
+    position:absolute;left:50%;transform:translateX(-50%);top:4px;width:30px;height:0%;background:#7af9b4;
     transition:height .12s linear, background-color .5s ease;
     -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='%23000' stroke-width='8.5' stroke-linecap='round'/%3E%3C/svg%3E");
     mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='60'%3E%3Cpath d='M15 0 C25 12 3 18 15 30 C25 42 3 48 15 60' fill='none' stroke='%23000' stroke-width='8.5' stroke-linecap='round'/%3E%3C/svg%3E");
     -webkit-mask-repeat:repeat-y;mask-repeat:repeat-y;
     animation:railFlow 2.1s linear infinite;
-    filter:drop-shadow(0 0 8px rgba(13,191,219,.65));
+    filter:drop-shadow(0 0 8px rgba(48,110,248,.65));
   }
   @keyframes railFlow{from{background-position-y:0; -webkit-mask-position-y:0; mask-position-y:0;} to{background-position-y:60px; -webkit-mask-position-y:60px; mask-position-y:60px;}}
   .rail-item{position:relative;height:52px;cursor:pointer;}
   .rail-dot{position:absolute;left:50%;top:6px;width:24px;height:33px;transform:translateX(-50%);
-    background:rgba(13,191,219,.4);transition:all .2s ease;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));
+    background:rgba(48,110,248,.45);transition:all .2s ease;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4));
     -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
     mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 22'%3E%3Cpath d='M8 0C8 0 0 10 0 14.5 0 18.6 3.6 22 8 22 12.4 22 16 18.6 16 14.5 16 10 8 0 8 0Z' fill='%23000'/%3E%3C/svg%3E");
     -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;
   }
-  .rail-item.active .rail-dot{background:var(--accent-live);
-    filter:drop-shadow(0 1px 3px rgba(0,0,0,.4)) drop-shadow(0 0 9px rgba(13,191,219,.7));
+  .rail-item.active .rail-dot{background:#7af9b4;
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,.4)) drop-shadow(0 0 9px rgba(48,110,248,.75));
     animation:dropletGlow 2.2s ease-in-out infinite;}
   @keyframes dropletGlow{0%,100%{transform:translateX(-50%) scale(1);}50%{transform:translateX(-50%) scale(1.14);}}
-  .rail-item:hover .rail-dot{background:rgba(13,191,219,.75);}
+  .rail-item:hover .rail-dot{background:rgba(48,110,248,.8);}
+  body.edit-on .rail-item, body.edit-on .rail-chapter-head{cursor:grab;}
+  .rail-item.rail-drop-before::before, .rail-chapter.rail-drop-before .rail-chapter-head::before{
+    content:"";position:absolute;left:8px;right:8px;top:0;height:2px;background:var(--accent-live);z-index:5;}
+  .rail-item.rail-drop-after::after, .rail-chapter.rail-drop-after .rail-chapter-head::after{
+    content:"";position:absolute;left:8px;right:8px;bottom:0;height:2px;background:var(--accent-live);z-index:5;}
+  .rail-chapter-head{position:relative;}
 
   /* floating popup that shows a chapter/entry's title next to its droplet on hover,
      since the thin strip no longer has room for inline text */
   .rail-hover-popup{
-    position:fixed;z-index:90;background:#413c3f;color:#0dbfdb;
+    position:fixed;z-index:90;background:#7af9b4;color:#005ba6;
     padding:9px 16px;border-radius:8px;font-family:var(--font-main);font-weight:700;font-size:14.5px;
-    white-space:nowrap;box-shadow:0 12px 28px rgba(0,0,0,.4);pointer-events:none;
+    white-space:nowrap;box-shadow:4px 4px 0 #134370;pointer-events:none;
     opacity:0;transform:translate(-100%,-50%);transition:opacity .15s ease;
-    border:1px solid rgba(13,191,219,.4);max-width:min(60vw, 320px);white-space:normal;
+    border:2px solid #005ba6;max-width:min(60vw, 320px);white-space:normal;
   }
   .rail-hover-popup.visible{opacity:1;}
   .rail-hover-popup-eyebrow{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
-    color:rgba(13,191,219,.65);margin-bottom:2px;}
+    color:#306ef8;margin-bottom:2px;}
+  .rail-hover-popup.editing{pointer-events:auto;}
+  .rail-rename-input{
+    font-family:var(--font-main);font-weight:700;font-size:14.5px;color:#005ba6;background:rgba(255,255,255,.5);
+    border:1px solid #005ba6;border-radius:4px;padding:4px 8px;width:220px;max-width:100%;
+  }
 
   /* ---------- "you are here" popup: pops up fresh each time the active chapter/entry changes ---------- */
   .position-popup{
     position:fixed;left:24px;bottom:26px;z-index:56;
     display:flex;align-items:center;gap:10px;
-    background:rgba(246,236,214,.92);color:var(--ink);
-    border:1px solid rgba(65,60,63,.18);border-radius:30px;
-    padding:9px 18px 9px 12px;box-shadow:0 14px 34px rgba(65,50,20,.22);
-    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    background:#7af9b4;color:#005ba6;
+    border:2px solid #005ba6;border-radius:12px;
+    padding:9px 18px 9px 12px;box-shadow:5px 5px 0 #134370;
     opacity:0;transform:translateY(10px) scale(.94);
     transition:opacity .3s ease, transform .3s ease;
     pointer-events:none;max-width:min(80vw, 360px);
@@ -266,13 +265,13 @@
   .position-popup.visible{opacity:1;transform:translateY(0) scale(1);}
   .position-popup.pop{animation:popupPop .5s cubic-bezier(.34,1.56,.64,1);}
   @keyframes popupPop{0%{transform:translateY(6px) scale(.9);}55%{transform:translateY(-3px) scale(1.05);}100%{transform:translateY(0) scale(1);}}
-  [data-theme="dark"] .position-popup{background:rgba(28,24,18,.9);color:#f6ecdc;border-color:rgba(246,236,214,.16);}
-  [data-theme="dark"] .position-popup-chapter{color:#61c9e1;}
+  [data-theme="dark"] .position-popup{background:#7af9b4;color:#005ba6;border-color:#005ba6;}
+  [data-theme="dark"] .position-popup-chapter{color:#134370;}
   .position-popup-drop{font-size:16px;line-height:1;animation:dropBob 2.4s ease-in-out infinite;}
   @keyframes dropBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
   .position-popup-text{display:flex;flex-direction:column;gap:1px;min-width:0;}
-  .position-popup-chapter{font-family:var(--font-body);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:#005ba6;font-weight:700;}
-  .position-popup-entry{font-family:var(--font-main);font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .position-popup-chapter{font-family:var(--font-body);font-size:9.5px;text-transform:uppercase;letter-spacing:.12em;color:#134370;font-weight:700;}
+  .position-popup-entry{font-family:var(--font-main);font-size:13.5px;font-weight:700;color:#005ba6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   @media (max-width: 860px){
     .position-popup{left:14px;right:70px;bottom:16px;max-width:none;padding:8px 14px 8px 10px;}
@@ -290,11 +289,13 @@
   .main{display:flex;flex-direction:column;flex:1 1 auto;min-width:0;}
   .chapter{display:flex;flex-direction:column;}
 
-  .chapter-index{font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fbe847;margin-bottom:10px;font-weight:700;}
-  .chapter-title{font-family:var(--font-main);font-size:clamp(28px,4.4vw,48px);font-weight:800;letter-spacing:-.01em;margin:0 0 10px;line-height:1.08;
-    transform-origin:left center;opacity:.35;transform:scale(.88);}
-  .chapter-subtitle{font-family:var(--font-body);font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;}
-  .chapter-cover-content{opacity:.55;transform:scale(.94);transform-origin:left center;}
+  .chapter-index{font-family:var(--font-body);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fbe847;margin-bottom:10px;font-weight:700;
+    text-shadow:0 2px 8px rgba(0,0,0,.7);}
+  .chapter-title{font-family:var(--font-main);font-size:clamp(28px,4.4vw,48px);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.7;
+    text-shadow:none;
+    display:inline;background:#005ba6;color:#fff;padding:.1em .45em;border-radius:4px;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  .chapter-subtitle{font-family:var(--font-body);font-size:15.5px;color:#d6d9f0;max-width:600px;line-height:1.55;text-shadow:0 2px 8px rgba(0,0,0,.7);margin-top:12px;}
 
   .chapter-toolbar, .entry-toolbar{position:absolute;top:16px;right:16px;z-index:3;gap:8px;}
   .chapter-toolbar button, .entry-toolbar button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
@@ -305,13 +306,115 @@
   .chapter-entries{display:flex;flex-direction:column;}
 
   /* ---------- entry ---------- */
-  .entry-content{opacity:.55;transform:scale(.94);transform-origin:left center;}
+  /* no scrim anywhere in the dashboard — every background image/video/GIF stays completely
+     clean and clear, at every scroll position, so legibility comes from a text-shadow on
+     the content instead of dimming the media underneath it */
+  .entry-content{text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
+
+  /* page type (a) Section Intro — centered divider page, no block grid */
+  .entry[data-page-type="intro"]{align-items:center;}
+  .entry[data-page-type="intro"] .entry-content{text-align:center;}
+  .entry[data-page-type="intro"] .entry-title{font-size:clamp(32px,5.5vw,64px);max-width:800px;margin-left:auto;margin-right:auto;}
+  .entry[data-page-type="intro"] .entry-caption{font-size:16px;font-style:normal;max-width:640px;margin:14px auto 0;}
+  /* a short optional instruction line (e.g. "click and hold to enlarge") plus a "Dive In"
+     button that jumps straight to the next slide, so an intro page gives a reader a clear
+     way to start, not just a title to read past */
+  .entry-hint{
+    display:inline-block;background:#7af9b4;color:#134370;font-family:var(--font-body);
+    font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:6px 14px;border-radius:6px;
+    margin-top:14px;text-shadow:none;min-width:40px;min-height:1em;
+    border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;
+  }
+  .entry-intro-cta{
+    display:inline-block;margin-top:22px;background:#7af9b4;color:#005ba6;font-family:var(--font-main);
+    font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+    border:2px solid #005ba6;border-radius:24px;padding:12px 30px;cursor:pointer;
+    box-shadow:4px 4px 0 #134370;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .entry-intro-cta:hover{transform:translateY(-2px) scale(1.03);background:#95fbc4;}
+
+  /* page type (b) Full Background — text blocks stack in a narrow card column pinned to the
+     true left edge (not centered, even on wide screens) so most of the frame stays clear for
+     the image/video behind it, instead of text spreading across most of the screen. The
+     title/caption above keep their own (wider) width — only the block stack narrows, since
+     each block already renders as its own card (see .block--body/.block--quote/
+     .block--caption above), so stacking them vertically reads as a tidy list of cards. */
+  .entry[data-page-type="background"] .entry-blocks{
+    flex-direction:column;align-items:stretch;max-width:min(36vw,460px);
+  }
+
+  /* page type (d) Grid — same template as Full Background, just a wider content column so
+     the freeform box grid has more room */
+  .entry[data-page-type="grid"] .entry-content{max-width:1680px;}
+  /* every block — text or media — snaps into an equal-width column, N per row (2/3/4,
+     chosen per page); a media block set to "Full width" still spans the entire row */
+  .entry[data-page-type="grid"] .entry-blocks{display:grid;grid-template-columns:repeat(var(--grid-cols,3),1fr);gap:18px 22px;align-items:start;}
+  .entry[data-page-type="grid"] .entry-blocks .block-wrap{width:100%;max-width:100%;}
+  .entry[data-page-type="grid"] .entry-blocks .block-media-wrap.block-media--Full{grid-column:1/-1;}
+  .entry[data-page-type="grid"] .add-block-row{grid-column:1/-1;}
+
+  /* ---------- page type (c) Scroll Sequence: a stack of steps, one visible at a time,
+     switched instantly by JS as the reader scrolls through them — never blended/overlapping
+     with the step before or after it — on a plain solid-blue field rather than a busy
+     full-bleed photo, so a step's own image stays a clear, centered focal point and any
+     annotation text on it reads easily; each step carries its own optional caption text */
+  .sequence-steps{position:absolute;inset:0;}
+  .sequence-step{position:absolute;inset:0;opacity:0;pointer-events:none;background:#005ba6;}
+  .sequence-step.active{opacity:1;pointer-events:auto;z-index:1;}
+  /* the image/GIF/video sits centered and large, at its own natural shape (never cropped) —
+     the plain blue field around it is what stays constant, so only the picture changes */
+  .sequence-step-media{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:min(64vw,860px);height:min(72vh,860px);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .sequence-step-media .media-fill{position:relative;inset:auto;width:100%;height:100%;background:none;}
+  .sequence-step-media .media-fill .media-el{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;}
+  .sequence-step-media .video-frame{width:100%;height:100%;}
+  .sequence-step-text{
+    position:absolute;left:7%;right:7%;bottom:9vh;z-index:2;max-width:820px;
+    font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:#fff;line-height:1.5;
+    text-shadow:0 2px 12px rgba(0,0,0,.6);
+  }
+  .sequence-step-toolbar{position:absolute;top:16px;left:16px;z-index:3;display:none;gap:8px;}
+  body.edit-on .sequence-step-toolbar{display:flex;}
+  .sequence-step-toolbar button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.35);color:#fff;padding:6px 11px;border-radius:16px;}
+  .sequence-step-toolbar button.danger:hover{border-color:#e37a7a;color:#ffbcbc;}
+  .sequence-step-index{position:absolute;top:16px;right:16px;z-index:3;background:rgba(0,0,0,.55);
+    color:#fff;font-size:11px;padding:5px 10px;border-radius:12px;font-weight:700;letter-spacing:.04em;}
+  .sequence-progress{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:4;
+    display:flex;gap:7px;}
+  .sequence-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .25s ease;}
+  .sequence-dot.active{background:#0dbfdb;transform:scale(1.35);}
+  .sequence-add-row{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:4;}
+  .sequence-add-row button{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(0,0,0,.55);border:1px dashed rgba(255,255,255,.5);color:#fff;padding:7px 14px;border-radius:18px;}
+  /* in Edit Mode, show every step stacked in normal flow (not crossfaded) so each one is
+     easy to see and edit at once, instead of hiding behind the single "active" step */
+  /* .entry is a flex row, so switching this out of position:absolute needs an explicit width —
+     otherwise, as a flex item with no in-flow content of its own, it shrinks to zero width and
+     every step (and its "Change Media" hover target) becomes invisible/unclickable */
+  body.edit-on .sequence-steps{position:static;width:100%;}
+  body.edit-on .sequence-step{
+    position:relative;inset:auto;opacity:1;pointer-events:auto;display:block;
+    min-height:60vh;margin-bottom:3px;border-bottom:3px solid rgba(13,191,219,.4);
+  }
+  body.edit-on .sequence-progress, body.edit-on .sequence-add-row{position:static;transform:none;
+    display:flex;justify-content:center;padding:16px;background:var(--paper);}
+  /* stacking every step in normal flow (above) routinely makes a sequence page taller than one
+     screen — but .entry is position:sticky, which pins the WHOLE box at top:0 rather than
+     scrolling inside it, so any step beyond the first screenful would otherwise be permanently
+     covered by the next section's higher z-index instead of ever reaching view. Dropping the
+     sticky behavior just for a sequence page in Edit Mode lets ordinary page scroll flow past
+     it and reveal every step, however many there are. */
+  body.edit-on .entry[data-page-type="sequence"]{position:relative;}
 
   /* ---------- optional per-section popup box (left side): a mascot tab that reveals a
      free-floating text + image/gif card on hover, pushed to hug the left edge ---------- */
   .callout-box{
     position:absolute;top:12%;left:1.5%;z-index:3;display:flex;align-items:flex-start;
-    transform-origin:left top;opacity:.6;transform:scale(.92);
   }
   .callout-tab{
     width:54px;height:54px;flex:0 0 auto;border-radius:50%;background:#005ba6;
@@ -319,7 +422,7 @@
     box-shadow:0 10px 26px rgba(0,0,0,.4);transition:transform .2s ease;
   }
   .callout-tab:hover{transform:scale(1.1);}
-  .callout-tab-icon{width:36px;height:44px;display:block;}
+  .callout-tab-icon{width:38px;height:36px;display:block;}
   .callout-content{
     position:relative;max-width:0;opacity:0;overflow:hidden;pointer-events:none;
     background:#005ba6;color:#fff;border-radius:12px;margin-left:0;padding:0;
@@ -363,10 +466,14 @@
   }
   body.edit-on .annotation{pointer-events:auto;}
   .annotation-text{
-    background:rgba(0,0,0,.32);border-radius:4px;padding:4px 9px;text-shadow:0 2px 6px rgba(0,0,0,.5);
-    line-height:1.35;word-break:break-word;
+    background:#ffde17;color:#005ba6;border-radius:3px;padding:1px 5px;text-shadow:none;
+    line-height:1.35;word-break:break-word;font-weight:700;
   }
-  body.edit-on .annotation-text{outline:1px dashed rgba(255,255,255,.5);outline-offset:2px;cursor:text;}
+  /* "Stat Chip" preset — a small rounded pill for a short number/label overlaid on media,
+     like a "YEAR: 1854" callout, as distinct from the longer highlighter-marker style above */
+  .annotation-text.chip-stat{background:#7af9b4;border-radius:20px;padding:3px 14px;
+    border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;}
+  body.edit-on .annotation-text{outline:1px dashed rgba(0,0,0,.45);outline-offset:2px;cursor:text;}
   .annotation-drag-handle{
     display:none;flex:0 0 auto;cursor:grab;color:#fff;font-size:13px;letter-spacing:-2px;
     background:rgba(0,91,166,.9);border-radius:4px;padding:3px 4px;touch-action:none;user-select:none;
@@ -394,16 +501,19 @@
   .block-color-input{width:26px;height:24px;padding:1px;cursor:pointer;border-radius:4px;}
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
-  .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;}
+  .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;
+    text-shadow:0 2px 8px rgba(0,0,0,.7);}
   .entry-rule{flex:1;height:1px;background:rgba(240,241,250,.3);max-width:120px;}
-  .entry-title{font-family:var(--font-main);font-size:clamp(24px,3.2vw,40px);font-weight:800;letter-spacing:-.01em;margin:0 0 14px;line-height:1.16;max-width:820px;
-    transform-origin:left center;opacity:.3;transform:scale(.88);}
-  .entry-caption{font-family:var(--font-body);font-size:12px;color:rgba(240,241,250,.65);margin:0 0 20px;font-style:italic;}
+  .entry-title{font-family:var(--font-main);font-size:clamp(24px,3.2vw,40px);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.7;max-width:820px;
+    text-shadow:none;
+    display:inline;background:#005ba6;color:#fff;padding:.1em .45em;border-radius:4px;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  .entry-caption{font-family:var(--font-body);font-size:12px;color:rgba(240,241,250,.65);margin:12px 0 20px;font-style:italic;}
 
   /* ---------- text blocks: laid out horizontally, side by side, wrapping to a new row
      only when they run out of horizontal space ---------- */
   .entry-blocks{display:flex;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:18px 22px;}
-  .block-wrap{flex:0 0 auto;opacity:.4;transform:scale(.95);transform-origin:left center;}
+  .block-wrap{flex:0 0 auto;}
   .block-toolbar{gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;padding:6px 8px;
     background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:8px;backdrop-filter:blur(6px);}
   .block-toolbar select, .block-toolbar button{
@@ -418,23 +528,67 @@
   .block{max-width:66ch;color:#e6e7f5;}
   .block p{margin:0 0 12px;}
   .block p:last-child{margin-bottom:0;}
-  .block--heading{color:#fff;font-weight:800;letter-spacing:-.01em;line-height:1.2;max-width:none;}
-  .block--subheading{color:#f1f2fb;font-weight:700;line-height:1.4;letter-spacing:.01em;}
+  .block--heading{font-weight:800;letter-spacing:-.01em;line-height:1.7;text-shadow:none;
+    display:inline;background:#005ba6;color:#fff;padding:.08em .4em;border-radius:4px;
+    box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+  /* wrap long headings within a readable column so the per-line highlight
+     (box-decoration-break:clone above) actually produces multiple highlighted lines
+     instead of one long bar running off the edge of the screen */
+  .block-wrap:has(.block--heading){max-width:700px;}
+  /* every text box that isn't a heading — Subheading, Body, Pull quote, Caption — shares the
+     same plain white/cream card look, so only headings carry the blue highlight treatment */
+  .block--body, .block--subheading, .block--quote, .block--caption{
+    background:#f8f3ef;color:#2b2b2b;padding:20px 24px;border-radius:12px;text-shadow:none;
+  }
   .block--body{line-height:1.75;}
-  .block--quote{font-style:italic;font-weight:600;line-height:1.5;border-left:3px solid var(--accent-2);
-    padding-left:18px;color:#fff;transition:border-color .5s ease;}
-  .block--caption{color:rgba(240,241,250,.6);text-transform:uppercase;letter-spacing:.08em;font-style:normal;}
+  .block--subheading{font-weight:700;line-height:1.5;letter-spacing:.01em;}
+  .block--quote{font-style:italic;font-weight:600;line-height:1.6;position:relative;padding-left:50px;}
+  .block--quote::before{content:"\201C";position:absolute;left:14px;top:14px;font-family:Georgia,"Times New Roman",serif;
+    font-style:normal;font-weight:800;font-size:2.6em;line-height:1;color:#005ba6;}
+  .block--caption{letter-spacing:.02em;font-style:italic;padding:10px 16px;}
+  /* on the published page, a text box with nothing typed into it shows no highlight at all —
+     no colored box with nothing in it — but Edit Mode keeps the box visible so there's still
+     something there to click on and type into */
+  body:not(.edit-on) .chapter-title.text-empty, body:not(.edit-on) .entry-title.text-empty,
+  body:not(.edit-on) .block--heading.text-empty, body:not(.edit-on) .block--subheading.text-empty,
+  body:not(.edit-on) .block--body.text-empty, body:not(.edit-on) .block--quote.text-empty,
+  body:not(.edit-on) .block--caption.text-empty, body:not(.edit-on) .annotation-text.text-empty{
+    background:none;box-shadow:none;padding:0;border:none;min-width:0;min-height:0;
+  }
+  body:not(.edit-on) .block--quote.text-empty::before{display:none;}
+  .block table{border-collapse:collapse;width:100%;max-width:820px;font-size:13.5px;}
+  .block table th, .block table td{border:1px solid rgba(255,255,255,.22);padding:8px 12px;text-align:left;}
+  .block table th{background:rgba(255,255,255,.1);text-transform:uppercase;font-size:11px;letter-spacing:.06em;}
+  .block ul, .block ol{padding-left:22px;margin:0 0 12px;}
+  .block li{margin-bottom:8px;}
+  .block .card-strip{display:flex;flex-wrap:wrap;gap:12px;margin:10px 0;}
+  .block .card-chip{flex:1 1 180px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);
+    border-radius:10px;padding:14px 16px;}
+  .block .card-chip strong{display:block;margin-bottom:4px;color:#fff;}
+  .block .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+  .block .pill-row span{background:var(--accent-live,var(--accent));color:#08131c;font-weight:700;font-size:12.5px;
+    padding:7px 16px;border-radius:20px;}
 
   /* ---------- inline media-overlay blocks (images/GIFs/video dropped into the text flow) ---------- */
-  .block-media-wrap{flex:0 0 auto;max-width:100%;transform-origin:center;opacity:.45;transform:scale(.92);}
+  .block-media-wrap{flex:0 0 auto;max-width:100%;}
   .block-media-wrap.block-media--S{width:260px;}
   .block-media-wrap.block-media--M{width:400px;}
   .block-media-wrap.block-media--L{width:600px;}
   .block-media-wrap.block-media--Full{flex-basis:100%;width:100%;max-width:820px;}
   .block-media-align--center{margin-left:auto;margin-right:auto;}
   .block-media-align--right{margin-left:auto;}
-  .block-media{position:relative;border-radius:8px;overflow:hidden;background:var(--bg-alt);aspect-ratio:16/9;
+  /* the box takes the shape of whatever's actually uploaded — no forced crop to a fixed
+     ratio — except a video EMBED (YouTube/Vimeo iframe), which has no intrinsic size of its
+     own to size from, so that alone keeps the standard 16:9 video shape */
+  .block-media{position:relative;border-radius:8px;overflow:hidden;background:var(--bg-alt);
+    min-height:180px;
     box-shadow:0 20px 45px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.1);}
+  /* a block with no media set yet has no <img>/<video> to size itself from — .media-empty
+     and .media-overlay are both position:absolute, so without this min-height the box (and
+     its clickable "Change Media" button) collapses to zero height and can't be clicked */
+  .block-media .media-fill{position:static;}
+  .block-media .media-fill .media-el{height:auto;object-fit:initial;}
+  .block-media .video-frame{aspect-ratio:16/9;}
   .block-media-caption{font-family:var(--font-body);font-size:11.5px;color:rgba(240,241,250,.65);margin-top:8px;font-style:italic;}
 
   .add-block-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
@@ -445,14 +599,18 @@
   .add-between, .add-entry-chapter{
     display:none;gap:10px;color:var(--ink-faint);font-size:11px;text-transform:uppercase;letter-spacing:.06em;
     align-items:center;padding:14px 7%;background:var(--paper);border-bottom:1px solid var(--line);
+    position:relative;z-index:250;
   }
+  /* these sit in normal document flow between two full-bleed sticky slides — without a
+     z-index above the slide stack (see slideMotion's z-index assignment), a slide mid-zoom
+     can visually cover this row even while it's within the viewport */
   body.edit-on .add-between, body.edit-on .add-entry-chapter{display:flex;}
   .add-between::before,.add-between::after,.add-entry-chapter::before{content:"";flex:1;height:1px;background:var(--line);}
   .add-between button, .add-entry-chapter button{background:var(--bg);border:1px solid var(--line-strong);padding:5px 12px;
     border-radius:14px;color:var(--ink-soft);white-space:nowrap;}
   .add-between button:hover, .add-entry-chapter button:hover{border-color:var(--accent-live);color:var(--accent-live);}
 
-  .add-chapter-row{display:none;justify-content:center;padding:26px;background:var(--paper);}
+  .add-chapter-row{display:none;justify-content:center;padding:26px;background:var(--paper);position:relative;z-index:250;}
   body.edit-on .add-chapter-row{display:flex;}
   .add-chapter-row button{background:var(--bg);border:1px dashed var(--line-strong);padding:10px 20px;border-radius:22px;
     color:var(--ink-soft);font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
@@ -463,17 +621,21 @@
     color:var(--ink-faint);font-size:12px;letter-spacing:.03em;}
   .site-footer strong{color:var(--ink-soft);}
 
-  /* ---------- brand mascot: an original cyan/yellow water-drop character used as a
-     decorative touch in a few spots ---------- */
-  .mascot-icon{display:block;width:100%;height:100%;}
-  .hero-mascot{position:absolute;right:6%;bottom:6%;width:88px;height:114px;z-index:2;
+  /* ---------- brand mascot: the client's cyan water-drop character, cropped to just its
+     head/face (matching their reference art), used as a decorative touch in a few spots ---------- */
+  .mascot-icon{display:block;width:100%;height:100%;object-fit:contain;}
+  .hero-mascot{position:absolute;right:6%;bottom:6%;width:96px;height:92px;z-index:2;
     animation:mascotBob 3.4s ease-in-out infinite;}
-  .hero-mascot svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.3));}
+  .hero-mascot svg, .hero-mascot img{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.3));}
   @keyframes mascotBob{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-10px) rotate(2deg);}}
-  .footer-mascot{width:52px;height:68px;margin:0 auto 14px;}
-  .footer-mascot svg{width:100%;height:100%;display:block;}
+  .footer-mascot{width:58px;height:56px;margin:0 auto 14px;}
+  .footer-mascot svg, .footer-mascot img{width:100%;height:100%;display:block;}
+  .mascot-change-btn{margin:0 auto 14px;background:none;border:1px solid var(--line-strong);
+    border-radius:20px;padding:5px 14px;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-faint);cursor:pointer;}
+  .mascot-change-btn:hover{border-color:var(--accent);color:var(--accent);}
   @media (max-width: 720px){
-    .hero-mascot{width:64px;height:83px;right:5%;bottom:4%;}
+    .hero-mascot{width:70px;height:67px;right:5%;bottom:4%;}
   }
 
   /* ---------- modal ---------- */
@@ -483,8 +645,10 @@
     box-shadow:0 20px 60px rgba(0,0,0,.4);max-height:88vh;overflow-y:auto;}
   .modal h3{margin:0 0 4px;font-family:var(--font-main);font-weight:800;font-size:19px;}
   .modal p.hint{margin:0 0 16px;font-size:12px;color:var(--ink-faint);}
-  .modal input[type=text]{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:4px;
+  .modal input[type=text], .modal input[type=number]{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:4px;
     background:var(--bg);color:var(--ink);font-size:13px;margin-bottom:12px;}
+  .modal input[type=number]{width:120px;}
+  .hold-label{display:block;font-size:12px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
   .modal-row{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap;}
   .modal-row .or{font-size:11px;color:var(--ink-faint);text-transform:uppercase;}
   .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:6px;}
@@ -525,6 +689,7 @@
       <button id="btnExport">Export JSON</button>
       <label class="file-btn">Import JSON<input type="file" id="fileImport" accept="application/json" /></label>
       <button id="btnReset">Reset Demo</button>
+      <button id="btnGithubPush">Push to GitHub</button>
     </div>
   </div>
 
@@ -539,32 +704,8 @@
   <section class="hero" id="hero">
     <div class="media-fill" id="heroMediaWrap" data-media-scope="hero"></div>
     <div class="annotation-layer" id="heroAnnotationLayer"></div>
-    <div class="scrim hero-scrim"></div>
     <div class="hero-callout-mount" id="heroCalloutMount"></div>
-    <div class="hero-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M40 95 L40 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <ellipse cx="40" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <ellipse cx="60" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="1" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="99" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-          fill="#0dbfdb" stroke="#413c3f" stroke-width="4.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#fbe847" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="34" cy="47" r="2.6" fill="#fbe847"/>
-        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="60" cy="47" r="2.6" fill="#fbe847"/>
-        <path d="M41 63 Q50 68 59 63" fill="none" stroke="#413c3f" stroke-width="3.2" stroke-linecap="round"/>
-      </svg>
-    </div>
+    <div class="hero-mascot" id="heroMascotIcon" aria-hidden="true"></div>
     <div class="hero-content">
       <div class="hero-logos-wrap">
         <div class="hero-logos" id="heroLogos"></div>
@@ -576,7 +717,7 @@
       <div class="hero-scrolldown">
         <div class="hero-scrolldown-label" data-editable data-bind-type="meta" data-field="scrollLabel" contenteditable="false"></div>
         <div class="hero-scrolldown-cue" data-editable data-bind-type="meta" data-field="scrollCue" contenteditable="false"></div>
-        <button class="hero-scrolldown-btn" id="heroScrollBtn" type="button" aria-label="Scroll down">⌄</button>
+        <button class="entry-intro-cta hero-dive-in-btn" id="heroScrollBtn" type="button">DIVE IN ↓</button>
       </div>
     </div>
   </section>
@@ -593,30 +734,8 @@
   <div class="rail-hover-popup" id="railHoverPopup"></div>
 
   <footer class="site-footer">
-    <div class="footer-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M40 95 L40 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <ellipse cx="40" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <ellipse cx="60" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="1" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="99" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-          fill="#0dbfdb" stroke="#413c3f" stroke-width="4.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#fbe847" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="34" cy="47" r="2.6" fill="#fbe847"/>
-        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="60" cy="47" r="2.6" fill="#fbe847"/>
-        <path d="M41 63 Q50 68 59 63" fill="none" stroke="#413c3f" stroke-width="3.2" stroke-linecap="round"/>
-      </svg>
-    </div>
+    <div class="footer-mascot" id="footerMascotIcon" aria-hidden="true"></div>
+    <button type="button" class="mascot-change-btn edit-only" data-act="changeMascot">Change Mascot Image</button>
     <strong>Editable Storymap Dashboard</strong> — a reusable, full-bleed scrollytelling template.
     Group your content into chapters, each with its own timeline, rich text styles, images, GIFs, and video.
   </footer>
@@ -659,11 +778,58 @@
           <label><input type="checkbox" id="optLoop" /> Loop</label>
           <label><input type="checkbox" id="optMuted" /> Muted</label>
         </div>
+        <p class="hint field-hidden" id="bgVideoHint">This is a section background, so it always autoplays muted
+          automatically — Autoplay/Muted above are ignored here. Check Loop if you want it to repeat.</p>
+      </div>
+
+      <div id="holdField" class="field-hidden">
+        <label class="hold-label" for="optHoldSeconds">Hold this section until media finishes (seconds)</label>
+        <input type="number" id="optHoldSeconds" min="1" max="60" step="1" placeholder="auto" />
+        <p class="hint">Uploaded/direct video files auto-detect their own length. GIFs and YouTube/Vimeo links
+          can't report when they're done playing, so this section will hold for however many seconds you set
+          here before the next one is allowed to transition in — leave blank to use the default.</p>
       </div>
 
       <div class="modal-actions">
         <button id="modalCancel" type="button">Cancel</button>
         <button id="modalSave" class="primary" type="button">Save Media</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="githubModalBackdrop">
+    <div class="modal">
+      <h3>Push to GitHub</h3>
+      <p class="hint">Uploads every image/video in your current content to its own file (never one giant blob),
+        then commits your content as this file's new default.</p>
+      <input type="text" id="ghOwner" placeholder="Repo owner (e.g. shmod1)" />
+      <input type="text" id="ghRepo" placeholder="Repo name (e.g. dashboard-case-studies)" />
+      <input type="text" id="ghBranch" placeholder="Branch (e.g. claude/editable-ambassador-dashboard-on41ir)" />
+      <input type="text" id="ghToken" placeholder="GitHub Personal Access Token" autocomplete="off" />
+      <p class="hint">Needs a GitHub <a href="https://github.com/settings/personal-access-tokens/new"
+        target="_blank" rel="noopener">Personal Access Token</a> with write access to this one repo — it's kept
+        only in this browser tab's session storage, never sent anywhere except directly to api.github.com.</p>
+
+      <label class="hold-label" for="mediaHostChoice">Where should images/video be uploaded?</label>
+      <select id="mediaHostChoice" style="width:100%;padding:9px 10px;border:1px solid var(--line-strong);
+        border-radius:4px;background:var(--bg);color:var(--ink);font-size:13px;margin-bottom:12px;">
+        <option value="github">This repo's assets/ folder (default)</option>
+        <option value="cloudflare">Cloudflare R2 (better for large files)</option>
+      </select>
+
+      <div id="cloudflareFields" class="field-hidden">
+        <input type="text" id="cfWorkerUrl" placeholder="Worker URL (e.g. https://your-worker.you.workers.dev)" />
+        <input type="text" id="cfSecret" placeholder="Upload secret" autocomplete="off" />
+        <p class="hint">Media is PUT directly to your Cloudflare Worker, which stores it in your R2 bucket and
+          hands back a public URL — better suited to large files than GitHub's API. Your content (text/structure)
+          still commits to GitHub as usual; only the media upload path changes. Requires a one-time Worker/R2
+          setup — ask for the setup steps if you haven't done this yet.</p>
+      </div>
+
+      <div id="ghPushStatus" class="hint" style="min-height:36px;white-space:pre-line;"></div>
+      <div class="modal-actions">
+        <button id="ghModalCancel" type="button">Close</button>
+        <button id="ghPushBtn" class="primary" type="button">Push</button>
       </div>
     </div>
   </div>
@@ -745,30 +911,27 @@
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
 
-  // an original brand mascot — a friendly cyan/yellow water-drop blob character — used as a
-  // decorative touch in a few spots (not a reproduction of any reference artwork)
+  // the mascot shown in the hero corner, the footer, and every popup-box tab. If the user
+  // has uploaded their own mascot image (Edit Mode → "Change Mascot Image"), that always
+  // wins; otherwise it falls back to a hand-drawn placeholder cropped to just the head/face
+  // (no arms or legs) so it reads cleanly as a small icon without ever looking skewed.
   function mascotSVG(extraClass){
-    return `<svg class="mascot-icon${extraClass ? " " + extraClass : ""}" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M60 95 L60 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M40 95 L40 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M60 95 L60 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <ellipse cx="40" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-      <ellipse cx="60" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-      <path d="M23 64 Q3 61 1 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M23 64 Q3 61 1 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <circle cx="1" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-      <path d="M77 64 Q97 61 99 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M77 64 Q97 61 99 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <circle cx="99" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
+    const cls = `mascot-icon${extraClass ? " " + extraClass : ""}`;
+    const m = state.meta.mascotMedia;
+    if(m && m.src){
+      return `<img class="${cls}" src="${escapeHtml(m.src)}" alt="" />`;
+    }
+    return `<svg class="${cls}" viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-        fill="#0dbfdb" stroke="#413c3f" stroke-width="4.5"/>
-      <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#fbe847" stroke-width="4.5" stroke-linecap="round"/>
-      <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-      <circle cx="34" cy="47" r="2.6" fill="#fbe847"/>
-      <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-      <circle cx="60" cy="47" r="2.6" fill="#fbe847"/>
-      <path d="M41 63 Q50 68 59 63" fill="none" stroke="#413c3f" stroke-width="3.2" stroke-linecap="round"/>
+        fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
+      <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
+      <ellipse cx="30" cy="63" rx="16" ry="11" fill="#7fecfb" opacity=".55"/>
+      <path d="M31 35 Q28 32 25 34" fill="none" stroke="#3a3542" stroke-width="2.6" stroke-linecap="round"/>
+      <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+      <circle cx="34" cy="47" r="2.6" fill="#ffe14d"/>
+      <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+      <circle cx="60" cy="47" r="2.6" fill="#ffe14d"/>
+      <path d="M39 61 Q50 69 61 61 Q59 68 50 69 Q41 68 39 61 Z" fill="#ffe14d" stroke="#3a3542" stroke-width="2.6" stroke-linejoin="round"/>
     </svg>`;
   }
 
@@ -791,7 +954,7 @@
     heading:   { S:24, M:32, L:42, XL:54 },
     subheading:{ S:17, M:20, L:24, XL:28 },
     body:      { S:14, M:16, L:18, XL:20 },
-    quote:     { S:19, M:23, L:27, XL:31 },
+    quote:     { S:14, M:16.5, L:19, XL:22 },
     caption:   { S:11, M:12.5, L:14, XL:15 }
   };
   const BLOCK_TYPES = [
@@ -815,150 +978,1379 @@
   function newMediaBlock(media){
     return { id:newId(), type:"media", media: media || { kind:"image", src:null, embed:false }, caption:"", size:"M", align:"left" };
   }
+
+  // every page a chapter contains is one of 4 types: a full-bleed "background" page (the
+  // classic entry — background media + text blocks), a simpler "intro" divider page, a
+  // "grid" page built mainly from a freeform box grid, or a scroll-driven "sequence" of
+  // stepped images. All 4 share the same base fields (title/year/caption/media/annotations/
+  // callout) so switching a page's type later doesn't lose your text — only blocks/sequence
+  // are type-specific.
+  const PAGE_TYPES = [
+    { type:"background", label:"Full Background" },
+    { type:"intro", label:"Section Intro" },
+    { type:"grid", label:"Grid" },
+    { type:"sequence", label:"Scroll Sequence" }
+  ];
+  function newEntry(pageType, seed){
+    const s = seed == null ? Math.floor(Math.random() * 99) : seed;
+    const entry = {
+      id:newId(), pageType,
+      year:String(new Date().getFullYear()),
+      title: pageType === "intro" ? "Section Introduction" : "New Entry",
+      caption:"",
+      media:{ kind:"image", src: placeholder(s, "N"), embed:false },
+      blocks:[], sequence:[], annotations:[], callout:null
+    };
+    if(pageType === "background" || pageType === "grid"){
+      entry.blocks = [ newBlock("body") ];
+      if(pageType === "grid") entry.gridColumns = 3;
+    } else if(pageType === "intro"){
+      entry.hint = "";
+    } else if(pageType === "sequence"){
+      entry.sequence = [
+        { id:newId(), media:{ kind:"image", src:placeholder(s, "1"), embed:false }, text:"", annotations:[] },
+        { id:newId(), media:{ kind:"image", src:placeholder(s + 1, "2"), embed:false }, text:"", annotations:[] }
+      ];
+    }
+    return entry;
+  }
   function newId(){ return "id" + Math.random().toString(36).slice(2,9); }
 
   /* ---------------- default dummy content ---------------- */
+  // the START/END comment markers a couple lines below wrap this object literal as a
+  // stable splice point: "Push to GitHub" (see pushToGithub()) rewrites exactly the text
+  // between them when it commits your current content as the new shipped default, so
+  // don't remove or rename those two markers.
   function defaultData(){
-    return {
-      meta: {
-        title: "The Water City",
-        subtitle: "The story of a growing city's water, seen through its lakes, wells, and neighborhoods.",
-        presentsLabel: "PRESENTS",
-        scrollLabel: "SCROLL DOWN",
-        scrollCue: "Explore the chapters",
-        heroMedia: { kind:"image", src: coverPlaceholder(), embed:false },
-        logos: [
-          { id:newId(), media:{ kind:"image", src: logoPlaceholder("YOUR LOGO"), embed:false } },
-          { id:newId(), media:{ kind:"image", src: logoPlaceholder("PARTNER LOGO"), embed:false } }
-        ]
-      },
-      chapters: [
-        {
-          id:"c1", title:"The Vanishing Lakes", subtitle:"Mapping a century of urban lake loss, 1900–1990", accent: ACCENTS[0],
-          cover: { kind:"image", src: placeholder(21,"1"), embed:false },
-          callout: { enabled:true, text:"Optional popup box — add a quick stat, quote, or side note here, with its own image or GIF.",
-            media:{ kind:"image", src: placeholder(22,"i"), embed:false } },
-          entries: [
-            {
-              id:"e1", year:"1905", title:"A City Built on a Thousand Tanks",
-              media:{ kind:"image", src: placeholder(31,"05"), embed:false },
-              caption:"Sample caption — replace with your own source line.",
-              callout: { enabled:true, text:"This box is fully optional — remove it with the ✕, or add one to any section with \"+ Add popup box\".", media:null },
-              annotations:[ { id:newId(), x:78, y:22, text:"Drag me anywhere on the image", font:FONT_OPTIONS[0].value, size:"M", bold:true, italic:false, color:"#ffde17" } ],
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                html:"<p>The city's water once moved through a chain of interconnected tanks and lakes, each overflow feeding the next down the valley. The system stored the monsoon for the dry months ahead.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(41,"1"), embed:false }), size:"M", align:"left",
-                  caption:"An inline overlay image — this sits inside the text flow, separate from the full-bleed background. Add as many as you like via \"+ Add image / video / GIF\"." },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Click any word here to edit — this block's type, font, and size can all be changed from the toolbar above it in Edit Mode.</p>" } ]
-            },
-            {
-              id:"e2", year:"1985", title:"Encroachment Accelerates",
-              media:{ kind:"gif", src: animatedPlaceholder(32,"85"), embed:false },
-              caption:"A full-bleed animated GIF background — swap in your own via Change Media.",
-              blocks:[ { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"Wetlands become real estate" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>As the city grows outward, lakebeds and buffer zones are drained, filled, and built over. What were once flood-absorbing wetlands become bus depots, stadiums, and housing layouts.</p><p>By the end of the decade, more than half of the historic tank network has been lost or fragmented beyond repair.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(43,"3"), embed:false }), size:"M", align:"right",
-                  caption:"A before/after comparison — a good candidate for a real photo pair." } ]
-            }
-          ]
-        },
-        {
-          id:"c2", title:"Groundwater Under Pressure", subtitle:"Borewells, depletion, and a city drinking itself dry, 1990–2015", accent: ACCENTS[1],
-          cover: { kind:"image", src: placeholder(22,"2"), embed:false },
-          entries: [
-            {
-              id:"e3", year:"1995", title:"The Rise of the Borewell",
-              media:{ kind:"image", src: placeholder(33,"95"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>With surface water sources shrinking, households and apartment blocks turn underground, drilling private borewells to make up the shortfall. Within a decade, tens of thousands are in operation across the city, mostly unregulated and unmetered.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(44,"4"), embed:false }), size:"S", align:"left",
-                  caption:"A drilling rig — a small, left-aligned inline overlay." },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Each new borewell is a private solution to a shared problem — and each one lowers the water table a little further for every neighbor drawing from the same aquifer.</p>" } ]
-            },
-            {
-              id:"e4", year:"2012", title:"A Falling Water Table",
-              media:{ kind:"video", src:null, embed:false },
-              caption:"Video slot — add a link or upload a clip via Change Media.",
-              blocks:[ { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                html:"“Every year the drill goes a little deeper, and the water comes back a little less.”" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Well depths that once reached water at 150 feet now go past 1,000. Tanker trucks become a daily fixture in neighborhoods where the pumps have run dry, and water itself turns into a line item in every household budget.</p>" } ]
-            }
-          ]
-        },
-        {
-          id:"c3", title:"Harvesting the Monsoon", subtitle:"Rainwater harvesting and citizen-led recharge, 2000–2020", accent: ACCENTS[2],
-          cover: { kind:"image", src: placeholder(23,"3"), embed:false },
-          entries: [
-            {
-              id:"e5", year:"2003", title:"A Rooftop Revolution",
-              media:{ kind:"image", src: placeholder(34,"03"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"subheading", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"Every roof becomes a catchment" },
-                { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>A new building code requires rainwater harvesting structures on every plot above a certain size. Roofs, once purely functional, are re-engineered as the first stage of a recharge system that feeds storage tanks and percolation pits below.</p>" },
-                { ...newMediaBlock({ kind:"gif", src: animatedPlaceholder(42,"2"), embed:false }), size:"S", align:"right",
-                  caption:"A small animated GIF overlay, right-aligned — size and alignment are per-block." } ]
-            },
-            {
-              id:"e6", year:"2018", title:"Recharge Wells Return",
-              media:{ kind:"image", src: placeholder(35,"18"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Old, disused open wells — once filled in or forgotten — are cleaned out and reopened as recharge points. Community groups map thousands of them across the city, turning neglected infrastructure back into working water assets.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(45,"5"), embed:false }), size:"L", align:"center",
-                  caption:"A large, center-aligned overlay — good for a hero-style inline photo." },
-                { id:newId(), type:"caption", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"Source: replace with your own citation or data credit." } ]
-            }
-          ]
-        },
-        {
-          id:"c4", title:"Community Water Guardians", subtitle:"Neighborhoods restoring lakes and wetlands, 2015–present", accent: ACCENTS[3 % ACCENTS.length],
-          cover: { kind:"image", src: placeholder(24,"4"), embed:false },
-          entries: [
-            {
-              id:"e7", year:"2016", title:"Citizens Reclaim a Lake",
-              media:{ kind:"image", src: placeholder(36,"16"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>A residents' association adopts a neglected lake choked with weeds and waste, organizing weekend clean-up drives and lobbying the city for de-silting and fencing. Within two years, migratory birds return for the first time in a generation.</p>" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(46,"6"), embed:false }), size:"M", align:"left",
-                  caption:"Volunteers at a clean-up drive." } ]
-            },
-            {
-              id:"e8", year:"2024", title:"A Living Case Study",
-              media:{ kind:"image", src: placeholder(37,"24"), embed:false },
-              caption:"",
-              blocks:[ { id:newId(), type:"body", font:FONT_OPTIONS[1].value, size:"M", align:"left",
-                  html:"<p>Today the model has spread to dozens of lakes across the city, each with its own citizen stewardship group, monitoring water quality and pushing back against fresh encroachment.</p>" },
-                { id:newId(), type:"quote", font:FONT_OPTIONS[0].value, size:"M", align:"left",
-                  html:"“The lake didn't need an expert. It needed a neighborhood that refused to look away.”" },
-                { ...newMediaBlock({ kind:"image", src: placeholder(47,"7"), embed:false }), size:"Full", align:"center",
-                  caption:"A full-width closing image — this template is yours to fill with a real case study." } ]
-            }
-          ]
+    return /* DEFAULT_DATA_START */ {
+  "meta": {
+    "title": "How Does Water Move Through The City?",
+    "subtitle": "Three cities engineered water away from view — and paid for\nit with fragmented ecologies, disconnected neighborhoods, and floods that pipes\nalone couldn't hold. This is how each one began designing with water instead.",
+    "presentsLabel": "PRESENTS",
+    "scrollLabel": "SCROLL DOWN",
+    "scrollCue": "Explore the chapters",
+    "heroMedia": {
+      "kind": "image",
+      "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22%23005ba6%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.2%22%20fill%3D%22none%22%20opacity%3D%220.22%22%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22260%22%20cy%3D%22180%22%20r%3D%22130%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%221300%22%20cy%3D%22700%22%20r%3D%22220%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Ccircle%20cx%3D%22820%22%20cy%3D%22470%22%20r%3D%22340%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M-20%2C680%20Q400%2C580%20800%2C680%20T1620%2C630%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M-20%2C240%20Q520%2C140%201040%2C250%20T1620%2C210%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M-20%2C860%20Q500%2C800%20900%2C850%20T1620%2C820%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%2290%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2218%22%20letter-spacing%3D%223%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%20opacity%3D%220.5%22%3ECOVER%20BACKGROUND%20%E2%80%94%20REPLACE%20VIA%20CHANGE%20MEDIA%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+      "embed": false
+    },
+    "logos": [
+      {
+        "id": "idmk6vt4g",
+        "media": {
+          "kind": "image",
+          "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2296%22%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%22254%22%20height%3D%2290%22%20rx%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%226%205%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22130%22%20y%3D%2255%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2220%22%20letter-spacing%3D%221%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EYOUR%20LOGO%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+          "embed": false
         }
-      ]
-    };
+      },
+      {
+        "id": "idq0jonlw",
+        "media": {
+          "kind": "image",
+          "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22260%22%20height%3D%2296%22%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%22254%22%20height%3D%2290%22%20rx%3D%2210%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221.6%22%20stroke-dasharray%3D%226%205%22%20opacity%3D%220.7%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22130%22%20y%3D%2255%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%2220%22%20letter-spacing%3D%221%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EPARTNER%20LOGO%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+          "embed": false
+        }
+      }
+    ],
+    "annotations": [
+      {
+        "id": "idn6zq188",
+        "x": 69.00369003690037,
+        "y": 56.69456066945606,
+        "text": "Water",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "S",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      },
+      {
+        "id": "id8vi4j8c",
+        "x": 71.74486030574592,
+        "y": 52.82426778242678,
+        "text": "PRIMARY LENS",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "M",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      },
+      {
+        "id": "id3and48t",
+        "x": 72.16657880864523,
+        "y": 60.56485355648535,
+        "text": "SECONDARY LENS",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "M",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      },
+      {
+        "id": "iddnu55no",
+        "x": 75.06589351607802,
+        "y": 64.1213389121339,
+        "text": "Space . Policy . Technology . Community",
+        "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+        "size": "S",
+        "bold": true,
+        "italic": false,
+        "color": "#82f984"
+      }
+    ]
+  },
+  "chapters": [
+    {
+      "id": "c2",
+      "title": "Setting Context",
+      "subtitle": "Tujunga Wash Greenway\n\nLos Angeles, California — Corridor Scale",
+      "accent": "#0dbfdb",
+      "cover": {
+        "kind": "image",
+        "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-ae47728ac7.png",
+        "embed": false
+      },
+      "entries": [
+        {
+          "id": "idamhiemm",
+          "pageType": "background",
+          "year": "2026",
+          "title": "The Flow",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-22baa7cfea.png",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idaw7zvwg",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\">Los Angeles grew up around an extensive network of rivers,\ncreeks, washes, and flood channels. One of them — the Tujunga Wash —\nhistorically carried water from the San Gabriel Mountains down through the city\nto the Los Angeles River, and on to the Pacific.<o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": {
+            "enabled": true,
+            "text": "",
+            "media": null
+          }
+        },
+        {
+          "id": "idjgb20dl",
+          "pageType": "background",
+          "year": "2026",
+          "title": "The City",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-a42c6b773b.png",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "id0kjw8a7",
+              "type": "body",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\">As urbanization increased, most of this watershed was\nengineered to move water away as quickly as possible. The wash stopped being a\nliving system and became, simply, flood-control infrastructure<o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "id4wcof63",
+          "pageType": "background",
+          "year": "WHAT WAS LOST?",
+          "title": "Flooding Reduced. But Something Else Disappeared",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-6886e23802.jpg",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idpb8sbo1",
+              "type": "subheading",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\"><span style=\"font-weight: normal;\">Mountains&nbsp; → &nbsp;Streams&nbsp;\n→ Tujunga Wash&nbsp;&nbsp; →LA\nRiver&nbsp; →&nbsp; Pacific Ocean</span><o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "idgrxfin8",
+          "pageType": "background",
+          "year": "THE TRADE OFF",
+          "title": "What Was Lost?",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-cf182d5fd5.png",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "ids1osq8i",
+              "type": "quote",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "L",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\"><i style=\"\">The system was efficient at moving water — but poor at\nsupporting resilience.</i><b><o:p></o:p></b></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [
+            {
+              "id": "idfbjuucj",
+              "x": 21.60664819944598,
+              "y": 11.820083682008368,
+              "text": "Mountains",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": false,
+              "italic": false,
+              "color": "#005ba6",
+              "chip": "stat"
+            },
+            {
+              "id": "idwm8drd9",
+              "x": 5.263157894736842,
+              "y": 53.97489539748954,
+              "text": "Streams",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": false,
+              "italic": false,
+              "color": "#005ba6",
+              "chip": "stat"
+            },
+            {
+              "id": "idjkzbmy1",
+              "x": 4.633204633204633,
+              "y": 71.64021164021163,
+              "text": "Tajunga Wash",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": false,
+              "italic": false,
+              "color": "#005ba6",
+              "chip": "stat"
+            },
+            {
+              "id": "idvtwu2c0",
+              "x": 61.828254847645425,
+              "y": 80.9623430962343,
+              "text": "Concrete Chanel",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": false,
+              "italic": false,
+              "color": "#005ba6",
+              "chip": "stat"
+            },
+            {
+              "id": "id33l7ik7",
+              "x": 46.81440443213297,
+              "y": 31.276150627615063,
+              "text": "Divided Communities",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": false,
+              "italic": false,
+              "color": "#005ba6",
+              "chip": "stat"
+            },
+            {
+              "id": "idvz8wdir",
+              "x": 80.38781163434902,
+              "y": 58.05439330543933,
+              "text": "Loss of Natural Habitat",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": false,
+              "italic": false,
+              "color": "#005ba6",
+              "chip": "stat"
+            },
+            {
+              "id": "idoabbggw",
+              "x": 27.633756205184778,
+              "y": 8.042328042328043,
+              "text": "Natural hydrological processes were disrupted.",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": true,
+              "italic": false,
+              "color": "#155724"
+            },
+            {
+              "id": "id5ealwa4",
+              "x": 66.3157894736842,
+              "y": 75.94142259414227,
+              "text": "Ecological connections were fragmented.",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": true,
+              "italic": false,
+              "color": "#155724",
+              "chip": ""
+            },
+            {
+              "id": "idplyy3u8",
+              "x": 52.5207756232687,
+              "y": 25.83682008368201,
+              "text": "Communities were disconnected from the waterway.",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": true,
+              "italic": false,
+              "color": "#155724"
+            },
+            {
+              "id": "id0ioq02w",
+              "x": 82.99168975069252,
+              "y": 51.88284518828452,
+              "text": "Opportunities for infiltration and habitat were reduced.",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": true,
+              "italic": false,
+              "color": "#155724",
+              "chip": ""
+            },
+            {
+              "id": "idktuqney",
+              "x": 11.086596800882516,
+              "y": 49.523809523809526,
+              "text": "-Ecological Connections were fragmented",
+              "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "S",
+              "bold": true,
+              "italic": false,
+              "color": "#005ba6"
+            }
+          ],
+          "callout": null,
+          "gridColumns": 3
+        },
+        {
+          "id": "ido3evwbf",
+          "pageType": "sequence",
+          "year": "2026",
+          "title": "New Entry",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2b38%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230dbfdb%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "blocks": [],
+          "sequence": [
+            {
+              "id": "idvb75og6",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-1da15bee89.png",
+                "embed": false
+              },
+              "text": "",
+              "annotations": [
+                {
+                  "id": "id9hsd06d",
+                  "x": 54.4310363389021,
+                  "y": 14.893617021276595,
+                  "text": "EXISTING CONCRETE CHANEL",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "M",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                },
+                {
+                  "id": "idav18xu7",
+                  "x": 49.60803311899939,
+                  "y": 77.12765957446808,
+                  "text": "Sterile Environment",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "id1zhhsjt",
+                  "x": 48.23003219902718,
+                  "y": 83.15602836879432,
+                  "text": "Rapid Runoff",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "id0m9peyg",
+                  "x": 47.72894095540092,
+                  "y": 89.00709219858156,
+                  "text": "Dry & Hot",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                }
+              ]
+            },
+            {
+              "id": "id3hw3z8s",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-45796abf21.png",
+                "embed": false
+              },
+              "text": "",
+              "annotations": [
+                {
+                  "id": "idgnl9625",
+                  "x": 52.3640349589438,
+                  "y": 16.312056737588655,
+                  "text": "CONSTRUCTED STREAM",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "M",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                },
+                {
+                  "id": "id9g570d9",
+                  "x": 48.4805778208403,
+                  "y": 76.59574468085107,
+                  "text": "Oxygenated Flow",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "id74q4gtz",
+                  "x": 48.605850631746875,
+                  "y": 81.91489361702128,
+                  "text": "Riparian Habitat",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "idzzq4m2b",
+                  "x": 49.98385155171908,
+                  "y": 87.2340425531915,
+                  "text": "Groundwater Recharge",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                }
+              ]
+            },
+            {
+              "id": "idbc0gjrj",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-a8636ecbaa.png",
+                "embed": false
+              },
+              "text": "",
+              "annotations": [
+                {
+                  "id": "ids3yxzcg",
+                  "x": 49.23221468627969,
+                  "y": 17.375886524822697,
+                  "text": "BIOSWALES",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "M",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                },
+                {
+                  "id": "idl6cqkfc",
+                  "x": 48.731123442653434,
+                  "y": 77.6595744680851,
+                  "text": "Bio-retention Soil",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "idpuvb09i",
+                  "x": 47.916850171760764,
+                  "y": 82.62411347517731,
+                  "text": "Gravel Layer ",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "id1fmz6pw",
+                  "x": 48.04212298266734,
+                  "y": 87.2340425531915,
+                  "text": "Unfilttration",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "idnuzacea",
+                  "x": 16.78655666147959,
+                  "y": 41.13475177304964,
+                  "text": "Stormwater Capture",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "id3gbxs00",
+                  "x": 16.348101823306614,
+                  "y": 46.98581560283688,
+                  "text": "Pollution Filtration",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                }
+              ]
+            },
+            {
+              "id": "idxzab4oy",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-17793975b4.png",
+                "embed": false
+              },
+              "text": "",
+              "annotations": [
+                {
+                  "id": "id93cwibw",
+                  "x": 51.111306849878154,
+                  "y": 12.056737588652481,
+                  "text": "NATIVE VEGETATION",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "M",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                },
+                {
+                  "id": "idgyxwnqv",
+                  "x": 49.357487497186256,
+                  "y": 80.49645390070921,
+                  "text": "Drought Tolerant",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": ""
+                },
+                {
+                  "id": "id7v24jrl",
+                  "x": 48.54321422629359,
+                  "y": 84.75177304964538,
+                  "text": "Deep Rooted",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": ""
+                },
+                {
+                  "id": "idurg2zpc",
+                  "x": 49.48276030809282,
+                  "y": 90.78014184397163,
+                  "text": "Wildlife Corridor",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": ""
+                }
+              ]
+            },
+            {
+              "id": "id14r5gzj",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-2273eb4203.png",
+                "embed": false
+              },
+              "text": "",
+              "annotations": [
+                {
+                  "id": "idnzg6l05",
+                  "x": 56.05958288068743,
+                  "y": 9.042553191489363,
+                  "text": "PERMEABLE TRAILS & PUBLIC SPACES",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "M",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                },
+                {
+                  "id": "idw635ddg",
+                  "x": 49.60803311899939,
+                  "y": 79.43262411347519,
+                  "text": "Reduced Runoff ",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": ""
+                },
+                {
+                  "id": "idvl2ykee",
+                  "x": 48.41794141538702,
+                  "y": 84.57446808510637,
+                  "text": "Accessible ",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                },
+                {
+                  "id": "id63ppe2w",
+                  "x": 48.79375984810672,
+                  "y": 88.82978723404256,
+                  "text": "Cool Surfaces",
+                  "font": "'Open Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6"
+                }
+              ]
+            }
+          ],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "idt7lmyf4",
+          "pageType": "grid",
+          "year": "DIAGNOSIS",
+          "title": "Water was Moving too Fast",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-693bdcddad.jpg",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "id945fux7",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-49d4e63ee2.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idqlupyoj",
+                  "x": 26.347470477415797,
+                  "y": 11.113403479815693,
+                  "text": "Increased Runoff",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idk9dakom",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-ecbc10fed7.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idhwkv7mh",
+                  "x": 31.038919266645227,
+                  "y": 11.553538271095523,
+                  "text": "Reduced Infiltration",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "id88rrnqi",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-e11d164f59.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idxbvs9el",
+                  "x": 33.08367412580986,
+                  "y": 11.993673062375352,
+                  "text": "Ecological Fragmentation",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idiuhh668",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-95d17b2439.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idm9wfxoo",
+                  "x": 33.658043468271835,
+                  "y": 11.113403479815693,
+                  "text": "Single Purpose Infrastructure",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null,
+          "gridColumns": 4
+        },
+        {
+          "id": "idjcm2owc",
+          "pageType": "grid",
+          "year": "THOUGHTS",
+          "title": "Approach ",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-4a85bf42e4.jpg",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idn5ntjpr",
+              "type": "body",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "XL",
+              "align": "left",
+              "html": "<p>THE TRADITIONAL RESPONSE:</p><p><i><b>Build More Engineered Infrastructure.</b></i></p><p class=\"MsoNormal\"><i>Traditional flood infrastructure follows one principle:\n<b>convey water away, quickly.</b></i><o:p></o:p></p><p><br></p><p><i><b><br></b></i></p>"
+            },
+            {
+              "id": "id9ixvw1o",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-52d453fa2f.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left"
+            },
+            {
+              "id": "idxvdm5ux",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-b57a802ec5.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left"
+            },
+            {
+              "id": "idndgtosn",
+              "type": "body",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "XL",
+              "align": "left",
+              "html": "<p>INSTEAD, THEY ASKED:</p><p><b><i>Can we protect watershed functions without removing flood protection?</i></b></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null,
+          "gridColumns": 4
+        },
+        {
+          "id": "idjnfa075",
+          "pageType": "grid",
+          "year": "THE SHIFT IN THINKING",
+          "title": "Reconnecting the Watershed",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-fd86150915.jpg",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "id1q5xne7",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-044c36057f.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idwbkig9u",
+                  "x": 35.07427253611883,
+                  "y": 16.612377850162865,
+                  "text": "WATER: Restore ecological and hydrological functions.",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": true,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idclbx6yp",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-9d02280f01.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idetzjet7",
+                  "x": 33.83185810696239,
+                  "y": 18.34049287813701,
+                  "text": "LANDSCAPE :Create continuous green infrastructure.",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": true,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "id31nvzdt",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-755e68aa1e.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idnew0ubi",
+                  "x": 35.84412941735061,
+                  "y": 15.419824034989574,
+                  "text": "COMMUNITIES: Improve access and awareness",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": true,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idgtfh6ez",
+              "type": "quote",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\"><i>Instead of rebuilding the channel — restore everything\naround it.</i><o:p></o:p></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null,
+          "gridColumns": 3
+        },
+        {
+          "id": "idcdk8a70",
+          "pageType": "grid",
+          "year": "2026",
+          "title": "Four Watershed Functions",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-6729ea4203.jpg",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idbps2nz7",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-7445091d68.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "ideruvhsp",
+                  "x": 18.701465790561965,
+                  "y": 11.352357320099255,
+                  "text": "CONVEY",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idefqg267",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-18362b44fc.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idxy41n72",
+                  "x": 16.335064099618616,
+                  "y": 12.283737024221452,
+                  "text": "SLOW",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "ide5eesi0",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-b3de152aa6.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "id3i8lekb",
+                  "x": 18.085741855442723,
+                  "y": 11.793493245106148,
+                  "text": "STORE",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "id8mhvirn",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-b69b35dc94.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idww06970",
+                  "x": 20.424573817947895,
+                  "y": 11.822830292979546,
+                  "text": "INFILTRATE",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": true,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null,
+          "gridColumns": 4
+        },
+        {
+          "id": "idkocuhq7",
+          "pageType": "grid",
+          "year": "MEASURED IMPACT",
+          "title": "What the Greenway Achieved",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%221600%22%20height%3D%22900%22%3E%0A%20%20%20%20%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%0A%20%20%20%20%20%20%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%230d2340%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23005ba6%22%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%20%20%20%20%3Crect%20width%3D%221600%22%20height%3D%22900%22%20fill%3D%22url(%23g)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22200%22%20fill%3D%22rgba(255%2C255%2C255%2C0.06)%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%22800%22%20cy%3D%22400%22%20r%3D%22120%22%20fill%3D%22rgba(255%2C255%2C255%2C0.07)%22%2F%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22440%22%20font-family%3D%22Poppins%2C%20Arial%2C%20sans-serif%22%20font-weight%3D%22700%22%20font-size%3D%22160%22%20fill%3D%22rgba(255%2C255%2C255%2C0.55)%22%20text-anchor%3D%22middle%22%3EN%3C%2Ftext%3E%0A%20%20%20%20%20%20%3Ctext%20x%3D%22800%22%20y%3D%22780%22%20font-family%3D%22'Open%20Sans'%2C%20Arial%2C%20sans-serif%22%20font-size%3D%2226%22%20letter-spacing%3D%225%22%20fill%3D%22rgba(255%2C255%2C255%2C0.5)%22%20text-anchor%3D%22middle%22%3ESAMPLE%20IMAGE%3C%2Ftext%3E%0A%20%20%20%20%20%20%3C%2Fsvg%3E",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idu9zxvhu",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-30d98afff3.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idorecn6j",
+                  "x": 40.107713535407484,
+                  "y": 39.716709908141084,
+                  "text": "Environmental\n\n\n Restored\n     habitat\n Better\n     infiltration\n Improved\n     biodiversity\n",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idf2k2ark",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-298b4d708e.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idfqpb9ui",
+                  "x": 34.681978012195664,
+                  "y": 25.937834941050376,
+                  "text": "Social\n\n\n Cycling\n     & walking access\n Environmental\n     education\n Community\n     ownership\n",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idklkm80q",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-682b4e887a.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idcc0ybzz",
+                  "x": 36.54693550540793,
+                  "y": 22.74653762723177,
+                  "text": "Economic\n\n\n Lower\n     long-term maintenance\n Better\n     ecosystem performance\n",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            },
+            {
+              "id": "idahv3id4",
+              "type": "media",
+              "media": {
+                "kind": "image",
+                "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-8a412f21a0.jpg",
+                "embed": false
+              },
+              "caption": "",
+              "size": "M",
+              "align": "left",
+              "annotations": [
+                {
+                  "id": "idn2zowib",
+                  "x": 39.66706725419505,
+                  "y": 10.919881305637983,
+                  "text": "Planning\n\n\n A\n     prototype for watershed-scale restoration elsewhere\n",
+                  "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+                  "size": "S",
+                  "bold": false,
+                  "italic": false,
+                  "color": "#005ba6",
+                  "chip": "stat"
+                }
+              ]
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null,
+          "gridColumns": 2
+        },
+        {
+          "id": "idl8kud2l",
+          "pageType": "intro",
+          "year": "2026",
+          "title": "Cloudburst Management",
+          "caption": "Copenhagen, Denmark",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-ed1d436a4f.png",
+            "embed": false
+          },
+          "blocks": [],
+          "sequence": [],
+          "annotations": [],
+          "callout": null,
+          "hint": "Dive In"
+        },
+        {
+          "id": "idhiqmp90",
+          "pageType": "background",
+          "year": "CONTEXT",
+          "title": "Setting Context",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-48dd40578a.png",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "idfpbe9tl",
+              "type": "body",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p class=\"MsoNormal\"><b><i>Copenhagen, Denmark</i><o:p></o:p></b></p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        },
+        {
+          "id": "idge1p2ke",
+          "pageType": "background",
+          "year": "NATURAL FLOW",
+          "title": "The City",
+          "caption": "",
+          "media": {
+            "kind": "image",
+            "src": "https://pub-8c958d08234b41c59a24a5e8ff59dc8b.r2.dev/push-2a20e4ae6c.png",
+            "embed": false
+          },
+          "blocks": [
+            {
+              "id": "id5a2k6fp",
+              "type": "body",
+              "font": "'Intercom','Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif",
+              "size": "M",
+              "align": "left",
+              "html": "<p>Write your paragraph text here. Use the toolbar above to change its style, font, size, or alignment.</p>"
+            }
+          ],
+          "sequence": [],
+          "annotations": [],
+          "callout": null
+        }
+      ],
+      "callout": {
+        "enabled": false,
+        "text": "",
+        "media": null
+      }
+    }
+  ]
+} /* DEFAULT_DATA_END */;
   }
 
-  let state = loadState() || defaultData();
+  // older saved states (and the shipped demo content) predate the pageType system — every
+  // entry defaults to "background" (today's classic full-bleed look) so nothing changes
+  // visually until you deliberately pick a different page type
+  function migrateState(data){
+    (data.chapters || []).forEach(chapter => {
+      (chapter.entries || []).forEach(entry => {
+        if(!entry.pageType) entry.pageType = "background";
+        if(!entry.blocks) entry.blocks = [];
+        if(!entry.sequence) entry.sequence = [];
+        if(entry.pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
+        if(entry.pageType === "intro" && entry.hint == null) entry.hint = "";
+        entry.sequence.forEach(step => { if(!step.annotations) step.annotations = []; });
+      });
+    });
+    return data;
+  }
+  // state starts as the baked-in default and is swapped for whatever's in IndexedDB (if
+  // anything) once initState() resolves, just before the first render — see "init" at the
+  // bottom of this file. Autosave lives in IndexedDB rather than localStorage because
+  // localStorage tops out around 5-10MB, which heavy uploaded media (images/video as base64)
+  // blows through fast; IndexedDB scales into the hundreds of MB, comfortably enough to edit
+  // a media-heavy dashboard entirely in the browser without losing edits mid-session.
+  let state = migrateState(defaultData());
   let editOn = false;
   let modalTarget = null;
   let modalType = "image";
   let modalVideoTab = "link";
 
-  function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
-  function loadState(){
-    try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : null; }catch(e){ return null; }
+  const IDB_NAME = "storymap-dashboard-db";
+  const IDB_STORE = "state";
+  function idbOpen(){
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(IDB_NAME, 1);
+      req.onupgradeneeded = () => { req.result.createObjectStore(IDB_STORE); };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
   }
+  async function idbSaveState(data){
+    try{
+      const db = await idbOpen();
+      await new Promise((resolve, reject) => {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        tx.objectStore(IDB_STORE).put(data, STORAGE_KEY);
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+      });
+    }catch(e){ /* storage unavailable — edits still work for this session, just won't persist */ }
+  }
+  async function idbLoadState(){
+    try{
+      const db = await idbOpen();
+      return await new Promise((resolve, reject) => {
+        const req = db.transaction(IDB_STORE, "readonly").objectStore(IDB_STORE).get(STORAGE_KEY);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => reject(req.error);
+      });
+    }catch(e){ return null; }
+  }
+  // one-time migration path: anyone with in-progress edits already sitting in the old
+  // localStorage key gets moved over automatically so nothing is lost by this switch
+  async function migrateLegacyLocalStorage(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return null;
+      const data = JSON.parse(raw);
+      await idbSaveState(data);
+      localStorage.removeItem(STORAGE_KEY);
+      return data;
+    }catch(e){ return null; }
+  }
+  async function initState(){
+    const loaded = (await idbLoadState()) || (await migrateLegacyLocalStorage());
+    if(loaded) state = migrateState(loaded);
+  }
+  function saveState(){ idbSaveState(state); }
   let saveTimer = null;
   function debouncedSave(){ clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 300); }
 
@@ -992,7 +2384,13 @@
     return "";
   }
 
-  function mediaMarkup(media){
+  // a chapter/hero/entry's full-bleed background media (as opposed to an inline block's
+  // media, a hero logo, or a popup-box callout's media) always autoplays muted and gates
+  // the section-to-section transition until it finishes playing
+  const BACKGROUND_SCOPES = ["hero", "chapterCover", "entryMedia", "sequenceStep"];
+  function isBackgroundTarget(target){ return !!target && BACKGROUND_SCOPES.includes(target.scope); }
+
+  function mediaMarkup(media, isBackground){
     if(!media || !media.src){
       const icon = media && media.kind === "video" ? "▶" : "🖼";
       const label = media && media.kind === "video" ? "No video added yet" : (media && media.kind === "gif" ? "No GIF added yet" : "No image added yet");
@@ -1004,12 +2402,13 @@
       if(media.embed){
         inner = `<div class="video-frame"><iframe src="${escapeHtml(media.src)}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" loading="lazy" allowfullscreen></iframe></div>`;
       } else {
+        const autoplay = isBackground || media.autoplay;
         const attrs = [
-          media.autoplay ? "autoplay" : "",
+          autoplay ? "autoplay" : "",
           media.loop ? "loop" : "",
-          (media.autoplay || media.muted) ? "muted" : "",
+          (autoplay || media.muted) ? "muted" : "",
           "playsinline",
-          "controls"
+          isBackground ? "" : "controls"
         ].filter(Boolean).join(" ");
         inner = `<video class="media-el" ${attrs} src="${escapeHtml(media.src)}"></video>`;
       }
@@ -1026,17 +2425,33 @@
 
   function render(){
     renderHeroText();
-    heroWrap.innerHTML = mediaMarkup(state.meta.heroMedia);
+    heroWrap.innerHTML = mediaMarkup(state.meta.heroMedia, true);
     renderHeroLogos();
     $("heroCalloutMount").innerHTML = renderCallout("hero", null, null, state.meta.callout);
     $("heroAnnotationLayer").innerHTML = renderAnnotationItems("hero", null, null, null, state.meta.annotations);
+    $("heroMascotIcon").innerHTML = mascotSVG();
+    $("footerMascotIcon").innerHTML = mascotSVG();
 
     railChapters.innerHTML = state.chapters.map(renderRailChapter).join("");
     mainEl.innerHTML = state.chapters.map(renderChapter).join("") +
       `<div class="add-chapter-row edit-only"><button type="button" data-act="addChapter" data-index="${state.chapters.length}">+ Add chapter at end</button></div>`;
 
     syncEditableAttrs();
+    syncRailDraggable();
+    refreshEmptyHighlights();
     updateScroll();
+  }
+
+  // any of these highlight/box treatments should disappear on the published page when the
+  // text box behind them is actually empty, rather than showing a colored box with nothing
+  // in it — but only on the published view; Edit Mode keeps the box visible so there's still
+  // something to click on to type into it
+  const EMPTY_HIGHLIGHT_SELECTOR = ".chapter-title, .entry-title, .block--heading, " +
+    ".block--subheading, .block--body, .block--quote, .block--caption, .annotation-text";
+  function refreshEmptyHighlights(){
+    document.querySelectorAll(EMPTY_HIGHLIGHT_SELECTOR).forEach(el => {
+      el.classList.toggle("text-empty", el.textContent.trim() === "");
+    });
   }
 
   function renderHeroText(){
@@ -1119,7 +2534,7 @@
     const owner = sectionOwner(scope, chapterId, entryId, blockId);
     if(!owner) return;
     if(!owner.annotations) owner.annotations = [];
-    owner.annotations.push({ id:newId(), x:50, y:50, text:"New label", font:FONT_OPTIONS[1].value, size:"M", bold:false, italic:false, color:"#ffffff" });
+    owner.annotations.push({ id:newId(), x:50, y:50, text:"New label", font:FONT_OPTIONS[1].value, size:"M", bold:false, italic:false, color:"#005ba6" });
     saveState(); render();
   }
   function deleteAnnotation(scope, chapterId, entryId, blockId, annotationId){
@@ -1135,21 +2550,26 @@
   }
   function renderAnnotation(a, idAttrs){
     const px = ANNOTATION_SIZE_PX[a.size] || ANNOTATION_SIZE_PX.M;
-    const textStyle = `font-family:${a.font};font-size:${px}px;color:${a.color || "#ffffff"};font-weight:${a.bold ? 700 : 400};font-style:${a.italic ? "italic" : "normal"};`;
+    const textStyle = `font-family:${a.font};font-size:${px}px;color:${a.color || "#005ba6"};font-weight:${a.bold ? 700 : 400};font-style:${a.italic ? "italic" : "normal"};`;
     const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===a.font?"selected":""}>${f.label}</option>`).join("");
     const optSizes = ["S","M","L"].map(s => `<option value="${s}" ${s===a.size?"selected":""}>${s}</option>`).join("");
+    const chipClass = a.chip === "stat" ? " chip-stat" : "";
     return `
       <div class="annotation" data-annotation-id="${a.id}" ${idAttrs} style="left:${a.x}%;top:${a.y}%;">
         <div class="annotation-drag-handle edit-only" title="Drag to move">⠿⠿</div>
         <div class="annotation-toolbar edit-only">
+          <select data-act="annoChip" title="Highlight or stat chip" data-annotation-id="${a.id}" ${idAttrs}>
+            <option value="" ${a.chip!=="stat"?"selected":""}>Highlight</option>
+            <option value="stat" ${a.chip==="stat"?"selected":""}>Stat Chip</option>
+          </select>
           <select data-act="annoStyle" data-field="font" data-annotation-id="${a.id}" ${idAttrs}>${optFonts}</select>
           <select data-act="annoStyle" data-field="size" data-annotation-id="${a.id}" ${idAttrs}>${optSizes}</select>
           <button type="button" data-act="annoFormat" data-cmd="bold" data-annotation-id="${a.id}" ${idAttrs}><b>B</b></button>
           <button type="button" data-act="annoFormat" data-cmd="italic" data-annotation-id="${a.id}" ${idAttrs}><i>I</i></button>
-          <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#ffffff"}">
+          <input type="color" title="Text color" data-act="annoColor" data-annotation-id="${a.id}" ${idAttrs} value="${a.color || "#005ba6"}">
           <button type="button" class="danger" data-act="deleteAnnotation" data-annotation-id="${a.id}" ${idAttrs}>✕</button>
         </div>
-        <div class="annotation-text" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "Type here…")}</div>
+        <div class="annotation-text${chipClass}" style="${textStyle}" data-editable data-bind-type="annotationText" data-annotation-id="${a.id}" ${idAttrs} contenteditable="false">${escapeHtml(a.text || "")}</div>
       </div>`;
   }
   function applyAnnotationStyle(a){
@@ -1158,9 +2578,10 @@
     const px = ANNOTATION_SIZE_PX[a.size] || ANNOTATION_SIZE_PX.M;
     el.style.fontFamily = a.font;
     el.style.fontSize = px + "px";
-    el.style.color = a.color || "#ffffff";
+    el.style.color = a.color || "#005ba6";
     el.style.fontWeight = a.bold ? "700" : "400";
     el.style.fontStyle = a.italic ? "italic" : "normal";
+    el.classList.toggle("chip-stat", a.chip === "stat");
   }
 
   function renderChapter(chapter, idx){
@@ -1169,9 +2590,8 @@
     return `
       <section class="chapter" id="chapter-${chapter.id}" data-chapter-id="${chapter.id}">
         <div class="chapter-cover" data-chapter-id="${chapter.id}">
-          <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover)}</div>
+          <div class="media-fill" data-media-scope="chapterCover" data-chapter-id="${chapter.id}">${mediaMarkup(chapter.cover, true)}</div>
           <div class="annotation-layer">${renderAnnotationItems("chapterCover", chapter.id, null, null, chapter.annotations)}</div>
-          <div class="scrim"></div>
           <div class="chapter-toolbar edit-only">
             <button type="button" data-act="moveChapter" data-dir="-1" data-chapter-id="${chapter.id}">↑ Move</button>
             <button type="button" data-act="moveChapter" data-dir="1" data-chapter-id="${chapter.id}">↓ Move</button>
@@ -1189,24 +2609,51 @@
   }
 
   function renderAddBetween(chapterId, index){
-    return `<div class="add-between edit-only"><button type="button" data-act="insertEntry" data-chapter-id="${chapterId}" data-index="${index}">+ Insert entry here</button></div>`;
+    const buttons = PAGE_TYPES.map(t =>
+      `<button type="button" data-act="insertEntry" data-chapter-id="${chapterId}" data-index="${index}" data-page-type="${t.type}">+ ${t.label}</button>`
+    ).join("");
+    return `<div class="add-between edit-only">${buttons}</div>`;
+  }
+
+  // shared by every page type — reorder/delete plus the page-type switcher
+  function entryToolbarHtml(chapter, entry){
+    const optTypes = PAGE_TYPES.map(t => `<option value="${t.type}" ${t.type===entry.pageType?"selected":""}>${t.label}</option>`).join("");
+    const gridColumnsHtml = entry.pageType === "grid"
+      ? `<select data-act="entryGridColumns" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" title="Columns per row">${
+          [2,3,4].map(n => `<option value="${n}" ${n===(entry.gridColumns||3)?"selected":""}>${n} per row</option>`).join("")}</select>`
+      : "";
+    return `
+      <div class="entry-toolbar edit-only">
+        <select data-act="entryPageType" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" title="Page type">${optTypes}</select>
+        ${gridColumnsHtml}
+        <button type="button" data-act="moveEntry" data-dir="-1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↑ Move up</button>
+        <button type="button" data-act="moveEntry" data-dir="1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↓ Move down</button>
+        <button type="button" class="danger" data-act="deleteEntry" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">✕ Delete</button>
+      </div>`;
   }
 
   function renderEntry(chapter, entry){
+    if(entry.pageType === "intro") return renderEntryIntro(chapter, entry);
+    if(entry.pageType === "sequence") return renderEntrySequence(chapter, entry);
+    return renderEntryBlocksPage(chapter, entry, entry.pageType === "grid" ? "grid" : "background");
+  }
+
+  // page types (b) Full Background and (d) Grid share this template — both are a full-bleed
+  // background with a freeform, add-one-at-a-time box grid of text/media; "grid" just widens
+  // the content column so the grid gets more room to breathe
+  function renderEntryBlocksPage(chapter, entry, variant){
     const blocksHtml = entry.blocks.map(b => renderBlock(chapter.id, entry.id, b)).join("");
     const captionHtml = entry.caption
       ? `<div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption)}</div>`
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
+    // "Grid" arranges every block — text or media — into a real N-per-row grid instead of
+    // the freeform flex-wrap flow Full Background uses
+    const blocksStyle = variant === "grid" ? ` style="--grid-cols:${entry.gridColumns || 3}"` : "";
     return `
-      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}">
-        <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media)}</div>
+      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
+        <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
-        <div class="scrim"></div>
-        <div class="entry-toolbar edit-only">
-          <button type="button" data-act="moveEntry" data-dir="-1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↑ Move up</button>
-          <button type="button" data-act="moveEntry" data-dir="1" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">↓ Move down</button>
-          <button type="button" class="danger" data-act="deleteEntry" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">✕ Delete</button>
-        </div>
+        ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
         <div class="entry-content">
           <div class="entry-eyebrow">
@@ -1215,7 +2662,7 @@
           </div>
           <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
           ${captionHtml}
-          <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">
+          <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}"${blocksStyle}>
             ${blocksHtml}
             <div class="add-block-row edit-only">
               <button type="button" class="add-block-btn" data-act="addBlock" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">+ Add text block</button>
@@ -1224,6 +2671,89 @@
           </div>
         </div>
       </section>`;
+  }
+
+  // page type (a): Section Introduction — a simpler, centered full-bleed divider page:
+  // background media (no opacity) plus a heading and a short line of text, no block grid
+  function renderEntryIntro(chapter, entry){
+    return `
+      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="intro">
+        <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
+        <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
+        ${entryToolbarHtml(chapter, entry)}
+        ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
+        <div class="entry-content">
+          <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
+          <div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>
+          <div class="entry-hint${entry.hint ? "" : " edit-only"}" data-editable data-bind-type="entryHint" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.hint || "")}</div>
+        </div>
+      </section>`;
+  }
+
+  // page type (c): Scroll Sequence — a stack of full-bleed image steps; scrolling forward
+  // steps through them one at a time (see handleSequenceWheel/advanceSequenceStep) and only
+  // reaches the next chapter/entry once the last step has been shown
+  function renderEntrySequence(chapter, entry){
+    const steps = entry.sequence || [];
+    const stepsHtml = steps.map((step, i) => renderSequenceStep(chapter, entry, step, i, steps.length)).join("");
+    const dotsHtml = steps.map((_, i) => `<span class="sequence-dot${i === 0 ? " active" : ""}" data-index="${i}"></span>`).join("");
+    return `
+      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="sequence">
+        <div class="sequence-steps" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${stepsHtml}</div>
+        ${entryToolbarHtml(chapter, entry)}
+        <div class="sequence-progress">${dotsHtml}</div>
+        <div class="sequence-add-row edit-only">
+          <button type="button" data-act="addSequenceStep" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">+ Add image</button>
+        </div>
+      </section>`;
+  }
+  function renderSequenceStep(chapter, entry, step, i, total){
+    const idAttrs = `data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" data-step-id="${step.id}"`;
+    return `
+      <div class="sequence-step${i === 0 ? " active" : ""}" data-step-id="${step.id}" data-index="${i}">
+        <div class="sequence-step-media">
+          <div class="media-fill" data-media-scope="sequenceStep" ${idAttrs}>${mediaMarkup(step.media, true)}</div>
+        </div>
+        <div class="annotation-layer">${renderAnnotationItems("sequenceStep", chapter.id, entry.id, step.id, step.annotations)}</div>
+        <div class="sequence-step-index">${i + 1} / ${total}</div>
+        <div class="sequence-step-toolbar">
+          <button type="button" data-act="moveSequenceStep" data-dir="-1" ${idAttrs}>↑</button>
+          <button type="button" data-act="moveSequenceStep" data-dir="1" ${idAttrs}>↓</button>
+          <button type="button" class="danger" data-act="deleteSequenceStep" ${idAttrs}>✕ Remove</button>
+        </div>
+        <div class="sequence-step-text" data-editable data-bind-type="sequenceStepText" ${idAttrs} contenteditable="false">${escapeHtml(step.text || "")}</div>
+      </div>`;
+  }
+
+  /* ---------------- scroll-sequence structural mutations ---------------- */
+  function getSequenceStep(chapterId, entryId, stepId){
+    const entry = getEntry(chapterId, entryId);
+    return entry && (entry.sequence || []).find(s => s.id === stepId);
+  }
+  function addSequenceStep(chapterId, entryId){
+    const entry = getEntry(chapterId, entryId);
+    if(!entry) return;
+    if(!entry.sequence) entry.sequence = [];
+    const n = entry.sequence.length;
+    entry.sequence.push({ id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), String(n+1)), embed:false }, text:"", annotations:[] });
+    saveState(); render();
+  }
+  function moveSequenceStep(chapterId, entryId, stepId, dir){
+    const entry = getEntry(chapterId, entryId);
+    if(!entry) return;
+    const i = entry.sequence.findIndex(s => s.id === stepId);
+    const j = i + dir;
+    if(i < 0 || j < 0 || j >= entry.sequence.length) return;
+    [entry.sequence[i], entry.sequence[j]] = [entry.sequence[j], entry.sequence[i]];
+    saveState(); render();
+  }
+  function deleteSequenceStep(chapterId, entryId, stepId){
+    const entry = getEntry(chapterId, entryId);
+    if(!entry) return;
+    if(entry.sequence.length <= 1){ alert("A scroll sequence needs at least one image."); return; }
+    if(!confirm("Remove this step from the sequence?")) return;
+    entry.sequence = entry.sequence.filter(s => s.id !== stepId);
+    saveState(); render();
   }
 
   function renderBlock(chapterId, entryId, block){
@@ -1288,8 +2818,7 @@
     const chapter = {
       id:newId(), title:"New Chapter", subtitle:"Add a short description for this chapter",
       accent: ACCENTS[n % ACCENTS.length], cover:{ kind:"image", src: placeholder(n+50,"N"), embed:false },
-      entries: [ { id:newId(), year:String(new Date().getFullYear()), title:"New Entry",
-        media:{ kind:"image", src: placeholder(n+60,"N"), embed:false }, caption:"", blocks:[ newBlock("body") ] } ]
+      entries: [ newEntry("background", n + 60) ]
     };
     state.chapters.splice(index, 0, chapter);
     saveState(); render();
@@ -1309,12 +2838,32 @@
     document.getElementById("chapter-" + id)?.scrollIntoView({behavior:"smooth", block:"start"});
   }
 
-  function insertEntry(chapterId, index){
+  function insertEntry(chapterId, index, pageType){
     const chapter = getChapter(chapterId);
-    const entry = { id:newId(), year:String(new Date().getFullYear()), title:"New Entry",
-      media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99),"N"), embed:false },
-      caption:"", blocks:[ newBlock("body") ] };
+    const entry = newEntry(pageType || "background");
     chapter.entries.splice(index, 0, entry);
+    saveState(); render();
+  }
+  function changeEntryPageType(chapterId, entryId, pageType){
+    const entry = getEntry(chapterId, entryId);
+    if(!entry || entry.pageType === pageType) return;
+    entry.pageType = pageType;
+    if((pageType === "background" || pageType === "grid") && (!entry.blocks || !entry.blocks.length)){
+      entry.blocks = [ newBlock("body") ];
+    }
+    if(pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
+    if(pageType === "sequence" && (!entry.sequence || !entry.sequence.length)){
+      entry.sequence = [
+        { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "1"), embed:false }, text:"", annotations:[] },
+        { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "2"), embed:false }, text:"", annotations:[] }
+      ];
+    }
+    saveState(); render();
+  }
+  function changeGridColumns(chapterId, entryId, columns){
+    const entry = getEntry(chapterId, entryId);
+    if(!entry) return;
+    entry.gridColumns = parseInt(columns, 10) || 3;
     saveState(); render();
   }
   function deleteEntry(chapterId, entryId){
@@ -1360,6 +2909,7 @@
     if(scope === "chapterCover") return getChapter(chapterId);
     if(scope === "entry" || scope === "entryMedia") return getEntry(chapterId, entryId);
     if(scope === "blockMedia") return getBlock(chapterId, entryId, blockId);
+    if(scope === "sequenceStep") return getSequenceStep(chapterId, entryId, blockId);
     return null;
   }
   function addCallout(scope, chapterId, entryId){
@@ -1398,12 +2948,18 @@
   function syncEditableAttrs(){
     document.querySelectorAll("[data-editable]").forEach(el => el.setAttribute("contenteditable", editOn ? "true" : "false"));
   }
+  // rail items are only draggable in Edit Mode, so a reader's ordinary click-to-jump never
+  // gets misread as a drag start
+  function syncRailDraggable(){
+    railChapters.querySelectorAll(".rail-item, .rail-chapter-head").forEach(el => el.setAttribute("draggable", editOn ? "true" : "false"));
+  }
   function setEditMode(on){
     editOn = on;
     document.body.classList.toggle("edit-on", on);
     $("btnEdit").textContent = "Edit Mode: " + (on ? "On" : "Off");
     $("btnEdit").classList.toggle("on", on);
     syncEditableAttrs();
+    syncRailDraggable();
   }
   $("btnEdit").addEventListener("click", () => setEditMode(!editOn));
 
@@ -1427,6 +2983,8 @@
       syncRailEntry(el.dataset.entryId);
     } else if(bt === "entryCaption"){
       getEntry(el.dataset.chapterId, el.dataset.entryId).caption = el.textContent;
+    } else if(bt === "entryHint"){
+      getEntry(el.dataset.chapterId, el.dataset.entryId).hint = el.textContent;
     } else if(bt === "blockHtml"){
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     } else if(bt === "blockMediaCaption"){
@@ -1437,7 +2995,11 @@
     } else if(bt === "annotationText"){
       const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
       if(a) a.text = el.textContent;
+    } else if(bt === "sequenceStepText"){
+      const s = getSequenceStep(el.dataset.chapterId, el.dataset.entryId, el.dataset.stepId);
+      if(s) s.text = el.textContent;
     }
+    if(el.matches(EMPTY_HIGHLIGHT_SELECTOR)) el.classList.toggle("text-empty", el.textContent.trim() === "");
     debouncedSave();
   });
 
@@ -1479,6 +3041,22 @@
     } else if(el.matches('[data-act="annoColor"]')){
       const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
       if(a){ a.color = el.value; applyAnnotationStyle(a); saveState(); }
+    } else if(el.matches('[data-act="annoChip"]')){
+      // both the yellow Highlight and green Stat Chip presets use the same blue text —
+      // re-applying it here keeps the color swatch in sync when switching between them
+      const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
+      if(a){
+        a.chip = el.value;
+        a.color = "#005ba6";
+        applyAnnotationStyle(a);
+        const colorInput = el.closest(".annotation-toolbar")?.querySelector('[data-act="annoColor"]');
+        if(colorInput) colorInput.value = a.color;
+        saveState();
+      }
+    } else if(el.matches('[data-act="entryPageType"]')){
+      changeEntryPageType(el.dataset.chapterId, el.dataset.entryId, el.value);
+    } else if(el.matches('[data-act="entryGridColumns"]')){
+      changeGridColumns(el.dataset.chapterId, el.dataset.entryId, el.value);
     }
   });
   function applyMediaBlockStyle(blockId, block){
@@ -1507,7 +3085,8 @@
         chapterId: scopeEl.dataset.chapterId,
         entryId: scopeEl.dataset.entryId,
         blockId: scopeEl.dataset.blockId,
-        logoId: scopeEl.dataset.logoId
+        logoId: scopeEl.dataset.logoId,
+        stepId: scopeEl.dataset.stepId
       });
       return;
     }
@@ -1517,8 +3096,11 @@
     const act = btn.dataset.act;
 
     if(act === "jumpEntry"){
+      if(editOn){ openRailRename("entry", btn.dataset.chapterId, btn.dataset.id); return; }
+      releaseGate(); // an explicit rail jump always overrides the section-hold
       document.getElementById("entry-" + btn.dataset.id)?.scrollIntoView({behavior:"smooth", block:"start"});
     } else if(act === "toggleChapter"){
+      if(editOn){ openRailRename("chapter", btn.dataset.chapterId, null); return; }
       const wrap = railChapters.querySelector(`.rail-chapter[data-chapter-id="${cssEscape(btn.dataset.chapterId)}"]`);
       wrap.classList.toggle("collapsed");
     } else if(act === "addChapter"){
@@ -1528,11 +3110,17 @@
     } else if(act === "deleteChapter"){
       deleteChapter(btn.dataset.chapterId);
     } else if(act === "insertEntry" || act === "addEntry"){
-      insertEntry(btn.dataset.chapterId, parseInt(btn.dataset.index, 10));
+      insertEntry(btn.dataset.chapterId, parseInt(btn.dataset.index, 10), btn.dataset.pageType);
     } else if(act === "moveEntry"){
       moveEntry(btn.dataset.chapterId, btn.dataset.entryId, parseInt(btn.dataset.dir, 10));
     } else if(act === "deleteEntry"){
       deleteEntry(btn.dataset.chapterId, btn.dataset.entryId);
+    } else if(act === "addSequenceStep"){
+      addSequenceStep(btn.dataset.chapterId, btn.dataset.entryId);
+    } else if(act === "moveSequenceStep"){
+      moveSequenceStep(btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.stepId, parseInt(btn.dataset.dir, 10));
+    } else if(act === "deleteSequenceStep"){
+      deleteSequenceStep(btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.stepId);
     } else if(act === "addBlock"){
       addBlock(btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "addMediaBlock"){
@@ -1545,6 +3133,8 @@
       removeCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "toggleCallout"){
       btn.closest(".callout-box").classList.toggle("open");
+    } else if(act === "changeMascot"){
+      openMediaModal({ scope:"mascot" });
     } else if(act === "addAnnotation"){
       addAnnotation(btn.dataset.aScope, btn.dataset.chapterId, btn.dataset.entryId, btn.dataset.blockId);
     } else if(act === "deleteAnnotation"){
@@ -1572,10 +3162,11 @@
     const activeEntryId = updateActiveEntry();
     const activeChapterId = updateActiveChapterAccent();
     updatePositionPopup(activeChapterId, activeEntryId);
+    updateActiveRailPopup(activeChapterId, activeEntryId);
+    updateCalloutAutoOpen();
     updateRailSync();
     slideMotion();
     blockMediaMotion();
-    contentZoomMotion();
   }
 
   function updateProgressBar(){
@@ -1628,6 +3219,43 @@
     return activeChapterId;
   }
 
+  // the popup box (mascot tab, top-left of each slide) auto-opens a couple seconds after its
+  // slide becomes the active one, no hover/click needed — only for boxes we opened ourselves,
+  // so a box the visitor already opened/closed by hand is left exactly as they set it
+  function getActiveSlideEl(){
+    const viewportMid = window.innerHeight * 0.42;
+    let active = document.querySelector(".hero");
+    document.querySelectorAll(".hero, .chapter-cover, .entry").forEach(el => {
+      const r = el.getBoundingClientRect();
+      if(r.top - viewportMid <= 0) active = el;
+    });
+    return active;
+  }
+  let calloutAutoTimer = null;
+  let lastCalloutSlideEl = null;
+  const autoOpenedCallouts = new WeakSet();
+  function updateCalloutAutoOpen(){
+    const activeSlideEl = getActiveSlideEl();
+    if(activeSlideEl === lastCalloutSlideEl) return;
+    if(lastCalloutSlideEl){
+      const prevBox = lastCalloutSlideEl.querySelector(".callout-box");
+      if(prevBox && autoOpenedCallouts.has(prevBox)){
+        prevBox.classList.remove("open");
+        autoOpenedCallouts.delete(prevBox);
+      }
+    }
+    lastCalloutSlideEl = activeSlideEl;
+    if(calloutAutoTimer) clearTimeout(calloutAutoTimer);
+    calloutAutoTimer = setTimeout(() => {
+      if(getActiveSlideEl() !== activeSlideEl) return;
+      const box = activeSlideEl.querySelector(".callout-box");
+      if(box && !box.classList.contains("open")){
+        box.classList.add("open");
+        autoOpenedCallouts.add(box);
+      }
+    }, 2500);
+  }
+
   // a small "you are here" chip that pops up fresh whenever the active chapter/entry changes,
   // then stays put as a quiet reference until the next change
   let lastPopupKey = null;
@@ -1651,10 +3279,11 @@
     popupHideTimer = setTimeout(() => popup.classList.remove("visible"), 2600);
   }
 
-  /* every hero / chapter cover / entry is a full-bleed "slide" that arrives zoomed way out
-     (tiny, distant) and grows to fill the screen as it scrolls into place — like zooming
-     in from orbit down to a location on a map — then holds at full scale until the next
-     slide zooms in on top of it. */
+  /* every hero / chapter cover / entry is a full-bleed "slide", stacked by DOM order via
+     z-index — as you scroll, the next slide rises up and covers whichever one is still
+     pinned underneath it. Slides stay at full opacity throughout (no fade/ghosting where
+     you'd see two sections blended together) — the smoothness comes entirely from the
+     inertia-eased wheel scroll (see below), not from any opacity transition. */
   const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function slideProgress(rect){
@@ -1663,32 +3292,147 @@
     const traveled = vh - rect.top;
     return Math.min(Math.max(traveled / total, 0), 1);
   }
-  function applySlideZoom(slide, r){
-    const vh = window.innerHeight;
-    let scale, opacity;
-    if(r.top > 0){
-      const t = Math.max(0, Math.min(1, 1 - r.top / (vh * 0.95)));
-      scale = 0.3 + t * 0.7;
-      opacity = Math.max(0, Math.min(1, t / 0.3));
-    } else {
-      scale = 1;
-      opacity = 1;
-    }
-    slide.style.transform = `scale(${scale.toFixed(3)})`;
-    slide.style.opacity = opacity.toFixed(2);
-  }
-  // sections are position:sticky and stacked by DOM order (z-index), so each one zooms in
-  // on top of whichever slide is still pinned underneath it
   function slideMotion(){
-    if(reduceMotion) return;
-    document.querySelectorAll(".hero, .chapter-cover, .entry").forEach((slide, i) => {
+    const vh = window.innerHeight;
+    const slides = document.querySelectorAll(".hero, .chapter-cover, .entry");
+    let activeIdx = -1;
+    slides.forEach((slide, i) => {
       slide.style.zIndex = i + 1;
       const r = slide.getBoundingClientRect();
-      if(r.bottom < -400 || r.top > window.innerHeight + 400) return;
-      const progress = slideProgress(r);
-      slide.dataset.progress = progress.toFixed(3);
-      applySlideZoom(slide, r);
+      if(r.top <= 0) activeIdx = i;
+      if(reduceMotion) return;
+      if(r.bottom < -400 || r.top > vh + 400) return;
+      slide.dataset.progress = slideProgress(r).toFixed(3);
     });
+    updateMediaGate(slides, activeIdx < 0 ? 0 : activeIdx, vh);
+  }
+
+  /* ---------------- section-hold gate: the current slide's background video/GIF has to
+     finish playing (or its hold timer run out) before scrolling is allowed to advance far
+     enough for the next slide to zoom in over it. Scrolling back up is always free, and the
+     last slide never holds — so the footer and its controls stay reachable no matter what. */
+  let gateSlideEl = null;
+  let gateReady = true;
+  let scrollCeiling = Infinity;
+  let gateReleaseTimer = null;
+  let gateSafetyTimer = null;
+  let setSmoothCeiling = null; // wired up by the wheel-scroll block below
+
+  function clampScrollToGate(){
+    if(setSmoothCeiling) setSmoothCeiling(scrollCeiling);
+    if(window.scrollY > scrollCeiling){
+      window.scrollTo({ top: scrollCeiling, left:0, behavior:"instant" });
+    }
+  }
+  function releaseGate(){
+    clearTimeout(gateReleaseTimer); clearTimeout(gateSafetyTimer);
+    gateReleaseTimer = null; gateSafetyTimer = null;
+    gateReady = true;
+    scrollCeiling = Infinity;
+    if(setSmoothCeiling) setSmoothCeiling(Infinity);
+  }
+  function getSlideBackgroundMedia(slide){
+    if(slide.id === "hero") return state.meta.heroMedia;
+    if(slide.classList.contains("chapter-cover")){ const c = getChapter(slide.dataset.chapterId); return c && c.cover; }
+    if(slide.classList.contains("entry")){ const e = getEntry(slide.dataset.chapterId, slide.dataset.id); return e && e.media; }
+    return null;
+  }
+  function startMediaWatch(slide){
+    clearTimeout(gateReleaseTimer); clearTimeout(gateSafetyTimer);
+    gateReleaseTimer = null; gateSafetyTimer = null;
+    gateReady = false;
+    if(slide.dataset.pageType === "sequence"){
+      const steps = slide.querySelectorAll(".sequence-step");
+      resetSequenceSteps(slide);
+      sequenceWheelAccum = 0;
+      if(reduceMotion || steps.length <= 1) releaseGate();
+      return;
+    }
+    const media = getSlideBackgroundMedia(slide);
+    if(reduceMotion || !media || !media.src){ releaseGate(); return; }
+    const fill = slide.querySelector(
+      '.media-fill[data-media-scope="hero"], .media-fill[data-media-scope="chapterCover"], .media-fill[data-media-scope="entryMedia"]');
+    const video = fill && fill.querySelector("video.media-el");
+    if(media.kind === "video" && !media.embed && video){
+      video.addEventListener("error", releaseGate, { once:true });
+      const arm = () => {
+        clearTimeout(gateSafetyTimer);
+        const dur = video.duration;
+        gateReleaseTimer = setTimeout(releaseGate, (isFinite(dur) && dur > 0 ? dur : 15) * 1000);
+      };
+      if(video.readyState >= 1){ arm(); }
+      else {
+        video.addEventListener("loadedmetadata", arm, { once:true });
+        gateSafetyTimer = setTimeout(releaseGate, 15000); // in case metadata never arrives
+      }
+      try{ video.currentTime = 0; }catch(err){}
+      const p = video.play();
+      if(p && p.catch) p.catch(releaseGate); // autoplay blocked — don't trap the visitor
+    } else if(media.kind === "gif" || (media.kind === "video" && media.embed)){
+      const fallback = media.kind === "gif" ? 4 : 6;
+      const secs = (media.holdSeconds && media.holdSeconds > 0) ? media.holdSeconds : fallback;
+      gateReleaseTimer = setTimeout(releaseGate, secs * 1000);
+    } else {
+      releaseGate(); // plain image, or no media set — nothing to wait for
+    }
+  }
+  function updateMediaGate(slides, activeIdx, vh){
+    if(!slides.length) return;
+    // never hold scroll hostage while actively editing content — only gate the reading view
+    if(editOn){ if(scrollCeiling !== Infinity) releaseGate(); return; }
+    const activeSlide = slides[activeIdx];
+    if(activeSlide !== gateSlideEl){
+      gateSlideEl = activeSlide;
+      startMediaWatch(activeSlide);
+      // freeze scroll right where this slide just finished settling in — before this point
+      // the slide hadn't fully arrived yet, so there's nothing to hold for
+      if(!gateReady && activeIdx < slides.length - 1) scrollCeiling = window.scrollY;
+    }
+    if(gateReady || activeIdx >= slides.length - 1) scrollCeiling = Infinity;
+    clampScrollToGate();
+  }
+
+  /* ---------------- scroll-sequence pages (page type "c"): each wheel gesture steps through
+     the image sequence instead of scrolling, until the last step is shown, then normal
+     scrolling resumes and the section-hold gate releases like any other slide. ---------------- */
+  function resetSequenceSteps(slide){
+    const steps = slide.querySelectorAll(".sequence-step");
+    steps.forEach((el, i) => el.classList.toggle("active", i === 0));
+    slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === 0));
+  }
+  function advanceSequenceStep(slide, dir){
+    const steps = Array.from(slide.querySelectorAll(".sequence-step"));
+    if(!steps.length) return false;
+    let activeIdx = steps.findIndex(el => el.classList.contains("active"));
+    if(activeIdx < 0) activeIdx = 0;
+    const nextIdx = activeIdx + dir;
+    if(nextIdx < 0) return false; // already at the first step — let normal scroll go to the previous slide
+    if(nextIdx >= steps.length){ releaseGate(); return false; } // reached the end — let normal scroll continue forward
+    steps[activeIdx].classList.remove("active");
+    steps[nextIdx].classList.add("active");
+    slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === nextIdx));
+    return true;
+  }
+  // small accumulator so a continuous trackpad stream doesn't blow through every image at
+  // once — a step only advances once enough scroll "effort" has built up, then it resets
+  let sequenceWheelAccum = 0;
+  let sequenceWheelLast = 0;
+  const SEQUENCE_STEP_THRESHOLD = 80;
+  // long enough for the slow 1.1s cross-dissolve (see .sequence-step) to mostly finish before
+  // the next one can start, so a fast scroll doesn't stack fades on top of each other
+  const SEQUENCE_STEP_COOLDOWN_MS = 550;
+  function handleSequenceWheel(e){
+    if(!gateSlideEl || gateReady) return false;
+    if(gateSlideEl.dataset.pageType !== "sequence") return false;
+    const now = Date.now();
+    if(now - sequenceWheelLast < SEQUENCE_STEP_COOLDOWN_MS) return true; // still consumed, just ignored
+    sequenceWheelAccum += e.deltaY;
+    if(Math.abs(sequenceWheelAccum) < SEQUENCE_STEP_THRESHOLD) return true;
+    const dir = sequenceWheelAccum > 0 ? 1 : -1;
+    sequenceWheelAccum = 0;
+    const consumed = advanceSequenceStep(gateSlideEl, dir);
+    if(consumed) sequenceWheelLast = now;
+    return consumed;
   }
 
   // inline media-overlay blocks get their own, smaller-scale scroll-linked drift so they
@@ -1705,36 +3449,6 @@
       const scale = 1.04 + progress * 0.06;
       media.style.transform = `scale(${scale.toFixed(3)}) translateY(${pan.toFixed(1)}px)`;
     });
-  }
-
-  // 1 when an element's center aligns with the viewport's center, tapering to 0 the further
-  // it sits from that center — used to zoom content in as it arrives and back out as it
-  // leaves, so sections feel like a continuous, reversible transition rather than a static
-  // one-time reveal
-  function centerProgress(rect, spread){
-    const vh = window.innerHeight;
-    const elCenter = rect.top + rect.height / 2;
-    const dist = Math.abs(elCenter - vh / 2);
-    const norm = Math.min(dist / (vh * spread), 1);
-    return 1 - norm;
-  }
-  function applyZoom(el, minScale, minOpacity, spread){
-    const r = el.getBoundingClientRect();
-    if(r.bottom < -150 || r.top > window.innerHeight + 150) return;
-    const p = centerProgress(r, spread);
-    el.style.transform = `scale(${(minScale + (1 - minScale) * p).toFixed(3)})`;
-    el.style.opacity = (minOpacity + (1 - minOpacity) * p).toFixed(2);
-  }
-  // zoom in/out applies at two layered levels — the section's content block as a whole,
-  // and each individual title/text-block/media-overlay within it — so scrolling through a
-  // section feels like a continuous, multi-layered transition instead of static content
-  function contentZoomMotion(){
-    if(reduceMotion) return;
-    document.querySelectorAll(".chapter-cover-content, .entry-content").forEach(el => applyZoom(el, 0.94, 0.55, 0.7));
-    document.querySelectorAll(".chapter-title, .entry-title").forEach(el => applyZoom(el, 0.88, 0.3, 0.55));
-    document.querySelectorAll(".block-wrap:not(.block-media-wrap)").forEach(el => applyZoom(el, 0.95, 0.4, 0.5));
-    document.querySelectorAll(".block-media-wrap").forEach(el => applyZoom(el, 0.92, 0.45, 0.5));
-    document.querySelectorAll(".callout-box").forEach(el => applyZoom(el, 0.9, 0.5, 0.55));
   }
 
   // the rail is a sticky column, not a fixed overlay, so it scrolls together with the
@@ -1755,15 +3469,75 @@
   // the thin rail strip has no room for inline titles, so show them in a floating popup
   // next to the hovered droplet instead
   const railHoverPopup = $("railHoverPopup");
+  let railRenaming = false;
   function showRailHoverPopup(anchorEl, eyebrow, label){
-    if(!anchorEl) return;
+    if(!anchorEl || railRenaming) return;
     const r = anchorEl.getBoundingClientRect();
     railHoverPopup.innerHTML = (eyebrow ? `<span class="rail-hover-popup-eyebrow">${escapeHtml(eyebrow)}</span>` : "") + escapeHtml(label);
     railHoverPopup.style.left = (r.left - 10) + "px";
     railHoverPopup.style.top = (r.top + r.height / 2) + "px";
     railHoverPopup.classList.add("visible");
   }
-  function hideRailHoverPopup(){ railHoverPopup.classList.remove("visible"); }
+  function hideRailHoverPopup(){ if(!railRenaming) railHoverPopup.classList.remove("visible"); }
+
+  // the rail's title popup now shows automatically for whichever chapter/entry is currently
+  // active as you scroll, instead of only appearing on hover — hovering a different droplet
+  // still previews its title, and letting go reverts to showing the current section again
+  let railActiveChapterId = null, railActiveEntryId = null;
+  function showActiveRailPopup(){
+    if(railRenaming) return;
+    if(railActiveEntryId){
+      const item = railChapters.querySelector(`.rail-item[data-id="${cssEscape(railActiveEntryId)}"]`);
+      const entry = getEntry(railActiveChapterId, railActiveEntryId);
+      if(item && entry) showRailHoverPopup(item.querySelector(".rail-dot"), entry.year, entryLabel(entry));
+    } else if(railActiveChapterId){
+      const head = railChapters.querySelector(`.rail-chapter-head[data-chapter-id="${cssEscape(railActiveChapterId)}"]`);
+      const chapter = getChapter(railActiveChapterId);
+      if(head && chapter) showRailHoverPopup(head.querySelector(".rail-chapter-dot"), "Chapter", chapter.title);
+    }
+  }
+  function updateActiveRailPopup(activeChapterId, activeEntryId){
+    const changed = activeChapterId !== railActiveChapterId || activeEntryId !== railActiveEntryId;
+    railActiveChapterId = activeChapterId;
+    railActiveEntryId = activeEntryId;
+    if(changed) showActiveRailPopup();
+  }
+
+  // click a droplet in Edit Mode to rename its chapter/entry title right from the sidebar,
+  // instead of jumping/collapsing — reuses the same hover popup as an editable field
+  function openRailRename(kind, chapterId, entryId){
+    const anchorEl = kind === "chapter"
+      ? railChapters.querySelector(`.rail-chapter-head[data-chapter-id="${cssEscape(chapterId)}"] .rail-chapter-dot`)
+      : railChapters.querySelector(`.rail-item[data-id="${cssEscape(entryId)}"] .rail-dot`);
+    if(!anchorEl) return;
+    const record = kind === "chapter" ? getChapter(chapterId) : getEntry(chapterId, entryId);
+    if(!record) return;
+    const original = record.title;
+    const r = anchorEl.getBoundingClientRect();
+    railRenaming = true;
+    railHoverPopup.innerHTML = `<input type="text" class="rail-rename-input" value="${escapeHtml(original)}" />`;
+    railHoverPopup.style.left = (r.left - 10) + "px";
+    railHoverPopup.style.top = (r.top + r.height / 2) + "px";
+    railHoverPopup.classList.add("visible", "editing");
+    const input = railHoverPopup.querySelector(".rail-rename-input");
+    input.focus();
+    input.select();
+    function commit(){
+      const val = input.value.trim();
+      record.title = val || original;
+      saveState();
+      if(kind === "chapter") syncRailChapterTitle(chapterId); else syncRailEntry(entryId);
+      railRenaming = false;
+      railHoverPopup.classList.remove("editing");
+      showActiveRailPopup(); // back to showing the current section instead of just hiding
+    }
+    input.addEventListener("blur", commit, { once:true });
+    input.addEventListener("keydown", (e) => {
+      if(e.key === "Enter"){ e.preventDefault(); input.blur(); }
+      else if(e.key === "Escape"){ e.preventDefault(); input.value = original; input.blur(); }
+    });
+  }
+
   document.addEventListener("mouseover", (e) => {
     const item = e.target.closest(".rail-item");
     const head = !item && e.target.closest(".rail-chapter-head");
@@ -1779,9 +3553,98 @@
     const from = e.target.closest(".rail-item, .rail-chapter-head");
     if(!from) return;
     const to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".rail-item, .rail-chapter-head");
-    if(to !== from) hideRailHoverPopup();
+    if(to !== from) showActiveRailPopup(); // revert to the current section instead of hiding
   });
-  window.addEventListener("scroll", hideRailHoverPopup, { passive:true });
+
+  /* ---------------- rail drag-and-drop reorder (chapters + entries), Edit Mode only —
+     draggable is only turned on via syncRailDraggable() while editOn, so a reader's
+     ordinary click-to-jump never gets misread as a drag start ---------------- */
+  let railDrag = null; // { kind:"chapter"|"entry", chapterId, entryId }
+  function clearRailDropMarks(){
+    railChapters.querySelectorAll(".rail-drop-before, .rail-drop-after")
+      .forEach(el => el.classList.remove("rail-drop-before", "rail-drop-after"));
+  }
+  function moveChapterToPosition(fromId, toId, before){
+    if(fromId === toId) return;
+    const list = state.chapters;
+    const fromIdx = list.findIndex(c => c.id === fromId);
+    if(fromIdx < 0) return;
+    const [moved] = list.splice(fromIdx, 1);
+    let toIdx = list.findIndex(c => c.id === toId);
+    if(toIdx < 0) toIdx = list.length;
+    if(!before) toIdx += 1;
+    list.splice(toIdx, 0, moved);
+    saveState(); render();
+  }
+  function moveEntryToPosition(fromChapterId, entryId, toChapterId, targetEntryId, before){
+    const fromChapter = getChapter(fromChapterId);
+    const toChapter = getChapter(toChapterId);
+    if(!fromChapter || !toChapter) return;
+    if(fromChapter === toChapter && entryId === targetEntryId) return;
+    if(fromChapter !== toChapter && fromChapter.entries.length <= 1){
+      alert("Each chapter needs at least one entry — add another entry before moving this one out.");
+      return;
+    }
+    const fromIdx = fromChapter.entries.findIndex(e => e.id === entryId);
+    if(fromIdx < 0) return;
+    const [moved] = fromChapter.entries.splice(fromIdx, 1);
+    let toIdx = toChapter.entries.findIndex(e => e.id === targetEntryId);
+    if(toIdx < 0) toIdx = toChapter.entries.length;
+    if(!before) toIdx += 1;
+    toChapter.entries.splice(toIdx, 0, moved);
+    saveState(); render();
+  }
+  railChapters.addEventListener("dragstart", (e) => {
+    if(!editOn){ e.preventDefault(); return; }
+    const item = e.target.closest(".rail-item");
+    const head = !item && e.target.closest(".rail-chapter-head");
+    if(item){
+      railDrag = { kind:"entry", chapterId:item.dataset.chapterId, entryId:item.dataset.id };
+      if(e.dataTransfer) e.dataTransfer.effectAllowed = "move";
+    } else if(head){
+      railDrag = { kind:"chapter", chapterId:head.dataset.chapterId };
+      if(e.dataTransfer) e.dataTransfer.effectAllowed = "move";
+    } else {
+      e.preventDefault();
+    }
+  });
+  railChapters.addEventListener("dragover", (e) => {
+    if(!railDrag) return;
+    if(railDrag.kind === "entry"){
+      const item = e.target.closest(".rail-item");
+      if(!item) return;
+      e.preventDefault();
+      clearRailDropMarks();
+      const r = item.getBoundingClientRect();
+      item.classList.add(e.clientY < r.top + r.height / 2 ? "rail-drop-before" : "rail-drop-after");
+    } else if(railDrag.kind === "chapter"){
+      const chapterEl = e.target.closest(".rail-chapter");
+      if(!chapterEl) return;
+      e.preventDefault();
+      clearRailDropMarks();
+      const r = chapterEl.getBoundingClientRect();
+      chapterEl.classList.add(e.clientY < r.top + r.height / 2 ? "rail-drop-before" : "rail-drop-after");
+    }
+  });
+  railChapters.addEventListener("drop", (e) => {
+    if(!railDrag) return;
+    e.preventDefault();
+    if(railDrag.kind === "entry"){
+      const item = e.target.closest(".rail-item");
+      if(item){
+        moveEntryToPosition(railDrag.chapterId, railDrag.entryId,
+          item.dataset.chapterId, item.dataset.id, item.classList.contains("rail-drop-before"));
+      }
+    } else if(railDrag.kind === "chapter"){
+      const chapterEl = e.target.closest(".rail-chapter");
+      if(chapterEl){
+        moveChapterToPosition(railDrag.chapterId, chapterEl.dataset.chapterId, chapterEl.classList.contains("rail-drop-before"));
+      }
+    }
+    clearRailDropMarks();
+    railDrag = null;
+  });
+  railChapters.addEventListener("dragend", () => { clearRailDropMarks(); railDrag = null; });
 
   let ticking = false;
   window.addEventListener("scroll", () => {
@@ -1797,6 +3660,7 @@
     let smoothTarget = window.scrollY;
     let smoothCurrent = window.scrollY;
     let smoothRunning = false;
+    setSmoothCeiling = (ceiling) => { smoothTarget = Math.min(smoothTarget, ceiling); };
 
     function maxScroll(){
       return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -1819,7 +3683,8 @@
     window.addEventListener("wheel", (e) => {
       if(backdrop.classList.contains("open")) return;
       e.preventDefault();
-      smoothTarget = Math.min(Math.max(smoothTarget + normalizedDelta(e), 0), maxScroll());
+      if(handleSequenceWheel(e)) return; // consumed by a scroll-sequence page, not a scroll
+      smoothTarget = Math.min(Math.max(smoothTarget + normalizedDelta(e), 0), Math.min(maxScroll(), scrollCeiling));
       if(!smoothRunning){ smoothRunning = true; requestAnimationFrame(smoothStep); }
     }, { passive:false });
     window.addEventListener("scroll", () => {
@@ -1871,6 +3736,7 @@
     $("mediaUrl").value = ""; $("mediaFile").value = "";
     $("videoUrl").value = ""; $("videoFile").value = "";
     $("optAutoplay").checked = false; $("optLoop").checked = false; $("optMuted").checked = false;
+    $("optHoldSeconds").value = "";
     setModalType("image");
     setVideoTab("link");
     backdrop.classList.add("open");
@@ -1885,6 +3751,8 @@
     $("typeTabs").querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.type === type));
     $("imageFields").classList.toggle("field-hidden", type === "video");
     $("videoFields").classList.toggle("field-hidden", type !== "video");
+    $("holdField").classList.toggle("field-hidden", type === "image");
+    $("bgVideoHint").classList.toggle("field-hidden", !(type === "video" && isBackgroundTarget(modalTarget)));
   }
   $("typeTabs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-type]");
@@ -1908,19 +3776,28 @@
   $("modalSave").addEventListener("click", () => {
     if(!modalTarget) return;
     const target = modalTarget; // snapshot: closeMediaModal() nulls modalTarget before async FileReader callbacks fire
+    const holdSeconds = parseFloat($("optHoldSeconds").value) || undefined;
     if(modalType === "image" || modalType === "gif"){
+      const extra = modalType === "gif" ? { holdSeconds } : {};
       if($("mediaFile").files[0]){
         const reader = new FileReader();
-        reader.onload = () => applyMedia(target, { kind:modalType, src:reader.result, embed:false });
+        reader.onload = () => applyMedia(target, { kind:modalType, src:reader.result, embed:false, ...extra });
         reader.readAsDataURL($("mediaFile").files[0]);
       } else if($("mediaUrl").value.trim()){
-        applyMedia(target, { kind:modalType, src:$("mediaUrl").value.trim(), embed:false });
+        applyMedia(target, { kind:modalType, src:$("mediaUrl").value.trim(), embed:false, ...extra });
       }
       closeMediaModal();
       return;
     }
-    // video
-    const opts = { autoplay:$("optAutoplay").checked, loop:$("optLoop").checked, muted:$("optMuted").checked };
+    // video — a section background always autoplays muted so it can actually play and hold
+    // the section until it finishes, regardless of the Autoplay/Muted checkboxes
+    const isBg = isBackgroundTarget(target);
+    const opts = {
+      autoplay: isBg ? true : $("optAutoplay").checked,
+      loop: $("optLoop").checked,
+      muted: isBg ? true : $("optMuted").checked,
+      holdSeconds
+    };
     if(modalVideoTab === "upload" && $("videoFile").files[0]){
       const reader = new FileReader();
       reader.onload = () => applyMedia(target, { kind:"video", src:reader.result, embed:false, ...opts });
@@ -1959,6 +3836,19 @@
       const logo = (state.meta.logos || []).find(l => l.id === target.logoId);
       if(logo) logo.media = media;
       container = document.querySelector(`.media-fill[data-media-scope="heroLogo"][data-logo-id="${cssEscape(target.logoId)}"]`);
+    } else if(target.scope === "mascot"){
+      // the mascot appears in several disjoint spots at once (hero corner, footer, and every
+      // popup-box tab) rather than one container, so it refreshes them all directly
+      state.meta.mascotMedia = media;
+      $("heroMascotIcon").innerHTML = mascotSVG();
+      $("footerMascotIcon").innerHTML = mascotSVG();
+      document.querySelectorAll(".callout-tab").forEach(el => { el.innerHTML = mascotSVG("callout-tab-icon"); });
+      saveState();
+      return;
+    } else if(target.scope === "sequenceStep"){
+      const step = getSequenceStep(target.chapterId, target.entryId, target.stepId);
+      if(step) step.media = media;
+      container = document.querySelector(`.media-fill[data-media-scope="sequenceStep"][data-step-id="${cssEscape(target.stepId)}"]`);
     } else if(target.scope && target.scope.endsWith("CalloutMedia")){
       const scope = target.scope.slice(0, -"CalloutMedia".length);
       const owner = sectionOwner(scope, target.chapterId, target.entryId);
@@ -1969,8 +3859,10 @@
         container = document.querySelector(sel);
       }
     }
-    if(container) container.innerHTML = mediaMarkup(media);
+    if(container) container.innerHTML = mediaMarkup(media, isBackgroundTarget(target));
     saveState();
+    // media just changed — force the section-hold gate to re-evaluate against the new media
+    gateSlideEl = null;
   }
 
   /* ---------------- export / import / reset ---------------- */
@@ -1989,7 +3881,7 @@
       try{
         const data = JSON.parse(reader.result);
         if(!data.chapters || !Array.isArray(data.chapters)) throw new Error("Invalid file");
-        state = data; saveState(); render();
+        state = migrateState(data); saveState(); render();
       }catch(err){ alert("That file doesn't look like a valid dashboard export."); }
     };
     reader.readAsText(file);
@@ -2001,12 +3893,324 @@
   });
   $("heroAddLogo").addEventListener("click", addHeroLogo);
   $("heroScrollBtn").addEventListener("click", () => {
+    if(!gateReady) return; // hero's background media is still playing/holding
     document.querySelector(".chapter")?.scrollIntoView({ behavior:"smooth", block:"start" });
   });
 
+  /* ---------------- push to GitHub ----------------
+     Uploads every embedded data: URI in the current content to assets/ in the repo as its
+     own file, rewrites the (cloned) content to point at those relative paths instead, then
+     commits that as the new default content baked into index.html — splicing it in between
+     the DEFAULT_DATA_START/END markers around defaultData()'s return statement above. This
+     never moves one giant blob anywhere: each asset is its own small upload, and the content
+     commit itself stays lightweight once media stops being embedded as base64. The GitHub
+     token/owner/repo/branch fields are remembered only in this tab's sessionStorage — gone
+     once the tab closes, never written to disk or sent anywhere but api.github.com. */
+  const GITHUB_API = "https://api.github.com";
+  const GH_MIME_EXT = {
+    "image/png":"png", "image/jpeg":"jpg", "image/gif":"gif", "image/webp":"webp",
+    "video/mp4":"mp4", "video/webm":"webm", "video/quicktime":"mov"
+  };
+  function githubHeaders(token){
+    return { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" };
+  }
+  // extracts the most useful error text available from a failed response — GitHub usually
+  // sends JSON with a .message, but proxied 5xx errors (e.g. a request body that's too
+  // large) can come back as an empty or non-JSON body, and res.statusText is often empty
+  // too since Chrome doesn't surface a reason phrase for HTTP/2 responses
+  async function githubErrorText(res){
+    const raw = await res.text().catch(() => "");
+    try{
+      const parsed = JSON.parse(raw);
+      if(parsed && parsed.message) return parsed.message;
+    }catch(e){ /* not JSON */ }
+    return raw || res.statusText || "no further detail from GitHub";
+  }
+  async function githubGetFile(owner, repo, path, branch, token){
+    const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(url, { headers: githubHeaders(token) });
+    if(res.status === 404) return null;
+    if(!res.ok) throw new Error(`Couldn't read ${path} (${res.status}): ${await githubErrorText(res)}`);
+    return res.json();
+  }
+  async function githubPutFile(owner, repo, path, branch, token, base64Content, message, sha){
+    const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+    const body = { message, content: base64Content, branch };
+    if(sha) body.sha = sha;
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: { ...githubHeaders(token), "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok){
+      const sizeNote = base64Content.length > 60_000_000
+        ? " — this file is large; GitHub's Contents API tops out well under its documented 100MB limit in practice, so this is likely a size problem, not a token/permission one."
+        : "";
+      throw new Error(`Couldn't write ${path} (${res.status}): ${await githubErrorText(res)}${sizeNote}`);
+    }
+    return res.json();
+  }
+  // matches every {kind, src} media object whose src is still an embedded base64 data: URI,
+  // wherever it lives (hero, covers, blocks, sequence steps, callouts, logos, the mascot...).
+  // Deliberately excludes the ";utf8,"-encoded placeholder SVGs (from placeholder()/
+  // animatedPlaceholder() above) — those are tiny, procedurally generated decoration, not
+  // real uploaded content worth its own file in the repo.
+  const DATA_URI_BASE64_RE = /^data:[^;]+;base64,/;
+  function dataUriParts(dataUri){
+    const m = dataUri.match(/^data:([^;]+);base64,([\s\S]*)$/);
+    if(!m) return null;
+    return { mime: m[1], base64: m[2] };
+  }
+  function base64ToBytes(base64){
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+  const EXT_MIME = Object.fromEntries(Object.entries(GH_MIME_EXT).map(([mime, ext]) => [ext, mime]));
+  // matches this file's own "assets/push-<hash>.<ext>" naming scheme specifically, so a
+  // Cloudflare migration pass can recognize files already pushed to GitHub and pull them
+  // back for re-upload, without touching any other assets/ path a real user might have
+  const GITHUB_ASSET_PATH_RE = /^assets\/(push-([a-f0-9]{10})\.([a-z0-9]+))$/;
+  async function githubGetRawBytes(owner, repo, path, branch, token){
+    const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(url, { headers: { ...githubHeaders(token), "Accept": "application/vnd.github.raw+json" } });
+    if(!res.ok) throw new Error(`Couldn't fetch ${path} from GitHub (${res.status}): ${await githubErrorText(res)}`);
+    return res.arrayBuffer();
+  }
+  async function uploadToCloudflare(workerUrl, secret, path, body, mime){
+    const url = `${workerUrl.replace(/\/$/, "")}/${path.split("/").map(encodeURIComponent).join("/")}`;
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: { "Authorization": `Bearer ${secret}`, "Content-Type": mime || "application/octet-stream" },
+      body
+    });
+    if(!res.ok){
+      const text = await res.text().catch(() => "");
+      throw new Error(`Couldn't upload ${path} to Cloudflare (${res.status}): ${text || res.statusText || "no further detail"}`);
+    }
+    const data = await res.json();
+    return data.url;
+  }
+  // finds every media object still worth touching for the chosen host: anything still
+  // embedded as a data: URI (never uploaded anywhere), plus — only when pushing to
+  // Cloudflare — anything already migrated to this repo's assets/ folder in an earlier
+  // GitHub push, so a switch to Cloudflare ends with everything consolidated in one place
+  // instead of split across two hosts
+  function collectPendingMedia(node, targetHost, found){
+    found = found || [];
+    if(!node || typeof node !== "object") return found;
+    if(Array.isArray(node)){ node.forEach(child => collectPendingMedia(child, targetHost, found)); return found; }
+    if(typeof node.src === "string" && (node.kind === "image" || node.kind === "video" || node.kind === "gif")){
+      if(DATA_URI_BASE64_RE.test(node.src)){
+        found.push({ obj: node, type: "dataUri" });
+      } else if(targetHost === "cloudflare" && GITHUB_ASSET_PATH_RE.test(node.src)){
+        found.push({ obj: node, type: "githubAsset" });
+      }
+    }
+    Object.values(node).forEach(v => collectPendingMedia(v, targetHost, found));
+    return found;
+  }
+  // Hashes the base64 TEXT directly rather than decoding it to raw bytes first — base64 is
+  // already ASCII, so TextEncoder can turn it straight into bytes for SubtleCrypto with no
+  // atob() decode step at all. That decode (atob() to a binary string, then a manual
+  // byte-by-byte copy into a Uint8Array) was extra full-size copies of every file, on top of
+  // everything else already in memory; skipping it removes that entirely. Deterministic
+  // either way — same file content always produces the same hash — so this is safe to change
+  // without orphaning or duplicating anything already pushed under the old scheme.
+  async function shortHashOfBase64(base64){
+    const bytes = new TextEncoder().encode(base64);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,"0")).join("").slice(0, 10);
+  }
+  // UTF-8 safe base64 encode/decode — plain atob/btoa only handle Latin1, and this content
+  // is full of curly quotes, em dashes, etc.
+  // TextEncoder/TextDecoder (not the classic escape/unescape trick) — native, faster, and
+  // doesn't create a bloated intermediate %XX-escaped string for every non-ASCII character
+  function utf8ToBase64(str){
+    const bytes = new TextEncoder().encode(str);
+    let binary = "";
+    const chunkSize = 0x8000; // chunked to avoid call-stack limits on String.fromCharCode(...bytes) for large inputs
+    for(let i=0;i<bytes.length;i+=chunkSize){
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+    }
+    return btoa(binary);
+  }
+  function base64ToUtf8(b64){
+    const binary = atob(b64.replace(/\n/g, ""));
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  function setPushStatus(msg){ $("ghPushStatus").textContent = msg; }
+  function withTimeout(promise, ms, label){
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms/1000)}s`)), ms))
+    ]);
+  }
+  const GH_SESSION_FIELDS = ["ghOwner", "ghRepo", "ghBranch", "ghToken", "mediaHostChoice", "cfWorkerUrl", "cfSecret"];
+  function loadGithubFieldsFromSession(){
+    GH_SESSION_FIELDS.forEach(id => { const v = sessionStorage.getItem("gh_" + id); if(v) $(id).value = v; });
+    updateMediaHostFieldVisibility();
+  }
+  function saveGithubFieldsToSession(){
+    GH_SESSION_FIELDS.forEach(id => sessionStorage.setItem("gh_" + id, $(id).value.trim()));
+  }
+  function updateMediaHostFieldVisibility(){
+    $("cloudflareFields").classList.toggle("field-hidden", $("mediaHostChoice").value !== "cloudflare");
+  }
+  $("mediaHostChoice").addEventListener("change", updateMediaHostFieldVisibility);
+
+  $("btnGithubPush").addEventListener("click", () => {
+    loadGithubFieldsFromSession();
+    setPushStatus("");
+    $("githubModalBackdrop").classList.add("open");
+  });
+  $("ghModalCancel").addEventListener("click", () => $("githubModalBackdrop").classList.remove("open"));
+  $("githubModalBackdrop").addEventListener("click", (e) => {
+    if(e.target === $("githubModalBackdrop")) $("githubModalBackdrop").classList.remove("open");
+  });
+
+  $("ghPushBtn").addEventListener("click", async () => {
+    const owner = $("ghOwner").value.trim();
+    const repo = $("ghRepo").value.trim();
+    const branch = $("ghBranch").value.trim();
+    const token = $("ghToken").value.trim();
+    const mediaHost = $("mediaHostChoice").value;
+    const cfWorkerUrl = $("cfWorkerUrl").value.trim();
+    const cfSecret = $("cfSecret").value.trim();
+    if(!owner || !repo || !branch || !token){
+      setPushStatus("Fill in the repo owner, repo name, branch, and token first.");
+      return;
+    }
+    if(mediaHost === "cloudflare" && (!cfWorkerUrl || !cfSecret)){
+      setPushStatus("Fill in the Cloudflare Worker URL and upload secret first.");
+      return;
+    }
+    saveGithubFieldsToSession();
+    $("ghPushBtn").disabled = true;
+    // Mutate the LIVE state's media objects in place, PERMANENTLY, the moment each upload
+    // succeeds — no cloning, and no keeping the original around for a possible rollback
+    // either. Holding on to every already-uploaded file's original data just in case of a
+    // later failure sounds safer, but at hundreds of MB of embedded media it means never
+    // actually freeing that memory during the push, which is exactly what was crashing the
+    // tab even after every file had already uploaded fine. Once a file's swapped, its old
+    // string becomes garbage-collectable for real. A push that fails partway through just
+    // leaves whatever succeeded already swapped over and everything else still embedded —
+    // clicking Push again picks up exactly where it left off, since already-migrated items
+    // no longer look like unpushed media to collectPendingMedia().
+    let successCount = 0;
+    const failures = [];
+    try{
+      setPushStatus("Preparing content...");
+      const pending = collectPendingMedia(state, mediaHost);
+      for(let i=0;i<pending.length;i++){
+        const { obj: m, type } = pending[i];
+        setPushStatus(`Uploading media ${i+1} of ${pending.length}...`);
+        // one oversized or flaky file shouldn't block every other upload — record it and
+        // move on, leaving that item as-is; everything else still goes through. A hard
+        // 90s-per-file timeout catches a request that's genuinely hung (not just slow) —
+        // without it, one stuck file blocks the entire push indefinitely with no way to
+        // know it'll never finish on its own.
+        try{
+          await withTimeout((async () => {
+            if(type === "dataUri"){
+              const parts = dataUriParts(m.src);
+              if(!parts) return;
+              const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
+              const hash = await shortHashOfBase64(parts.base64);
+              const filename = `push-${hash}.${ext}`;
+              if(mediaHost === "cloudflare"){
+                m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, base64ToBytes(parts.base64), parts.mime);
+              } else {
+                const assetPath = `assets/${filename}`;
+                const existing = await githubGetFile(owner, repo, assetPath, branch, token);
+                await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
+                  `Add media asset ${hash}`, existing && existing.sha);
+                m.src = assetPath;
+              }
+            } else if(type === "githubAsset"){
+              // already pushed to this repo's assets/ in an earlier run — pull it back and
+              // re-upload to Cloudflare so everything ends up in one place, not split in two
+              const match = m.src.match(GITHUB_ASSET_PATH_RE);
+              const filename = match[1], ext = match[3];
+              const bytes = await githubGetRawBytes(owner, repo, m.src, branch, token);
+              m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, bytes, EXT_MIME[ext]);
+            }
+          })(), 90000, `media ${i+1}`);
+          successCount++;
+          // persist to IndexedDB after EVERY file, not just at the end — a browser "Out of
+          // Memory" tab crash kills the whole process outright rather than throwing a
+          // catchable error, so the finally block below never runs either; without this,
+          // every file that successfully uploads still gets lost locally (though never
+          // re-uploaded, since it's already safely wherever it was just sent) the moment
+          // the tab dies, forcing every retry to start over from the full original size again
+          await idbSaveState(state);
+        }catch(mediaErr){
+          if(/timed out/.test(mediaErr.message)){
+            // a hang (not a normal fast-failing error) means retrying as-is probably just
+            // hangs again — clear it instead of leaving a giant embedded blob that would
+            // keep blocking the final content commit too; the slot is left empty so it's
+            // obviously missing, not silently broken, and can be re-added with a direct
+            // link (e.g. YouTube/Vimeo for video) via Change Media afterward
+            m.src = "";
+            failures.push(`${mediaErr.message} — cleared locally so it stops blocking the rest of the push; re-add it manually afterward`);
+            await idbSaveState(state);
+          } else {
+            failures.push(mediaErr.message);
+          }
+        }
+      }
+
+      setPushStatus("Fetching current index.html...");
+      const htmlFile = await githubGetFile(owner, repo, "index.html", branch, token);
+      if(!htmlFile) throw new Error("Couldn't find index.html on that branch — check owner/repo/branch.");
+      const currentHtml = base64ToUtf8(htmlFile.content);
+
+      const startMarker = "/* DEFAULT_DATA_START */", endMarker = "/* DEFAULT_DATA_END */";
+      const startIdx = currentHtml.indexOf(startMarker);
+      const endIdx = currentHtml.indexOf(endMarker);
+      if(startIdx === -1 || endIdx === -1 || endIdx < startIdx){
+        throw new Error("Couldn't find the content markers in that index.html — is it an older version?");
+      }
+      // by this point every media .src still embedded as data: has already been swept out
+      // to a short relative path above, so this is cheap regardless of how large the
+      // original content was
+      const jsonStr = JSON.stringify(state, null, 2);
+      const newHtml = currentHtml.slice(0, startIdx + startMarker.length) +
+        " " + jsonStr + " " + currentHtml.slice(endIdx);
+
+      setPushStatus("Committing index.html...");
+      await githubPutFile(owner, repo, "index.html", branch, token, utf8ToBase64(newHtml),
+        "Update dashboard content via in-app push", htmlFile.sha);
+
+      const doneMsg = mediaHost === "cloudflare"
+        ? `Done — pushed ${successCount} media file(s) to Cloudflare and your content to ${owner}/${repo}@${branch}. ` +
+          `Your local copy now points at those same public URLs too (so it stays light going forward) — since ` +
+          `they're full URLs, images should keep working right here, not just once this is hosted elsewhere.`
+        : `Done — pushed ${successCount} media file(s) and your content to ${owner}/${repo}@${branch}. ` +
+          `Your local copy now points at those same short paths too (so it stays light going forward) — ` +
+          `images may look broken right here unless this page is being viewed from somewhere that also serves ` +
+          `assets/ (the repo itself, or a hosted copy), but everything is safely on GitHub now.`;
+      setPushStatus(failures.length
+        ? `${doneMsg}\n${failures.length} file(s) had a problem (see below — a timeout means it was cleared locally so it stopped blocking the rest; anything else means it's still embedded and safe to retry with Push again):\n${failures.join("\n")}`
+        : doneMsg);
+    }catch(err){
+      setPushStatus(`Error: ${err.message}\n${successCount} media file(s) already succeeded and are saved — click Push again to pick up where this left off.` +
+        (failures.length ? `\n${failures.length} media file(s) also had a problem this run (see below — a timeout means it was cleared locally; anything else means it's still embedded):\n${failures.join("\n")}` : ""));
+    }finally{
+      saveState(); // persist whatever migration progress happened, partial or complete
+      $("ghPushBtn").disabled = false;
+    }
+  });
+
   /* ---------------- init ---------------- */
-  render();
-  updateScroll();
+  initState().then(() => {
+    render();
+    updateScroll();
+  });
 })();
 </script>
 </body>
