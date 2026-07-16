@@ -3481,6 +3481,12 @@
   }
 
   function setPushStatus(msg){ $("ghPushStatus").textContent = msg; }
+  function withTimeout(promise, ms, label){
+    return Promise.race([
+      promise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms/1000)}s`)), ms))
+    ]);
+  }
   const GH_SESSION_FIELDS = ["ghOwner", "ghRepo", "ghBranch", "ghToken", "mediaHostChoice", "cfWorkerUrl", "cfSecret"];
   function loadGithubFieldsFromSession(){
     GH_SESSION_FIELDS.forEach(id => { const v = sessionStorage.getItem("gh_" + id); if(v) $(id).value = v; });
@@ -3541,31 +3547,36 @@
         const { obj: m, type } = pending[i];
         setPushStatus(`Uploading media ${i+1} of ${pending.length}...`);
         // one oversized or flaky file shouldn't block every other upload — record it and
-        // move on, leaving that item as-is; everything else still goes through
+        // move on, leaving that item as-is; everything else still goes through. A hard
+        // 90s-per-file timeout catches a request that's genuinely hung (not just slow) —
+        // without it, one stuck file blocks the entire push indefinitely with no way to
+        // know it'll never finish on its own.
         try{
-          if(type === "dataUri"){
-            const parts = dataUriParts(m.src);
-            if(!parts) continue;
-            const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
-            const hash = await shortHashOfBase64(parts.base64);
-            const filename = `push-${hash}.${ext}`;
-            if(mediaHost === "cloudflare"){
-              m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, base64ToBytes(parts.base64), parts.mime);
-            } else {
-              const assetPath = `assets/${filename}`;
-              const existing = await githubGetFile(owner, repo, assetPath, branch, token);
-              await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
-                `Add media asset ${hash}`, existing && existing.sha);
-              m.src = assetPath;
+          await withTimeout((async () => {
+            if(type === "dataUri"){
+              const parts = dataUriParts(m.src);
+              if(!parts) return;
+              const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
+              const hash = await shortHashOfBase64(parts.base64);
+              const filename = `push-${hash}.${ext}`;
+              if(mediaHost === "cloudflare"){
+                m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, base64ToBytes(parts.base64), parts.mime);
+              } else {
+                const assetPath = `assets/${filename}`;
+                const existing = await githubGetFile(owner, repo, assetPath, branch, token);
+                await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
+                  `Add media asset ${hash}`, existing && existing.sha);
+                m.src = assetPath;
+              }
+            } else if(type === "githubAsset"){
+              // already pushed to this repo's assets/ in an earlier run — pull it back and
+              // re-upload to Cloudflare so everything ends up in one place, not split in two
+              const match = m.src.match(GITHUB_ASSET_PATH_RE);
+              const filename = match[1], ext = match[3];
+              const bytes = await githubGetRawBytes(owner, repo, m.src, branch, token);
+              m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, bytes, EXT_MIME[ext]);
             }
-          } else if(type === "githubAsset"){
-            // already pushed to this repo's assets/ in an earlier run — pull it back and
-            // re-upload to Cloudflare so everything ends up in one place, not split in two
-            const match = m.src.match(GITHUB_ASSET_PATH_RE);
-            const filename = match[1], ext = match[3];
-            const bytes = await githubGetRawBytes(owner, repo, m.src, branch, token);
-            m.src = await uploadToCloudflare(cfWorkerUrl, cfSecret, filename, bytes, EXT_MIME[ext]);
-          }
+          })(), 90000, `media ${i+1}`);
           successCount++;
           // persist to IndexedDB after EVERY file, not just at the end — a browser "Out of
           // Memory" tab crash kills the whole process outright rather than throwing a
@@ -3575,7 +3586,18 @@
           // the tab dies, forcing every retry to start over from the full original size again
           await idbSaveState(state);
         }catch(mediaErr){
-          failures.push(mediaErr.message);
+          if(/timed out/.test(mediaErr.message)){
+            // a hang (not a normal fast-failing error) means retrying as-is probably just
+            // hangs again — clear it instead of leaving a giant embedded blob that would
+            // keep blocking the final content commit too; the slot is left empty so it's
+            // obviously missing, not silently broken, and can be re-added with a direct
+            // link (e.g. YouTube/Vimeo for video) via Change Media afterward
+            m.src = "";
+            failures.push(`${mediaErr.message} — cleared locally so it stops blocking the rest of the push; re-add it manually afterward`);
+            await idbSaveState(state);
+          } else {
+            failures.push(mediaErr.message);
+          }
         }
       }
 
@@ -3610,11 +3632,11 @@
           `images may look broken right here unless this page is being viewed from somewhere that also serves ` +
           `assets/ (the repo itself, or a hosted copy), but everything is safely on GitHub now.`;
       setPushStatus(failures.length
-        ? `${doneMsg}\n${failures.length} file(s) failed and are still embedded locally — just click Push again to retry them:\n${failures.join("\n")}`
+        ? `${doneMsg}\n${failures.length} file(s) had a problem (see below — a timeout means it was cleared locally so it stopped blocking the rest; anything else means it's still embedded and safe to retry with Push again):\n${failures.join("\n")}`
         : doneMsg);
     }catch(err){
       setPushStatus(`Error: ${err.message}\n${successCount} media file(s) already succeeded and are saved — click Push again to pick up where this left off.` +
-        (failures.length ? `\n${failures.length} media file(s) also failed during this run and are still embedded:\n${failures.join("\n")}` : ""));
+        (failures.length ? `\n${failures.length} media file(s) also had a problem this run (see below — a timeout means it was cleared locally; anything else means it's still embedded):\n${failures.join("\n")}` : ""));
     }finally{
       saveState(); // persist whatever migration progress happened, partial or complete
       $("ghPushBtn").disabled = false;
