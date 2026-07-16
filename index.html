@@ -422,7 +422,7 @@
     box-shadow:0 10px 26px rgba(0,0,0,.4);transition:transform .2s ease;
   }
   .callout-tab:hover{transform:scale(1.1);}
-  .callout-tab-icon{width:36px;height:44px;display:block;}
+  .callout-tab-icon{width:38px;height:36px;display:block;}
   .callout-content{
     position:relative;max-width:0;opacity:0;overflow:hidden;pointer-events:none;
     background:#005ba6;color:#fff;border-radius:12px;margin-left:0;padding:0;
@@ -621,17 +621,17 @@
     color:var(--ink-faint);font-size:12px;letter-spacing:.03em;}
   .site-footer strong{color:var(--ink-soft);}
 
-  /* ---------- brand mascot: an original cyan/yellow water-drop character used as a
-     decorative touch in a few spots ---------- */
+  /* ---------- brand mascot: the client's cyan water-drop character, cropped to just its
+     head/face (matching their reference art), used as a decorative touch in a few spots ---------- */
   .mascot-icon{display:block;width:100%;height:100%;}
-  .hero-mascot{position:absolute;right:6%;bottom:6%;width:88px;height:114px;z-index:2;
+  .hero-mascot{position:absolute;right:6%;bottom:6%;width:96px;height:92px;z-index:2;
     animation:mascotBob 3.4s ease-in-out infinite;}
   .hero-mascot svg{width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(0,0,0,.3));}
   @keyframes mascotBob{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-10px) rotate(2deg);}}
-  .footer-mascot{width:52px;height:68px;margin:0 auto 14px;}
+  .footer-mascot{width:58px;height:56px;margin:0 auto 14px;}
   .footer-mascot svg{width:100%;height:100%;display:block;}
   @media (max-width: 720px){
-    .hero-mascot{width:64px;height:83px;right:5%;bottom:4%;}
+    .hero-mascot{width:70px;height:67px;right:5%;bottom:4%;}
   }
 
   /* ---------- modal ---------- */
@@ -701,27 +701,17 @@
     <div class="annotation-layer" id="heroAnnotationLayer"></div>
     <div class="hero-callout-mount" id="heroCalloutMount"></div>
     <div class="hero-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M40 95 L40 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <ellipse cx="40" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <ellipse cx="60" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="1" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="99" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
+      <svg viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-          fill="#0dbfdb" stroke="#413c3f" stroke-width="4.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#fbe847" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="34" cy="47" r="2.6" fill="#fbe847"/>
-        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="60" cy="47" r="2.6" fill="#fbe847"/>
-        <path d="M41 63 Q50 68 59 63" fill="none" stroke="#413c3f" stroke-width="3.2" stroke-linecap="round"/>
+          fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
+        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
+        <ellipse cx="30" cy="63" rx="16" ry="11" fill="#7fecfb" opacity=".55"/>
+        <path d="M31 35 Q28 32 25 34" fill="none" stroke="#3a3542" stroke-width="2.6" stroke-linecap="round"/>
+        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+        <circle cx="34" cy="47" r="2.6" fill="#ffe14d"/>
+        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+        <circle cx="60" cy="47" r="2.6" fill="#ffe14d"/>
+        <path d="M39 61 Q50 69 61 61 Q59 68 50 69 Q41 68 39 61 Z" fill="#ffe14d" stroke="#3a3542" stroke-width="2.6" stroke-linejoin="round"/>
       </svg>
     </div>
     <div class="hero-content">
@@ -753,27 +743,17 @@
 
   <footer class="site-footer">
     <div class="footer-mascot" aria-hidden="true">
-      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg">
-        <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M40 95 L40 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <path d="M60 95 L60 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <ellipse cx="40" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <ellipse cx="60" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M23 64 Q3 61 1 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="1" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-        <path d="M77 64 Q97 61 99 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-        <circle cx="99" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
+      <svg viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg">
         <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-          fill="#0dbfdb" stroke="#413c3f" stroke-width="4.5"/>
-        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#fbe847" stroke-width="4.5" stroke-linecap="round"/>
-        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="34" cy="47" r="2.6" fill="#fbe847"/>
-        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-        <circle cx="60" cy="47" r="2.6" fill="#fbe847"/>
-        <path d="M41 63 Q50 68 59 63" fill="none" stroke="#413c3f" stroke-width="3.2" stroke-linecap="round"/>
+          fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
+        <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
+        <ellipse cx="30" cy="63" rx="16" ry="11" fill="#7fecfb" opacity=".55"/>
+        <path d="M31 35 Q28 32 25 34" fill="none" stroke="#3a3542" stroke-width="2.6" stroke-linecap="round"/>
+        <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+        <circle cx="34" cy="47" r="2.6" fill="#ffe14d"/>
+        <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+        <circle cx="60" cy="47" r="2.6" fill="#ffe14d"/>
+        <path d="M39 61 Q50 69 61 61 Q59 68 50 69 Q41 68 39 61 Z" fill="#ffe14d" stroke="#3a3542" stroke-width="2.6" stroke-linejoin="round"/>
       </svg>
     </div>
     <strong>Editable Storymap Dashboard</strong> — a reusable, full-bleed scrollytelling template.
@@ -914,30 +894,21 @@
     return "data:image/svg+xml;utf8," + encodeURIComponent(svg);
   }
 
-  // an original brand mascot — a friendly cyan/yellow water-drop blob character — used as a
-  // decorative touch in a few spots (not a reproduction of any reference artwork)
+  // the client's mascot — a friendly cyan water-drop blob character with a yellow rim
+  // highlight — cropped to just its head/face, matching the reference character art (no
+  // arms or legs, so it reads cleanly as a small round tab icon without looking skewed)
   function mascotSVG(extraClass){
-    return `<svg class="mascot-icon${extraClass ? " " + extraClass : ""}" viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M40 95 L40 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M60 95 L60 118" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M40 95 L40 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M60 95 L60 118" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <ellipse cx="40" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-      <ellipse cx="60" cy="120" rx="13" ry="7.5" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-      <path d="M23 64 Q3 61 1 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M23 64 Q3 61 1 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <circle cx="1" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
-      <path d="M77 64 Q97 61 99 79" fill="none" stroke="#413c3f" stroke-width="9" stroke-linecap="round"/>
-      <path d="M77 64 Q97 61 99 79" fill="none" stroke="#0dbfdb" stroke-width="5.5" stroke-linecap="round"/>
-      <circle cx="99" cy="81" r="11" fill="#0dbfdb" stroke="#413c3f" stroke-width="3.5"/>
+    return `<svg class="mascot-icon${extraClass ? " " + extraClass : ""}" viewBox="0 0 100 96" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M50 3 C59 3 56 14 65 12 C82 8 92 31 85 47 C93 57 91 78 74 84 C64 92 36 92 26 84 C9 78 7 57 15 47 C8 31 18 8 35 12 C44 14 41 3 50 3 Z"
-        fill="#0dbfdb" stroke="#413c3f" stroke-width="4.5"/>
-      <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#fbe847" stroke-width="4.5" stroke-linecap="round"/>
-      <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-      <circle cx="34" cy="47" r="2.6" fill="#fbe847"/>
-      <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#413c3f"/>
-      <circle cx="60" cy="47" r="2.6" fill="#fbe847"/>
-      <path d="M41 63 Q50 68 59 63" fill="none" stroke="#413c3f" stroke-width="3.2" stroke-linecap="round"/>
+        fill="#14d6f0" stroke="#3a3542" stroke-width="4.5"/>
+      <path d="M50 3 C59 3 56 14 65 12 C74 9.5 81 19 82 22" fill="none" stroke="#ffe14d" stroke-width="4.5" stroke-linecap="round"/>
+      <ellipse cx="30" cy="63" rx="16" ry="11" fill="#7fecfb" opacity=".55"/>
+      <path d="M31 35 Q28 32 25 34" fill="none" stroke="#3a3542" stroke-width="2.6" stroke-linecap="round"/>
+      <ellipse cx="37" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+      <circle cx="34" cy="47" r="2.6" fill="#ffe14d"/>
+      <ellipse cx="63" cy="43" rx="6.4" ry="9.4" fill="#3a3542"/>
+      <circle cx="60" cy="47" r="2.6" fill="#ffe14d"/>
+      <path d="M39 61 Q50 69 61 61 Q59 68 50 69 Q41 68 39 61 Z" fill="#ffe14d" stroke="#3a3542" stroke-width="2.6" stroke-linejoin="round"/>
     </svg>`;
   }
 
