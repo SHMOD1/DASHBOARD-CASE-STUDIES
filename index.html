@@ -3613,7 +3613,8 @@
         ? `${doneMsg}\n${failures.length} file(s) failed and are still embedded locally — just click Push again to retry them:\n${failures.join("\n")}`
         : doneMsg);
     }catch(err){
-      setPushStatus(`Error: ${err.message}\n${successCount} media file(s) already succeeded and are saved — click Push again to pick up where this left off.`);
+      setPushStatus(`Error: ${err.message}\n${successCount} media file(s) already succeeded and are saved — click Push again to pick up where this left off.` +
+        (failures.length ? `\n${failures.length} media file(s) also failed during this run and are still embedded:\n${failures.join("\n")}` : ""));
     }finally{
       saveState(); // persist whatever migration progress happened, partial or complete
       $("ghPushBtn").disabled = false;
