@@ -3403,8 +3403,23 @@
   }
   // UTF-8 safe base64 encode/decode — plain atob/btoa only handle Latin1, and this content
   // is full of curly quotes, em dashes, etc.
-  function utf8ToBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
-  function base64ToUtf8(b64){ return decodeURIComponent(escape(atob(b64.replace(/\n/g, "")))); }
+  // TextEncoder/TextDecoder (not the classic escape/unescape trick) — native, faster, and
+  // doesn't create a bloated intermediate %XX-escaped string for every non-ASCII character
+  function utf8ToBase64(str){
+    const bytes = new TextEncoder().encode(str);
+    let binary = "";
+    const chunkSize = 0x8000; // chunked to avoid call-stack limits on String.fromCharCode(...bytes) for large inputs
+    for(let i=0;i<bytes.length;i+=chunkSize){
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+    }
+    return btoa(binary);
+  }
+  function base64ToUtf8(b64){
+    const binary = atob(b64.replace(/\n/g, ""));
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
 
   function setPushStatus(msg){ $("ghPushStatus").textContent = msg; }
   const GH_SESSION_FIELDS = ["ghOwner", "ghRepo", "ghBranch", "ghToken"];
@@ -3436,15 +3451,17 @@
     }
     saveGithubFieldsToSession();
     $("ghPushBtn").disabled = true;
-    // Mutate the LIVE state's media objects in place instead of cloning the whole thing
-    // first — with a lot of embedded media, a clone (whether via JSON.stringify+parse or
-    // structuredClone) briefly needs a second full copy of everything in memory, which can
-    // crash the tab outright on a large enough dashboard. Swapping a media object's .src to
-    // a short relative path costs nothing (it's just a reference to a new short string; the
-    // old large string becomes garbage-collectable), and this always restores every original
-    // value afterward — on success or failure — so your live editing session is untouched
-    // either way; only the content actually committed to GitHub uses the relative paths.
-    const restoreList = [];
+    // Mutate the LIVE state's media objects in place, PERMANENTLY, the moment each upload
+    // succeeds — no cloning, and no keeping the original around for a possible rollback
+    // either. Holding on to every already-uploaded file's original data just in case of a
+    // later failure sounds safer, but at hundreds of MB of embedded media it means never
+    // actually freeing that memory during the push, which is exactly what was crashing the
+    // tab even after every file had already uploaded fine. Once a file's swapped, its old
+    // string becomes garbage-collectable for real. A push that fails partway through just
+    // leaves whatever succeeded already swapped over and everything else still embedded —
+    // clicking Push again picks up exactly where it left off, since already-migrated items
+    // no longer look like unpushed media to collectMediaObjects().
+    let successCount = 0;
     const failures = [];
     try{
       setPushStatus("Preparing content...");
@@ -3463,8 +3480,8 @@
           const existing = await githubGetFile(owner, repo, assetPath, branch, token);
           await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
             `Add media asset ${hash}`, existing && existing.sha);
-          restoreList.push({ obj: m, src: m.src });
           m.src = assetPath;
+          successCount++;
         }catch(mediaErr){
           failures.push(mediaErr.message);
         }
@@ -3492,14 +3509,17 @@
       await githubPutFile(owner, repo, "index.html", branch, token, utf8ToBase64(newHtml),
         "Update dashboard content via in-app push", htmlFile.sha);
 
-      const doneMsg = `Done — pushed ${restoreList.length} media file(s) and your content to ${owner}/${repo}@${branch}.`;
+      const doneMsg = `Done — pushed ${successCount} media file(s) and your content to ${owner}/${repo}@${branch}. ` +
+        `Your local copy now points at those same short paths too (so it stays light going forward) — ` +
+        `images may look broken right here unless this page is being viewed from somewhere that also serves ` +
+        `assets/ (the repo itself, or a hosted copy), but everything is safely on GitHub now.`;
       setPushStatus(failures.length
-        ? `${doneMsg}\n${failures.length} file(s) failed and were left as-is (not pushed) — you can retry just those separately:\n${failures.join("\n")}`
+        ? `${doneMsg}\n${failures.length} file(s) failed and are still embedded locally — just click Push again to retry them:\n${failures.join("\n")}`
         : doneMsg);
     }catch(err){
-      setPushStatus("Error: " + err.message);
+      setPushStatus(`Error: ${err.message}\n${successCount} media file(s) already succeeded and are saved — click Push again to pick up where this left off.`);
     }finally{
-      restoreList.forEach(({ obj, src }) => { obj.src = src; });
+      saveState(); // persist whatever migration progress happened, partial or complete
       $("ghPushBtn").disabled = false;
     }
   });

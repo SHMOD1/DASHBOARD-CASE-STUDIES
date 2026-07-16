@@ -241,6 +241,16 @@ pick any color per annotation from its toolbar's color swatch.
   `sessionStorage` (gone once the tab closes) and sent nowhere but `api.github.com` directly.
   The commit lands on whatever branch you point it at — review it (or open a PR) same as any
   other change before merging.
+  Each media file's .src is swapped to its new short path the moment its upload succeeds —
+  permanently, directly on your live content, not on a copy — because holding on to every
+  original in case of a later rollback is itself enough memory pressure to crash the tab once
+  total embedded media reaches into the hundreds of MB. A push that fails partway through
+  just leaves whatever succeeded already swapped over and the rest still embedded; clicking
+  Push again picks up exactly where it left off, since already-migrated files no longer look
+  like unpushed media. One side effect: right after a push, your own local images may show
+  broken here unless this page happens to be served from somewhere that also serves
+  `assets/` (the repo itself, or a hosted copy) — the content itself is safe on GitHub either
+  way, and a normal page load afterward (e.g. from the pushed copy) shows everything intact.
 
 **Note on video embeds:** YouTube/Vimeo iframes require a live internet connection in the
 browser viewing the page — they won't load in network-sandboxed previews, only in a normal
