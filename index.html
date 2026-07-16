@@ -3419,10 +3419,18 @@
     }
     saveGithubFieldsToSession();
     $("ghPushBtn").disabled = true;
+    // Mutate the LIVE state's media objects in place instead of cloning the whole thing
+    // first — with a lot of embedded media, a clone (whether via JSON.stringify+parse or
+    // structuredClone) briefly needs a second full copy of everything in memory, which can
+    // crash the tab outright on a large enough dashboard. Swapping a media object's .src to
+    // a short relative path costs nothing (it's just a reference to a new short string; the
+    // old large string becomes garbage-collectable), and this always restores every original
+    // value afterward — on success or failure — so your live editing session is untouched
+    // either way; only the content actually committed to GitHub uses the relative paths.
+    const restoreList = [];
     try{
       setPushStatus("Preparing content...");
-      const pushState = JSON.parse(JSON.stringify(state));
-      const mediaObjs = collectMediaObjects(pushState);
+      const mediaObjs = collectMediaObjects(state);
       for(let i=0;i<mediaObjs.length;i++){
         const m = mediaObjs[i];
         setPushStatus(`Uploading media ${i+1} of ${mediaObjs.length}...`);
@@ -3434,6 +3442,7 @@
         const existing = await githubGetFile(owner, repo, assetPath, branch, token);
         await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
           `Add media asset ${hash}`, existing && existing.sha);
+        restoreList.push({ obj: m, src: m.src });
         m.src = assetPath;
       }
 
@@ -3448,7 +3457,10 @@
       if(startIdx === -1 || endIdx === -1 || endIdx < startIdx){
         throw new Error("Couldn't find the content markers in that index.html — is it an older version?");
       }
-      const jsonStr = JSON.stringify(pushState, null, 2);
+      // by this point every media .src still embedded as data: has already been swept out
+      // to a short relative path above, so this is cheap regardless of how large the
+      // original content was
+      const jsonStr = JSON.stringify(state, null, 2);
       const newHtml = currentHtml.slice(0, startIdx + startMarker.length) +
         " " + jsonStr + " " + currentHtml.slice(endIdx);
 
@@ -3456,10 +3468,11 @@
       await githubPutFile(owner, repo, "index.html", branch, token, utf8ToBase64(newHtml),
         "Update dashboard content via in-app push", htmlFile.sha);
 
-      setPushStatus(`Done — pushed ${mediaObjs.length} media file(s) and your content to ${owner}/${repo}@${branch}.`);
+      setPushStatus(`Done — pushed ${restoreList.length} media file(s) and your content to ${owner}/${repo}@${branch}.`);
     }catch(err){
       setPushStatus("Error: " + err.message);
     }finally{
+      restoreList.forEach(({ obj, src }) => { obj.src = src; });
       $("ghPushBtn").disabled = false;
     }
   });
