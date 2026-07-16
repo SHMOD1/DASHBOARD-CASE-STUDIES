@@ -3487,6 +3487,13 @@
             `Add media asset ${hash}`, existing && existing.sha);
           m.src = assetPath;
           successCount++;
+          // persist to IndexedDB after EVERY file, not just at the end — a browser "Out of
+          // Memory" tab crash kills the whole process outright rather than throwing a
+          // catchable error, so the finally block below never runs either; without this,
+          // every file that successfully uploads still gets lost locally (though never
+          // re-uploaded, since it's already safely on GitHub) the moment the tab dies,
+          // forcing every retry to start over from the full original size again
+          await idbSaveState(state);
         }catch(mediaErr){
           failures.push(mediaErr.message);
         }
