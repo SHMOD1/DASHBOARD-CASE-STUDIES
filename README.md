@@ -229,6 +229,18 @@ pick any color per annotation from its toolbar's color swatch.
   a *lot* of large video uploads can still make the page itself heavy to export/import, so
   linking to hosted video (or a YouTube/Vimeo URL) scales better than uploading when you're
   adding a lot of it.
+- **Push to GitHub** (top bar) is the alternative to Export/Import for getting a heavily
+  edited version out of the browser and into the actual repo, without ever moving one giant
+  file: it uploads every embedded image/video in your current content to `assets/` as its own
+  small file (skipping the tiny procedurally-generated placeholder graphics, which aren't real
+  content), rewrites your content to point at those files instead of inline data URLs, and
+  commits that as this file's new default — all directly from your browser to GitHub's API.
+  It needs a GitHub [Personal Access
+  Token](https://github.com/settings/personal-access-tokens/new) with write access to the
+  target repo, plus the repo owner/name/branch; all four are kept only in that browser tab's
+  `sessionStorage` (gone once the tab closes) and sent nowhere but `api.github.com` directly.
+  The commit lands on whatever branch you point it at — review it (or open a PR) same as any
+  other change before merging.
 
 **Note on video embeds:** YouTube/Vimeo iframes require a live internet connection in the
 browser viewing the page — they won't load in network-sandboxed previews, only in a normal

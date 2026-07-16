@@ -689,6 +689,7 @@
       <button id="btnExport">Export JSON</button>
       <label class="file-btn">Import JSON<input type="file" id="fileImport" accept="application/json" /></label>
       <button id="btnReset">Reset Demo</button>
+      <button id="btnGithubPush">Push to GitHub</button>
     </div>
   </div>
 
@@ -792,6 +793,26 @@
       <div class="modal-actions">
         <button id="modalCancel" type="button">Cancel</button>
         <button id="modalSave" class="primary" type="button">Save Media</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="githubModalBackdrop">
+    <div class="modal">
+      <h3>Push to GitHub</h3>
+      <p class="hint">Uploads every image/video in your current content to <code>assets/</code> as its own file
+        (never one giant blob), then commits your content as this file's new default. Needs a GitHub
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Personal
+        Access Token</a> with write access to this one repo — it's kept only in this browser tab's session
+        storage, never sent anywhere except directly to api.github.com.</p>
+      <input type="text" id="ghOwner" placeholder="Repo owner (e.g. shmod1)" />
+      <input type="text" id="ghRepo" placeholder="Repo name (e.g. dashboard-case-studies)" />
+      <input type="text" id="ghBranch" placeholder="Branch (e.g. claude/editable-ambassador-dashboard-on41ir)" />
+      <input type="text" id="ghToken" placeholder="GitHub Personal Access Token" autocomplete="off" />
+      <div id="ghPushStatus" class="hint" style="min-height:36px;white-space:pre-line;"></div>
+      <div class="modal-actions">
+        <button id="ghModalCancel" type="button">Close</button>
+        <button id="ghPushBtn" class="primary" type="button">Push</button>
       </div>
     </div>
   </div>
@@ -979,8 +1000,12 @@
   function newId(){ return "id" + Math.random().toString(36).slice(2,9); }
 
   /* ---------------- default dummy content ---------------- */
+  // the START/END comment markers a couple lines below wrap this object literal as a
+  // stable splice point: "Push to GitHub" (see pushToGithub()) rewrites exactly the text
+  // between them when it commits your current content as the new shipped default, so
+  // don't remove or rename those two markers.
   function defaultData(){
-    return {
+    return /* DEFAULT_DATA_START */ {
   "meta": {
     "title": "How Does Water Move Through The City?",
     "subtitle": "Three cities engineered water away from view — and paid for\nit with fragmented ecologies, disconnected neighborhoods, and floods that pipes\nalone couldn't hold. This is how each one began designing with water instead.",
@@ -1667,7 +1692,7 @@
       ]
     }
   ]
-};
+} /* DEFAULT_DATA_END */;
   }
 
   // older saved states (and the shipped demo content) predate the pageType system — every
@@ -3290,6 +3315,153 @@
   $("heroScrollBtn").addEventListener("click", () => {
     if(!gateReady) return; // hero's background media is still playing/holding
     document.querySelector(".chapter")?.scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
+  /* ---------------- push to GitHub ----------------
+     Uploads every embedded data: URI in the current content to assets/ in the repo as its
+     own file, rewrites the (cloned) content to point at those relative paths instead, then
+     commits that as the new default content baked into index.html — splicing it in between
+     the DEFAULT_DATA_START/END markers around defaultData()'s return statement above. This
+     never moves one giant blob anywhere: each asset is its own small upload, and the content
+     commit itself stays lightweight once media stops being embedded as base64. The GitHub
+     token/owner/repo/branch fields are remembered only in this tab's sessionStorage — gone
+     once the tab closes, never written to disk or sent anywhere but api.github.com. */
+  const GITHUB_API = "https://api.github.com";
+  const GH_MIME_EXT = {
+    "image/png":"png", "image/jpeg":"jpg", "image/gif":"gif", "image/webp":"webp",
+    "video/mp4":"mp4", "video/webm":"webm", "video/quicktime":"mov"
+  };
+  function githubHeaders(token){
+    return { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github+json" };
+  }
+  async function githubGetFile(owner, repo, path, branch, token){
+    const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+    const res = await fetch(url, { headers: githubHeaders(token) });
+    if(res.status === 404) return null;
+    if(!res.ok) throw new Error(`Couldn't read ${path} (${res.status}): ${(await res.json().catch(()=>({}))).message || res.statusText}`);
+    return res.json();
+  }
+  async function githubPutFile(owner, repo, path, branch, token, base64Content, message, sha){
+    const url = `${GITHUB_API}/repos/${owner}/${repo}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+    const body = { message, content: base64Content, branch };
+    if(sha) body.sha = sha;
+    const res = await fetch(url, {
+      method: "PUT",
+      headers: { ...githubHeaders(token), "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if(!res.ok) throw new Error(`Couldn't write ${path} (${res.status}): ${(await res.json().catch(()=>({}))).message || res.statusText}`);
+    return res.json();
+  }
+  // walks the whole content tree and collects every {kind, src} media object whose src is
+  // still an embedded base64 data: URI, wherever it lives (hero, covers, blocks, sequence
+  // steps, callouts, logos, the mascot...) — generic on purpose, so it never needs updating
+  // when a new kind of media field gets added elsewhere in the schema. Deliberately excludes
+  // the ";utf8,"-encoded placeholder SVGs (from placeholder()/animatedPlaceholder() above) —
+  // those are tiny, procedurally generated decoration, not real uploaded content worth its
+  // own file in the repo.
+  const DATA_URI_BASE64_RE = /^data:[^;]+;base64,/;
+  function collectMediaObjects(node, found){
+    found = found || [];
+    if(!node || typeof node !== "object") return found;
+    if(Array.isArray(node)){ node.forEach(child => collectMediaObjects(child, found)); return found; }
+    if(typeof node.src === "string" && DATA_URI_BASE64_RE.test(node.src) &&
+       (node.kind === "image" || node.kind === "video" || node.kind === "gif")){
+      found.push(node);
+    }
+    Object.values(node).forEach(v => collectMediaObjects(v, found));
+    return found;
+  }
+  function dataUriParts(dataUri){
+    const m = dataUri.match(/^data:([^;]+);base64,([\s\S]*)$/);
+    if(!m) return null;
+    return { mime: m[1], base64: m[2] };
+  }
+  async function shortHashOfBase64(base64){
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2,"0")).join("").slice(0, 10);
+  }
+  // UTF-8 safe base64 encode/decode — plain atob/btoa only handle Latin1, and this content
+  // is full of curly quotes, em dashes, etc.
+  function utf8ToBase64(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function base64ToUtf8(b64){ return decodeURIComponent(escape(atob(b64.replace(/\n/g, "")))); }
+
+  function setPushStatus(msg){ $("ghPushStatus").textContent = msg; }
+  const GH_SESSION_FIELDS = ["ghOwner", "ghRepo", "ghBranch", "ghToken"];
+  function loadGithubFieldsFromSession(){
+    GH_SESSION_FIELDS.forEach(id => { const v = sessionStorage.getItem("gh_" + id); if(v) $(id).value = v; });
+  }
+  function saveGithubFieldsToSession(){
+    GH_SESSION_FIELDS.forEach(id => sessionStorage.setItem("gh_" + id, $(id).value.trim()));
+  }
+
+  $("btnGithubPush").addEventListener("click", () => {
+    loadGithubFieldsFromSession();
+    setPushStatus("");
+    $("githubModalBackdrop").classList.add("open");
+  });
+  $("ghModalCancel").addEventListener("click", () => $("githubModalBackdrop").classList.remove("open"));
+  $("githubModalBackdrop").addEventListener("click", (e) => {
+    if(e.target === $("githubModalBackdrop")) $("githubModalBackdrop").classList.remove("open");
+  });
+
+  $("ghPushBtn").addEventListener("click", async () => {
+    const owner = $("ghOwner").value.trim();
+    const repo = $("ghRepo").value.trim();
+    const branch = $("ghBranch").value.trim();
+    const token = $("ghToken").value.trim();
+    if(!owner || !repo || !branch || !token){
+      setPushStatus("Fill in the repo owner, repo name, branch, and token first.");
+      return;
+    }
+    saveGithubFieldsToSession();
+    $("ghPushBtn").disabled = true;
+    try{
+      setPushStatus("Preparing content...");
+      const pushState = JSON.parse(JSON.stringify(state));
+      const mediaObjs = collectMediaObjects(pushState);
+      for(let i=0;i<mediaObjs.length;i++){
+        const m = mediaObjs[i];
+        setPushStatus(`Uploading media ${i+1} of ${mediaObjs.length}...`);
+        const parts = dataUriParts(m.src);
+        if(!parts) continue;
+        const ext = GH_MIME_EXT[parts.mime] || (m.kind === "video" ? "mp4" : "png");
+        const hash = await shortHashOfBase64(parts.base64);
+        const assetPath = `assets/push-${hash}.${ext}`;
+        const existing = await githubGetFile(owner, repo, assetPath, branch, token);
+        await githubPutFile(owner, repo, assetPath, branch, token, parts.base64,
+          `Add media asset ${hash}`, existing && existing.sha);
+        m.src = assetPath;
+      }
+
+      setPushStatus("Fetching current index.html...");
+      const htmlFile = await githubGetFile(owner, repo, "index.html", branch, token);
+      if(!htmlFile) throw new Error("Couldn't find index.html on that branch — check owner/repo/branch.");
+      const currentHtml = base64ToUtf8(htmlFile.content);
+
+      const startMarker = "/* DEFAULT_DATA_START */", endMarker = "/* DEFAULT_DATA_END */";
+      const startIdx = currentHtml.indexOf(startMarker);
+      const endIdx = currentHtml.indexOf(endMarker);
+      if(startIdx === -1 || endIdx === -1 || endIdx < startIdx){
+        throw new Error("Couldn't find the content markers in that index.html — is it an older version?");
+      }
+      const jsonStr = JSON.stringify(pushState, null, 2);
+      const newHtml = currentHtml.slice(0, startIdx + startMarker.length) +
+        " " + jsonStr + " " + currentHtml.slice(endIdx);
+
+      setPushStatus("Committing index.html...");
+      await githubPutFile(owner, repo, "index.html", branch, token, utf8ToBase64(newHtml),
+        "Update dashboard content via in-app push", htmlFile.sha);
+
+      setPushStatus(`Done — pushed ${mediaObjs.length} media file(s) and your content to ${owner}/${repo}@${branch}.`);
+    }catch(err){
+      setPushStatus("Error: " + err.message);
+    }finally{
+      $("ghPushBtn").disabled = false;
+    }
   });
 
   /* ---------------- init ---------------- */
