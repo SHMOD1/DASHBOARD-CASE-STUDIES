@@ -216,8 +216,10 @@ pick any color per annotation from its toolbar's color swatch.
   Vimeo embed keeps the standard 16:9 video shape, since an embed has no size of its own to
   take. Its S/M/L/Full setting still controls how wide it sits in the flow (or, on a Grid
   page, "Full" spans the entire row instead of one column).
-- **+ Add chapter at end**, **+ Insert entry here**, move-up/down, and delete controls (in
-  the main content column) let you fully restructure the story.
+- A **"+ Add chapter here"** row appears after every chapter (the last one reads "+ Add
+  chapter at end"), so a new chapter can be inserted between any two existing ones just as
+  easily as tacked onto the end. That, plus **+ Insert entry here**, move-up/down, and delete
+  controls (in the main content column), let you fully restructure the story.
 - **Export JSON** downloads your content; **Import JSON** loads it back in (or share it with
   someone else). **Reset Demo** restores the sample content.
 - Edits autosave to the browser's IndexedDB storage, so a refresh won't lose your work.

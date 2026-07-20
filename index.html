@@ -3842,8 +3842,9 @@
     $("footerMascotIcon").innerHTML = mascotSVG();
 
     railChapters.innerHTML = state.chapters.map(renderRailChapter).join("");
-    mainEl.innerHTML = state.chapters.map(renderChapter).join("") +
-      `<div class="add-chapter-row edit-only"><button type="button" data-act="addChapter" data-index="${state.chapters.length}">+ Add chapter at end</button></div>`;
+    mainEl.innerHTML = state.chapters.map((c, idx) =>
+      renderChapter(c, idx) + addChapterRowHtml(idx + 1, idx === state.chapters.length - 1)
+    ).join("");
 
     syncEditableAttrs();
     syncRailDraggable();
@@ -3991,6 +3992,12 @@
     el.style.fontWeight = a.bold ? "700" : "400";
     el.style.fontStyle = a.italic ? "italic" : "normal";
     el.classList.toggle("chip-stat", a.chip === "stat");
+  }
+  // a "+ Add chapter" row after every chapter, not just once at the very end, so a new
+  // chapter can be inserted between any two existing ones just as easily as at the end
+  function addChapterRowHtml(index, isLast){
+    const label = isLast ? "+ Add chapter at end" : "+ Add chapter here";
+    return `<div class="add-chapter-row edit-only"><button type="button" data-act="addChapter" data-index="${index}">${label}</button></div>`;
   }
 
   function renderChapter(chapter, idx){
