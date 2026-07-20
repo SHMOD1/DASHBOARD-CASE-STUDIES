@@ -609,6 +609,9 @@
   .add-between button, .add-entry-chapter button{background:var(--bg);border:1px solid var(--line-strong);padding:5px 12px;
     border-radius:14px;color:var(--ink-soft);white-space:nowrap;}
   .add-between button:hover, .add-entry-chapter button:hover{border-color:var(--accent-live);color:var(--accent-live);}
+  /* a step up from adding a page — starts a whole new chapter right at this point, so it's
+     styled a notch bolder than the plain page-type buttons beside it */
+  .add-between-split-chapter{border-color:var(--accent-live) !important;color:var(--accent-live) !important;font-weight:700;}
 
   .add-chapter-row{display:none;justify-content:center;padding:26px;background:var(--paper);position:relative;z-index:250;}
   body.edit-on .add-chapter-row{display:flex;}
@@ -4027,7 +4030,8 @@
   function renderAddBetween(chapterId, index){
     const buttons = PAGE_TYPES.map(t =>
       `<button type="button" data-act="insertEntry" data-chapter-id="${chapterId}" data-index="${index}" data-page-type="${t.type}">+ ${t.label}</button>`
-    ).join("");
+    ).join("") +
+      `<button type="button" class="add-between-split-chapter" data-act="splitChapter" data-chapter-id="${chapterId}" data-index="${index}">+ Add Chapter</button>`;
     return `<div class="add-between edit-only">${buttons}</div>`;
   }
 
@@ -4237,6 +4241,23 @@
       entries: [ newEntry("background", n + 60) ]
     };
     state.chapters.splice(index, 0, chapter);
+    saveState(); render();
+  }
+  // starts a new chapter at any page, not just between whole chapters — everything from
+  // that page onward moves out of the current chapter and into the new one (nothing is
+  // lost, just re-homed), so this works the same as insertChapter when clicked at the very
+  // end of a chapter's pages (nothing left to move) and as a genuine split anywhere earlier
+  function splitChapterInsertingNew(chapterId, entryIndex){
+    const ci = state.chapters.findIndex(c => c.id === chapterId);
+    if(ci === -1) return;
+    const movedEntries = state.chapters[ci].entries.splice(entryIndex);
+    const n = state.chapters.length;
+    const chapter = {
+      id:newId(), title:"New Chapter", subtitle:"Add a short description for this chapter",
+      accent: ACCENTS[n % ACCENTS.length], cover:{ kind:"image", src: placeholder(n+50,"N"), embed:false },
+      entries: movedEntries.length ? movedEntries : [ newEntry("background", n + 60) ]
+    };
+    state.chapters.splice(ci + 1, 0, chapter);
     saveState(); render();
   }
   function deleteChapter(id){
@@ -4527,6 +4548,8 @@
       deleteChapter(btn.dataset.chapterId);
     } else if(act === "insertEntry" || act === "addEntry"){
       insertEntry(btn.dataset.chapterId, parseInt(btn.dataset.index, 10), btn.dataset.pageType);
+    } else if(act === "splitChapter"){
+      splitChapterInsertingNew(btn.dataset.chapterId, parseInt(btn.dataset.index, 10));
     } else if(act === "moveEntry"){
       moveEntry(btn.dataset.chapterId, btn.dataset.entryId, parseInt(btn.dataset.dir, 10));
     } else if(act === "deleteEntry"){

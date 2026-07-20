@@ -218,8 +218,16 @@ pick any color per annotation from its toolbar's color swatch.
   page, "Full" spans the entire row instead of one column).
 - A **"+ Add chapter here"** row appears after every chapter (the last one reads "+ Add
   chapter at end"), so a new chapter can be inserted between any two existing ones just as
-  easily as tacked onto the end. That, plus **+ Insert entry here**, move-up/down, and delete
-  controls (in the main content column), let you fully restructure the story.
+  easily as tacked onto the end.
+- Every **"+ Insert entry here"** row (which already appears before every single page, and
+  once more at the end of each chapter) also carries a **"+ Add Chapter"** option alongside
+  the page-type buttons — click it and everything from that page onward moves out of the
+  current chapter into a brand-new one right after it, splitting the chapter at exactly that
+  point. Nothing is lost or reordered, it's just re-homed into the new chapter; used at the
+  very end of a chapter's pages (nothing left to move), it behaves the same as the
+  chapter-level "+ Add chapter here" row above.
+- That, plus move-up/down and delete controls (in the main content column), let you fully
+  restructure the story.
 - **Export JSON** downloads your content; **Import JSON** loads it back in (or share it with
   someone else). **Reset Demo** restores the sample content.
 - Edits autosave to the browser's IndexedDB storage, so a refresh won't lose your work.
