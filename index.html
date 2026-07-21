@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=1500" />
 <title>Editable Storymap Dashboard</title>
 <!-- Brand body font (Open Sans, per brand guidelines). Requires a live connection to fonts.googleapis.com —
      this <link> is a no-op in network-sandboxed previews (falls back to system sans) but works normally
@@ -677,7 +677,16 @@
   @media (max-width: 860px){
     .hero-content, .chapter-cover-content, .entry-content{padding:0 6% 8vh;}
     .add-between, .add-entry-chapter{padding:14px 6%;}
+  }
 
+  /* ---------- touchscreens (phones/tablets): pan & pinch-zoom instead of reflow ----------
+     the viewport meta tag pins the layout at a fixed desktop-scale width (see <head>) so
+     nothing here ever squeezes into a narrow column or wraps annotation labels down to one
+     letter per line -- visitors pinch-zoom and pan around the full design instead, the way a
+     non-mobile-optimized site works. max-width:860px above no longer fires on a real phone
+     (its layout viewport is fixed-width now), so it only still helps a narrow desktop window;
+     phone/tablet-specific treatment is targeted by touch capability instead. */
+  @media (pointer: coarse) and (hover: none){
     /* phones are for reading, not editing -- drop the editor toolbar entirely and let
        everything below reclaim the space it was leaving room for */
     .chrome{display:none;}
@@ -5035,7 +5044,9 @@
   function syncRailDraggable(){
     railChapters.querySelectorAll(".rail-item, .rail-chapter-head").forEach(el => el.setAttribute("draggable", editOn ? "true" : "false"));
   }
+  const touchDeviceQuery = window.matchMedia("(pointer: coarse) and (hover: none)");
   function setEditMode(on){
+    if(on && touchDeviceQuery.matches) on = false; // phones/tablets are read-only, no exceptions
     editOn = on;
     document.body.classList.toggle("edit-on", on);
     $("btnEdit").textContent = "Edit Mode: " + (on ? "On" : "Off");
@@ -5044,6 +5055,7 @@
     syncRailDraggable();
   }
   $("btnEdit").addEventListener("click", () => setEditMode(!editOn));
+  touchDeviceQuery.addEventListener("change", (e) => { if(e.matches && editOn) setEditMode(false); });
 
   /* ---------------- delegated input (typing) ---------------- */
   document.addEventListener("input", (e) => {
