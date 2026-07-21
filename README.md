@@ -2,6 +2,12 @@
 
 ## Editable Storymap Dashboard
 
+**The editor toolbar is retired on this branch** — this is the published, read-only version
+of the dashboard; visitors can't reach Edit Mode by any means, on any device. A checkpoint
+with editing still enabled lives on `main` (and the `checkpoint-*` point in history) if this
+content needs further changes later — pull that copy, keep editing, and push a fresh published
+version back here when it's ready again.
+
 `index.html` is a full-bleed storymap — every hero, chapter cover, and entry is a true
 full-screen (100vh) slide with its background image/GIF/video filling the entire viewport
 edge-to-edge, each one rising cleanly into full view as you scroll — no fade, so the
@@ -193,12 +199,10 @@ pick any color per annotation from its toolbar's color swatch.
 viewport is pinned at a fixed desktop-scale width (1500px), so the whole design (including
 freely-placed annotation labels, which can't sensibly reflow) renders exactly as designed and
 is simply scaled down to fit the screen initially. Visitors pinch-zoom and pan to read details,
-the way a non-mobile-optimized site works, rather than everything being pre-shrunk to fit. The
-editor toolbar (Edit Mode, Export/Import JSON, Reset Demo, Push to GitHub) is hidden on any
-touchscreen device — phones are for reading the published story, not editing it — and the
-timeline rail reclaims the full screen height it leaves behind; Edit Mode also can't be
-switched on by any means on a touch device, even if it was left on at a wider width beforehand.
-Desktop/laptop viewing (mouse or trackpad) is completely unaffected either way.
+the way a non-mobile-optimized site works, rather than everything being pre-shrunk to fit.
+Edit Mode can't be switched on by any means on a touch device even on a checkpoint where the
+toolbar is still enabled, as an extra safeguard on top of it being retired entirely on the
+published branch (see above).
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
