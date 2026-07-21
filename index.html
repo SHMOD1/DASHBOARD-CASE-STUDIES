@@ -677,6 +677,12 @@
   @media (max-width: 860px){
     .hero-content, .chapter-cover-content, .entry-content{padding:0 6% 8vh;}
     .add-between, .add-entry-chapter{padding:14px 6%;}
+
+    /* phones are for reading, not editing -- drop the editor toolbar entirely and let
+       everything below reclaim the space it was leaving room for */
+    .chrome{display:none;}
+    .rail{top:0;height:100vh;height:100svh;}
+    #progressBar{top:0;}
   }
 </style>
 </head>

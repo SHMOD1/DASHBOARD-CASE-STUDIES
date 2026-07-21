@@ -189,6 +189,11 @@ pick any color per annotation from its toolbar's color swatch.
   line, idle droplets, and title popup use the newer `#306EF8`/`#7AF9B4` green-blue combo
   described above instead of the cyan.)
 
+**On a phone:** the editor toolbar (Edit Mode, Export/Import JSON, Reset Demo, Push to
+GitHub) is hidden below 860px width — phones are for reading the published story, not editing
+it — and the timeline rail reclaims the full screen height it leaves behind. Everything else
+(hero, chapters, entries, the timeline rail, popups) already reflows for narrow screens.
+
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and
   every text block.
