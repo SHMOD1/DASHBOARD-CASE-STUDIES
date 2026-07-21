@@ -195,14 +195,18 @@ pick any color per annotation from its toolbar's color swatch.
   line, idle droplets, and title popup use the newer `#306EF8`/`#7AF9B4` green-blue combo
   described above instead of the cyan.)
 
-**On a phone or tablet:** the page doesn't reflow into a narrow single-column layout — the
-viewport is pinned at a fixed desktop-scale width (1500px), so the whole design (including
-freely-placed annotation labels, which can't sensibly reflow) renders exactly as designed and
-is simply scaled down to fit the screen initially. Visitors pinch-zoom and pan to read details,
-the way a non-mobile-optimized site works, rather than everything being pre-shrunk to fit.
-Edit Mode can't be switched on by any means on a touch device even on a checkpoint where the
-toolbar is still enabled, as an extra safeguard on top of it being retired entirely on the
-published branch (see above).
+**On a phone or tablet:** the page reflows into a narrow layout using the browser's normal
+responsive viewport (a fixed-width "pinch-zoom the desktop layout" approach was tried first,
+but doesn't survive being embedded in an iframe on another site — e.g. WordPress via a Raw
+HTML block — since browsers ignore an iframe's own viewport meta tag). Grid pages drop to 2
+columns (1 below ~480px) so a label never wraps down to one letter per line, and draggable
+annotation labels are automatically nudged after every render/resize so none of them get
+clipped by the screen edge or end up overlapping each other — `clampAnnotations()` in the
+`<script>`. This can't fully prevent an annotation from ever overlapping ordinary body text
+(only other annotations and the container edge), so it's worth a quick look at annotation
+placement on a page that's especially dense with them. Edit Mode can't be switched on by any
+means on a touch device even on a checkpoint where the toolbar is still enabled, as an extra
+safeguard on top of it being retired entirely on the published branch (see above).
 
 **Editing (toggle "Edit Mode: On" in the top bar):**
 - Click any text to edit it in place — chapter titles, entry years/titles/captions, and

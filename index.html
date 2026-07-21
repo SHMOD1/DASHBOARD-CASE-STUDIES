@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=1500" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Editable Storymap Dashboard</title>
 <!-- Brand body font (Open Sans, per brand guidelines). Requires a live connection to fonts.googleapis.com —
      this <link> is a no-op in network-sandboxed previews (falls back to system sans) but works normally
@@ -676,14 +676,21 @@
   @media (max-width: 860px){
     .hero-content, .chapter-cover-content, .entry-content{padding:0 6% 8vh;}
     .add-between, .add-entry-chapter{padding:14px 6%;}
-  }
 
-  /* ---------- touchscreens (phones/tablets): pan & pinch-zoom instead of reflow ----------
-     the viewport meta tag pins the layout at a fixed desktop-scale width (see <head>) so
-     nothing here ever squeezes into a narrow column or wraps annotation labels down to one
-     letter per line -- visitors pinch-zoom and pan around the full design instead, the way a
-     non-mobile-optimized site works. max-width:860px above no longer fires on a real phone
-     (its layout viewport is fixed-width now), so it only still helps a narrow desktop window. */
+    /* Grid pages: never let columns squeeze narrow enough that a label wraps to one letter
+       per line -- 3-4 desktop columns collapse to 2, regardless of the per-page setting. */
+    .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:repeat(2,1fr) !important;}
+
+    /* annotations: shrink their footprint so two nearby labels are less likely to collide,
+       and so a label placed near an image edge has more room before it would overflow it
+       (see the JS-driven edge clamp in clampAnnotations() for the rest of that fix). */
+    .annotation{max-width:82%;}
+    .annotation-text{font-size:13px !important;padding:1px 4px;}
+  }
+  @media (max-width: 480px){
+    .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:1fr !important;}
+    .annotation-text{font-size:11.5px !important;}
+  }
 </style>
 </head>
 <body>
@@ -4498,7 +4505,72 @@
     syncRailDraggable();
     refreshEmptyHighlights();
     updateScroll();
+    requestAnimationFrame(clampAnnotations);
   }
+
+  // annotations are pinned at a saved %x/%y point, centered on it via a CSS transform --
+  // on a narrow screen (a) a point placed near an edge can push the label's box past its
+  // container entirely, and (b) two points that had plenty of room apart on a wide desktop
+  // screen can end up with their (now-larger-relative-to-the-image) boxes overlapping each
+  // other. Nudge every label back into its container and apart from its siblings after every
+  // render/resize instead, so nothing is ever clipped or unreadably overlapped no matter how
+  // narrow the viewport is (this also covers annotations viewed inside an embedding iframe,
+  // which reports its own real width here regardless of the outer page).
+  function clampAnnotations(){
+    document.querySelectorAll(".annotation-layer").forEach(layer => {
+      const layerBox = layer.getBoundingClientRect();
+      if(!layerBox.width || !layerBox.height) return;
+      const els = [...layer.querySelectorAll(".annotation")];
+      if(!els.length) return;
+      els.forEach(el => { el.style.transform = ""; });
+      const items = els.map(el => {
+        const r = el.getBoundingClientRect();
+        return { el, left: r.left, top: r.top, width: r.width, height: r.height, dx: 0, dy: 0 };
+      });
+      const margin = 6, gap = 4;
+      function clampToLayer(it){
+        const left = it.left + it.dx, top = it.top + it.dy;
+        const right = left + it.width, bottom = top + it.height;
+        if(left < layerBox.left + margin) it.dx += (layerBox.left + margin) - left;
+        else if(right > layerBox.right - margin) it.dx += (layerBox.right - margin) - right;
+        if(top < layerBox.top + margin) it.dy += (layerBox.top + margin) - top;
+        else if(bottom > layerBox.bottom - margin) it.dy += (layerBox.bottom - margin) - bottom;
+      }
+      items.forEach(clampToLayer);
+      // resolve overlaps by processing top-to-bottom and only ever pushing an item further
+      // down (never sideways or back up) past anything already placed above it -- guarantees
+      // convergence in one sweep, unlike a mutual-push solver which can oscillate
+      const order = [...items].sort((a, b) => (a.top + a.dy) - (b.top + b.dy));
+      const placed = [];
+      order.forEach(it => {
+        const box = () => ({
+          left: it.left + it.dx, top: it.top + it.dy,
+          right: it.left + it.dx + it.width, bottom: it.top + it.dy + it.height,
+        });
+        for(let iter = 0; iter < placed.length + 1; iter++){
+          const b = box();
+          const hit = placed.find(p =>
+            Math.min(b.right, p.right) - Math.max(b.left, p.left) > -gap &&
+            Math.min(b.bottom, p.bottom) - Math.max(b.top, p.top) > -gap
+          );
+          if(!hit) break;
+          it.dy += (hit.bottom + gap) - b.top;
+        }
+        clampToLayer(it);
+        placed.push(box());
+      });
+      items.forEach(it => {
+        it.el.style.transform = (it.dx || it.dy)
+          ? `translate(calc(-50% + ${it.dx.toFixed(1)}px), calc(-50% + ${it.dy.toFixed(1)}px))`
+          : "";
+      });
+    });
+  }
+  let clampAnnotationsResizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(clampAnnotationsResizeTimer);
+    clampAnnotationsResizeTimer = setTimeout(clampAnnotations, 150);
+  });
 
   // any of these highlight/box treatments should disappear on the published page when the
   // text box behind them is actually empty, rather than showing a colored box with nothing
