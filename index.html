@@ -84,9 +84,13 @@
   [contenteditable="true"]{outline:none;}
   body.edit-on [data-editable]{outline:1px dashed rgba(226,192,126,.7);outline-offset:3px;border-radius:2px;cursor:text;transition:background .15s;}
   body.edit-on [data-editable]:hover, body.edit-on [data-editable]:focus{background:rgba(226,192,126,.16);}
-  .edit-only{display:none;}
-  body.edit-on .edit-only{display:flex;}
-  body.edit-on button.edit-only, body.edit-on label.edit-only{display:inline-flex;}
+  /* !important here is deliberate: .edit-only is a cross-cutting utility applied alongside
+     plenty of other classes that also set their own `display` (e.g. .add-block-row{display:
+     flex}) -- without it, a same-specificity, later-declared component rule can silently win
+     the cascade and leave edit-only controls visible to every visitor, not just in Edit Mode. */
+  .edit-only{display:none !important;}
+  body.edit-on .edit-only{display:flex !important;}
+  body.edit-on button.edit-only, body.edit-on label.edit-only{display:inline-flex !important;}
 
   /* ---------- generic media (hero / chapter cover / entry) ---------- */
   .media-fill{position:absolute;inset:0;overflow:hidden;background:var(--bg-alt);}
