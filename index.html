@@ -61,10 +61,11 @@
 
   /* ---------- progress + chrome ---------- */
   #progressBar{position:sticky;top:0;z-index:70;height:3px;background:var(--accent-live);width:0%;transition:width .08s linear, background-color .5s ease;}
-  /* the editor toolbar is retired on the published site -- this is a checked-in copy of the
-     fully-edited dashboard, not a live editing surface, so there's no toggle to bring it back
-     here (a backup with editing still enabled lives on a separate branch/checkpoint). */
-  .chrome{display:none;}
+  .chrome{
+    position:sticky;top:3px;z-index:60;background:var(--chrome-bg);color:var(--chrome-ink);
+    display:flex;align-items:center;justify-content:space-between;padding:9px 20px;
+    font-size:12px;letter-spacing:.04em;gap:12px;flex-wrap:wrap;
+  }
   .chrome-brand{display:flex;align-items:center;gap:8px;font-weight:600;text-transform:uppercase;font-size:11px;opacity:.85;}
   .chrome-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2);}
   .chrome-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -176,8 +177,8 @@
      titles live in a hover popup instead of taking up permanent width. ---------- */
   .layout-wrap{display:flex;align-items:flex-start;}
   .rail{
-    position:sticky;top:0;z-index:20;flex:0 0 92px;width:92px;
-    height:100vh;height:100svh;overflow:hidden;align-self:flex-start;
+    position:sticky;top:49px;z-index:20;flex:0 0 92px;width:92px;
+    height:calc(100vh - 49px);height:calc(100svh - 49px);overflow:hidden;align-self:flex-start;
     background:linear-gradient(180deg, rgba(65,60,63,.97) 0%, rgba(42,39,41,.95) 45%, rgba(65,60,63,.97) 100%);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
     border-left:1px solid rgba(48,110,248,.4);

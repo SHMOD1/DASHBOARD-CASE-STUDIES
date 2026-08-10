@@ -2,11 +2,11 @@
 
 ## Editable Storymap Dashboard
 
-**The editor toolbar is retired on this branch** — this is the published, read-only version
-of the dashboard; visitors can't reach Edit Mode by any means, on any device. A checkpoint
-with editing still enabled lives on `main` (and the `checkpoint-*` point in history) if this
-content needs further changes later — pull that copy, keep editing, and push a fresh published
-version back here when it's ready again.
+**This branch (`claude/dashboard-major-edits`) has the editor toolbar restored** — it's a
+working copy for making further changes via the dashboard's own Edit Mode UI, branched off the
+published version (`claude/editable-ambassador-dashboard-on41ir`, which stays live and
+untouched). Once changes here are ready to go live, push a fresh published copy back to that
+branch (toolbar retired again) the same way as before.
 
 `index.html` is a full-bleed storymap — every hero, chapter cover, and entry is a true
 full-screen (100vh) slide with its background image/GIF/video filling the entire viewport
