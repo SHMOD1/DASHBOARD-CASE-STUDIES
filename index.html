@@ -444,6 +444,7 @@
     position:relative;max-width:0;opacity:0;overflow:hidden;pointer-events:none;
     background:#005ba6;color:#fff;border-radius:12px;margin-left:0;padding:0;
     box-shadow:0 18px 40px rgba(0,0,0,.4);
+    max-height:min(420px, 60vh);overflow-y:auto;
     transition:max-width .32s ease, opacity .22s ease .05s, margin-left .32s ease, padding .32s ease;
   }
   .callout-box:hover .callout-content,
@@ -455,10 +456,18 @@
     background:rgba(255,255,255,.14);margin-bottom:12px;}
   .callout-media-frame .media-empty{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);}
   .callout-text{font-family:var(--font-body);font-size:14.5px;font-weight:600;line-height:1.5;white-space:normal;}
+  /* the visitor-facing close button (distinct from .callout-remove, which deletes the box
+     entirely and only appears in Edit Mode) -- always available so closing it never depends
+     on remembering to tap the mascot tab again, which isn't an obvious gesture on its own */
+  .callout-close{
+    position:absolute;top:8px;right:8px;z-index:2;width:24px;height:24px;border-radius:50%;
+    background:rgba(0,0,0,.55);color:#fff;border:1.5px solid rgba(255,255,255,.7);font-size:11px;line-height:1;cursor:pointer;
+  }
   .callout-remove{
     position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-radius:50%;
     background:#fff;color:#005ba6;border:2px solid #005ba6;font-size:11px;line-height:1;cursor:pointer;
   }
+  body.edit-on .callout-close{display:none;} /* Edit Mode already has .callout-remove for this spot */
   .callout-add-btn{
     position:absolute;top:12%;left:1.5%;z-index:3;font-size:11.5px;font-weight:700;text-transform:uppercase;
     letter-spacing:.05em;background:rgba(0,91,166,.1);border:1.5px dashed #005ba6;color:#005ba6;
@@ -468,6 +477,8 @@
   @media (max-width: 720px){
     .callout-box, .callout-add-btn{left:3%;top:10%;}
     .callout-box:hover .callout-content, .callout-box:focus-within .callout-content, .callout-box.open .callout-content{max-width:min(220px, 74vw);}
+    .callout-content{max-height:48vh;}
+    .callout-media-frame{height:100px;}
   }
   /* the hero's callout box positions itself just like every other one — this mount just
      needs to not add its own box so the absolute positioning is relative to .hero */
@@ -4666,6 +4677,7 @@
       <div class="callout-box" ${idAttrs}>
         <div class="callout-tab" data-act="toggleCallout">${mascotSVG("callout-tab-icon")}</div>
         <div class="callout-content">
+          <button type="button" class="callout-close" data-act="toggleCallout" aria-label="Close">✕</button>
           <button type="button" class="callout-remove edit-only" data-act="removeCallout" ${idAttrs}>✕</button>
           ${mediaHtml}
           <div class="callout-text" data-editable data-bind-type="${bindType}" ${idAttrs} contenteditable="false">${escapeHtml(c.text || "Optional note — click to edit, or leave blank.")}</div>
@@ -5419,6 +5431,11 @@
   let lastCalloutSlideEl = null;
   const autoOpenedCallouts = new WeakSet();
   function updateCalloutAutoOpen(){
+    // on a phone, a popup box can easily cover most of the screen (long note + image, short
+    // viewport) -- auto-triggering it right as a visitor starts reading a new section is more
+    // disruptive than helpful there, so touch devices only see it if they deliberately tap the
+    // mascot tab themselves. Desktop keeps the passive-discovery auto-open.
+    if(touchDeviceQuery.matches) return;
     const activeSlideEl = getActiveSlideEl();
     if(activeSlideEl === lastCalloutSlideEl) return;
     if(lastCalloutSlideEl){
