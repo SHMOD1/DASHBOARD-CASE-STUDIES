@@ -4552,6 +4552,11 @@
   // render/resize instead, so nothing is ever clipped or unreadably overlapped no matter how
   // narrow the viewport is (this also covers annotations viewed inside an embedding iframe,
   // which reports its own real width here regardless of the outer page).
+  // real text content (titles, body copy, captions) that an annotation shouldn't be allowed
+  // to land on top of -- scoped to whatever slide/block the annotation-layer belongs to
+  const ANNOTATION_OBSTACLE_SELECTOR = ".hero-cover-title, .hero-cover-subtitle, .chapter-title, " +
+    ".chapter-subtitle, .entry-title, .entry-caption, .block--heading, .block--subheading, " +
+    ".block--body, .block--quote, .block--caption";
   function clampAnnotations(){
     document.querySelectorAll(".annotation-layer").forEach(layer => {
       const layerBox = layer.getBoundingClientRect();
@@ -4575,9 +4580,15 @@
       items.forEach(clampToLayer);
       // resolve overlaps by processing top-to-bottom and only ever pushing an item further
       // down (never sideways or back up) past anything already placed above it -- guarantees
-      // convergence in one sweep, unlike a mutual-push solver which can oscillate
+      // convergence in one sweep, unlike a mutual-push solver which can oscillate. Real text
+      // content is seeded into `placed` as fixed obstacles up front (never itself nudged) so
+      // annotations route around body copy the same way they already route around each other.
       const order = [...items].sort((a, b) => (a.top + a.dy) - (b.top + b.dy));
-      const placed = [];
+      const slideScope = layer.closest(".hero, .chapter-cover, .entry, .block-media-wrap, .sequence-step") || layer.parentElement;
+      const placed = [...slideScope.querySelectorAll(ANNOTATION_OBSTACLE_SELECTOR)]
+        .filter(el => !layer.contains(el) && !el.classList.contains("text-empty") && el.textContent.trim())
+        .map(el => { const r = el.getBoundingClientRect(); return { left:r.left, top:r.top, right:r.right, bottom:r.bottom }; })
+        .filter(r => r.right > r.left && r.bottom > r.top);
       order.forEach(it => {
         const box = () => ({
           left: it.left + it.dx, top: it.top + it.dy,
