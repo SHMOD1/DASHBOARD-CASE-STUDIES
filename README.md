@@ -43,19 +43,21 @@ untouched, and Section Intro pages carry just their optional hint line, no butto
   grotesque weight) — swap in a hosted `@font-face` for Intercom if you have the license files.
   Both fonts are also the top two choices in every text block's font dropdown in Edit Mode.
 
-**Text styling — highlighter-marker look:** chapter titles, entry titles, and Heading text
-blocks are the only text carrying the blue (`#005BA6`) highlight — chapter/entry titles and
-Heading render as tight, per-line highlight bars behind white text (using
-`box-decoration-break`, so each wrapped line gets its own tightly-fit rectangle rather than
-one big box); the hero's own title skips this since the hero page is already a solid blue
-backdrop. Every other text block type — Subheading, Body, Pull quote, and Caption — shares
-one plain cream (`#F8F3EF`) card look with dark text, so a page's text reads as a stack of
-plain white cards under its blue heading, not a wall of color. Pull quotes keep a large
-decorative opening quotation mark; captions/citations stay italic. Draggable text-box
-annotations use brand-blue (`#005BA6`) text, tightly padded, on a solid yellow (`#FFDE17`)
-highlight — the same blue used everywhere else, kept readable against that yellow. Newly-added
-annotations default to that blue (as does the "Stat Chip" preset's green pill); you can still
-pick any color per annotation from its toolbar's color swatch.
+**Text styling — heading-and-rule look:** no text carries a colored box behind it anymore.
+Chapter titles, entry titles, and Heading text blocks sit directly on the media, in plain
+white text with a drop shadow for legibility, each followed immediately by a solid cyan
+(`#0DBFDB`) rule spanning the full width of the column it introduces — that heading-plus-line
+pairing is what marks a new section now, instead of a colored highlight bar. The rule's width
+tracks its section's own content column, so it lines up exactly with what sits underneath it:
+the narrow block column on a Full Background page, the full grid width on a Grid page, or the
+centered title on a Section Intro. The hero's own title still skips any rule, since it's a
+distinct opening cover, not a section. Every other text block type — Subheading, Body, Pull
+quote, and Caption — is plain text too (no cream card), relying on the same drop shadow for
+readability over the photo behind it; pull quotes keep a large decorative opening quotation
+mark (now cyan instead of blue-on-cream). Draggable text-box annotations are unchanged and
+keep their own separate look: brand-blue (`#005BA6`) text, tightly padded, on a solid yellow
+(`#FFDE17`) highlight (or a green "Stat Chip" pill) — they're a distinct on-image labeling
+feature, not part of a page's section text.
 
 **Structure:**
 - A full-screen hero, then any number of **chapters** — each with its own full-bleed cover
@@ -201,10 +203,10 @@ it — and the timeline rail reclaims the full screen height it leaves behind. E
   and a color swatch for the text itself, plus reorder/delete. Use **+ Add text block** to add
   more, or **+ Add image / video / GIF** to drop in an inline media overlay (its toolbar
   controls size and alignment instead).
-- Chapter/entry titles, text blocks, and annotations all carry a highlight/box background
-  behind their text — but only when there's actually text in them. Clear all the text out of
-  one and its highlight disappears on the published page, so a reader never sees an empty
-  colored box; in Edit Mode the box stays put so you can always find it and type into it again.
+- Chapter/entry titles and Heading blocks carry their section-defining rule, and annotations
+  carry their highlight chip, only when there's actually text in them. Clear all the text out
+  of one and the rule/chip disappears on the published page, so a reader never sees one hanging
+  under empty space; in Edit Mode it stays put so you can always find it and type into it again.
 - Every chapter/page is fully reorderable — **↑/↓ Move** on a chapter or entry (or drag it
   in the timeline rail, see above), and the 4 "**+** *page type*" buttons between pages drop
   a new page of that type anywhere in the sequence — regardless of what mix of page types a
