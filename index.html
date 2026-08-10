@@ -131,44 +131,57 @@
     padding:0 7% 9vh;color:#f3f3fa;
   }
 
-  /* ---------- hero / opening cover: a distinct "presented by" title page — light,
-     centered, logo row up top, scroll-down button at the bottom. Scoped to .hero only;
-     chapter covers and entries keep their own bottom-left full-bleed treatment. ---------- */
-  .hero{align-items:center;background:#005ba6;}
+  /* ---------- hero / opening cover: an asymmetric "exhibition frontispiece" title page —
+     a small institutional credit line top-left, a large left-anchored title block bottom-left
+     (like a museum wall didactic, not a centered SaaS splash), and a vertical wayfinding
+     "gauge" on the right standing in for the usual centered scroll-down button. Scoped to
+     .hero only; chapter covers and entries keep their own bottom-left full-bleed treatment. */
+  .hero{align-items:stretch;background:#005ba6;}
   .hero .hero-content{
-    display:flex;flex-direction:column;align-items:center;text-align:center;
-    padding:9vh 7%;gap:6px;color:#fff;
+    display:flex;align-items:stretch;justify-content:space-between;text-align:left;
+    padding:6vh 6% 7vh;gap:4vw;color:#fff;height:100%;
   }
+  .hero-content-main{display:flex;flex-direction:column;justify-content:space-between;flex:1 1 auto;min-width:0;}
 
-  .hero-logos-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:34px;}
-  .hero-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:22px;}
-  .hero-logo-item{position:relative;width:120px;height:48px;}
+  .hero-logos-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:16px;}
+  .hero-logos{display:flex;flex-wrap:wrap;align-items:center;gap:14px;}
+  .hero-logo-item{position:relative;width:72px;height:30px;opacity:.82;}
   .hero-logo-item .media-el{object-fit:contain;}
-  .hero-logo-item .media-empty{font-size:9px;padding:6px;}
-  .hero-logo-item .media-empty .icon{font-size:16px;}
-  .hero-logo-remove{position:absolute;top:-8px;right:-8px;z-index:4;width:18px;height:18px;border-radius:50%;
-    background:#fff;color:#413c3f;border:none;font-size:10px;line-height:1;cursor:pointer;}
-  .hero-add-logo{font-size:10px;text-transform:uppercase;letter-spacing:.06em;background:none;
-    border:1px dashed rgba(255,255,255,.5);color:rgba(255,255,255,.85);padding:6px 12px;border-radius:20px;}
-  .hero-presents{font-family:var(--font-body);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
-    font-weight:700;color:rgba(255,255,255,.8);}
+  .hero-logo-item .media-empty{font-size:8px;padding:4px;}
+  .hero-logo-item .media-empty .icon{font-size:13px;}
+  .hero-logo-remove{position:absolute;top:-7px;right:-7px;z-index:4;width:16px;height:16px;border-radius:50%;
+    background:#fff;color:#413c3f;border:none;font-size:9px;line-height:1;cursor:pointer;}
+  .hero-add-logo{font-size:9px;text-transform:uppercase;letter-spacing:.06em;background:none;
+    border:1px dashed rgba(255,255,255,.4);color:rgba(255,255,255,.75);padding:5px 10px;border-radius:20px;}
+
+  .hero-title-block{max-width:860px;}
+  .hero-presents{font-family:var(--font-body);font-size:11px;letter-spacing:.3em;text-transform:uppercase;
+    font-weight:700;color:#7af9b4;margin-bottom:20px;padding-left:28px;position:relative;}
+  .hero-presents::before{content:"";position:absolute;left:0;top:50%;width:20px;height:1px;background:#7af9b4;}
 
   /* the hero's own backdrop is already solid brand blue, so its title skips the highlight
      treatment used elsewhere — a blue box on a blue background would be invisible */
-  .hero-cover-title{font-family:var(--font-main);font-size:clamp(36px,6vw,72px);line-height:1.04;margin:0 0 14px;
-    font-weight:800;letter-spacing:-.01em;color:#fff;text-shadow:none;}
-  .hero-cover-subtitle{font-family:var(--font-body);font-size:clamp(15px,2vw,19px);color:rgba(255,255,255,.88);
-    font-weight:400;max-width:620px;line-height:1.55;text-shadow:0 2px 8px rgba(0,0,0,.7);}
+  .hero-cover-title{font-family:var(--font-main);font-size:clamp(42px,7.2vw,104px);line-height:.97;margin:0 0 22px;
+    font-weight:800;letter-spacing:-.02em;color:#fff;text-shadow:none;}
+  .hero-cover-subtitle{font-family:var(--font-body);font-size:clamp(15px,1.5vw,18px);color:rgba(255,255,255,.82);
+    font-weight:400;max-width:520px;line-height:1.65;text-shadow:none;
+    padding-left:28px;border-left:1px solid rgba(255,255,255,.28);}
 
-  .hero-scrolldown{margin-top:56px;display:flex;flex-direction:column;align-items:center;gap:5px;}
-  .hero-scrolldown-label{font-family:var(--font-body);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-    font-weight:700;color:rgba(255,255,255,.8);}
-  .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:16px;color:rgba(255,255,255,.88);margin-bottom:10px;}
-  .hero-dive-in-btn{margin-top:0;}
+  .hero-scrolldown{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:16px;}
+  .hero-scrolldown-gauge{flex:1 1 auto;width:1px;min-height:30px;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,.55) 0 2px, transparent 2px 11px);}
+  .hero-scrolldown-text{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;}
+  .hero-scrolldown-label{font-family:var(--font-body);font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+    font-weight:700;color:rgba(255,255,255,.75);white-space:nowrap;}
+  .hero-scrolldown-cue{font-family:var(--font-main);font-style:italic;font-size:14px;color:rgba(255,255,255,.85);}
+  .hero-dive-in-btn{margin-top:2px;border-radius:3px !important;}
 
   @media (max-width: 860px){
-    .hero-logos{gap:14px;}
-    .hero-logo-item{width:90px;height:38px;}
+    .hero-logos{gap:10px;}
+    .hero-logo-item{width:58px;height:24px;}
+    .hero .hero-content{flex-direction:column;justify-content:flex-end;gap:24px;}
+    .hero-scrolldown{flex-direction:row;align-items:center;}
+    .hero-scrolldown-gauge{display:none;}
   }
 
   /* ---------- timeline rail: a thin strip, sticky within the page flow so it scrolls
@@ -728,17 +741,24 @@
     <div class="hero-callout-mount" id="heroCalloutMount"></div>
     <div class="hero-mascot" id="heroMascotIcon" aria-hidden="true"></div>
     <div class="hero-content">
-      <div class="hero-logos-wrap">
-        <div class="hero-logos" id="heroLogos"></div>
-        <button class="hero-add-logo edit-only" id="heroAddLogo" type="button">+ Add logo</button>
-        <div class="hero-presents" data-editable data-bind-type="meta" data-field="presentsLabel" contenteditable="false"></div>
+      <div class="hero-content-main">
+        <div class="hero-logos-wrap">
+          <div class="hero-logos" id="heroLogos"></div>
+          <button class="hero-add-logo edit-only" id="heroAddLogo" type="button">+ Add logo</button>
+        </div>
+        <div class="hero-title-block">
+          <div class="hero-presents" data-editable data-bind-type="meta" data-field="presentsLabel" contenteditable="false"></div>
+          <h1 class="hero-name hero-cover-title" data-editable data-bind-type="meta" data-field="title" contenteditable="false"></h1>
+          <p class="hero-role hero-cover-subtitle" data-editable data-bind-type="meta" data-field="subtitle" contenteditable="false"></p>
+        </div>
       </div>
-      <h1 class="hero-name hero-cover-title" data-editable data-bind-type="meta" data-field="title" contenteditable="false"></h1>
-      <p class="hero-role hero-cover-subtitle" data-editable data-bind-type="meta" data-field="subtitle" contenteditable="false"></p>
       <div class="hero-scrolldown">
-        <div class="hero-scrolldown-label" data-editable data-bind-type="meta" data-field="scrollLabel" contenteditable="false"></div>
-        <div class="hero-scrolldown-cue" data-editable data-bind-type="meta" data-field="scrollCue" contenteditable="false"></div>
-        <button class="entry-intro-cta hero-dive-in-btn" id="heroScrollBtn" type="button">DIVE IN ↓</button>
+        <div class="hero-scrolldown-gauge" aria-hidden="true"></div>
+        <div class="hero-scrolldown-text">
+          <div class="hero-scrolldown-label" data-editable data-bind-type="meta" data-field="scrollLabel" contenteditable="false"></div>
+          <div class="hero-scrolldown-cue" data-editable data-bind-type="meta" data-field="scrollCue" contenteditable="false"></div>
+          <button class="entry-intro-cta hero-dive-in-btn" id="heroScrollBtn" type="button">DIVE IN ↓</button>
+        </div>
       </div>
     </div>
   </section>
