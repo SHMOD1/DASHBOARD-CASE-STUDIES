@@ -4570,7 +4570,7 @@
         const r = el.getBoundingClientRect();
         return { el, left: r.left, top: r.top, width: r.width, height: r.height, dx: 0, dy: 0 };
       });
-      const margin = 6, gap = 4;
+      const margin = 6, gap = 7;
       function clampToLayer(it){
         const left = it.left + it.dx, top = it.top + it.dy;
         const right = left + it.width, bottom = top + it.height;
