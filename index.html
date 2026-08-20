@@ -179,9 +179,8 @@
   @media (max-width: 860px){
     .hero-logos{gap:10px;}
     .hero-logo-item{width:58px;height:24px;}
-    .hero .hero-content{flex-direction:column;justify-content:flex-end;gap:24px;}
-    .hero-scrolldown{flex-direction:row;align-items:center;}
-    .hero-scrolldown-gauge{display:none;}
+    /* the rest of the hero's mobile layout (unstacking off the full-bleed image) is handled
+       by the single consolidated mobile block further down, not here */
   }
 
   /* ---------- timeline rail: a thin strip, sticky within the page flow so it scrolls
@@ -721,6 +720,90 @@
   @media (max-width: 480px){
     .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:1fr !important;}
     .annotation-text{font-size:11.5px !important;}
+  }
+
+  /* ---------- mobile: stop overlaying text on full-bleed images entirely ----------
+     Cramming a big background photo AND overlaid text AND draggable annotations into the
+     same phone screen never worked well no matter how much collision-avoidance ran on top
+     of it -- they were fundamentally fighting for the same space. Below 860px, every
+     full-bleed slide (hero/chapter cover/entry) switches from "sticky full-screen image
+     with text pinned over it" to a normal, non-sticky block: the image shows in full at a
+     fixed height, then all the content flows in normal document order underneath it, like
+     an ordinary article. Mobile-only -- desktop keeps the original full-screen reveal/hold
+     effect exactly as it was. */
+  @media (max-width: 860px){
+    .hero, .chapter-cover, .entry{
+      position:relative;top:auto;min-height:0;height:auto;display:block;overflow:visible;
+    }
+    .hero > .media-fill, .chapter-cover > .media-fill, .entry > .media-fill{
+      position:relative;inset:auto;width:100%;height:56vh;max-height:480px;
+    }
+    .hero > .annotation-layer, .chapter-cover > .annotation-layer, .entry > .annotation-layer{
+      position:absolute;inset:auto;top:0;left:0;right:0;height:56vh;max-height:480px;
+    }
+    /* small overlaid controls (popup-box tab, mascot, edit toolbar) stay pinned to the
+       image itself, not wherever a percentage/bottom value would now land on a much
+       taller section */
+    .hero-callout-mount .callout-box, .chapter-cover > .callout-box, .entry > .callout-box,
+    .chapter-cover > .callout-add-btn, .entry > .callout-add-btn{
+      top:14px;left:14px;
+    }
+    .hero-mascot{top:14px;right:14px;bottom:auto;}
+    .chapter-toolbar, .entry-toolbar{top:14px;right:14px;}
+
+    .hero-content, .chapter-cover-content, .entry-content{
+      position:static;z-index:auto;max-width:none;width:auto;margin:0;
+      background:#f8f3ef;color:#2b2b2b;text-shadow:none;
+      padding:28px 6% 40px;
+    }
+    .hero .hero-content{display:block;height:auto;}
+    .hero-content-main{display:block;}
+    .hero-logos-wrap{margin-bottom:20px;}
+    .hero-presents{color:#005ba6;}
+    .hero-presents::before{background:#005ba6;}
+    .hero-cover-title{color:#141413;text-shadow:none;}
+    .hero-cover-subtitle{color:#3d3d3d;border-left-color:rgba(0,0,0,.18);text-shadow:none;}
+    .hero-scrolldown{
+      flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;margin-top:28px;
+    }
+    .hero-scrolldown-gauge{display:none;}
+    .hero-scrolldown-text{align-items:flex-start;text-align:left;}
+    .hero-scrolldown-label, .hero-scrolldown-cue{color:#3d3d3d;}
+
+    .chapter-index{color:#005ba6;text-shadow:none;}
+    .chapter-index::before{background:#005ba6;}
+    .chapter-subtitle{color:#3d3d3d;border-left-color:rgba(0,0,0,.18);text-shadow:none;}
+
+    .entry-eyebrow{color:#005ba6;}
+    .entry-rule{background:rgba(0,0,0,.18);}
+    .entry-title{text-shadow:none;}
+    .entry-caption{text-shadow:none;color:#3d3d3d;}
+
+    /* Scroll Sequence: reuse the same "stack every step in normal flow" treatment already
+       built for Edit Mode (see body.edit-on .sequence-steps elsewhere) -- a stepped reveal
+       only makes sense within a pinned full-screen slide, which mobile no longer has */
+    .entry[data-page-type="sequence"]{position:relative;}
+    .entry[data-page-type="sequence"] .sequence-steps{position:static;width:100%;}
+    .entry[data-page-type="sequence"] .sequence-step{
+      position:relative;inset:auto;opacity:1;pointer-events:auto;display:block;
+      min-height:0;margin-bottom:24px;
+    }
+    .entry[data-page-type="sequence"] .sequence-step-media{
+      position:relative;top:auto;left:auto;transform:none;
+      width:100%;height:56vh;max-height:480px;margin-bottom:0;
+    }
+    .entry[data-page-type="sequence"] .sequence-step-text{
+      position:static;background:#f8f3ef;color:#2b2b2b;text-shadow:none;
+      max-width:none;padding:20px 6% 0;
+    }
+    .entry[data-page-type="sequence"] .sequence-progress,
+    .entry[data-page-type="sequence"] .sequence-add-row,
+    .entry[data-page-type="sequence"] .sequence-step-index{display:none;}
+    .entry[data-page-type="sequence"] .sequence-step-toolbar{position:static;padding:8px 6% 0;}
+
+    /* the freeform Full Background block column no longer needs to stay narrow to leave
+       room for a photo behind it -- there's no photo behind it here anymore, it's a card */
+    .entry[data-page-type="background"] .entry-blocks{max-width:none;}
   }
 </style>
 </head>
@@ -5590,10 +5673,15 @@
       releaseGate(); // plain image, or no media set — nothing to wait for
     }
   }
+  // matches the CSS breakpoint that un-stacks full-bleed slides into normal document flow
+  // on narrow screens (see the mobile media query in <style>) -- the "hold scroll until this
+  // slide's video/GIF finishes" gate exists to stop the *next* full-screen slide from
+  // covering an unfinished one, which is meaningless once slides no longer stack at all
+  function isMobileLayout(){ return window.innerWidth <= 860; }
   function updateMediaGate(slides, activeIdx, vh){
     if(!slides.length) return;
     // never hold scroll hostage while actively editing content — only gate the reading view
-    if(editOn){ if(scrollCeiling !== Infinity) releaseGate(); return; }
+    if(editOn || isMobileLayout()){ if(scrollCeiling !== Infinity) releaseGate(); return; }
     const activeSlide = slides[activeIdx];
     if(activeSlide !== gateSlideEl){
       gateSlideEl = activeSlide;
