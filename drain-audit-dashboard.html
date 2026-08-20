@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stormwater Drain Audit Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --blue:#005BA6; --navy:#134370; --cyan:#0DBFDB; --charcoal:#413C3F;
+    --green:#53B94E; --red:#E24C4C; --yellow:#FFDE17; --grey:#8B98A6;
+    --bg:#EAF2FA; --card:#FFFFFF; --line:#D7E3F0;
+    --font-main:'Poppins','Open Sans',sans-serif; --font-body:'Open Sans',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:var(--font-body);background:var(--bg);color:var(--charcoal);}
+
+  /* ---- top nav ---- */
+  .topnav{background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 24px;flex-wrap:wrap;gap:10px;}
+  .topnav .brand{font-family:var(--font-main);font-weight:800;font-size:14px;letter-spacing:.5px;}
+  .topnav nav{display:flex;align-items:center;gap:22px;font-size:14px;font-weight:600;flex-wrap:wrap;}
+  .topnav nav a{color:#cfe4f7;text-decoration:none;}
+  .topnav nav a.active{color:var(--yellow);}
+  .topnav .arrow{opacity:.6;}
+
+  /* ---- layout ---- */
+  .layout{display:grid;grid-template-columns:230px 1fr 230px;gap:10px;padding:10px;align-items:start;}
+  @media (max-width:1000px){.layout{grid-template-columns:1fr;}}
+
+  .panel{display:flex;flex-direction:column;gap:10px;}
+  .card{background:var(--card);border-radius:10px;box-shadow:0 1px 4px rgba(19,67,112,.12);overflow:hidden;}
+  .card-head{font-family:var(--font-main);font-weight:700;font-size:12px;letter-spacing:.06em;color:var(--navy);
+    padding:8px 10px 4px;text-transform:uppercase;}
+  .card-body{display:flex;gap:8px;padding:0 10px 10px;align-items:center;}
+  .card-photo{position:relative;width:96px;height:96px;border-radius:8px;overflow:hidden;flex:none;background:linear-gradient(135deg,#c8d6e5,#8296ab);}
+  .card-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .card-photo .tag{position:absolute;left:0;bottom:0;background:var(--yellow);color:var(--charcoal);
+    font-size:9px;font-weight:700;padding:2px 6px;border-top-right-radius:6px;text-transform:capitalize;}
+  .card-photo .upload-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);color:#fff;font-size:10px;
+    display:none;align-items:center;justify-content:center;text-align:center;cursor:pointer;padding:4px;}
+  body.edit-on .card-photo:hover .upload-overlay{display:flex;}
+  .card-chart{flex:1;min-width:0;}
+  .chart-select{width:100%;font-size:11px;font-weight:700;color:#fff;background:var(--blue);border:none;
+    border-radius:6px;padding:5px 6px;font-family:var(--font-body);cursor:pointer;margin-bottom:4px;}
+  .legend{list-style:none;margin:4px 0 0;padding:0;font-size:10px;}
+  .legend li{display:flex;align-items:center;gap:5px;cursor:pointer;padding:1px 3px;border-radius:4px;line-height:1.5;}
+  .legend li:hover{background:#f0f5fb;}
+  .legend li.dimmed{opacity:.35;}
+  .legend .sw{width:9px;height:9px;border-radius:2px;flex:none;}
+  .chart-wrap{position:relative;height:80px;width:80px;flex:none;}
+  .card.wide .card-body{align-items:flex-start;}
+
+  /* ---- center column ---- */
+  .center{display:flex;flex-direction:column;gap:10px;}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+  .toolbar .filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+  select.filter, .searchbox input{font-family:var(--font-body);font-weight:700;font-size:12px;color:#fff;
+    background:var(--blue);border:none;border-radius:6px;padding:8px 10px;cursor:pointer;}
+  select.filter option{color:#000;}
+  .btn{font-family:var(--font-body);font-weight:700;font-size:12px;color:#fff;background:var(--blue);
+    border:none;border-radius:6px;padding:8px 12px;cursor:pointer;}
+  .btn.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--blue);}
+  .searchbox{display:flex;align-items:center;background:#fff;border:1.5px solid var(--blue);border-radius:6px;
+    padding:4px 8px;gap:6px;}
+  .searchbox input{background:transparent;color:var(--blue);padding:2px 0;}
+  .searchbox input::placeholder{color:#7fa6c9;}
+
+  .map-shell{position:relative;background:#dfe9f2;border-radius:10px;overflow:hidden;height:560px;box-shadow:0 1px 4px rgba(19,67,112,.12);}
+  #map{position:absolute;inset:0;}
+  .map-controls{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:6px;z-index:5;}
+  .map-controls button{width:30px;height:30px;background:#fff;border:1px solid var(--line);border-radius:6px;
+    font-size:16px;font-weight:700;color:var(--navy);cursor:pointer;}
+  .map-badge{position:absolute;bottom:8px;right:10px;background:rgba(255,255,255,.9);font-size:10px;color:#557;
+    padding:3px 8px;border-radius:5px;z-index:5;}
+  .popup-card{font-family:var(--font-body);font-size:12px;line-height:1.5;min-width:170px;}
+  .popup-card b{color:var(--navy);}
+
+  .bottom-panel{background:var(--card);border-radius:10px;box-shadow:0 1px 4px rgba(19,67,112,.12);padding:14px 18px;}
+  .bottom-title{font-family:var(--font-main);font-weight:800;font-size:14px;color:var(--navy);
+    display:flex;justify-content:space-between;align-items:center;cursor:pointer;}
+  .howto{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin:14px 0;}
+  @media (max-width:900px){.howto{grid-template-columns:repeat(2,1fr);}}
+  .howto .step b{font-size:12px;color:var(--blue);display:flex;gap:6px;align-items:center;}
+  .howto .step p{font-size:11px;color:#5b6b7a;margin:4px 0 0;}
+  .stats{display:flex;justify-content:space-around;flex-wrap:wrap;gap:14px;border-top:1px solid var(--line);padding-top:14px;}
+  .stat{text-align:center;}
+  .stat .num{font-family:var(--font-main);font-weight:800;font-size:26px;color:var(--navy);}
+  .stat .lbl{font-size:11px;font-weight:700;color:#5b6b7a;letter-spacing:.04em;text-transform:uppercase;}
+
+  /* ---- edit bar ---- */
+  .editbar{background:var(--charcoal);color:#fff;padding:8px 16px;display:flex;gap:10px;align-items:center;
+    flex-wrap:wrap;font-size:12px;}
+  .editbar label{display:flex;align-items:center;gap:6px;cursor:pointer;}
+  .editbar input[type=checkbox]{transform:scale(1.2);}
+  .editbar .spacer{flex:1;}
+  .editbar input[type=text],.editbar input[type=password]{font-size:12px;padding:5px 8px;border-radius:5px;border:none;width:220px;}
+  .editbar button{font-size:12px;padding:6px 10px;border-radius:5px;border:none;cursor:pointer;background:var(--cyan);color:#00263a;font-weight:700;}
+  #fileImportInput{display:none;}
+  @media (max-width:860px){.editbar{display:none;}}
+
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:999;}
+  .modal-backdrop.on{display:flex;}
+  .modal{background:#fff;border-radius:10px;padding:20px;width:360px;max-width:92vw;font-size:13px;}
+  .modal h3{margin:0 0 10px;font-family:var(--font-main);color:var(--navy);}
+  .modal label{display:block;font-weight:700;margin:10px 0 4px;}
+  .modal input,.modal select{width:100%;padding:7px;border:1px solid var(--line);border-radius:6px;font-size:13px;}
+  .modal .row{display:flex;gap:8px;margin-top:16px;}
+  .modal .row button{flex:1;padding:9px;border-radius:6px;border:none;font-weight:700;cursor:pointer;}
+  .modal .row .cancel{background:#eee;color:#333;}
+  .modal .row .go{background:var(--blue);color:#fff;}
+  .modal .status{font-size:11px;color:#777;margin-top:8px;min-height:16px;}
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <div class="brand">BUILDING A RESILIENT BENGALURU</div>
+  <nav>
+    <a href="#">Who We Are</a>
+    <a href="#">Hani's World</a>
+    <span class="arrow">→</span>
+    <a href="#" class="active">Decoding Stormwater</a>
+    <a href="#">Audit a Drain</a>
+    <a href="#">Resources</a>
+    <a href="#">☰</a>
+  </nav>
+</div>
+
+<div class="editbar">
+  <label><input type="checkbox" id="editToggle"> Edit Mode</label>
+  <span id="editStatus" style="opacity:.8"></span>
+  <div class="spacer"></div>
+  <button id="btnMapboxToken">Mapbox Token</button>
+  <button id="btnExport">Export JSON</button>
+  <button id="btnImport">Import JSON</button>
+  <button id="btnResetDemo">Reset Demo</button>
+  <button id="btnPushGithub">Push to GitHub</button>
+  <input type="file" id="fileImportInput" accept="application/json">
+</div>
+
+<div class="layout">
+  <!-- LEFT PANEL -->
+  <div class="panel" id="leftPanel"></div>
+
+  <!-- CENTER -->
+  <div class="center">
+    <div class="toolbar">
+      <div class="filters" id="filterRow"></div>
+      <div class="searchbox"><span>🔍</span><input id="searchInput" placeholder="Search"></div>
+    </div>
+    <div class="toolbar">
+      <button class="btn ghost" id="btnResetFilters">↺ Reset Filters</button>
+      <span style="font-size:11px;color:#5b6b7a;" id="filterSummary"></span>
+    </div>
+
+    <div class="map-shell">
+      <div id="map"></div>
+      <div class="map-controls">
+        <button id="zoomIn">+</button>
+        <button id="zoomOut">−</button>
+      </div>
+      <div class="map-badge">MapLibre | © OpenStreetMap contributors © CARTO</div>
+    </div>
+
+    <div class="bottom-panel">
+      <div class="bottom-title" id="bottomToggle">
+        <span>STORMWATER DRAIN AUDIT DASHBOARD</span>
+        <span id="bottomChevron">▾</span>
+      </div>
+      <div id="bottomBody">
+        <div class="howto">
+          <div class="step"><b>📍 SELECT A POINT</b><p>Click any point on the map to see its audit photos and values. Press next to go to the next point.</p></div>
+          <div class="step"><b>🎨 CHANGE COLOUR</b><p>Use the dropdown in each category panel to recolour the map points.</p></div>
+          <div class="step"><b>👥 FILTERS</b><p>Use the dropdowns on the map to filter audit points by team, drain ID, corporation and valley.</p></div>
+          <div class="step"><b>📊 FILTER BY CHART</b><p>Click on the charts to filter out the map points by attribute value.</p></div>
+          <div class="step"><b>↺ RESET FILTERS</b><p>Click Reset Filters to clear all active chart selections and restore the full dataset.</p></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="num" id="statAuditors">0</div><div class="lbl">👥 Citizen Auditors</div></div>
+          <div class="stat"><div class="num" id="statKm">0 km</div><div class="lbl">🚰 Drain KM Audited</div></div>
+          <div class="stat"><div class="num" id="statResidents">0</div><div class="lbl">🏠 Residents Engaged</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="panel" id="rightPanel"></div>
+</div>
+
+<div class="modal-backdrop" id="tokenModal">
+  <div class="modal">
+    <h3>Mapbox Access Token</h3>
+    <p style="color:#666">Optional. Leave blank to keep using the free MapLibre + CARTO basemap (no token needed, same as this demo). Paste a token to switch to Mapbox GL tiles/styles.</p>
+    <label>Token</label>
+    <input type="text" id="mapboxTokenInput" placeholder="pk.eyJ1Ijoi...">
+    <div class="row">
+      <button class="cancel" id="tokenCancel">Cancel</button>
+      <button class="go" id="tokenSave">Save &amp; Reload Map</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="githubModal">
+  <div class="modal">
+    <h3>Push to GitHub</h3>
+    <label>Personal Access Token</label>
+    <input type="password" id="ghToken" placeholder="github_pat_...">
+    <label>Owner</label>
+    <input type="text" id="ghOwner" placeholder="shmod1">
+    <label>Repo</label>
+    <input type="text" id="ghRepo" placeholder="dashboard-case-studies">
+    <label>Branch</label>
+    <input type="text" id="ghBranch" placeholder="claude/new-mapbox-dashboard-0zspd9">
+    <div class="row">
+      <button class="cancel" id="ghCancel">Cancel</button>
+      <button class="go" id="ghGo">Commit</button>
+    </div>
+    <div class="status" id="ghStatus"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* =========================================================
+   1. CATEGORY / PANEL CONFIG
+   ========================================================= */
+var CATS = {
+  wall:      {key:"wall",      label:"Wall Condition",      panel:"left",  type:"pie",
+              options:[{v:"Intact",c:"#53B94E"},{v:"Broken",c:"#FFB020"},{v:"Does Not Exist",c:"#E24C4C"}]},
+  electrical:{key:"electrical",label:"Electrical",          panel:"left",  type:"pie",
+              options:[{v:"No",c:"#53B94E"},{v:"Yes",c:"#E24C4C"}]},
+  bridge:    {key:"bridge",    label:"Bridge Condition",    panel:"left",  type:"pie",
+              options:[{v:"Intact",c:"#53B94E"},{v:"Broken wall",c:"#E24C4C"},{v:"Broken path",c:"#c23a3a"}]},
+  water:     {key:"water",     label:"Water Contamination", panel:"right", type:"pie",
+              options:[{v:"Black/ Grey",c:"#413C3F"},{v:"Particles/Oily_Film",c:"#8B5E3C"},
+                       {v:"Cannot See",c:"#B9C2CC"},{v:"Earth / Foam",c:"#53B94E"}]},
+  waste:     {key:"waste",     label:"Waste Inside",        panel:"right", type:"pie",
+              options:[{v:"Yes",c:"#E24C4C"},{v:"Cannot See",c:"#B9C2CC"},{v:"No",c:"#53B94E"}]},
+  street:    {key:"street",    label:"Community Engagement",panel:"right", type:"bar",
+              options:[{v:"Trees",c:"#2e7d32"},{v:"Plants",c:"#53B94E"},{v:"Parks",c:"#FFDE17"},
+                       {v:"Idols",c:"#E24C4C"},{v:"Gym",c:"#0DBFDB"},{v:"Parking",c:"#8B98A6"}]}
+};
+var CAT_ORDER = ["wall","electrical","bridge","water","waste","street"];
+var PHOTO_TAG = {wall:"Broken",electrical:"No",bridge:"No Bridge",water:"Particles/Oily_Film",waste:"Yes",street:"Not applicable"};
+
+var TEAMS=["Team Kaveri","Team Vrishabhavathi","Team Koramangala","Team Challaghatta"];
+var CORPORATIONS=["BBMP East","BBMP West","BBMP South","BBMP North"];
+var VALLEYS=["Koramangala Valley","Vrishabhavathi Valley","Hebbal Valley","Challaghatta Valley"];
+var DRAINS=["SWD-101","SWD-102","SWD-103","SWD-104","SWD-105","SWD-106","SWD-107","SWD-108"];
+
+/* =========================================================
+   2. STATE + PERSISTENCE
+   ========================================================= */
+var LS_KEY="drainAuditDashboard_v1";
+var state = loadState() || makeDefaultState();
+
+function makeDefaultState(){
+  return {
+    mapboxToken:"",
+    photos:{},              // {catKey: dataURL override}
+    stats:{auditors:230, km:40.8, residents:242},
+    points: genMockPoints(140),
+    filters:{team:"",drain:"",corporation:"",valley:""},
+    chartFilters:{},        // {catKey: value}
+    search:""
+  };
+}
+
+function seededRandom(seed){
+  var s = seed;
+  return function(){ s = (s*9301+49297)%233280; return s/233280; };
+}
+
+function weightedPick(rand, weights){
+  var total=0; for(var k in weights) total+=weights[k];
+  var r = rand()*total, acc=0;
+  for(var k2 in weights){ acc+=weights[k2]; if(r<=acc) return k2; }
+  return Object.keys(weights)[0];
+}
+
+function genMockPoints(n){
+  var rand = seededRandom(42);
+  var centerLat=12.9716, centerLng=77.5946;
+  var pts=[];
+  for(var i=0;i<n;i++){
+    var angle = rand()*Math.PI*2, radius = rand()*0.09;
+    var lat = centerLat + Math.sin(angle)*radius*0.8;
+    var lng = centerLng + Math.cos(angle)*radius;
+    var p = {
+      id:"P"+(i+1),
+      lat:lat, lng:lng,
+      team:TEAMS[Math.floor(rand()*TEAMS.length)],
+      drain:DRAINS[Math.floor(rand()*DRAINS.length)],
+      corporation:CORPORATIONS[Math.floor(rand()*CORPORATIONS.length)],
+      valley:VALLEYS[Math.floor(rand()*VALLEYS.length)],
+      wall: weightedPick(rand,{"Intact":60,"Broken":25,"Does Not Exist":15}),
+      electrical: weightedPick(rand,{"No":55,"Yes":45}),
+      bridge: weightedPick(rand,{"Intact":70,"Broken wall":20,"Broken path":10}),
+      water: weightedPick(rand,{"Black/ Grey":50,"Particles/Oily_Film":25,"Cannot See":15,"Earth / Foam":10}),
+      waste: weightedPick(rand,{"Yes":65,"Cannot See":10,"No":25}),
+      street: weightedPick(rand,{"Trees":30,"Plants":25,"Parks":15,"Idols":10,"Gym":10,"Parking":10})
+    };
+    pts.push(p);
+  }
+  return pts;
+}
+
+function saveState(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ console.warn("save failed",e); }
+}
+function loadState(){
+  try{
+    var raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+
+/* =========================================================
+   3. DERIVED / FILTER LOGIC
+   ========================================================= */
+function getFilteredPoints(){
+  return state.points.filter(function(p){
+    if(state.filters.team && p.team!==state.filters.team) return false;
+    if(state.filters.drain && p.drain!==state.filters.drain) return false;
+    if(state.filters.corporation && p.corporation!==state.filters.corporation) return false;
+    if(state.filters.valley && p.valley!==state.filters.valley) return false;
+    for(var k in state.chartFilters){
+      if(state.chartFilters[k] && p[k]!==state.chartFilters[k]) return false;
+    }
+    if(state.search){
+      var s = state.search.toLowerCase();
+      var hay = (p.id+" "+p.team+" "+p.drain+" "+p.corporation+" "+p.valley).toLowerCase();
+      if(hay.indexOf(s)===-1) return false;
+    }
+    return true;
+  });
+}
+
+function countBy(points, key){
+  var out={};
+  points.forEach(function(p){ out[p[key]] = (out[p[key]]||0)+1; });
+  return out;
+}
+
+/* =========================================================
+   4. UI BUILD — side panel cards
+   ========================================================= */
+var chartInstances = {};
+
+function buildPanels(){
+  var left = document.getElementById("leftPanel");
+  var right = document.getElementById("rightPanel");
+  left.innerHTML=""; right.innerHTML="";
+  CAT_ORDER.forEach(function(key){
+    var cfg = CATS[key];
+    var target = cfg.panel==="left" ? left : right;
+    target.appendChild(buildCard(cfg));
+  });
+}
+
+function groupTitle(key){
+  var g = {wall:"RETAINING WALL",electrical:"UTILITIES",bridge:"BRIDGE",water:"WATER QUALITY",waste:"SOLID WASTE",street:"STREET"};
+  return g[key];
+}
+
+function buildCard(cfg){
+  var card = document.createElement("div");
+  var head = document.createElement("div");
+  head.className="card-head"; head.textContent = groupTitle(cfg.key);
+  card.appendChild(head);
+
+  var wrap = document.createElement("div");
+  wrap.className="card"; wrap.style.marginTop="0";
+  var body = document.createElement("div");
+  body.className="card-body";
+
+  // photo
+  var photo = document.createElement("div");
+  photo.className="card-photo";
+  var img = document.createElement("img");
+  img.src = state.photos[cfg.key] || placeholderImg(cfg.key);
+  photo.appendChild(img);
+  var tag = document.createElement("div");
+  tag.className="tag"; tag.textContent = PHOTO_TAG[cfg.key]||"";
+  photo.appendChild(tag);
+  var overlay = document.createElement("div");
+  overlay.className="upload-overlay"; overlay.textContent="Change Photo";
+  photo.appendChild(overlay);
+  var fileInp = document.createElement("input");
+  fileInp.type="file"; fileInp.accept="image/*"; fileInp.style.display="none";
+  photo.appendChild(fileInp);
+  overlay.addEventListener("click", function(){ if(document.body.classList.contains("edit-on")) fileInp.click(); });
+  fileInp.addEventListener("change", function(e){
+    var f = e.target.files[0]; if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){ state.photos[cfg.key]=ev.target.result; img.src=ev.target.result; saveState(); };
+    reader.readAsDataURL(f);
+  });
+  body.appendChild(photo);
+
+  // chart column
+  var chartCol = document.createElement("div");
+  chartCol.className="card-chart";
+  var sel = document.createElement("select");
+  sel.className="chart-select";
+  var opt = document.createElement("option");
+  opt.textContent = cfg.label; sel.appendChild(opt);
+  chartCol.appendChild(sel);
+
+  var row = document.createElement("div");
+  row.style.display="flex"; row.style.gap="8px"; row.style.alignItems="center";
+  var chartWrap = document.createElement("div");
+  chartWrap.className="chart-wrap";
+  var canvas = document.createElement("canvas");
+  chartWrap.appendChild(canvas);
+  row.appendChild(chartWrap);
+
+  var legend = document.createElement("ul");
+  legend.className="legend";
+  cfg.options.forEach(function(o){
+    var li = document.createElement("li");
+    li.dataset.value = o.v;
+    li.innerHTML = '<span class="sw" style="background:'+o.c+'"></span><span>'+o.v+'</span>';
+    li.addEventListener("click", function(){ toggleChartFilter(cfg.key, o.v); });
+    legend.appendChild(li);
+  });
+  row.appendChild(legend);
+  chartCol.appendChild(row);
+  body.appendChild(chartCol);
+
+  wrap.appendChild(body);
+  card.appendChild(wrap);
+
+  if(cfg.type==="pie"){
+    chartInstances[cfg.key] = new Chart(canvas.getContext("2d"), {
+      type:"pie",
+      data:{labels:cfg.options.map(function(o){return o.v;}),
+            datasets:[{data:cfg.options.map(function(){return 0;}), backgroundColor:cfg.options.map(function(o){return o.c;}), borderWidth:1, borderColor:"#fff"}]},
+      options:{plugins:{legend:{display:false}, tooltip:{enabled:true}}, onClick:function(evt,els){
+          if(els && els.length){ var idx=els[0].index; toggleChartFilter(cfg.key, cfg.options[idx].v); }
+        }, responsive:true, maintainAspectRatio:false}
+    });
+  } else {
+    canvas.parentElement.style.width="140px";
+    canvas.parentElement.style.height="90px";
+    chartInstances[cfg.key] = new Chart(canvas.getContext("2d"), {
+      type:"bar",
+      data:{labels:cfg.options.map(function(o){return o.v;}),
+            datasets:[{data:cfg.options.map(function(){return 0;}), backgroundColor:cfg.options.map(function(o){return o.c;})}]},
+      options:{plugins:{legend:{display:false}}, scales:{x:{ticks:{font:{size:8}}}, y:{ticks:{font:{size:8}}}},
+        onClick:function(evt,els){ if(els && els.length){ var idx=els[0].index; toggleChartFilter(cfg.key, cfg.options[idx].v); } },
+        responsive:true, maintainAspectRatio:false}
+    });
+  }
+
+  return card;
+}
+
+function placeholderImg(key){
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">'+
+    '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'+
+    '<stop offset="0%" stop-color="#a7c4e0"/><stop offset="100%" stop-color="#5b7fa6"/></linearGradient></defs>'+
+    '<rect width="200" height="200" fill="url(#g)"/>'+
+    '<text x="100" y="105" font-family="sans-serif" font-size="14" fill="#ffffffcc" text-anchor="middle">'+key+'</text></svg>';
+  return "data:image/svg+xml;base64,"+btoa(svg);
+}
+
+/* =========================================================
+   5. FILTER ROW (Team / Drain / Corporation / Valley)
+   ========================================================= */
+function buildFilterRow(){
+  var row = document.getElementById("filterRow");
+  row.innerHTML="";
+  var defs = [
+    {key:"team", label:"Team", list:TEAMS},
+    {key:"drain", label:"Drain", list:DRAINS},
+    {key:"corporation", label:"Corporation", list:CORPORATIONS},
+    {key:"valley", label:"Valley", list:VALLEYS}
+  ];
+  defs.forEach(function(d){
+    var sel = document.createElement("select");
+    sel.className="filter";
+    var optAll = document.createElement("option");
+    optAll.value=""; optAll.textContent=d.label; sel.appendChild(optAll);
+    d.list.forEach(function(v){
+      var o=document.createElement("option"); o.value=v; o.textContent=v; sel.appendChild(o);
+    });
+    sel.value = state.filters[d.key] || "";
+    sel.addEventListener("change", function(){ state.filters[d.key]=sel.value; saveState(); renderAll(); });
+    row.appendChild(sel);
+  });
+}
+
+function toggleChartFilter(key, value){
+  state.chartFilters[key] = (state.chartFilters[key]===value) ? "" : value;
+  saveState();
+  renderAll();
+}
+
+/* =========================================================
+   6. MAP (Mapbox GL if token set, else MapLibre + CARTO free tiles)
+   ========================================================= */
+var mapImpl = null;      // "mapbox" | "maplibre"
+var mapObj = null;
+var markers = [];
+var scriptsLoaded = {mapbox:false, maplibre:false};
+
+function loadScript(src, cb){
+  var s = document.createElement("script");
+  s.src=src; s.onload=cb; document.head.appendChild(s);
+}
+function loadCss(href){
+  var l = document.createElement("link");
+  l.rel="stylesheet"; l.href=href; document.head.appendChild(l);
+}
+
+function initMap(){
+  var container = document.getElementById("map");
+  container.innerHTML="";
+  markers = [];
+
+  if(state.mapboxToken){
+    document.querySelector(".map-badge").textContent = "Mapbox";
+    if(scriptsLoaded.mapbox) return setupMapbox();
+    loadCss("https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css");
+    loadScript("https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js", function(){
+      scriptsLoaded.mapbox=true; setupMapbox();
+    });
+  } else {
+    document.querySelector(".map-badge").textContent = "MapLibre | © OpenStreetMap contributors © CARTO";
+    if(scriptsLoaded.maplibre) return setupMapLibre();
+    loadCss("https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css");
+    loadScript("https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js", function(){
+      scriptsLoaded.maplibre=true; setupMapLibre();
+    });
+  }
+}
+
+function setupMapbox(){
+  mapImpl="mapbox";
+  window.mapboxgl.accessToken = state.mapboxToken;
+  mapObj = new window.mapboxgl.Map({
+    container:"map", style:"mapbox://styles/mapbox/light-v11",
+    center:[77.5946,12.9716], zoom:11
+  });
+  mapObj.on("load", renderMap);
+}
+
+function setupMapLibre(){
+  mapImpl="maplibre";
+  mapObj = new window.maplibregl.Map({
+    container:"map",
+    style:"https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    center:[77.5946,12.9716], zoom:11
+  });
+  mapObj.on("load", renderMap);
+}
+
+function colorForPoint(p){
+  var activeCat = Object.keys(state.chartFilters).find(function(k){ return state.chartFilters[k]; });
+  if(!activeCat) activeCat = "wall";
+  var cfg = CATS[activeCat];
+  var val = p[activeCat];
+  var found = cfg.options.find(function(o){ return o.v===val; });
+  return found ? found.c : "#8B98A6";
+}
+
+function renderMap(){
+  if(!mapObj) return;
+  markers.forEach(function(m){ m.remove(); });
+  markers = [];
+  var pts = getFilteredPoints();
+  var GL = mapImpl==="mapbox" ? window.mapboxgl : window.maplibregl;
+  pts.forEach(function(p){
+    var el = document.createElement("div");
+    el.style.width="12px"; el.style.height="12px"; el.style.borderRadius="50%";
+    el.style.background = colorForPoint(p);
+    el.style.border="1.5px solid #fff"; el.style.boxShadow="0 0 2px rgba(0,0,0,.4)";
+    el.style.cursor="pointer";
+    var popupHtml = '<div class="popup-card"><b>'+p.id+'</b> — '+p.drain+'<br>'+
+      'Team: '+p.team+'<br>Corp: '+p.corporation+'<br>Valley: '+p.valley+'<br>'+
+      'Wall: '+p.wall+' · Water: '+p.water+' · Waste: '+p.waste+'</div>';
+    var popup = new GL.Popup({offset:10}).setHTML(popupHtml);
+    var marker = new GL.Marker(el).setLngLat([p.lng,p.lat]).setPopup(popup).addTo(mapObj);
+    markers.push(marker);
+  });
+}
+
+/* =========================================================
+   7. RENDER: charts, stats, summary
+   ========================================================= */
+function renderCharts(){
+  var pts = getFilteredPoints();
+  CAT_ORDER.forEach(function(key){
+    var cfg = CATS[key];
+    var counts = countBy(pts, key);
+    var data = cfg.options.map(function(o){ return counts[o.v]||0; });
+    var chart = chartInstances[key];
+    chart.data.datasets[0].data = data;
+    chart.update();
+    // dim legend items that don't match active filter
+    var legendEl = chart.canvas.closest(".card").querySelectorAll(".legend li");
+    legendEl.forEach(function(li){
+      var active = state.chartFilters[key];
+      li.classList.toggle("dimmed", !!active && li.dataset.value!==active);
+    });
+  });
+}
+
+function renderStats(){
+  document.getElementById("statAuditors").textContent = state.stats.auditors;
+  document.getElementById("statKm").textContent = state.stats.km+" km";
+  document.getElementById("statResidents").textContent = state.stats.residents;
+}
+
+function renderFilterSummary(){
+  var pts = getFilteredPoints();
+  document.getElementById("filterSummary").textContent =
+    pts.length + " of " + state.points.length + " audit points shown";
+}
+
+function renderAll(){
+  renderMap();
+  renderCharts();
+  renderFilterSummary();
+}
+
+/* =========================================================
+   8. TOOLBAR / EDIT MODE / EXPORT-IMPORT / GITHUB PUSH
+   ========================================================= */
+function wireToolbar(){
+  document.getElementById("btnResetFilters").addEventListener("click", function(){
+    state.filters={team:"",drain:"",corporation:"",valley:""};
+    state.chartFilters={};
+    state.search="";
+    document.getElementById("searchInput").value="";
+    buildFilterRow();
+    saveState(); renderAll();
+  });
+
+  document.getElementById("searchInput").addEventListener("input", function(e){
+    state.search = e.target.value; saveState(); renderAll();
+  });
+
+  document.getElementById("zoomIn").addEventListener("click", function(){ if(mapObj) mapObj.zoomIn(); });
+  document.getElementById("zoomOut").addEventListener("click", function(){ if(mapObj) mapObj.zoomOut(); });
+
+  document.getElementById("bottomToggle").addEventListener("click", function(){
+    var body = document.getElementById("bottomBody");
+    var open = body.style.display!=="none";
+    body.style.display = open ? "none" : "block";
+    document.getElementById("bottomChevron").textContent = open ? "▸" : "▾";
+  });
+
+  var editToggle = document.getElementById("editToggle");
+  editToggle.addEventListener("change", function(){
+    document.body.classList.toggle("edit-on", editToggle.checked);
+    document.getElementById("editStatus").textContent = editToggle.checked ? "— click any photo to replace it" : "";
+  });
+
+  document.getElementById("btnExport").addEventListener("click", function(){
+    var blob = new Blob([JSON.stringify(state,null,2)], {type:"application/json"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "drain-audit-dashboard-data.json";
+    a.click();
+  });
+
+  document.getElementById("btnImport").addEventListener("click", function(){
+    document.getElementById("fileImportInput").click();
+  });
+  document.getElementById("fileImportInput").addEventListener("change", function(e){
+    var f = e.target.files[0]; if(!f) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        var imported = JSON.parse(ev.target.result);
+        state = Object.assign(makeDefaultState(), imported);
+        saveState();
+        buildPanels(); buildFilterRow(); renderStats(); initMap();
+      }catch(err){ alert("Invalid JSON file."); }
+    };
+    reader.readAsText(f);
+  });
+
+  document.getElementById("btnResetDemo").addEventListener("click", function(){
+    if(!confirm("Reset to the default demo dataset? This clears local edits.")) return;
+    localStorage.removeItem(LS_KEY);
+    state = makeDefaultState();
+    saveState();
+    buildPanels(); buildFilterRow(); renderStats(); initMap();
+  });
+
+  // Mapbox token modal
+  var tokenModal = document.getElementById("tokenModal");
+  document.getElementById("btnMapboxToken").addEventListener("click", function(){
+    document.getElementById("mapboxTokenInput").value = state.mapboxToken || "";
+    tokenModal.classList.add("on");
+  });
+  document.getElementById("tokenCancel").addEventListener("click", function(){ tokenModal.classList.remove("on"); });
+  document.getElementById("tokenSave").addEventListener("click", function(){
+    state.mapboxToken = document.getElementById("mapboxTokenInput").value.trim();
+    saveState();
+    tokenModal.classList.remove("on");
+    initMap();
+  });
+
+  // GitHub push modal (simple single-file commit via Contents API)
+  var ghModal = document.getElementById("githubModal");
+  document.getElementById("btnPushGithub").addEventListener("click", function(){
+    document.getElementById("ghStatus").textContent="";
+    ghModal.classList.add("on");
+  });
+  document.getElementById("ghCancel").addEventListener("click", function(){ ghModal.classList.remove("on"); });
+  document.getElementById("ghGo").addEventListener("click", pushToGithub);
+}
+
+function pushToGithub(){
+  var token = document.getElementById("ghToken").value.trim();
+  var owner = document.getElementById("ghOwner").value.trim();
+  var repo = document.getElementById("ghRepo").value.trim();
+  var branch = document.getElementById("ghBranch").value.trim() || "main";
+  var statusEl = document.getElementById("ghStatus");
+  if(!token || !owner || !repo){ statusEl.textContent="Token, owner and repo are required."; return; }
+  statusEl.textContent = "Pushing…";
+
+  var path = "drain-audit-dashboard.html";
+  var apiBase = "https://api.github.com/repos/"+owner+"/"+repo+"/contents/"+path;
+
+  fetch(apiBase+"?ref="+encodeURIComponent(branch), {
+    headers:{Authorization:"Bearer "+token, Accept:"application/vnd.github+json"}
+  }).then(function(r){ return r.ok ? r.json() : {sha:undefined, _notFound:r.status===404}; })
+  .then(function(existing){
+    var content = document.documentElement.outerHTML;
+    var b64 = btoa(unescape(encodeURIComponent("<!DOCTYPE html>\n"+content)));
+    var body = {
+      message:"Update drain audit dashboard content",
+      content:b64,
+      branch:branch
+    };
+    if(existing && existing.sha) body.sha = existing.sha;
+    return fetch(apiBase, {
+      method:"PUT",
+      headers:{Authorization:"Bearer "+token, Accept:"application/vnd.github+json", "Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    });
+  }).then(function(r){
+    if(r.ok){ statusEl.textContent="✓ Pushed to "+owner+"/"+repo+"@"+branch; }
+    else { r.json().then(function(j){ statusEl.textContent="Failed: "+(j.message||r.status); }); }
+  }).catch(function(err){ statusEl.textContent="Error: "+err.message; });
+}
+
+/* =========================================================
+   9. INIT
+   ========================================================= */
+document.addEventListener("DOMContentLoaded", function(){
+  buildPanels();
+  buildFilterRow();
+  wireToolbar();
+  renderStats();
+  initMap();
+});
+
+})();
+</script>
+</body>
+</html>
