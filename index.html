@@ -107,19 +107,11 @@
   .entry[data-page-type="background"].zoom-active > .media-fill .media-el{
     transform: scale(1.17) translate(-2.2%, -3.2%);
   }
-  /* a stepped Full Background entry (see advanceStep()) nudges the zoom to a different
-     target on every text step, cycling through these four, instead of holding one fixed
-     end point -- read alongside the text changing, it reinforces the sense that scrolling
-     is revealing more of the same scene rather than just replacing a caption */
-  .entry[data-page-type="background"].zoom-active[data-zoom-step="1"] > .media-fill .media-el{
-    transform: scale(1.24) translate(2.4%, -1.2%);
-  }
-  .entry[data-page-type="background"].zoom-active[data-zoom-step="2"] > .media-fill .media-el{
-    transform: scale(1.13) translate(-1.4%, 2.6%);
-  }
-  .entry[data-page-type="background"].zoom-active[data-zoom-step="3"] > .media-fill .media-el{
-    transform: scale(1.28) translate(1.8%, 2.2%);
-  }
+  /* a stepped Full Background entry (2+ annotations, see annotation-layer--stepped above)
+     overrides this fixed end point with an inline transform computed per-point by
+     pointZoomTransform(), so the image nudges toward whichever annotation is currently
+     active instead of one generic target -- inline style wins over the rule above by
+     specificity, so non-stepped entries are completely unaffected by this. */
   .video-frame{position:relative;width:100%;height:100%;}
   .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
   .media-badge{
@@ -389,21 +381,19 @@
   .entry[data-page-type="background"] .entry-blocks{
     flex-direction:column;align-items:stretch;max-width:min(36vw,460px);
   }
-  /* a Full Background entry with more than one block steps through them one at a time
-     (desktop only, and never while editing -- see getStepEls()/advanceStep()) instead of
-     stacking every block at once: all blocks overlap in the same spot, only the current
-     step is actually in flow (so the column's height still tracks whichever one is showing),
-     everything else sits invisible underneath it and fades in on its turn. */
+  /* a Full Background entry with more than one annotation steps through them one at a time
+     (desktop only, and never while editing -- see getStepEls()/advanceStep()): the pinned
+     image zooms toward whichever point is active (see fullBleedMotion()/pointZoomTransform())
+     while its annotation is the only one shown, turning the annotation into a small popup at
+     that spot instead of a permanent label — everything else stays out of the way until its
+     own turn. The entry's title/caption/blocks are untouched by this; only the on-image
+     annotations step. */
   @media (min-width: 861px) and (prefers-reduced-motion: no-preference){
-    body:not(.edit-on) .entry-blocks.entry-blocks--stepped{ position:relative; display:block; min-height:1px; }
-    body:not(.edit-on) .entry-blocks.entry-blocks--stepped > *{
-      position:absolute; top:0; left:0; right:0;
-      opacity:0; visibility:hidden; pointer-events:none;
-      transition: opacity .6s ease;
+    body:not(.edit-on) .annotation-layer.annotation-layer--stepped > .annotation{
+      opacity:0; pointer-events:none; transition: opacity .6s ease;
     }
-    body:not(.edit-on) .entry-blocks.entry-blocks--stepped > .step-active{
-      position:relative;
-      opacity:1; visibility:visible; pointer-events:auto;
+    body:not(.edit-on) .annotation-layer.annotation-layer--stepped > .annotation.step-active{
+      opacity:1; pointer-events:auto;
     }
   }
 
@@ -4951,14 +4941,17 @@
     // "Grid" arranges every block — text or media — into a real N-per-row grid instead of
     // the freeform flex-wrap flow Full Background uses
     const blocksStyle = variant === "grid" ? ` style="--grid-cols:${entry.gridColumns || 3}"` : "";
-    // Full Background entries with more than one block step through them one at a time on
-    // desktop (see advanceEntryStep()/entryStepWheel()) instead of showing every block
-    // stacked at once — a single block never needs stepping, so it's left exactly as before
-    const steppedClass = (variant === "background" && entry.blocks.length > 1) ? " entry-blocks--stepped" : "";
+    // Full Background entries with more than one annotation step through them one at a time
+    // on desktop (see getStepEls()/advanceStep()) instead of showing every annotation at
+    // once: the pinned image zooms in on whichever point is active, so the annotation itself
+    // becomes a small popup right where it's pointing — a single (or zero) annotation never
+    // needs stepping, so it's left exactly as before
+    const annStepped = variant === "background" && (entry.annotations || []).length > 1;
+    const annLayerClass = annStepped ? " annotation-layer--stepped" : "";
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
-        <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
+        <div class="annotation-layer${annLayerClass}">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
         ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
         <div class="entry-content">
@@ -4968,7 +4961,7 @@
           </div>
           <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
           ${captionHtml}
-          <div class="entry-blocks${steppedClass}" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}"${blocksStyle}>
+          <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}"${blocksStyle}>
             ${blocksHtml}
             <div class="add-block-row edit-only">
               <button type="button" class="add-block-btn" data-act="addBlock" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">+ Add text block</button>
@@ -5738,32 +5731,48 @@
      scrolling, until the last step is shown, then normal scrolling resumes and the
      section-hold gate releases like any other slide. Two kinds of slide step this way:
      Scroll Sequence pages (page type "c", stepping through images) and Full Background
-     entries that have more than one text/media block (desktop only, stepping through the
-     blocks one at a time -- see the "entry-blocks--stepped" CSS). Both share the exact same
-     advance/gate/wheel/touch mechanics from here on, just with different step elements and
-     "active" class names (sequence steps already had their own .active-keyed CSS crossfade
-     before this existed, so it's kept as-is rather than renamed). ---------------- */
+     entries that have more than one annotation (desktop only, stepping through the image's
+     points of interest -- see the "annotation-layer--stepped" CSS). Both share the exact
+     same advance/gate/wheel/touch mechanics from here on, just with different step elements
+     and "active" class names (sequence steps already had their own .active-keyed CSS
+     crossfade before this existed, so it's kept as-is rather than renamed). ---------------- */
   function getStepEls(slide){
     if(!slide) return [];
     if(slide.dataset.pageType === "sequence") return Array.from(slide.querySelectorAll(".sequence-step"));
     if(slide.dataset.pageType === "background" && !isMobileLayout()){
-      const blocks = slide.querySelector(".entry-blocks.entry-blocks--stepped");
-      if(blocks) return Array.from(blocks.children).filter(el => !el.classList.contains("add-block-row"));
+      const layer = slide.querySelector(".annotation-layer.annotation-layer--stepped");
+      if(layer) return Array.from(layer.querySelectorAll(".annotation"));
     }
     return [];
   }
   function stepActiveClass(slide){ return slide.dataset.pageType === "sequence" ? "active" : "step-active"; }
-  // a stepped Full Background entry's zoom target (see the [data-zoom-step] CSS above
-  // fullBleedMotion) cycles through 4 variants as text steps advance, so the pinned image
-  // keeps nudging to a different part of the scene each time, not just holding one end state
-  function setZoomStep(slide, idx){
-    if(slide.dataset.pageType === "background") slide.dataset.zoomStep = idx % 4;
+  // a stepped Full Background entry's zoom nudges toward whichever annotation point is
+  // currently active, reading its x/y straight off the annotation's own left/top (the same
+  // coordinates it's positioned at on the image) rather than a separate stored target.
+  // Scale-up only ever crops in tighter and the pan stays well inside the slack that scale
+  // creates, so this can never expose blank space regardless of how close to an edge a
+  // point sits.
+  function pointZoomTransform(annotationEl){
+    const x = parseFloat(annotationEl.style.left) || 50;
+    const y = parseFloat(annotationEl.style.top) || 50;
+    const scale = 1.22, panMax = 3.4;
+    const panX = -((x - 50) / 50) * panMax;
+    const panY = -((y - 50) / 50) * panMax;
+    return `scale(${scale}) translate(${panX.toFixed(2)}%, ${panY.toFixed(2)}%)`;
+  }
+  function applyPointZoom(slide){
+    if(slide.dataset.pageType !== "background") return;
+    const layer = slide.querySelector(".annotation-layer.annotation-layer--stepped");
+    const active = layer && layer.querySelector(".annotation.step-active");
+    const media = slide.querySelector(":scope > .media-fill .media-el");
+    if(!active || !media) return;
+    media.style.transform = pointZoomTransform(active);
   }
   function resetSteps(slide){
     const activeClass = stepActiveClass(slide);
     getStepEls(slide).forEach((el, i) => el.classList.toggle(activeClass, i === 0));
     slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === 0));
-    setZoomStep(slide, 0);
+    applyPointZoom(slide);
   }
   function advanceStep(slide, dir){
     const activeClass = stepActiveClass(slide);
@@ -5777,7 +5786,7 @@
     steps[activeIdx].classList.remove(activeClass);
     steps[nextIdx].classList.add(activeClass);
     slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === nextIdx));
-    setZoomStep(slide, nextIdx);
+    applyPointZoom(slide);
     return true;
   }
   // small accumulator so a continuous trackpad stream doesn't blow through every image at
@@ -5807,7 +5816,7 @@
   // Sequence page keeps its pinned/stepped layout on mobile too (see the CSS media query),
   // so it needs its own way to step through images with a finger the same way a wheel does.
   // Stepped Full Background entries never apply here since getStepEls() only returns their
-  // blocks on desktop -- mobile keeps its own flowing-card layout for those instead.
+  // annotation points on desktop -- mobile keeps its own flowing-card layout for those instead.
   let touchStartY = null;
   window.addEventListener("touchstart", (e) => {
     touchStartY = (gateSlideEl && !gateReady && getStepEls(gateSlideEl).length)
