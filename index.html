@@ -524,6 +524,12 @@
      image/video/GIF (full-bleed backgrounds or inline media blocks), for on-image
      annotation the way a scrollytelling infographic would ---------- */
   .annotation-layer{position:absolute;inset:0;z-index:200;pointer-events:none;}
+  /* labels now only ever show where they drive zoom-to-point stepping -- a Full Background
+     entry with 2+ annotations (see .annotation-layer--stepped further down). Everywhere else
+     (Hero, Chapter Cover, Sequence steps, Grid, a Full Background entry with 0-1 annotation)
+     they're hidden from visitors entirely; Edit Mode still shows every annotation everywhere
+     so nothing becomes impossible to find, move, or delete. */
+  body:not(.edit-on) .annotation-layer:not(.annotation-layer--stepped){ display:none; }
   .annotation{
     position:absolute;transform:translate(-50%,-50%);max-width:70%;pointer-events:none;
     display:flex;align-items:center;gap:6px;
