@@ -5752,12 +5752,20 @@
   // Scale-up only ever crops in tighter and the pan stays well inside the slack that scale
   // creates, so this can never expose blank space regardless of how close to an edge a
   // point sits.
+  // for `transform: scale(S) translate(tx%, ty%)` (translate applied first, in the box's own
+  // unscaled units, then the whole thing scaled around center), the exact translate that
+  // fully re-centers a point at fractional position `p` (0..1 across the image) works out to
+  // -(p - 0.5)*100 regardless of S -- and the largest translate that scale S can carry
+  // without pulling the image's edge in past the container works out to (S-1)/(2S)*100.
+  // Below, points near the middle get re-centered almost exactly; points near an edge get
+  // pushed as close as that edge allows and no further, so this can never expose blank space.
   function pointZoomTransform(annotationEl){
     const x = parseFloat(annotationEl.style.left) || 50;
     const y = parseFloat(annotationEl.style.top) || 50;
-    const scale = 1.22, panMax = 3.4;
-    const panX = -((x - 50) / 50) * panMax;
-    const panY = -((y - 50) / 50) * panMax;
+    const scale = 1.65;
+    const maxPan = (scale - 1) / (2 * scale) * 100 * 0.94; // small margin under the exact bound
+    const panX = Math.max(-maxPan, Math.min(maxPan, -(x - 50)));
+    const panY = Math.max(-maxPan, Math.min(maxPan, -(y - 50)));
     return `scale(${scale}) translate(${panX.toFixed(2)}%, ${panY.toFixed(2)}%)`;
   }
   function applyPointZoom(slide){
