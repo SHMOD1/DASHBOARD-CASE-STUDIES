@@ -290,8 +290,12 @@
   .position-popup-entry{font-family:var(--font-main);font-size:13.5px;font-weight:700;color:#005ba6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
   @media (max-width: 860px){
-    .position-popup{left:14px;right:70px;bottom:16px;max-width:none;padding:8px 14px 8px 10px;}
-    .position-popup-entry{font-size:12.5px;}
+    /* on mobile, content now flows normally below each image instead of staying pinned
+       full-bleed -- a fixed "you are here" chip at the bottom sits directly on top of
+       whatever real text happens to be scrolling past underneath it, briefly covering it
+       every time the active section changes. The entry's own eyebrow/title already show
+       inline in the flowing content, so the redundant floating chip is just hidden here. */
+    .position-popup{display:none !important;}
   }
 
   @media (max-width: 860px){
