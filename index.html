@@ -661,6 +661,36 @@
   .block-media .video-frame{aspect-ratio:16/9;}
   .block-media-caption{font-family:var(--font-body);font-size:11.5px;color:rgba(240,241,250,.65);margin-top:8px;font-style:italic;}
 
+  /* ---------- Grid flip cards: image on the front, its caption/annotation text on the
+     back, flipped into view once the card has scrolled into place (see the
+     IntersectionObserver-driven .flipped toggle below) instead of a label glued onto the
+     photo. Only cards with something to say get this treatment (see flipCardBackText()) —
+     a purely decorative image is left as a plain card. ---------- */
+  .flip-card{ perspective:1600px; }
+  .flip-card .flip-card-inner{
+    position:relative;width:100%;aspect-ratio:4/3;border-radius:8px;
+    transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.4,.1,.2,1);
+    box-shadow:0 20px 45px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.1);
+  }
+  .flip-card.flipped .flip-card-inner{ transform:rotateY(180deg); }
+  .flip-card-face{ position:absolute;inset:0;backface-visibility:hidden;border-radius:8px;overflow:hidden; }
+  .flip-card-front .block-media{ position:absolute;inset:0;min-height:0;box-shadow:none;background:none; }
+  .flip-card-front .block-media .media-fill{ position:absolute;inset:0; }
+  .flip-card-front .block-media .media-el{ width:100%;height:100%;object-fit:cover; }
+  .flip-card-back{
+    transform:rotateY(180deg);
+    background:#f8f3ef;display:flex;align-items:center;justify-content:center;
+    padding:22px 24px;text-align:center;
+  }
+  .flip-card-back-text{
+    font-family:var(--font-body);font-size:15px;font-weight:600;line-height:1.55;color:#2b2b2b;
+  }
+  @media (prefers-reduced-motion: reduce){
+    .flip-card .flip-card-inner{ transform:rotateY(180deg) !important;transition:none; }
+  }
+  /* editing always shows the front (the image being edited), regardless of scroll position */
+  body.edit-on .flip-card .flip-card-inner{ transform:none !important; }
+
   .add-block-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
   .add-block-btn{align-self:flex-start;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
     background:rgba(0,0,0,.4);border:1px dashed rgba(255,255,255,.35);color:#f1ede2;padding:6px 12px;border-radius:20px;}
@@ -4655,6 +4685,21 @@
     refreshEmptyHighlights();
     updateScroll();
     requestAnimationFrame(clampAnnotations);
+    observeFlipCards();
+  }
+
+  // Grid flip cards flip once, the first time they scroll into a readable position, and
+  // stay flipped -- simpler and more reliable than trying to key the flip to scroll
+  // progress: a Grid entry is a pinned full-screen slide like any other, so its own
+  // scroll-through-the-viewport distance is nearly zero once it settles into place (there's
+  // no room left for a continuous scroll-linked animation during that hold). Re-created each
+  // render() since innerHTML replaces the elements being observed.
+  const flipCardObserver = ("IntersectionObserver" in window) ? new IntersectionObserver((entries) => {
+    entries.forEach(en => { if(en.isIntersecting) en.target.classList.add("flipped"); });
+  }, { threshold:0.5 }) : null;
+  function observeFlipCards(){
+    if(!flipCardObserver) return;
+    document.querySelectorAll(".flip-card").forEach(el => flipCardObserver.observe(el));
   }
 
   // annotations are pinned at a saved %x/%y point, centered on it via a CSS transform --
@@ -4940,7 +4985,7 @@
   // background with a freeform, add-one-at-a-time box grid of text/media; "grid" just widens
   // the content column so the grid gets more room to breathe
   function renderEntryBlocksPage(chapter, entry, variant){
-    const blocksHtml = entry.blocks.map(b => renderBlock(chapter.id, entry.id, b)).join("");
+    const blocksHtml = entry.blocks.map(b => renderBlock(chapter.id, entry.id, b, variant)).join("");
     const captionHtml = entry.caption
       ? `<div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption)}</div>`
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
@@ -5061,8 +5106,8 @@
     saveState(); render();
   }
 
-  function renderBlock(chapterId, entryId, block){
-    if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block);
+  function renderBlock(chapterId, entryId, block, variant){
+    if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block, variant);
     const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
     const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};${block.color ? `color:${block.color};` : ""}`;
     const optTypes = BLOCK_TYPES.map(t => `<option value="${t.type}" ${t.type===block.type?"selected":""}>${t.label}</option>`).join("");
@@ -5092,13 +5137,20 @@
       </div>`;
   }
 
-  function renderMediaBlockEl(chapterId, entryId, block){
+  // combined text for a Grid flip-card's back face: whatever the block's caption and/or
+  // annotations already hold, reusing that data as-is rather than asking for it twice
+  function flipCardBackText(block){
+    const parts = [];
+    if(block.caption && block.caption.trim()) parts.push(block.caption.trim());
+    (block.annotations || []).forEach(a => { if(a.text && a.text.trim()) parts.push(a.text.trim()); });
+    return parts.join("\n\n");
+  }
+  function renderMediaBlockEl(chapterId, entryId, block, variant){
     const sizes = [["S","Small"],["M","Medium"],["L","Large"],["Full","Full width"]];
     const optSizes = sizes.map(s => `<option value="${s[0]}" ${s[0]===block.size?"selected":""}>${s[1]}</option>`).join("");
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
     const optAligns = aligns.map(a => `<option value="${a[0]}" ${a[0]===block.align?"selected":""}>${a[1]}</option>`).join("");
-    return `
-      <div class="block-wrap block-media-wrap block-media--${block.size} block-media-align--${block.align}" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
+    const toolbarHtml = `
         <div class="block-toolbar edit-only">
           <select data-act="blockMediaStyle" data-field="size" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optSizes}</select>
           <select data-act="blockMediaStyle" data-field="align" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optAligns}</select>
@@ -5106,11 +5158,34 @@
           <button type="button" data-act="moveBlock" data-dir="-1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↑</button>
           <button type="button" data-act="moveBlock" data-dir="1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↓</button>
           <button type="button" class="danger" data-act="deleteBlock" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">✕</button>
-        </div>
+        </div>`;
+    const mediaHtml = `
         <div class="block-media">
           <div class="media-fill" data-media-scope="blockMedia" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${mediaMarkup(block.media)}</div>
           <div class="annotation-layer">${renderAnnotationItems("blockMedia", chapterId, entryId, block.id, block.annotations)}</div>
+        </div>`;
+
+    // Grid cards flip from image to text as they scroll into view instead of overlaying a
+    // label on the image -- only when there's actually text to put on the back (a caption
+    // and/or annotations); a purely decorative image is left exactly as it was
+    const backText = variant === "grid" ? flipCardBackText(block) : "";
+    if(backText){
+      return `
+      <div class="block-wrap block-media-wrap block-media--${block.size} block-media-align--${block.align} flip-card" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
+        ${toolbarHtml}
+        <div class="flip-card-inner">
+          <div class="flip-card-face flip-card-front">${mediaHtml}</div>
+          <div class="flip-card-face flip-card-back"><div class="flip-card-back-text">${escapeHtml(backText).replace(/\n/g, "<br>")}</div></div>
         </div>
+        <div class="block-media-caption edit-only" data-editable data-bind-type="blockMediaCaption"
+             data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}"
+             contenteditable="false">${escapeHtml(block.caption || "")}</div>
+      </div>`;
+    }
+    return `
+      <div class="block-wrap block-media-wrap block-media--${block.size} block-media-align--${block.align}" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
+        ${toolbarHtml}
+        ${mediaHtml}
         <div class="block-media-caption" data-editable data-bind-type="blockMediaCaption"
              data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}"
              contenteditable="false">${escapeHtml(block.caption || "")}</div>
