@@ -96,6 +96,17 @@
   /* ---------- generic media (hero / chapter cover / entry) ---------- */
   .media-fill{position:absolute;inset:0;overflow:hidden;background:var(--bg-alt);}
   .media-el{width:100%;height:100%;object-fit:cover;display:block;will-change:transform;}
+  /* Ken-Burns zoom/pan for Chapter Cover + Full Background, see fullBleedMotion() -- scale-up
+     only ever crops in tighter (never exposes an edge), and the pan distance stays well inside
+     the slack that scale creates, so this never reveals blank space at any viewport size. */
+  .chapter-cover > .media-fill .media-el,
+  .entry[data-page-type="background"] > .media-fill .media-el{
+    transition: transform 9s cubic-bezier(.16,.68,.32,1);
+  }
+  .chapter-cover.zoom-active > .media-fill .media-el,
+  .entry[data-page-type="background"].zoom-active > .media-fill .media-el{
+    transform: scale(1.17) translate(-2.2%, -3.2%);
+  }
   .video-frame{position:relative;width:100%;height:100%;}
   .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
   .media-badge{
@@ -5450,6 +5461,7 @@
     updateRailSync();
     slideMotion();
     blockMediaMotion();
+    fullBleedMotion();
   }
 
   function updateProgressBar(){
@@ -5776,6 +5788,24 @@
       const pan = (progress - 0.5) * 34;
       const scale = 1.04 + progress * 0.06;
       media.style.transform = `scale(${scale.toFixed(3)}) translateY(${pan.toFixed(1)}px)`;
+    });
+  }
+
+  // Chapter Cover and Full Background get a much more pronounced, continuous Ken-Burns-style
+  // zoom/pan on their full-bleed image while they're the pinned "front" slide -- a slow,
+  // steady reveal that makes the scene feel explored rather than just sitting still behind
+  // the text. This is deliberately NOT driven by scroll progress: these sections are
+  // position:sticky at ~exactly one viewport tall, so their own rect.top sits pinned at 0 for
+  // the whole time they're the front slide (that's what "stuck" means) -- there's no further
+  // scroll distance during the hold for a scroll-linked value to key off. A CSS transition
+  // triggered once per slide when it becomes gateSlideEl (see updateMediaGate) gives a
+  // continuous multi-second zoom instead, which is what actually reads as motion here.
+  // Desktop-only: on mobile these sections no longer stay pinned at all (see the mobile
+  // "unstack" rules), so there's no "front slide" dwell for this to attach to there.
+  function fullBleedMotion(){
+    if(reduceMotion || isMobileLayout()) return;
+    document.querySelectorAll('.chapter-cover, .entry[data-page-type="background"]').forEach(slide => {
+      slide.classList.toggle("zoom-active", slide === gateSlideEl);
     });
   }
 
