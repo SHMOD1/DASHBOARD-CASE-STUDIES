@@ -697,6 +697,10 @@
   }
   /* editing always shows the front (the image being edited), regardless of scroll position */
   body.edit-on .flip-card .flip-card-inner{ transform:none !important; }
+  /* a Grid caption block folded onto its paired image's flip-card back (see
+     renderEntryBlocksPage) still renders normally -- and stays fully editable -- in Edit
+     Mode; visitors just never see it as its own separate grid cell */
+  body:not(.edit-on) .block-wrap.grid-paired-text{ display:none; }
 
   .add-block-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
   .add-block-btn{align-self:flex-start;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
@@ -4976,8 +4980,39 @@
   // page types (b) Full Background and (d) Grid share this template — both are a full-bleed
   // background with a freeform, add-one-at-a-time box grid of text/media; "grid" just widens
   // the content column so the grid gets more room to breathe
+  // Grid pages are sometimes authored as a leading run of images followed by an equal-length
+  // run of caption blocks underneath (image i's caption is the i-th block in that second
+  // run), rather than via each image's own caption/annotations. Detect that structurally,
+  // but conservatively: require the *whole* entry to be exactly [media x N, text x N] with
+  // nothing else mixed in, and require none of those media blocks to already have their own
+  // caption/annotations. Both guards exist because a looser, position-only check (pair block
+  // i with block i+gridColumns) mis-fired twice on real content: once grabbing an unrelated
+  // trailing pull-quote that only happened to land in the same column as image 0, and once
+  // duplicating text onto images that already had their own annotations doing this job.
+  // Anything that doesn't fit this exact shape is left completely alone.
+  function detectGridCaptionPairing(entry){
+    const blocks = entry.blocks;
+    let split = 0;
+    while(split < blocks.length && blocks[split].type === "media") split++;
+    const mediaBlocks = blocks.slice(0, split), textBlocks = blocks.slice(split);
+    if(!mediaBlocks.length || textBlocks.length !== mediaBlocks.length) return null;
+    if(textBlocks.some(b => b.type === "media")) return null;
+    if(mediaBlocks.some(b => (b.annotations || []).length || (b.caption || "").trim())) return null;
+    const pairedTextFor = {}, pairedAwayIds = new Set();
+    mediaBlocks.forEach((b, i) => {
+      pairedTextFor[b.id] = stripHtml(textBlocks[i].html);
+      pairedAwayIds.add(textBlocks[i].id);
+    });
+    return { pairedTextFor, pairedAwayIds };
+  }
+
   function renderEntryBlocksPage(chapter, entry, variant){
-    const blocksHtml = entry.blocks.map(b => renderBlock(chapter.id, entry.id, b, variant)).join("");
+    const pairing = variant === "grid" ? detectGridCaptionPairing(entry) : null;
+    const pairedTextFor = pairing ? pairing.pairedTextFor : {};
+    const pairedAwayIds = pairing ? pairing.pairedAwayIds : new Set();
+    const blocksHtml = entry.blocks
+      .map(b => renderBlock(chapter.id, entry.id, b, variant, pairedTextFor[b.id], pairedAwayIds.has(b.id)))
+      .join("");
     const captionHtml = entry.caption
       ? `<div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption)}</div>`
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
@@ -5098,8 +5133,15 @@
     saveState(); render();
   }
 
-  function renderBlock(chapterId, entryId, block, variant){
-    if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block, variant);
+  // plain-text extraction for a rich-text block's stored HTML -- used to pull a Grid
+  // caption block's text onto its paired image's flip-card back (see renderEntryBlocksPage)
+  function stripHtml(html){
+    const div = document.createElement("div");
+    div.innerHTML = html || "";
+    return div.textContent.trim();
+  }
+  function renderBlock(chapterId, entryId, block, variant, pairedText, pairedAway){
+    if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block, variant, pairedText);
     const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
     const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};${block.color ? `color:${block.color};` : ""}`;
     const optTypes = BLOCK_TYPES.map(t => `<option value="${t.type}" ${t.type===block.type?"selected":""}>${t.label}</option>`).join("");
@@ -5109,7 +5151,7 @@
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
     const optAligns = aligns.map(a => `<option value="${a[0]}" ${a[0]===block.align?"selected":""}>${a[1]}</option>`).join("");
     return `
-      <div class="block-wrap" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
+      <div class="block-wrap${pairedAway ? " grid-paired-text" : ""}" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
         <div class="block-toolbar edit-only">
           <select data-act="blockStyle" data-field="type" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optTypes}</select>
           <select data-act="blockStyle" data-field="font" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optFonts}</select>
@@ -5129,10 +5171,12 @@
       </div>`;
   }
 
-  // combined text for a Grid flip-card's back face: whatever the block's caption and/or
-  // annotations already hold, reusing that data as-is rather than asking for it twice
-  function flipCardBackText(block){
+  // combined text for a Grid flip-card's back face: a paired caption block (see
+  // renderEntryBlocksPage) first, then whatever the image's own caption and/or annotations
+  // already hold -- reusing that data as-is rather than asking for it twice
+  function flipCardBackText(block, pairedText){
     const parts = [];
+    if(pairedText && pairedText.trim()) parts.push(pairedText.trim());
     if(block.caption && block.caption.trim()) parts.push(block.caption.trim());
     (block.annotations || []).forEach(a => { if(a.text && a.text.trim()) parts.push(a.text.trim()); });
     return parts.join("\n\n");
@@ -5146,7 +5190,7 @@
     if(!m || !m.src || m.kind === "video") return "";
     return `<div class="flip-card-back-media" style="background-image:url('${escapeHtml(m.src)}')"></div><div class="flip-card-back-scrim"></div>`;
   }
-  function renderMediaBlockEl(chapterId, entryId, block, variant){
+  function renderMediaBlockEl(chapterId, entryId, block, variant, pairedText){
     const sizes = [["S","Small"],["M","Medium"],["L","Large"],["Full","Full width"]];
     const optSizes = sizes.map(s => `<option value="${s[0]}" ${s[0]===block.size?"selected":""}>${s[1]}</option>`).join("");
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
@@ -5169,7 +5213,7 @@
     // Grid cards flip from image to text as they scroll into view instead of overlaying a
     // label on the image -- only when there's actually text to put on the back (a caption
     // and/or annotations); a purely decorative image is left exactly as it was
-    const backText = variant === "grid" ? flipCardBackText(block) : "";
+    const backText = variant === "grid" ? flipCardBackText(block, pairedText) : "";
     if(backText){
       return `
       <div class="block-wrap block-media-wrap block-media--${block.size} block-media-align--${block.align} flip-card" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
