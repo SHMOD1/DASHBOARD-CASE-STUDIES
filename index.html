@@ -107,6 +107,19 @@
   .entry[data-page-type="background"].zoom-active > .media-fill .media-el{
     transform: scale(1.17) translate(-2.2%, -3.2%);
   }
+  /* a stepped Full Background entry (see advanceStep()) nudges the zoom to a different
+     target on every text step, cycling through these four, instead of holding one fixed
+     end point -- read alongside the text changing, it reinforces the sense that scrolling
+     is revealing more of the same scene rather than just replacing a caption */
+  .entry[data-page-type="background"].zoom-active[data-zoom-step="1"] > .media-fill .media-el{
+    transform: scale(1.24) translate(2.4%, -1.2%);
+  }
+  .entry[data-page-type="background"].zoom-active[data-zoom-step="2"] > .media-fill .media-el{
+    transform: scale(1.13) translate(-1.4%, 2.6%);
+  }
+  .entry[data-page-type="background"].zoom-active[data-zoom-step="3"] > .media-fill .media-el{
+    transform: scale(1.28) translate(1.8%, 2.2%);
+  }
   .video-frame{position:relative;width:100%;height:100%;}
   .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
   .media-badge{
@@ -375,6 +388,23 @@
      .block--caption above), so stacking them vertically reads as a tidy list of cards. */
   .entry[data-page-type="background"] .entry-blocks{
     flex-direction:column;align-items:stretch;max-width:min(36vw,460px);
+  }
+  /* a Full Background entry with more than one block steps through them one at a time
+     (desktop only, and never while editing -- see getStepEls()/advanceStep()) instead of
+     stacking every block at once: all blocks overlap in the same spot, only the current
+     step is actually in flow (so the column's height still tracks whichever one is showing),
+     everything else sits invisible underneath it and fades in on its turn. */
+  @media (min-width: 861px) and (prefers-reduced-motion: no-preference){
+    body:not(.edit-on) .entry-blocks.entry-blocks--stepped{ position:relative; display:block; min-height:1px; }
+    body:not(.edit-on) .entry-blocks.entry-blocks--stepped > *{
+      position:absolute; top:0; left:0; right:0;
+      opacity:0; visibility:hidden; pointer-events:none;
+      transition: opacity .6s ease;
+    }
+    body:not(.edit-on) .entry-blocks.entry-blocks--stepped > .step-active{
+      position:relative;
+      opacity:1; visibility:visible; pointer-events:auto;
+    }
   }
 
   /* page type (d) Grid — same template as Full Background, just a wider content column so
@@ -4921,6 +4951,10 @@
     // "Grid" arranges every block — text or media — into a real N-per-row grid instead of
     // the freeform flex-wrap flow Full Background uses
     const blocksStyle = variant === "grid" ? ` style="--grid-cols:${entry.gridColumns || 3}"` : "";
+    // Full Background entries with more than one block step through them one at a time on
+    // desktop (see advanceEntryStep()/entryStepWheel()) instead of showing every block
+    // stacked at once — a single block never needs stepping, so it's left exactly as before
+    const steppedClass = (variant === "background" && entry.blocks.length > 1) ? " entry-blocks--stepped" : "";
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
@@ -4934,7 +4968,7 @@
           </div>
           <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
           ${captionHtml}
-          <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}"${blocksStyle}>
+          <div class="entry-blocks${steppedClass}" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}"${blocksStyle}>
             ${blocksHtml}
             <div class="add-block-row edit-only">
               <button type="button" class="add-block-btn" data-act="addBlock" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">+ Add text block</button>
@@ -4963,7 +4997,7 @@
   }
 
   // page type (c): Scroll Sequence — a stack of full-bleed image steps; scrolling forward
-  // steps through them one at a time (see handleSequenceWheel/advanceSequenceStep) and only
+  // steps through them one at a time (see handleSequenceWheel/advanceStep) and only
   // reaches the next chapter/entry once the last step has been shown
   function renderEntrySequence(chapter, entry){
     const steps = entry.sequence || [];
@@ -5641,11 +5675,11 @@
     clearTimeout(gateReleaseTimer); clearTimeout(gateSafetyTimer);
     gateReleaseTimer = null; gateSafetyTimer = null;
     gateReady = false;
-    if(slide.dataset.pageType === "sequence"){
-      const steps = slide.querySelectorAll(".sequence-step");
-      resetSequenceSteps(slide);
+    const steppable = getStepEls(slide);
+    if(steppable.length){
+      resetSteps(slide);
       sequenceWheelAccum = 0;
-      if(reduceMotion || steps.length <= 1) releaseGate();
+      if(reduceMotion || steppable.length <= 1) releaseGate();
       return;
     }
     const media = getSlideBackgroundMedia(slide);
@@ -5700,25 +5734,50 @@
     clampScrollToGate();
   }
 
-  /* ---------------- scroll-sequence pages (page type "c"): each wheel gesture steps through
-     the image sequence instead of scrolling, until the last step is shown, then normal
-     scrolling resumes and the section-hold gate releases like any other slide. ---------------- */
-  function resetSequenceSteps(slide){
-    const steps = slide.querySelectorAll(".sequence-step");
-    steps.forEach((el, i) => el.classList.toggle("active", i === 0));
-    slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === 0));
+  /* ---------------- stepped slides: each wheel gesture steps through content instead of
+     scrolling, until the last step is shown, then normal scrolling resumes and the
+     section-hold gate releases like any other slide. Two kinds of slide step this way:
+     Scroll Sequence pages (page type "c", stepping through images) and Full Background
+     entries that have more than one text/media block (desktop only, stepping through the
+     blocks one at a time -- see the "entry-blocks--stepped" CSS). Both share the exact same
+     advance/gate/wheel/touch mechanics from here on, just with different step elements and
+     "active" class names (sequence steps already had their own .active-keyed CSS crossfade
+     before this existed, so it's kept as-is rather than renamed). ---------------- */
+  function getStepEls(slide){
+    if(!slide) return [];
+    if(slide.dataset.pageType === "sequence") return Array.from(slide.querySelectorAll(".sequence-step"));
+    if(slide.dataset.pageType === "background" && !isMobileLayout()){
+      const blocks = slide.querySelector(".entry-blocks.entry-blocks--stepped");
+      if(blocks) return Array.from(blocks.children).filter(el => !el.classList.contains("add-block-row"));
+    }
+    return [];
   }
-  function advanceSequenceStep(slide, dir){
-    const steps = Array.from(slide.querySelectorAll(".sequence-step"));
+  function stepActiveClass(slide){ return slide.dataset.pageType === "sequence" ? "active" : "step-active"; }
+  // a stepped Full Background entry's zoom target (see the [data-zoom-step] CSS above
+  // fullBleedMotion) cycles through 4 variants as text steps advance, so the pinned image
+  // keeps nudging to a different part of the scene each time, not just holding one end state
+  function setZoomStep(slide, idx){
+    if(slide.dataset.pageType === "background") slide.dataset.zoomStep = idx % 4;
+  }
+  function resetSteps(slide){
+    const activeClass = stepActiveClass(slide);
+    getStepEls(slide).forEach((el, i) => el.classList.toggle(activeClass, i === 0));
+    slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === 0));
+    setZoomStep(slide, 0);
+  }
+  function advanceStep(slide, dir){
+    const activeClass = stepActiveClass(slide);
+    const steps = getStepEls(slide);
     if(!steps.length) return false;
-    let activeIdx = steps.findIndex(el => el.classList.contains("active"));
+    let activeIdx = steps.findIndex(el => el.classList.contains(activeClass));
     if(activeIdx < 0) activeIdx = 0;
     const nextIdx = activeIdx + dir;
     if(nextIdx < 0) return false; // already at the first step — let normal scroll go to the previous slide
     if(nextIdx >= steps.length){ releaseGate(); return false; } // reached the end — let normal scroll continue forward
-    steps[activeIdx].classList.remove("active");
-    steps[nextIdx].classList.add("active");
+    steps[activeIdx].classList.remove(activeClass);
+    steps[nextIdx].classList.add(activeClass);
     slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === nextIdx));
+    setZoomStep(slide, nextIdx);
     return true;
   }
   // small accumulator so a continuous trackpad stream doesn't blow through every image at
@@ -5731,14 +5790,14 @@
   const SEQUENCE_STEP_COOLDOWN_MS = 550;
   function handleSequenceWheel(e){
     if(!gateSlideEl || gateReady) return false;
-    if(gateSlideEl.dataset.pageType !== "sequence") return false;
+    if(!getStepEls(gateSlideEl).length) return false;
     const now = Date.now();
     if(now - sequenceWheelLast < SEQUENCE_STEP_COOLDOWN_MS) return true; // still consumed, just ignored
     sequenceWheelAccum += e.deltaY;
     if(Math.abs(sequenceWheelAccum) < SEQUENCE_STEP_THRESHOLD) return true;
     const dir = sequenceWheelAccum > 0 ? 1 : -1;
     sequenceWheelAccum = 0;
-    const consumed = advanceSequenceStep(gateSlideEl, dir);
+    const consumed = advanceStep(gateSlideEl, dir);
     if(consumed) sequenceWheelLast = now;
     return consumed;
   }
@@ -5746,31 +5805,33 @@
   // touch-swipe equivalent of handleSequenceWheel, for phones/tablets -- everywhere else,
   // touch scrolling stays completely native (per the wheel-scroll block below), but a Scroll
   // Sequence page keeps its pinned/stepped layout on mobile too (see the CSS media query),
-  // so it needs its own way to step through images with a finger the same way a wheel does
+  // so it needs its own way to step through images with a finger the same way a wheel does.
+  // Stepped Full Background entries never apply here since getStepEls() only returns their
+  // blocks on desktop -- mobile keeps its own flowing-card layout for those instead.
   let touchStartY = null;
   window.addEventListener("touchstart", (e) => {
-    touchStartY = (gateSlideEl && !gateReady && gateSlideEl.dataset.pageType === "sequence")
+    touchStartY = (gateSlideEl && !gateReady && getStepEls(gateSlideEl).length)
       ? e.touches[0].clientY : null;
   }, { passive:true });
   window.addEventListener("touchmove", (e) => {
     if(touchStartY === null) return;
-    if(!gateSlideEl || gateReady || gateSlideEl.dataset.pageType !== "sequence"){ touchStartY = null; return; }
+    if(!gateSlideEl || gateReady){ touchStartY = null; return; }
     const y = e.touches[0].clientY;
     const delta = touchStartY - y; // positive = finger moving up = advance forward
     const dir = delta >= 0 ? 1 : -1;
     // peek at whether this direction is even possible before deciding to hold the gesture --
     // a swipe backward past the first step (or forward past the last) should fall through to
     // native scroll immediately, not get trapped waiting for a step change that can't happen
-    const steps = gateSlideEl.querySelectorAll(".sequence-step");
-    const activeIdx = Array.from(steps).findIndex(el => el.classList.contains("active"));
+    const steps = getStepEls(gateSlideEl);
+    const activeIdx = steps.findIndex(el => el.classList.contains(stepActiveClass(gateSlideEl)));
     const nextIdx = activeIdx + dir;
-    if(nextIdx < 0 || nextIdx >= steps.length){ touchStartY = null; return; }
+    if(!steps.length || nextIdx < 0 || nextIdx >= steps.length){ touchStartY = null; return; }
     e.preventDefault();
     const now = Date.now();
     if(now - sequenceWheelLast < SEQUENCE_STEP_COOLDOWN_MS) return;
     if(Math.abs(delta) < SEQUENCE_STEP_THRESHOLD) return;
     touchStartY = y; // reset baseline so the next swipe increment is measured fresh
-    const consumed = advanceSequenceStep(gateSlideEl, dir);
+    const consumed = advanceStep(gateSlideEl, dir);
     if(consumed) sequenceWheelLast = now;
   }, { passive:false });
   window.addEventListener("touchend", () => { touchStartY = null; }, { passive:true });
