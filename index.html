@@ -711,15 +711,15 @@
        per line -- 3-4 desktop columns collapse to 2, regardless of the per-page setting. */
     .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:repeat(2,1fr) !important;}
 
-    /* annotations: shrink their footprint so two nearby labels are less likely to collide,
-       and so a label placed near an image edge has more room before it would overflow it
-       (see the JS-driven edge clamp in clampAnnotations() for the rest of that fix). */
-    .annotation{max-width:82%;}
-    .annotation-text{font-size:13px !important;padding:1px 4px;}
+    /* draggable annotation labels never worked well on a phone screen no matter how much
+       collision-avoidance ran on top of them -- too many labels crammed onto too short an
+       image. Drop them entirely on mobile; this only hides the visitor-facing overlay, the
+       underlying annotation data is untouched (and Edit Mode is unreachable on touch
+       devices anyway, so there's no editing UI that needs them visible here either). */
+    .annotation-layer{display:none !important;}
   }
   @media (max-width: 480px){
     .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:1fr !important;}
-    .annotation-text{font-size:11.5px !important;}
   }
 
   /* ---------- mobile: stop overlaying text on full-bleed images entirely ----------
@@ -742,9 +742,6 @@
     .hero > .media-fill, .chapter-cover > .media-fill, .entry:not([data-page-type="sequence"]) > .media-fill{
       position:relative;inset:auto;width:100%;height:56vh;max-height:480px;
     }
-    .hero > .annotation-layer, .chapter-cover > .annotation-layer, .entry:not([data-page-type="sequence"]) > .annotation-layer{
-      position:absolute;inset:auto;top:0;left:0;right:0;height:56vh;max-height:480px;
-    }
     /* small overlaid controls (popup-box tab, mascot, edit toolbar) stay pinned to the
        image itself, not wherever a percentage/bottom value would now land on a much
        taller section */
@@ -754,6 +751,14 @@
     }
     .hero-mascot{top:14px;right:14px;bottom:auto;}
     .chapter-toolbar, .entry-toolbar{top:14px;right:14px;}
+
+    /* the rail's "current position" popup (distinct from .position-popup at the bottom,
+       which already shows the same current-section title in a compact, properly-truncated
+       bar) floats freely at the rail dot's coordinates and isn't width-constrained enough
+       for that to work inside a narrow 72px mobile rail column -- it renders as a tall,
+       overlapping, single-word-per-line box on top of real content. .position-popup covers
+       the same "you are here" purpose correctly on mobile, so just hide this one there. */
+    .rail-hover-popup{display:none !important;}
 
     .hero-content, .chapter-cover-content, .entry-content{
       position:static;z-index:auto;max-width:none;width:auto;margin:0;
