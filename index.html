@@ -606,8 +606,16 @@
      only when they run out of horizontal space ---------- */
   .entry-blocks{display:flex;flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:18px 22px;}
   .block-wrap{flex:0 0 auto;}
-  .block-toolbar{gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;padding:6px 8px;
-    background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:8px;backdrop-filter:blur(6px);}
+  /* like .annotation-toolbar, this only appears on hover/focus of the block it belongs to --
+     with every block on a Grid/Full Background page carrying its own toolbar, showing them
+     all permanently buried the actual content (image, text) under a wall of controls with
+     nothing being edited. */
+  .block-toolbar{
+    display:none;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;padding:6px 8px;
+    background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.18);border-radius:8px;backdrop-filter:blur(6px);
+  }
+  body.edit-on .block-wrap:hover .block-toolbar,
+  body.edit-on .block-wrap:focus-within .block-toolbar{display:flex;}
   .block-toolbar select, .block-toolbar button{
     font-size:10.5px;border:1px solid rgba(255,255,255,.28);background:rgba(0,0,0,.35);color:#f1ede2;
     padding:4px 7px;border-radius:12px;text-transform:uppercase;letter-spacing:.03em;
@@ -4900,7 +4908,7 @@
     return `
       <div class="annotation" data-annotation-id="${a.id}" ${idAttrs} style="left:${a.x}%;top:${a.y}%;">
         <div class="annotation-drag-handle edit-only" title="Drag to move">⠿⠿</div>
-        <div class="annotation-toolbar edit-only">
+        <div class="annotation-toolbar">
           <select data-act="annoChip" title="Highlight or stat chip" data-annotation-id="${a.id}" ${idAttrs}>
             <option value="" ${a.chip!=="stat"?"selected":""}>Highlight</option>
             <option value="stat" ${a.chip==="stat"?"selected":""}>Stat Chip</option>
@@ -5163,7 +5171,7 @@
     const optAligns = aligns.map(a => `<option value="${a[0]}" ${a[0]===block.align?"selected":""}>${a[1]}</option>`).join("");
     return `
       <div class="block-wrap${pairedAway ? " grid-paired-text" : ""}" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
-        <div class="block-toolbar edit-only">
+        <div class="block-toolbar">
           <select data-act="blockStyle" data-field="type" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optTypes}</select>
           <select data-act="blockStyle" data-field="font" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optFonts}</select>
           <select data-act="blockStyle" data-field="size" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optSizes}</select>
@@ -5198,7 +5206,7 @@
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
     const optAligns = aligns.map(a => `<option value="${a[0]}" ${a[0]===block.align?"selected":""}>${a[1]}</option>`).join("");
     const toolbarHtml = `
-        <div class="block-toolbar edit-only">
+        <div class="block-toolbar">
           <select data-act="blockMediaStyle" data-field="size" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optSizes}</select>
           <select data-act="blockMediaStyle" data-field="align" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optAligns}</select>
           <span class="spacer"></span>
