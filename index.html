@@ -107,11 +107,6 @@
   .entry[data-page-type="background"].zoom-active > .media-fill .media-el{
     transform: scale(1.17) translate(-2.2%, -3.2%);
   }
-  /* a stepped Full Background entry (2+ annotations, see annotation-layer--stepped above)
-     overrides this fixed end point with an inline transform computed per-point by
-     pointZoomTransform(), so the image nudges toward whichever annotation is currently
-     active instead of one generic target -- inline style wins over the rule above by
-     specificity, so non-stepped entries are completely unaffected by this. */
   .video-frame{position:relative;width:100%;height:100%;}
   .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
   .media-badge{
@@ -381,21 +376,6 @@
   .entry[data-page-type="background"] .entry-blocks{
     flex-direction:column;align-items:stretch;max-width:min(36vw,460px);
   }
-  /* a Full Background entry with more than one annotation steps through them one at a time
-     (desktop only, and never while editing -- see getStepEls()/advanceStep()): the pinned
-     image zooms toward whichever point is active (see fullBleedMotion()/pointZoomTransform())
-     while its annotation is the only one shown, turning the annotation into a small popup at
-     that spot instead of a permanent label — everything else stays out of the way until its
-     own turn. The entry's title/caption/blocks are untouched by this; only the on-image
-     annotations step. */
-  @media (min-width: 861px) and (prefers-reduced-motion: no-preference){
-    body:not(.edit-on) .annotation-layer.annotation-layer--stepped > .annotation{
-      opacity:0; pointer-events:none; transition: opacity .6s ease;
-    }
-    body:not(.edit-on) .annotation-layer.annotation-layer--stepped > .annotation.step-active{
-      opacity:1; pointer-events:auto;
-    }
-  }
 
   /* page type (d) Grid — same template as Full Background, just a wider content column so
      the freeform box grid has more room */
@@ -524,12 +504,11 @@
      image/video/GIF (full-bleed backgrounds or inline media blocks), for on-image
      annotation the way a scrollytelling infographic would ---------- */
   .annotation-layer{position:absolute;inset:0;z-index:200;pointer-events:none;}
-  /* labels now only ever show as the Full Background section's one standard text box (see
+  /* labels now only ever show as the Full Background section's point markers (see
      .annotation-layer--labeled further down: every Full Background entry with 1+ annotations
-     gets it, 2+ additionally steps through them one at a time). Everywhere else (Hero,
-     Chapter Cover, Sequence steps, Grid, a Full Background entry with 0 annotations) they're
-     hidden from visitors entirely; Edit Mode still shows every annotation everywhere so
-     nothing becomes impossible to find, move, or delete. */
+     gets them). Everywhere else (Hero, Chapter Cover, Sequence steps, Grid, a Full Background
+     entry with 0 annotations) they're hidden from visitors entirely; Edit Mode still shows
+     every annotation everywhere so nothing becomes impossible to find, move, or delete. */
   body:not(.edit-on) .annotation-layer:not(.annotation-layer--labeled){ display:none; }
   .annotation{
     position:absolute;transform:translate(-50%,-50%);max-width:70%;pointer-events:none;
@@ -544,27 +523,45 @@
      like a "YEAR: 1854" callout, as distinct from the longer highlighter-marker style above */
   .annotation-text.chip-stat{background:#7af9b4;border-radius:20px;padding:3px 14px;
     border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;}
-  /* the Full Background section's one standard text box: floats the label above its point
-     instead of centering on top of it, with a small tail connecting straight down to the
-     exact spot — a map-callout card rather than a flat highlighter tag, and the same white
-     card + thin tail regardless of which style the author chose (or how many annotations the
-     entry has), so every Full Background entry's on-image text reads as one consistent,
-     deliberate accent instead of competing yellow/mint treatments that only sometimes show
-     up. See pointZoomTransform() for why it's *this* point that zooms in on entries with 2+
-     (.annotation-layer--stepped). Applied in Edit Mode too (not just the visitor view) so
-     what an author sees while editing matches the published result exactly, instead of the
-     plain centered/highlighter styling the CSS default would otherwise still show. */
-  .annotation-layer--labeled .annotation{
-    transform:translate(-50%, calc(-100% - 15px));
-    max-width:min(280px, 70vw);
+  /* the Full Background section's point markers: a small dot sits exactly on the spot, and
+     clicking it opens a floating popup card with the label just above it, connected by a
+     thin tail — a map-callout, not a label sitting on the photo permanently. The photo stays
+     uncluttered with every point visible but nothing crowding it, until a visitor actually
+     wants to read one; only one popup is open at a time (see the .annotation-dot click
+     handler). The same white card + tail regardless of which style the author chose, so every
+     Full Background entry's popup reads as one consistent, deliberate accent instead of
+     competing yellow/mint treatments. Edit Mode instead keeps every popup open all the time
+     (see body.edit-on below) since an author needs to see and edit all of them at once, not
+     discover them one click at a time — the card styling itself still matches the published
+     result exactly, just always expanded while editing. */
+  .annotation-dot{ display:none; }
+  .annotation-layer--labeled .annotation-dot{
+    display:block;position:relative;flex:0 0 auto;width:26px;height:26px;
+    border-radius:50%;cursor:pointer;pointer-events:auto;
   }
-  .annotation-layer--labeled .annotation-text,
-  .annotation-layer--labeled .annotation-text.chip-stat{
+  .annotation-layer--labeled .annotation-dot::before{
+    content:"";position:absolute;top:50%;left:50%;width:11px;height:11px;
+    transform:translate(-50%,-50%);border-radius:50%;background:#005ba6;
+    box-shadow:0 0 0 4px rgba(255,255,255,.9), 0 2px 6px rgba(0,0,0,.35);
+  }
+  .annotation-layer--labeled .annotation-dot:hover::before{
+    background:#0072c9;box-shadow:0 0 0 5px rgba(255,255,255,.95), 0 2px 8px rgba(0,0,0,.4);
+  }
+  .annotation-layer--labeled .annotation-text{
+    display:none;position:absolute;left:50%;bottom:calc(100% + 15px);transform:translateX(-50%);
+    width:max-content;max-width:min(280px, 70vw);
     background:#fff;border:1px solid rgba(20,20,19,.14);border-radius:7px;
     padding:11px 15px;box-shadow:0 14px 30px rgba(0,0,0,.3);
   }
-  .annotation-layer--labeled .annotation::after{
-    content:"";position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);
+  .annotation-layer--labeled .annotation.annotation-open .annotation-text{
+    display:block;pointer-events:auto; /* stay "inside" the annotation for the outside-click-closes handler */
+  }
+  body.edit-on .annotation-layer--labeled .annotation-text{
+    display:block;
+  }
+  .annotation-layer--labeled .annotation.annotation-open .annotation-text::after,
+  body.edit-on .annotation-layer--labeled .annotation-text::after{
+    content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
     width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
     border-top:8px solid #fff;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18));
   }
@@ -4746,7 +4743,19 @@
       if(!els.length) return;
       els.forEach(el => { el.style.transform = ""; });
       const items = els.map(el => {
-        const r = el.getBoundingClientRect();
+        let r = el.getBoundingClientRect();
+        // a Full Background point's popup card is positioned absolutely so it never expands
+        // its own dot's layout box -- getBoundingClientRect() on the dot alone would then
+        // miss it entirely. Whenever the card is actually visible (Edit Mode always shows it;
+        // a visitor sees it while that one point is open), fold its rect in too, or collision
+        // avoidance would let two open cards sit right on top of each other.
+        const textEl = el.querySelector(".annotation-text");
+        if(textEl && getComputedStyle(textEl).display !== "none"){
+          const tr = textEl.getBoundingClientRect();
+          const left = Math.min(r.left, tr.left), top = Math.min(r.top, tr.top);
+          const right = Math.max(r.right, tr.right), bottom = Math.max(r.bottom, tr.bottom);
+          r = { left, top, right, bottom, width: right - left, height: bottom - top };
+        }
         return { el, left: r.left, top: r.top, width: r.width, height: r.height, dx: 0, dy: 0 };
       });
       const margin = 6, gap = 7;
@@ -4787,16 +4796,9 @@
         clampToLayer(it);
         placed.push(box());
       });
-      // the zoom-to-point callout card (see the .annotation-layer--stepped CSS) floats above
-      // its point instead of centering on it -- in Edit Mode too, now that the styling is
-      // unscoped -- so match that same baseline here, or a collision nudge would silently
-      // snap it back to centered the moment dx/dy stop being both zero, undoing the CSS
-      // positioning the instant a label needs to dodge something
-      const labeled = layer.classList.contains("annotation-layer--labeled");
-      const baseY = labeled ? "calc(-100% - 15px)" : "-50%";
       items.forEach(it => {
         it.el.style.transform = (it.dx || it.dy)
-          ? `translate(calc(-50% + ${it.dx.toFixed(1)}px), calc(${baseY} + ${it.dy.toFixed(1)}px))`
+          ? `translate(calc(-50% + ${it.dx.toFixed(1)}px), calc(-50% + ${it.dy.toFixed(1)}px))`
           : "";
       });
     });
@@ -4922,6 +4924,7 @@
     const chipClass = a.chip === "stat" ? " chip-stat" : "";
     return `
       <div class="annotation" data-annotation-id="${a.id}" ${idAttrs} style="left:${a.x}%;top:${a.y}%;">
+        <div class="annotation-dot" title="Show label"></div>
         <div class="annotation-drag-handle edit-only" title="Drag to move">⠿⠿</div>
         <div class="annotation-toolbar">
           <select data-act="annoChip" title="Highlight or stat chip" data-annotation-id="${a.id}" ${idAttrs}>
@@ -5053,17 +5056,12 @@
     // "Grid" arranges every block — text or media — into a real N-per-row grid instead of
     // the freeform flex-wrap flow Full Background uses
     const blocksStyle = variant === "grid" ? ` style="--grid-cols:${entry.gridColumns || 3}"` : "";
-    // Full Background entries with more than one annotation step through them one at a time
-    // on desktop (see getStepEls()/advanceStep()) instead of showing every annotation at
-    // once: the pinned image zooms in on whichever point is active, so the annotation itself
-    // becomes a small popup right where it's pointing. A single annotation has nothing to
-    // step through, but still gets the same callout-card treatment (see
-    // .annotation-layer--labeled) so a Full Background entry's text box always looks the
-    // same regardless of how many points it has -- one consistent style for the section,
-    // not "styled card" for 2+ and "nothing shown" for exactly 1.
-    const annCount = variant === "background" ? (entry.annotations || []).length : 0;
-    const annLayerClass = annCount > 1 ? " annotation-layer--stepped annotation-layer--labeled"
-      : annCount === 1 ? " annotation-layer--labeled" : "";
+    // Full Background entries render every point as a small dot sitting exactly on its spot;
+    // clicking one opens a popup card with its label right above it (see
+    // .annotation-layer--labeled and the .annotation-dot click handler further down) instead
+    // of overlaying every label on the photo at once, or zooming/stepping through them.
+    const annLayerClass = variant === "background" && (entry.annotations || []).length
+      ? " annotation-layer--labeled" : "";
     return `
       <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
@@ -5550,6 +5548,29 @@
     el.style.color = block.color || "";
   }
 
+  /* ---------------- Full Background point markers: click a dot to open its popup, click
+     another to switch to it, click anywhere outside a marker to close whatever's open. Edit
+     Mode never runs this -- every popup already stays open there (see the CSS) so there's
+     nothing to toggle. ---------------- */
+  document.addEventListener("click", (e) => {
+    if(editOn) return;
+    const dot = e.target.closest(".annotation-dot");
+    if(dot){
+      const ann = dot.closest(".annotation");
+      const layer = dot.closest(".annotation-layer--labeled");
+      if(ann && layer){
+        const wasOpen = ann.classList.contains("annotation-open");
+        layer.querySelectorAll(".annotation.annotation-open").forEach(a => a.classList.remove("annotation-open"));
+        if(!wasOpen) ann.classList.add("annotation-open");
+      }
+      return;
+    }
+    if(!e.target.closest(".annotation")){
+      document.querySelectorAll(".annotation-layer--labeled .annotation.annotation-open")
+        .forEach(a => a.classList.remove("annotation-open"));
+    }
+  });
+
   /* ---------------- delegated click (all buttons + media overlays + rail nav) ---------------- */
   document.addEventListener("click", (e) => {
     const overlay = e.target.closest(".media-overlay");
@@ -5885,58 +5906,21 @@
 
   /* ---------------- stepped slides: each wheel gesture steps through content instead of
      scrolling, until the last step is shown, then normal scrolling resumes and the
-     section-hold gate releases like any other slide. Two kinds of slide step this way:
-     Scroll Sequence pages (page type "c", stepping through images) and Full Background
-     entries that have more than one annotation (desktop only, stepping through the image's
-     points of interest -- see the "annotation-layer--stepped" CSS). Both share the exact
-     same advance/gate/wheel/touch mechanics from here on, just with different step elements
-     and "active" class names (sequence steps already had their own .active-keyed CSS
-     crossfade before this existed, so it's kept as-is rather than renamed). ---------------- */
+     section-hold gate releases like any other slide. Only Scroll Sequence pages step this
+     way (page type "c", stepping through images) -- Full Background entries used to as well,
+     zooming toward whichever annotation was active, but that's been replaced by always-visible
+     point dots with a click-to-open popup (see .annotation-layer--labeled), which don't need
+     to hold scroll at all since nothing has to happen "in order." ---------------- */
   function getStepEls(slide){
     if(!slide) return [];
     if(slide.dataset.pageType === "sequence") return Array.from(slide.querySelectorAll(".sequence-step"));
-    if(slide.dataset.pageType === "background" && !isMobileLayout()){
-      const layer = slide.querySelector(".annotation-layer.annotation-layer--stepped");
-      if(layer) return Array.from(layer.querySelectorAll(".annotation"));
-    }
     return [];
   }
-  function stepActiveClass(slide){ return slide.dataset.pageType === "sequence" ? "active" : "step-active"; }
-  // a stepped Full Background entry's zoom nudges toward whichever annotation point is
-  // currently active, reading its x/y straight off the annotation's own left/top (the same
-  // coordinates it's positioned at on the image) rather than a separate stored target.
-  // Scale-up only ever crops in tighter and the pan stays well inside the slack that scale
-  // creates, so this can never expose blank space regardless of how close to an edge a
-  // point sits.
-  // for `transform: scale(S) translate(tx%, ty%)` (translate applied first, in the box's own
-  // unscaled units, then the whole thing scaled around center), the exact translate that
-  // fully re-centers a point at fractional position `p` (0..1 across the image) works out to
-  // -(p - 0.5)*100 regardless of S -- and the largest translate that scale S can carry
-  // without pulling the image's edge in past the container works out to (S-1)/(2S)*100.
-  // Below, points near the middle get re-centered almost exactly; points near an edge get
-  // pushed as close as that edge allows and no further, so this can never expose blank space.
-  function pointZoomTransform(annotationEl){
-    const x = parseFloat(annotationEl.style.left) || 50;
-    const y = parseFloat(annotationEl.style.top) || 50;
-    const scale = 1.65;
-    const maxPan = (scale - 1) / (2 * scale) * 100 * 0.94; // small margin under the exact bound
-    const panX = Math.max(-maxPan, Math.min(maxPan, -(x - 50)));
-    const panY = Math.max(-maxPan, Math.min(maxPan, -(y - 50)));
-    return `scale(${scale}) translate(${panX.toFixed(2)}%, ${panY.toFixed(2)}%)`;
-  }
-  function applyPointZoom(slide){
-    if(slide.dataset.pageType !== "background") return;
-    const layer = slide.querySelector(".annotation-layer.annotation-layer--stepped");
-    const active = layer && layer.querySelector(".annotation.step-active");
-    const media = slide.querySelector(":scope > .media-fill .media-el");
-    if(!active || !media) return;
-    media.style.transform = pointZoomTransform(active);
-  }
+  function stepActiveClass(){ return "active"; }
   function resetSteps(slide){
     const activeClass = stepActiveClass(slide);
     getStepEls(slide).forEach((el, i) => el.classList.toggle(activeClass, i === 0));
     slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === 0));
-    applyPointZoom(slide);
   }
   function advanceStep(slide, dir){
     const activeClass = stepActiveClass(slide);
@@ -5950,7 +5934,6 @@
     steps[activeIdx].classList.remove(activeClass);
     steps[nextIdx].classList.add(activeClass);
     slide.querySelectorAll(".sequence-dot").forEach((dot, i) => dot.classList.toggle("active", i === nextIdx));
-    applyPointZoom(slide);
     return true;
   }
   // small accumulator so a continuous trackpad stream doesn't blow through every image at
