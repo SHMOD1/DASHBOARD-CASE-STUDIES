@@ -543,23 +543,24 @@
      like a "YEAR: 1854" callout, as distinct from the longer highlighter-marker style above */
   .annotation-text.chip-stat{background:#7af9b4;border-radius:20px;padding:3px 14px;
     border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;}
-  /* the visitor-facing zoom-to-point view (never Edit Mode, which keeps the plain
-     Highlight/Stat Chip styling above so authors still see what they picked) floats the
-     label above its point instead of centering on top of it, with a small tail connecting
-     straight down to the exact spot — a map-callout card rather than a flat highlighter
-     tag, and the same white card + thin tail regardless of which style the author chose, so
-     the one thing on screen at a time reads as one deliberate accent instead of competing
-     yellow/mint treatments. See pointZoomTransform() for why it's *this* point that zooms in. */
-  body:not(.edit-on) .annotation-layer--stepped .annotation{
+  /* the zoom-to-point callout card floats the label above its point instead of centering on
+     top of it, with a small tail connecting straight down to the exact spot — a map-callout
+     card rather than a flat highlighter tag, and the same white card + thin tail regardless
+     of which style the author chose, so the one thing on screen at a time reads as one
+     deliberate accent instead of competing yellow/mint treatments. See pointZoomTransform()
+     for why it's *this* point that zooms in. Applied in Edit Mode too (not just the visitor
+     view) so what an author sees while editing matches the published result exactly, instead
+     of the plain centered/highlighter styling the CSS default would otherwise still show. */
+  .annotation-layer--stepped .annotation{
     transform:translate(-50%, calc(-100% - 15px));
     max-width:min(280px, 70vw);
   }
-  body:not(.edit-on) .annotation-layer--stepped .annotation-text,
-  body:not(.edit-on) .annotation-layer--stepped .annotation-text.chip-stat{
+  .annotation-layer--stepped .annotation-text,
+  .annotation-layer--stepped .annotation-text.chip-stat{
     background:#fff;border:1px solid rgba(20,20,19,.14);border-radius:7px;
     padding:11px 15px;box-shadow:0 14px 30px rgba(0,0,0,.3);
   }
-  body:not(.edit-on) .annotation-layer--stepped .annotation::after{
+  .annotation-layer--stepped .annotation::after{
     content:"";position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);
     width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
     border-top:8px solid #fff;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18));
@@ -4764,10 +4765,11 @@
         placed.push(box());
       });
       // the zoom-to-point callout card (see the .annotation-layer--stepped CSS) floats above
-      // its point instead of centering on it -- match that same baseline here, or a
-      // collision nudge would silently snap it back to centered the moment dx/dy stop being
-      // both zero, undoing the CSS positioning the instant a label needs to dodge something
-      const stepped = layer.classList.contains("annotation-layer--stepped") && !editOn;
+      // its point instead of centering on it -- in Edit Mode too, now that the styling is
+      // unscoped -- so match that same baseline here, or a collision nudge would silently
+      // snap it back to centered the moment dx/dy stop being both zero, undoing the CSS
+      // positioning the instant a label needs to dodge something
+      const stepped = layer.classList.contains("annotation-layer--stepped");
       const baseY = stepped ? "calc(-100% - 15px)" : "-50%";
       items.forEach(it => {
         it.el.style.transform = (it.dx || it.dy)
