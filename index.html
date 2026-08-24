@@ -508,18 +508,23 @@
   .grid-col-add:hover{background:rgba(0,0,0,.7);}
 
   /* ---------- page type (c) Scroll Sequence: a stack of steps, one visible at a time,
-     switched instantly by JS as the reader scrolls through them — never blended/overlapping
-     with the step before or after it — on a plain solid-blue field rather than a busy
-     full-bleed photo, so a step's own image stays a clear, centered focal point and any
-     annotation text on it reads easily; each step carries its own optional caption text */
+     cross-dissolving smoothly into the next as the reader scrolls through them, on a plain
+     solid-blue field rather than a busy full-bleed photo, so a step's own image stays a
+     clear, centered focal point; each step carries its own optional caption text. The image
+     always sits in the exact same spot at the exact same size (see .sequence-step-media) --
+     only the picture (and caption) inside that one fixed frame ever changes. */
   .sequence-steps{position:absolute;inset:0;}
-  .sequence-step{position:absolute;inset:0;opacity:0;pointer-events:none;background:#005ba6;}
+  .sequence-step{
+    position:absolute;inset:0;opacity:0;pointer-events:none;background:#005ba6;
+    transition:opacity .9s ease;
+  }
   .sequence-step.active{opacity:1;pointer-events:auto;z-index:1;}
-  /* the image/GIF/video sits centered and large, at its own natural shape (never cropped) —
-     the plain blue field around it is what stays constant, so only the picture changes */
+  /* the image/GIF/video sits centered, at its own natural shape (never cropped or stretched),
+     inside one fixed frame sized to fill almost the entire screen — the plain blue margin
+     around it is what stays constant, so only the picture changes */
   .sequence-step-media{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:min(64vw,860px);height:min(72vh,860px);
+    width:min(92vw,1600px);height:min(88vh,1100px);
     display:flex;align-items:center;justify-content:center;
   }
   .sequence-step-media .media-fill{position:relative;inset:auto;width:100%;height:100%;background:none;}
@@ -5332,7 +5337,6 @@
         <div class="sequence-step-media">
           <div class="media-fill" data-media-scope="sequenceStep" ${idAttrs}>${mediaMarkup(step.media, true)}</div>
         </div>
-        <div class="annotation-layer">${renderAnnotationItems("sequenceStep", chapter.id, entry.id, step.id, step.annotations)}</div>
         <div class="sequence-step-index">${i + 1} / ${total}</div>
         <div class="sequence-step-toolbar">
           <button type="button" data-act="moveSequenceStep" data-dir="-1" ${idAttrs}>↑</button>
@@ -6134,9 +6138,9 @@
   let sequenceWheelAccum = 0;
   let sequenceWheelLast = 0;
   const SEQUENCE_STEP_THRESHOLD = 80;
-  // long enough for the slow 1.1s cross-dissolve (see .sequence-step) to mostly finish before
-  // the next one can start, so a fast scroll doesn't stack fades on top of each other
-  const SEQUENCE_STEP_COOLDOWN_MS = 550;
+  // long enough for the .9s cross-dissolve (see .sequence-step's opacity transition) to mostly
+  // finish before the next one can start, so a fast scroll doesn't stack fades on top of each other
+  const SEQUENCE_STEP_COOLDOWN_MS = 850;
   function handleSequenceWheel(e){
     if(!gateSlideEl || gateReady) return false;
     if(!getStepEls(gateSlideEl).length) return false;
