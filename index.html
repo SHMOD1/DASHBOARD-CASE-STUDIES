@@ -344,20 +344,42 @@
      the content instead of dimming the media underneath it */
   .entry-content{text-shadow:0 2px 10px rgba(0,0,0,.75), 0 0 30px rgba(0,0,0,.55);}
 
-  /* page type (a) Section Intro — centered divider page, no block grid */
+  /* page type (a) Section Intro — a clean, quiet divider: a small title label above one large
+     pull-quote, both centered, nothing else competing for attention. A background photo is an
+     optional accent (see entry-intro--plain below for when there isn't one) rather than the
+     assumed full-bleed treatment every other page type gets. */
   .entry[data-page-type="intro"]{align-items:center;}
   .entry[data-page-type="intro"] .entry-content{text-align:center;}
-  .entry[data-page-type="intro"] .entry-title{font-size:clamp(32px,5.5vw,64px);max-width:800px;margin-left:auto;margin-right:auto;}
-  .entry[data-page-type="intro"] .entry-caption{font-size:16px;font-style:normal;max-width:640px;margin:14px auto 0;}
-  /* a short optional instruction line (e.g. "click and hold to enlarge") plus a "Dive In"
-     button that jumps straight to the next slide, so an intro page gives a reader a clear
-     way to start, not just a title to read past */
-  .entry-hint{
-    display:inline-block;background:#7af9b4;color:#134370;font-family:var(--font-body);
-    font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:6px 14px;border-radius:6px;
-    margin-top:14px;text-shadow:none;min-width:40px;min-height:1em;
-    border:2px solid #005ba6;box-shadow:3px 3px 0 #134370;
+  /* .entry-title's own base rule (font-size:clamp(24px,3.2vw,40px), further down this
+     stylesheet) ties .intro-title on specificity -- source order would let it win and this
+     override would silently do nothing, so it needs the page-type scope for real priority */
+  .entry[data-page-type="intro"] .intro-title{
+    font-size:clamp(15px,1.6vw,19px);letter-spacing:.04em;text-transform:uppercase;
+    margin:0 0 28px;max-width:none;
   }
+  .intro-quote{
+    display:block;position:relative;font-family:var(--font-main);font-style:italic;font-weight:600;
+    font-size:clamp(24px,3.6vw,44px);line-height:1.4;max-width:760px;margin:0 auto;
+    min-height:1.4em; /* keeps the empty-state dashed outline visible in Edit Mode before typing */
+  }
+  .intro-quote::before{
+    content:"\201C";position:absolute;left:0;top:0;transform:translate(-.65em,-.22em);
+    font-family:var(--font-main);font-style:normal;font-weight:800;font-size:2.4em;line-height:1;
+    color:#0dbfdb;opacity:.55;pointer-events:none;
+  }
+  /* an intro page with no quote typed in yet (text-empty, kept live by the same mechanism
+     that runs the headings above) shows nothing to a visitor -- no empty box, no decorative
+     mark floating over nothing -- while Edit Mode keeps it visible via min-height so there's
+     still something there to click into */
+  body:not(.edit-on) .intro-quote.text-empty{ display:none; }
+  @media (max-width: 640px){
+    .intro-quote::before{ display:none; } /* no room to hang it off the left edge on a phone */
+  }
+  /* a fresh Section Intro (or one whose photo was removed) falls back to a plain panel instead
+     of the generic "No image added yet" placeholder every other full-bleed page type shows --
+     that placeholder is meant for editors, not something a finished intro page should ever
+     present to a visitor as if it were the design. */
+  body:not(.edit-on) .entry-intro--plain > .media-fill .media-empty{ display:none; }
   .entry-intro-cta{
     display:inline-block;margin-top:22px;background:#7af9b4;color:#005ba6;font-family:var(--font-main);
     font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
@@ -1239,14 +1261,17 @@
       year:String(new Date().getFullYear()),
       title: pageType === "intro" ? "Section Introduction" : "New Entry",
       caption:"",
-      media:{ kind:"image", src: placeholder(s, "N"), embed:false },
+      // Section Intro starts with no background image -- it's an optional accent for this
+      // page type, not assumed the way it is for every other page (see renderEntryIntro()),
+      // so a fresh one is a clean panel until the author deliberately adds a photo.
+      media: pageType === "intro" ? { kind:"image", src:null, embed:false } : { kind:"image", src: placeholder(s, "N"), embed:false },
       blocks:[], sequence:[], annotations:[], callout:null
     };
     if(pageType === "background" || pageType === "grid"){
       entry.blocks = [ newBlock("body") ];
       if(pageType === "grid") entry.gridColumns = 3;
     } else if(pageType === "intro"){
-      entry.hint = "";
+      entry.quote = "";
     } else if(pageType === "sequence"){
       entry.sequence = [
         { id:newId(), media:{ kind:"image", src:placeholder(s, "1"), embed:false }, text:"", annotations:[] },
@@ -4574,7 +4599,10 @@
         if(!entry.blocks) entry.blocks = [];
         if(!entry.sequence) entry.sequence = [];
         if(entry.pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
-        if(entry.pageType === "intro" && entry.hint == null) entry.hint = "";
+        // "hint" (a small instruction pill) is retired in favor of "quote" (see
+        // renderEntryIntro()) -- carry over anything an author already typed into it rather
+        // than silently dropping their content
+        if(entry.pageType === "intro" && entry.quote == null) entry.quote = entry.hint || "";
         entry.sequence.forEach(step => { if(!step.annotations) step.annotations = []; });
       });
     });
@@ -4825,7 +4853,7 @@
   // in it — but only on the published view; Edit Mode keeps the box visible so there's still
   // something to click on to type into it
   const EMPTY_HIGHLIGHT_SELECTOR = ".chapter-title, .entry-title, .block--heading, " +
-    ".block--subheading, .block--body, .block--quote, .block--caption, .annotation-text";
+    ".block--subheading, .block--body, .block--quote, .block--caption, .annotation-text, .intro-quote";
   function refreshEmptyHighlights(){
     document.querySelectorAll(EMPTY_HIGHLIGHT_SELECTOR).forEach(el => {
       el.classList.toggle("text-empty", el.textContent.trim() === "");
@@ -5097,19 +5125,23 @@
       </section>`;
   }
 
-  // page type (a): Section Introduction — a simpler, centered full-bleed divider page:
-  // background media (no opacity) plus a heading and a short line of text, no block grid
+  // page type (a): Section Introduction — a clean, quiet divider page: a small title and one
+  // large pull-quote, centered, with a background photo as an optional accent rather than a
+  // given -- a fresh one has none (see newEntry()) and falls back to a plain dark panel (see
+  // .entry-intro--plain further down) instead of the generic full-bleed placeholder every
+  // other page type gets, since that placeholder's "No image added yet" label was always
+  // meant for editors, not something a real intro page should ever show a visitor.
   function renderEntryIntro(chapter, entry){
+    const hasMedia = !!(entry.media && entry.media.src);
     return `
-      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="intro">
+      <section class="entry${hasMedia ? "" : " entry-intro--plain"}" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="intro">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
         ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
-        <div class="entry-content">
-          <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
-          <div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>
-          <div class="entry-hint${entry.hint ? "" : " edit-only"}" data-editable data-bind-type="entryHint" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.hint || "")}</div>
+        <div class="entry-content intro-content">
+          <h3 class="entry-title intro-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
+          <blockquote class="intro-quote${entry.quote ? "" : " text-empty"}" data-editable data-bind-type="entryQuote" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.quote || "")}</blockquote>
         </div>
       </section>`;
   }
@@ -5467,8 +5499,8 @@
       syncRailEntry(el.dataset.entryId);
     } else if(bt === "entryCaption"){
       getEntry(el.dataset.chapterId, el.dataset.entryId).caption = el.textContent;
-    } else if(bt === "entryHint"){
-      getEntry(el.dataset.chapterId, el.dataset.entryId).hint = el.textContent;
+    } else if(bt === "entryQuote"){
+      getEntry(el.dataset.chapterId, el.dataset.entryId).quote = el.textContent;
     } else if(bt === "blockHtml"){
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     } else if(bt === "blockMediaCaption"){
