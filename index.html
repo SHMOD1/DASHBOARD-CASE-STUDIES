@@ -436,15 +436,76 @@
     flex-direction:column;align-items:stretch;max-width:min(36vw,460px);
   }
 
-  /* page type (d) Grid — same template as Full Background, just a wider content column so
-     the freeform box grid has more room */
-  .entry[data-page-type="grid"] .entry-content{max-width:1680px;}
-  /* every block — text or media — snaps into an equal-width column, N per row (2/3/4,
-     chosen per page); a media block set to "Full width" still spans the entire row */
-  .entry[data-page-type="grid"] .entry-blocks{display:grid;grid-template-columns:repeat(var(--grid-cols,3),1fr);gap:18px 22px;align-items:start;}
-  .entry[data-page-type="grid"] .entry-blocks .block-wrap{width:100%;max-width:100%;}
-  .entry[data-page-type="grid"] .entry-blocks .block-media-wrap.block-media--Full{grid-column:1/-1;}
-  .entry[data-page-type="grid"] .add-block-row{grid-column:1/-1;}
+  /* page type (d) Grid — a fixed row of full-bleed image columns (3 or 4, entry.gridColumns),
+     edge to edge, filling the whole screen -- no gaps, no cards, no rounded corners. Each
+     column carries exactly two pieces of text: a title anchored near the bottom at all times,
+     and a subtitle that only appears on hover, when the title also lifts toward the middle and
+     a thin rule appears between them (see .grid-col-textwrap). Nothing else -- no annotation
+     pills, no per-image size/alignment options -- those belonged to a freeform flowing grid of
+     arbitrarily sized cards, which this isn't anymore. */
+  .grid-columns{position:absolute;inset:0;display:flex;}
+  .grid-col{position:relative;flex:1 1 0;min-width:0;height:100%;overflow:hidden;}
+  .grid-col + .grid-col{border-left:1px solid rgba(0,0,0,.35);}
+  .grid-col > .media-fill{position:absolute;inset:0;}
+  .grid-col .media-el{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .6s cubic-bezier(.16,.68,.32,1);
+  }
+  .grid-col:hover .media-el{transform:scale(1.05);}
+  .grid-col::after{
+    /* a soft, permanent gradient keeps the title legible over any photo without a hard scrim
+       dimming the whole image the way the old caption overlay did */
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 38%);
+  }
+  .grid-col-toolbar{position:absolute;top:14px;right:14px;z-index:3;display:none;gap:6px;}
+  body.edit-on .grid-col-toolbar{display:flex;}
+  .grid-col-toolbar button{
+    font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.35);color:#fff;
+    padding:5px 9px;border-radius:14px;
+  }
+  .grid-col-toolbar button:hover{background:rgba(0,0,0,.75);}
+  .grid-col-toolbar button.danger:hover{border-color:#e37a7a;color:#ffbcbc;}
+  /* anchored via top:50% + a translateY that centers it, then pushed further down by a fixed
+     viewport-height offset for the resting/bottom position -- vh is safe to use here (rather
+     than a %, which would need the column's own height) because a Grid column is always
+     exactly 100vh tall, side-by-side columns splitting the width, never the height */
+  .grid-col-textwrap{
+    position:absolute;left:0;right:0;top:50%;text-align:center;padding:0 9%;z-index:2;
+    transform:translateY(calc(41vh - 50%));
+    transition:transform .5s cubic-bezier(.16,.68,.32,1);
+    pointer-events:none; /* let clicks reach the media hover-overlay underneath; the title/
+      subtitle opt back in below since Edit Mode still needs to click into them to type */
+  }
+  .grid-col:hover .grid-col-textwrap{transform:translateY(-50%);}
+  .grid-col-title{
+    font-family:var(--font-main);font-weight:700;font-size:clamp(19px,1.9vw,28px);
+    line-height:1.3;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.6);
+    pointer-events:auto;
+  }
+  .grid-col-divider{
+    width:34px;height:1px;background:rgba(255,255,255,.55);margin:16px auto 0;
+    opacity:0;transition:opacity .35s ease .05s;
+  }
+  .grid-col:hover .grid-col-divider{opacity:1;}
+  .grid-col-subtitle{
+    font-family:var(--font-body);font-size:14px;line-height:1.5;color:rgba(255,255,255,.88);
+    margin-top:12px;max-width:320px;margin-left:auto;margin-right:auto;
+    opacity:0;transition:opacity .35s ease .05s;
+    pointer-events:auto;
+  }
+  .grid-col:hover .grid-col-subtitle{opacity:1;}
+  .grid-col--empty{
+    display:flex;align-items:center;justify-content:center;
+    background:repeating-linear-gradient(135deg,var(--bg-alt),var(--bg-alt) 10px,var(--paper) 10px,var(--paper) 20px);
+  }
+  .grid-col-add{
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(0,0,0,.5);border:1.5px dashed #0dbfdb;color:#0dbfdb;
+    padding:10px 20px;border-radius:20px;
+  }
+  .grid-col-add:hover{background:rgba(0,0,0,.7);}
 
   /* ---------- page type (c) Scroll Sequence: a stack of steps, one visible at a time,
      switched instantly by JS as the reader scrolls through them — never blended/overlapping
@@ -761,29 +822,6 @@
   .block-media .video-frame{aspect-ratio:16/9;}
   .block-media-caption{font-family:var(--font-body);font-size:11.5px;color:rgba(240,241,250,.65);margin-top:8px;font-style:italic;}
 
-  /* ---------- Grid caption cards: a tall image with its caption/annotation text set
-     directly into the photo, in a scrim at the bottom -- one legible layer, always visible,
-     no flip/rotation. Only cards with something to say get this treatment (see
-     gridCaptionText()); a purely decorative image is left as a plain card. ---------- */
-  .grid-caption-card .block-media{
-    position:relative;aspect-ratio:3/4;border-radius:8px;overflow:hidden;min-height:0;
-  }
-  .grid-caption-card .block-media .media-fill{ position:absolute;inset:0; }
-  .grid-caption-card .block-media .media-el{ width:100%;height:100%;object-fit:cover; }
-  .grid-caption-overlay{
-    position:absolute;inset:0;z-index:1;display:flex;align-items:flex-end;justify-content:center;
-    padding:16% 22px 15%;text-align:center;
-    background:linear-gradient(to top, rgba(10,10,14,.8) 0%, rgba(10,10,14,.4) 42%, transparent 72%);
-  }
-  .grid-caption-text{
-    font-family:var(--font-main);font-weight:700;font-size:clamp(19px,1.7vw,25px);line-height:1.25;
-    color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.55);
-  }
-  /* a Grid caption block folded onto its paired image's caption overlay (see
-     renderEntryBlocksPage) still renders normally -- and stays fully editable -- in Edit
-     Mode; visitors just never see it as its own separate grid cell */
-  body:not(.edit-on) .block-wrap.grid-paired-text{ display:none; }
-
   .add-block-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;}
   .add-block-btn{align-self:flex-start;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;
     background:rgba(0,0,0,.4);border:1px dashed rgba(255,255,255,.35);color:#f1ede2;padding:6px 12px;border-radius:20px;}
@@ -871,10 +909,6 @@
     .hero-content, .chapter-cover-content, .entry-content{padding:0 6% 8vh;}
     .add-between, .add-entry-chapter{padding:14px 6%;}
 
-    /* Grid pages: never let columns squeeze narrow enough that a label wraps to one letter
-       per line -- 3-4 desktop columns collapse to 2, regardless of the per-page setting. */
-    .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:repeat(2,1fr) !important;}
-
     /* draggable annotation labels never worked well on a phone screen no matter how much
        collision-avoidance ran on top of them -- too many labels crammed onto too short an
        image. Drop them entirely on mobile everywhere except the Full Background section's
@@ -885,9 +919,6 @@
        unreachable on touch devices anyway, so there's no editing UI that needs the dropped
        ones visible here either). */
     .annotation-layer:not(.annotation-layer--labeled){display:none !important;}
-  }
-  @media (max-width: 480px){
-    .entry[data-page-type="grid"] .entry-blocks{grid-template-columns:1fr !important;}
   }
 
   /* ---------- mobile: stop overlaying text on full-bleed images entirely ----------
@@ -900,14 +931,18 @@
      an ordinary article. Mobile-only -- desktop keeps the original full-screen reveal/hold
      effect exactly as it was. */
   @media (max-width: 860px){
-    /* Scroll Sequence pages are deliberately excluded from all of this -- stepping through a
-       set of images only makes sense while staying pinned on one screen, so they keep the
-       original sticky/full-bleed/pinned treatment (and gain touch-swipe stepping, see the
-       touch handlers near handleSequenceWheel) on every screen size, not just desktop. */
-    .hero, .chapter-cover, .entry:not([data-page-type="sequence"]){
+    /* Scroll Sequence and Grid pages are both deliberately excluded from all of this. Scroll
+       Sequence: stepping through a set of images only makes sense while staying pinned on one
+       screen, so it keeps the original sticky/full-bleed/pinned treatment (and gains touch-
+       swipe stepping, see the touch handlers near handleSequenceWheel) on every screen size.
+       Grid: it's already a fixed set of full-bleed images with nothing else on the page to
+       flow underneath it -- see the dedicated mobile rules further down, which keep it pinned
+       full-screen too but stack its columns into rows instead of sitting them side by side. */
+    .hero, .chapter-cover, .entry:not([data-page-type="sequence"]):not([data-page-type="grid"]){
       position:relative;top:auto;min-height:0;height:auto;display:block;overflow:visible;
     }
-    .hero > .media-fill, .chapter-cover > .media-fill, .entry:not([data-page-type="sequence"]) > .media-fill{
+    .hero > .media-fill, .chapter-cover > .media-fill,
+    .entry:not([data-page-type="sequence"]):not([data-page-type="grid"]) > .media-fill{
       position:relative;inset:auto;width:100%;height:56vh;max-height:480px;
     }
     /* the Full Background text box's left/top percentages are authored against the image
@@ -967,6 +1002,20 @@
     /* the freeform Full Background block column no longer needs to stay narrow to leave
        room for a photo behind it -- there's no photo behind it here anymore, it's a card */
     .entry[data-page-type="background"] .entry-blocks{max-width:none;}
+  }
+
+  /* Grid on mobile: still a pinned, full-screen 100vh section (unlike every other page type,
+     see the [data-page-type="grid"] exclusions above) -- there's just no room to sit 3-4
+     columns side by side on a phone, so they stack into horizontal bands instead, splitting
+     the same 100vh down instead of across. There's no hover on a touchscreen, so the subtitle
+     (and its divider) show permanently rather than staying undiscoverable. */
+  @media (max-width: 720px){
+    .grid-columns{flex-direction:column;}
+    .grid-col + .grid-col{border-left:none;border-top:1px solid rgba(0,0,0,.35);}
+    .grid-col-textwrap{transform:translateY(-50%);}
+    .grid-col-divider, .grid-col-subtitle{opacity:1;}
+    .grid-col-title{font-size:clamp(15px,4vw,20px);}
+    .grid-col-subtitle{font-size:12.5px;max-width:88%;}
   }
 </style>
 </head>
@@ -1276,7 +1325,12 @@
   // an inline media block: an image/GIF/video overlay dropped into the text flow, alongside
   // the text blocks — its own toolbar (size/alignment) and the shared media modal
   function newMediaBlock(media){
-    return { id:newId(), type:"media", media: media || { kind:"image", src:null, embed:false }, caption:"", size:"M", align:"left" };
+    return {
+      id:newId(), type:"media", media: media || { kind:"image", src:null, embed:false }, caption:"", size:"M", align:"left",
+      // Grid's own bottom-anchored title + hover-revealed subtitle (see renderEntryGrid()) --
+      // unused outside Grid, harmless to carry on every media block regardless of page type
+      gridTitle:"", gridSubtitle:""
+    };
   }
 
   // every page a chapter contains is one of 4 types: a full-bleed "background" page (the
@@ -1304,9 +1358,11 @@
       media: pageType === "intro" ? { kind:"image", src:null, embed:false } : { kind:"image", src: placeholder(s, "N"), embed:false },
       blocks:[], sequence:[], annotations:[], callout:null
     };
-    if(pageType === "background" || pageType === "grid"){
+    if(pageType === "background"){
       entry.blocks = [ newBlock("body") ];
-      if(pageType === "grid") entry.gridColumns = 3;
+    } else if(pageType === "grid"){
+      entry.gridColumns = 3;
+      entry.blocks = [0, 1, 2].map(i => newMediaBlock({ kind:"image", src:placeholder(s + i, String(i + 1)), embed:false }));
     } else if(pageType === "intro"){
       entry.quote = "";
       entry.introImage = null;
@@ -4641,10 +4697,30 @@
         // renderEntryIntro()) -- carry over anything an author already typed into it rather
         // than silently dropping their content
         if(entry.pageType === "intro" && entry.quote == null) entry.quote = entry.hint || "";
+        if(entry.pageType === "grid") migrateGridBlockTitles(entry);
         entry.sequence.forEach(step => { if(!step.annotations) step.annotations = []; });
       });
     });
     return data;
+  }
+  // Grid used to show each image's text as annotation pills and/or a paired caption-row
+  // block (see the now-removed .grid-caption-card rendering) -- Grid is now a fixed row of
+  // full-bleed columns with exactly one title + one hover-revealed subtitle per image (see
+  // renderEntryGrid()), so fold whatever text already existed into those two fields once,
+  // the same way it would have been combined for display before. Guarded by gridTitle being
+  // unset so this only ever runs once per block, and re-running it is harmless either way.
+  function migrateGridBlockTitles(entry){
+    const pairing = detectGridCaptionPairing(entry);
+    const pairedTextFor = pairing ? pairing.pairedTextFor : {};
+    (entry.blocks || []).forEach(b => {
+      if(b.type !== "media" || b.gridTitle != null) return;
+      const parts = [];
+      if(pairedTextFor[b.id]) parts.push(pairedTextFor[b.id]);
+      if(b.caption && b.caption.trim()) parts.push(b.caption.trim());
+      (b.annotations || []).forEach(a => { if(a.text && a.text.trim()) parts.push(a.text.trim()); });
+      b.gridTitle = parts[0] || "";
+      b.gridSubtitle = parts.slice(1).join(" ") || "";
+    });
   }
   // state starts as the baked-in default and is swapped for whatever's in IndexedDB (if
   // anything) once initState() resolves, just before the first render — see "init" at the
@@ -5072,8 +5148,8 @@
   function entryToolbarHtml(chapter, entry){
     const optTypes = PAGE_TYPES.map(t => `<option value="${t.type}" ${t.type===entry.pageType?"selected":""}>${t.label}</option>`).join("");
     const gridColumnsHtml = entry.pageType === "grid"
-      ? `<select data-act="entryGridColumns" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" title="Columns per row">${
-          [2,3,4].map(n => `<option value="${n}" ${n===(entry.gridColumns||3)?"selected":""}>${n} per row</option>`).join("")}</select>`
+      ? `<select data-act="entryGridColumns" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" title="Columns">${
+          [3,4].map(n => `<option value="${n}" ${n===(entry.gridColumns||3)?"selected":""}>${n} columns</option>`).join("")}</select>`
       : "";
     return `
       <div class="entry-toolbar edit-only">
@@ -5088,22 +5164,22 @@
   function renderEntry(chapter, entry){
     if(entry.pageType === "intro") return renderEntryIntro(chapter, entry);
     if(entry.pageType === "sequence") return renderEntrySequence(chapter, entry);
-    return renderEntryBlocksPage(chapter, entry, entry.pageType === "grid" ? "grid" : "background");
+    if(entry.pageType === "grid") return renderEntryGrid(chapter, entry);
+    return renderEntryBlocksPage(chapter, entry);
   }
 
-  // page types (b) Full Background and (d) Grid share this template — both are a full-bleed
-  // background with a freeform, add-one-at-a-time box grid of text/media; "grid" just widens
-  // the content column so the grid gets more room to breathe
-  // Grid pages are sometimes authored as a leading run of images followed by an equal-length
-  // run of caption blocks underneath (image i's caption is the i-th block in that second
-  // run), rather than via each image's own caption/annotations. Detect that structurally,
-  // but conservatively: require the *whole* entry to be exactly [media x N, text x N] with
-  // nothing else mixed in, and require none of those media blocks to already have their own
-  // caption/annotations. Both guards exist because a looser, position-only check (pair block
-  // i with block i+gridColumns) mis-fired twice on real content: once grabbing an unrelated
-  // trailing pull-quote that only happened to land in the same column as image 0, and once
-  // duplicating text onto images that already had their own annotations doing this job.
-  // Anything that doesn't fit this exact shape is left completely alone.
+  // migrateGridBlockTitles() (see migrateState()) needs to recognize Grid's old authoring
+  // pattern once, to fold it into today's title/subtitle fields -- a leading run of images
+  // followed by an equal-length run of caption blocks underneath (image i's caption is the
+  // i-th block in that second run), rather than via each image's own caption/annotations.
+  // Detect that structurally, but conservatively: require the *whole* entry to be exactly
+  // [media x N, text x N] with nothing else mixed in, and require none of those media blocks
+  // to already have their own caption/annotations. Both guards exist because a looser,
+  // position-only check (pair block i with block i+gridColumns) mis-fired twice on real
+  // content when this same logic drove live rendering: once grabbing an unrelated trailing
+  // pull-quote that only happened to land in the same column as image 0, and once duplicating
+  // text onto images that already had their own annotations doing this job. Anything that
+  // doesn't fit this exact shape is left completely alone.
   function detectGridCaptionPairing(entry){
     const blocks = entry.blocks;
     let split = 0;
@@ -5120,27 +5196,18 @@
     return { pairedTextFor, pairedAwayIds };
   }
 
-  function renderEntryBlocksPage(chapter, entry, variant){
-    const pairing = variant === "grid" ? detectGridCaptionPairing(entry) : null;
-    const pairedTextFor = pairing ? pairing.pairedTextFor : {};
-    const pairedAwayIds = pairing ? pairing.pairedAwayIds : new Set();
-    const blocksHtml = entry.blocks
-      .map(b => renderBlock(chapter.id, entry.id, b, variant, pairedTextFor[b.id], pairedAwayIds.has(b.id)))
-      .join("");
+  function renderEntryBlocksPage(chapter, entry){
+    const blocksHtml = entry.blocks.map(b => renderBlock(chapter.id, entry.id, b)).join("");
     const captionHtml = entry.caption
       ? `<div class="entry-caption" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption)}</div>`
       : `<div class="entry-caption edit-only" data-editable data-bind-type="entryCaption" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.caption || "")}</div>`;
-    // "Grid" arranges every block — text or media — into a real N-per-row grid instead of
-    // the freeform flex-wrap flow Full Background uses
-    const blocksStyle = variant === "grid" ? ` style="--grid-cols:${entry.gridColumns || 3}"` : "";
     // Full Background entries render every point as a small dot sitting exactly on its spot;
     // clicking one opens a popup card with its label right above it (see
     // .annotation-layer--labeled and the .annotation-dot click handler further down) instead
     // of overlaying every label on the photo at once, or zooming/stepping through them.
-    const annLayerClass = variant === "background" && (entry.annotations || []).length
-      ? " annotation-layer--labeled" : "";
+    const annLayerClass = (entry.annotations || []).length ? " annotation-layer--labeled" : "";
     return `
-      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="${variant}">
+      <section class="entry" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="background">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer${annLayerClass}">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
         ${entryToolbarHtml(chapter, entry)}
@@ -5152,7 +5219,7 @@
           </div>
           <h3 class="entry-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
           ${captionHtml}
-          <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}"${blocksStyle}>
+          <div class="entry-blocks" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">
             ${blocksHtml}
             <div class="add-block-row edit-only">
               <button type="button" class="add-block-btn" data-act="addBlock" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">+ Add text block</button>
@@ -5161,6 +5228,50 @@
           </div>
         </div>
       </section>`;
+  }
+
+  // page type (d): Grid — a fixed row of full-bleed image columns filling the whole screen,
+  // edge to edge, exactly like a Full Background entry's photo but split into 3 or 4 side by
+  // side instead of one. Each column carries exactly two pieces of text: a title, anchored
+  // near the bottom at all times, and a subtitle that's hidden until that column is hovered,
+  // when the title also lifts toward the middle and a thin rule appears between them (see
+  // .grid-col-textwrap). No annotation pills, no caption overlay, no per-image toolbar of
+  // size/alignment options -- those all applied to a freeform flowing grid of arbitrarily
+  // sized cards, which this isn't anymore.
+  function renderEntryGrid(chapter, entry){
+    const cols = entry.gridColumns === 4 ? 4 : 3;
+    const mediaBlocks = entry.blocks.filter(b => b.type === "media");
+    const colsHtml = Array.from({ length: cols }, (_, i) => mediaBlocks[i] || null)
+      .map(block => renderGridColumn(chapter.id, entry.id, block))
+      .join("");
+    return `
+      <section class="entry entry-grid" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="grid">
+        ${entryToolbarHtml(chapter, entry)}
+        <div class="grid-columns" style="--grid-cols:${cols}">${colsHtml}</div>
+      </section>`;
+  }
+  function renderGridColumn(chapterId, entryId, block){
+    if(!block){
+      return `
+        <div class="grid-col grid-col--empty edit-only">
+          <button type="button" class="grid-col-add" data-act="addMediaBlock" data-chapter-id="${chapterId}" data-entry-id="${entryId}">+ Add Image</button>
+        </div>`;
+    }
+    const idAttrs = `data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}"`;
+    return `
+      <div class="grid-col" data-block-id="${block.id}">
+        <div class="grid-col-toolbar edit-only">
+          <button type="button" data-act="moveBlock" data-dir="-1" ${idAttrs} title="Move left">←</button>
+          <button type="button" data-act="moveBlock" data-dir="1" ${idAttrs} title="Move right">→</button>
+          <button type="button" class="danger" data-act="deleteBlock" ${idAttrs}>✕</button>
+        </div>
+        <div class="media-fill" data-media-scope="blockMedia" ${idAttrs}>${mediaMarkup(block.media)}</div>
+        <div class="grid-col-textwrap">
+          <div class="grid-col-title${block.gridTitle ? "" : " edit-only"}" data-editable data-bind-type="blockGridTitle" ${idAttrs} contenteditable="false">${escapeHtml(block.gridTitle || "")}</div>
+          <div class="grid-col-divider${block.gridSubtitle ? "" : " edit-only"}"></div>
+          <div class="grid-col-subtitle${block.gridSubtitle ? "" : " edit-only"}" data-editable data-bind-type="blockGridSubtitle" ${idAttrs} contenteditable="false">${escapeHtml(block.gridSubtitle || "")}</div>
+        </div>
+      </div>`;
   }
 
   // page type (a): Section Introduction — a clean, quiet divider page: a small title and one
@@ -5270,8 +5381,8 @@
     div.innerHTML = html || "";
     return div.textContent.trim();
   }
-  function renderBlock(chapterId, entryId, block, variant, pairedText, pairedAway){
-    if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block, variant, pairedText);
+  function renderBlock(chapterId, entryId, block){
+    if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block);
     const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
     const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};${block.color ? `color:${block.color};` : ""}`;
     const optTypes = BLOCK_TYPES.map(t => `<option value="${t.type}" ${t.type===block.type?"selected":""}>${t.label}</option>`).join("");
@@ -5281,7 +5392,7 @@
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
     const optAligns = aligns.map(a => `<option value="${a[0]}" ${a[0]===block.align?"selected":""}>${a[1]}</option>`).join("");
     return `
-      <div class="block-wrap${pairedAway ? " grid-paired-text" : ""}" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
+      <div class="block-wrap" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
         <div class="block-toolbar">
           <select data-act="blockStyle" data-field="type" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optTypes}</select>
           <select data-act="blockStyle" data-field="font" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optFonts}</select>
@@ -5301,17 +5412,7 @@
       </div>`;
   }
 
-  // combined caption text for a Grid image: a paired caption block (see
-  // renderEntryBlocksPage) first, then whatever the image's own caption and/or annotations
-  // already hold -- reusing that data as-is rather than asking for it twice
-  function gridCaptionText(block, pairedText){
-    const parts = [];
-    if(pairedText && pairedText.trim()) parts.push(pairedText.trim());
-    if(block.caption && block.caption.trim()) parts.push(block.caption.trim());
-    (block.annotations || []).forEach(a => { if(a.text && a.text.trim()) parts.push(a.text.trim()); });
-    return parts.join("\n\n");
-  }
-  function renderMediaBlockEl(chapterId, entryId, block, variant, pairedText){
+  function renderMediaBlockEl(chapterId, entryId, block){
     const sizes = [["S","Small"],["M","Medium"],["L","Large"],["Full","Full width"]];
     const optSizes = sizes.map(s => `<option value="${s[0]}" ${s[0]===block.size?"selected":""}>${s[1]}</option>`).join("");
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
@@ -5330,25 +5431,6 @@
           <div class="media-fill" data-media-scope="blockMedia" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${mediaMarkup(block.media)}</div>
           <div class="annotation-layer">${renderAnnotationItems("blockMedia", chapterId, entryId, block.id, block.annotations)}</div>
         </div>`;
-
-    // a Grid image with something to say (a caption and/or annotations) gets its text set
-    // directly into the photo instead of overlaying a floating label -- a purely decorative
-    // image is left exactly as it was
-    const captionText = variant === "grid" ? gridCaptionText(block, pairedText) : "";
-    if(captionText){
-      return `
-      <div class="block-wrap block-media-wrap block-media--${block.size} block-media-align--${block.align} grid-caption-card" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
-        ${toolbarHtml}
-        <div class="block-media">
-          <div class="media-fill" data-media-scope="blockMedia" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${mediaMarkup(block.media)}</div>
-          <div class="annotation-layer">${renderAnnotationItems("blockMedia", chapterId, entryId, block.id, block.annotations)}</div>
-          <div class="grid-caption-overlay"><div class="grid-caption-text">${escapeHtml(captionText).replace(/\n/g, "<br>")}</div></div>
-        </div>
-        <div class="block-media-caption edit-only" data-editable data-bind-type="blockMediaCaption"
-             data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}"
-             contenteditable="false">${escapeHtml(block.caption || "")}</div>
-      </div>`;
-    }
     return `
       <div class="block-wrap block-media-wrap block-media--${block.size} block-media-align--${block.align}" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
         ${toolbarHtml}
@@ -5412,10 +5494,15 @@
     const entry = getEntry(chapterId, entryId);
     if(!entry || entry.pageType === pageType) return;
     entry.pageType = pageType;
-    if((pageType === "background" || pageType === "grid") && (!entry.blocks || !entry.blocks.length)){
+    if(pageType === "background" && (!entry.blocks || !entry.blocks.length)){
       entry.blocks = [ newBlock("body") ];
     }
-    if(pageType === "grid" && !entry.gridColumns) entry.gridColumns = 3;
+    if(pageType === "grid"){
+      if(!entry.gridColumns) entry.gridColumns = 3;
+      if(!entry.blocks || !entry.blocks.some(b => b.type === "media")){
+        entry.blocks = [0, 1, 2].map(i => newMediaBlock({ kind:"image", src: placeholder(Math.floor(Math.random()*99) + i, String(i + 1)), embed:false }));
+      }
+    }
     if(pageType === "sequence" && (!entry.sequence || !entry.sequence.length)){
       entry.sequence = [
         { id:newId(), media:{ kind:"image", src: placeholder(Math.floor(Math.random()*99), "1"), embed:false }, text:"", annotations:[] },
@@ -5562,6 +5649,10 @@
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).html = el.innerHTML;
     } else if(bt === "blockMediaCaption"){
       getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).caption = el.textContent;
+    } else if(bt === "blockGridTitle"){
+      getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).gridTitle = el.textContent;
+    } else if(bt === "blockGridSubtitle"){
+      getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId).gridSubtitle = el.textContent;
     } else if(bt && bt.endsWith("CalloutText")){
       const owner = sectionOwner(bt.slice(0, -"CalloutText".length), el.dataset.chapterId, el.dataset.entryId);
       if(owner && owner.callout) owner.callout.text = el.textContent;
