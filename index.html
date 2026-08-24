@@ -528,12 +528,13 @@
      thin tail — a map-callout, not a label sitting on the photo permanently. The photo stays
      uncluttered with every point visible but nothing crowding it, until a visitor actually
      wants to read one; only one popup is open at a time (see the .annotation-dot click
-     handler). The same white card + tail regardless of which style the author chose, so every
-     Full Background entry's popup reads as one consistent, deliberate accent instead of
-     competing yellow/mint treatments. Edit Mode instead keeps every popup open all the time
-     (see body.edit-on below) since an author needs to see and edit all of them at once, not
-     discover them one click at a time — the card styling itself still matches the published
-     result exactly, just always expanded while editing. */
+     handler). The dot, card and tail all pick up one of two on-brand looks -- blue for
+     "Highlight", green for "Stat Chip" (the same toggle already in the annotation toolbar) --
+     so a point's color is visible before it's even opened, instead of every point reading
+     identically. Edit Mode instead keeps every popup open all the time (see body.edit-on
+     below) since an author needs to see and edit all of them at once, not discover them one
+     click at a time — the card styling itself still matches the published result exactly,
+     just always expanded while editing. */
   .annotation-dot{ display:none; }
   .annotation-layer--labeled .annotation-dot{
     display:block;position:relative;flex:0 0 auto;width:26px;height:26px;
@@ -544,14 +545,20 @@
     transform:translate(-50%,-50%);border-radius:50%;background:#005ba6;
     box-shadow:0 0 0 4px rgba(255,255,255,.9), 0 2px 6px rgba(0,0,0,.35);
   }
+  .annotation-layer--labeled .annotation:has(.annotation-text.chip-stat) .annotation-dot::before{
+    background:#1a8f5a;
+  }
   .annotation-layer--labeled .annotation-dot:hover::before{
-    background:#0072c9;box-shadow:0 0 0 5px rgba(255,255,255,.95), 0 2px 8px rgba(0,0,0,.4);
+    box-shadow:0 0 0 5px rgba(255,255,255,.95), 0 2px 8px rgba(0,0,0,.4);
   }
   .annotation-layer--labeled .annotation-text{
     display:none;position:absolute;left:50%;bottom:calc(100% + 15px);transform:translateX(-50%);
     width:max-content;max-width:min(280px, 70vw);
-    background:#fff;border:1px solid rgba(20,20,19,.14);border-radius:7px;
+    background:#005ba6;color:#fff !important;border:none;border-radius:7px;
     padding:11px 15px;box-shadow:0 14px 30px rgba(0,0,0,.3);
+  }
+  .annotation-layer--labeled .annotation-text.chip-stat{
+    background:#7af9b4;color:#00432c !important;
   }
   .annotation-layer--labeled .annotation.annotation-open .annotation-text{
     display:block;pointer-events:auto; /* stay "inside" the annotation for the outside-click-closes handler */
@@ -563,7 +570,11 @@
   body.edit-on .annotation-layer--labeled .annotation-text::after{
     content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);
     width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;
-    border-top:8px solid #fff;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18));
+    border-top:8px solid #005ba6;filter:drop-shadow(0 4px 3px rgba(0,0,0,.18));
+  }
+  .annotation-layer--labeled .annotation.annotation-open .annotation-text.chip-stat::after,
+  body.edit-on .annotation-layer--labeled .annotation-text.chip-stat::after{
+    border-top-color:#7af9b4;
   }
   body.edit-on .annotation-text{outline:1px dashed rgba(0,0,0,.45);outline-offset:2px;cursor:text;}
   .annotation-drag-handle{
