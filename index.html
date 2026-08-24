@@ -380,6 +380,43 @@
      that placeholder is meant for editors, not something a finished intro page should ever
      present to a visitor as if it were the design. */
   body:not(.edit-on) .entry-intro--plain > .media-fill .media-empty{ display:none; }
+  /* the optional second image that can sit alongside the title/quote (a portrait next to a
+     pull-quote, distinct from the full-bleed background) -- centered/stacked by default like
+     everything else on this page type, switching to a two-column row only once a photo is
+     actually set (.intro-content--withimage), so a plain intro with no image is completely
+     unaffected. */
+  /* scoped to [data-page-type="intro"] for the same reason .intro-title is above -- .entry-
+     content's own text-align:center (right above) ties this on specificity otherwise */
+  .entry[data-page-type="intro"] .intro-content--withimage{
+    display:flex;flex-direction:row-reverse;align-items:center;gap:clamp(28px,5vw,64px);
+    text-align:left;max-width:1040px;
+  }
+  .intro-content--withimage .intro-text{flex:1 1 auto;min-width:0;}
+  .intro-content--withimage .intro-quote{margin:0;}
+  .intro-content--withimage .intro-title{margin:0 0 20px;}
+  .intro-image-frame{
+    position:relative;flex:0 0 clamp(200px,26vw,340px);aspect-ratio:3/4;
+    border-radius:10px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.45);
+  }
+  .intro-image-frame .media-el{width:100%;height:100%;object-fit:cover;}
+  .intro-image-remove{
+    position:absolute;top:8px;right:8px;z-index:2;width:24px;height:24px;line-height:22px;
+    text-align:center;padding:0;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;
+    border:1px solid rgba(255,255,255,.35);font-size:12px;
+  }
+  .intro-image-remove:hover{background:rgba(0,0,0,.8);}
+  @media (max-width: 720px){
+    /* same page-type scope as the desktop rule above, and for the same reason -- a media
+       query doesn't add specificity, so a plain .intro-content--withimage here would still
+       lose to that higher-specificity desktop rule regardless of viewport width */
+    .entry[data-page-type="intro"] .intro-content--withimage{
+      flex-direction:column;text-align:center;max-width:420px;
+    }
+    .entry[data-page-type="intro"] .intro-content--withimage .intro-image-frame{
+      flex:0 0 auto;width:min(280px,70vw);aspect-ratio:3/4;
+    }
+    .entry[data-page-type="intro"] .intro-content--withimage .intro-title{margin:0 0 28px;}
+  }
   .entry-intro-cta{
     display:inline-block;margin-top:22px;background:#7af9b4;color:#005ba6;font-family:var(--font-main);
     font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
@@ -1272,6 +1309,7 @@
       if(pageType === "grid") entry.gridColumns = 3;
     } else if(pageType === "intro"){
       entry.quote = "";
+      entry.introImage = null;
     } else if(pageType === "sequence"){
       entry.sequence = [
         { id:newId(), media:{ kind:"image", src:placeholder(s, "1"), embed:false }, text:"", annotations:[] },
@@ -5133,15 +5171,28 @@
   // meant for editors, not something a real intro page should ever show a visitor.
   function renderEntryIntro(chapter, entry){
     const hasMedia = !!(entry.media && entry.media.src);
+    // a second, optional image sitting alongside the title/quote (like a portrait next to a
+    // pull-quote) -- distinct from the full-bleed background above: this one lives inside the
+    // content column itself, so text switches to a two-column layout next to it once it's set
+    // (see .intro-content--withimage) instead of the plain centered column every intro starts as
+    const hasIntroImage = !!(entry.introImage && entry.introImage.src);
+    const introImageHtml = `
+      <div class="intro-image-frame${hasIntroImage ? "" : " edit-only"}">
+        <button type="button" class="intro-image-remove edit-only" data-act="removeIntroImage" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">✕</button>
+        <div class="media-fill" data-media-scope="introImage" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.introImage)}</div>
+      </div>`;
     return `
       <section class="entry${hasMedia ? "" : " entry-intro--plain"}" id="entry-${entry.id}" data-id="${entry.id}" data-chapter-id="${chapter.id}" data-page-type="intro">
         <div class="media-fill" data-media-scope="entryMedia" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}">${mediaMarkup(entry.media, true)}</div>
         <div class="annotation-layer">${renderAnnotationItems("entryMedia", chapter.id, entry.id, null, entry.annotations)}</div>
         ${entryToolbarHtml(chapter, entry)}
         ${renderCallout("entry", chapter.id, entry.id, entry.callout)}
-        <div class="entry-content intro-content">
-          <h3 class="entry-title intro-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
-          <blockquote class="intro-quote${entry.quote ? "" : " text-empty"}" data-editable data-bind-type="entryQuote" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.quote || "")}</blockquote>
+        <div class="entry-content intro-content${hasIntroImage ? " intro-content--withimage" : ""}">
+          ${introImageHtml}
+          <div class="intro-text">
+            <h3 class="entry-title intro-title" data-editable data-bind-type="entryTitle" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.title)}</h3>
+            <blockquote class="intro-quote${entry.quote ? "" : " text-empty"}" data-editable data-bind-type="entryQuote" data-chapter-id="${chapter.id}" data-entry-id="${entry.id}" contenteditable="false">${escapeHtml(entry.quote || "")}</blockquote>
+          </div>
         </div>
       </section>`;
   }
@@ -5438,6 +5489,12 @@
     owner.callout.enabled = false;
     saveState(); render();
   }
+  function removeIntroImage(chapterId, entryId){
+    const entry = getEntry(chapterId, entryId);
+    if(!entry) return;
+    entry.introImage = null;
+    saveState(); render();
+  }
   function deleteBlock(chapterId, entryId, blockId){
     const entry = getEntry(chapterId, entryId);
     if(entry.blocks.length <= 1){ alert("Each entry needs at least one block."); return; }
@@ -5672,6 +5729,8 @@
       addCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "removeCallout"){
       removeCallout(btn.dataset.calloutScope, btn.dataset.chapterId, btn.dataset.entryId);
+    } else if(act === "removeIntroImage"){
+      removeIntroImage(btn.dataset.chapterId, btn.dataset.entryId);
     } else if(act === "toggleCallout"){
       btn.closest(".callout-box").classList.toggle("open");
     } else if(act === "changeMascot"){
@@ -6447,6 +6506,21 @@
     } else if(target.scope === "entryMedia"){
       getEntry(target.chapterId, target.entryId).media = media;
       container = document.querySelector(`.media-fill[data-media-scope="entryMedia"][data-entry-id="${cssEscape(target.entryId)}"]`);
+    } else if(target.scope === "introImage"){
+      getEntry(target.chapterId, target.entryId).introImage = media;
+      container = document.querySelector(`.media-fill[data-media-scope="introImage"][data-entry-id="${cssEscape(target.entryId)}"]`);
+      // this optional image's wrapping frame (hidden from visitors until it actually has a
+      // photo) and the text column's two-column layout are both decided by "is there an
+      // image" at render time -- since this whole modal flow deliberately updates just the
+      // one .media-fill instead of doing a full render(), match that same decision here too,
+      // or adding a first photo would need a reload before a visitor could ever see it
+      const frame = container && container.closest(".intro-image-frame");
+      const hasImg = !!(media && media.src);
+      if(frame){
+        frame.classList.toggle("edit-only", !hasImg);
+        const content = frame.closest(".intro-content");
+        if(content) content.classList.toggle("intro-content--withimage", hasImg);
+      }
     } else if(target.scope === "blockMedia"){
       getBlock(target.chapterId, target.entryId, target.blockId).media = media;
       container = document.querySelector(`.media-fill[data-media-scope="blockMedia"][data-block-id="${cssEscape(target.blockId)}"]`);
