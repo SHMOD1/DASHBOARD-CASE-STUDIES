@@ -6138,9 +6138,12 @@
   let sequenceWheelAccum = 0;
   let sequenceWheelLast = 0;
   const SEQUENCE_STEP_THRESHOLD = 80;
-  // long enough for the .9s cross-dissolve (see .sequence-step's opacity transition) to mostly
-  // finish before the next one can start, so a fast scroll doesn't stack fades on top of each other
-  const SEQUENCE_STEP_COOLDOWN_MS = 850;
+  // the .9s cross-dissolve (see .sequence-step's opacity transition) only needs ~900ms to
+  // finish, but the cooldown runs well past that on purpose: it's what stops one continuous
+  // scroll gesture from chaining straight through several steps before a reader has had a
+  // moment to actually read the caption on the one that just arrived, not just long enough
+  // for the fade itself to settle
+  const SEQUENCE_STEP_COOLDOWN_MS = 2200;
   function handleSequenceWheel(e){
     if(!gateSlideEl || gateReady) return false;
     if(!getStepEls(gateSlideEl).length) return false;
