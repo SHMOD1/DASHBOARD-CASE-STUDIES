@@ -96,17 +96,24 @@
   /* ---------- generic media (hero / chapter cover / entry) ---------- */
   .media-fill{position:absolute;inset:0;overflow:hidden;background:var(--bg-alt);}
   .media-el{width:100%;height:100%;object-fit:cover;display:block;will-change:transform;}
-  /* Ken-Burns zoom/pan for Chapter Cover + Full Background, see fullBleedMotion() -- scale-up
-     only ever crops in tighter (never exposes an edge), and the pan distance stays well inside
-     the slack that scale creates, so this never reveals blank space at any viewport size. */
-  .chapter-cover > .media-fill .media-el,
-  .entry[data-page-type="background"] > .media-fill .media-el{
+  /* Ken-Burns zoom/pan for Chapter Cover, see fullBleedMotion() -- scale-up only ever crops in
+     tighter (never exposes an edge), and the pan distance stays well inside the slack that
+     scale creates, so this never reveals blank space at any viewport size. Full Background
+     used to get the same treatment, but that assumed the photo already filled the frame edge
+     to edge (object-fit:cover) with nothing lost off the sides worth protecting -- now that it
+     shows the whole photo instead (see object-fit:contain below), scaling it up would crop
+     back into the exact edges that change was meant to stop losing. */
+  .chapter-cover > .media-fill .media-el{
     transition: transform 9s cubic-bezier(.16,.68,.32,1);
   }
-  .chapter-cover.zoom-active > .media-fill .media-el,
-  .entry[data-page-type="background"].zoom-active > .media-fill .media-el{
+  .chapter-cover.zoom-active > .media-fill .media-el{
     transform: scale(1.17) translate(-2.2%, -3.2%);
   }
+  /* a Full Background photo is shown in full, letterboxed on whatever sides don't match the
+     screen's shape (the plain background color fills that margin) instead of being cropped
+     edge-to-edge -- particularly important for anything wider/narrower than a typical desktop
+     window, like a multi-panel collage, where cover would otherwise slice off most of it. */
+  .entry[data-page-type="background"] > .media-fill .media-el{ object-fit:contain; }
   .video-frame{position:relative;width:100%;height:100%;}
   .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;}
   .media-badge{
@@ -732,7 +739,7 @@
   .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;
     text-shadow:0 2px 8px rgba(0,0,0,.7);}
   .entry-rule{flex:1;height:1px;background:rgba(240,241,250,.3);max-width:120px;}
-  .entry-title{font-family:var(--font-main);font-size:clamp(24px,3.2vw,40px);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.7;max-width:820px;
+  .entry-title{font-family:var(--font-main);font-size:clamp(20px,2.4vw,30px);font-weight:800;letter-spacing:-.01em;margin:0;line-height:1.7;max-width:820px;
     text-shadow:none;
     display:inline;background:#005ba6;color:#fff;padding:.1em .45em;border-radius:4px;
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
@@ -1305,8 +1312,8 @@
     { label: "Courier (Mono)", value: "'Courier New', Courier, monospace" }
   ];
   const SIZE_PX = {
-    heading:   { S:24, M:32, L:42, XL:54 },
-    subheading:{ S:17, M:20, L:24, XL:28 },
+    heading:   { S:20, M:26, L:34, XL:42 },
+    subheading:{ S:15, M:18, L:21, XL:24 },
     body:      { S:14, M:16, L:18, XL:20 },
     quote:     { S:14, M:16.5, L:19, XL:22 },
     caption:   { S:11, M:12.5, L:14, XL:15 }
