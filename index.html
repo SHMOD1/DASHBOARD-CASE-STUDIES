@@ -733,7 +733,6 @@
     padding:7px 14px;border-radius:20px;pointer-events:auto;
   }
   .annotation-add-btn:hover{background:rgba(0,0,0,.7);}
-  .block-color-input{width:26px;height:24px;padding:1px;cursor:pointer;border-radius:4px;}
 
   .entry-eyebrow{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
   .entry-year-tag{font-family:var(--font-main);font-weight:700;font-size:15px;color:#fbe847;letter-spacing:.04em;transition:color .5s ease;
@@ -771,7 +770,12 @@
   .block{max-width:66ch;color:#e6e7f5;}
   .block p{margin:0 0 12px;}
   .block p:last-child{margin-bottom:0;}
-  .block--heading{font-weight:800;letter-spacing:-.01em;line-height:1.7;text-shadow:none;
+  /* Every block's color and typeface are fixed per type here rather than left to a per-block
+     choice (renderBlock() no longer emits font-family/color inline at all, only font-size and
+     text-align stay author-adjustable) -- one heading, one body, one quote, one caption look,
+     everywhere, instead of each instance drifting to whatever font/color its author happened
+     to pick, which is how a block ended up with near-white text on this same light card. */
+  .block--heading{font-family:var(--font-main);font-weight:800;letter-spacing:-.01em;line-height:1.7;text-shadow:none;
     display:inline;background:#005ba6;color:#fff;padding:.08em .4em;border-radius:4px;
     box-decoration-break:clone;-webkit-box-decoration-break:clone;}
   /* wrap long headings within a readable column so the per-line highlight
@@ -783,6 +787,8 @@
   .block--body, .block--subheading, .block--quote, .block--caption{
     background:#f8f3ef;color:#2b2b2b;padding:14px 18px;border-radius:10px;text-shadow:none;
   }
+  .block--body, .block--caption{font-family:var(--font-body);}
+  .block--subheading, .block--quote{font-family:var(--font-main);}
   .block--body{line-height:1.75;}
   .block--subheading{font-weight:700;line-height:1.5;letter-spacing:.01em;}
   .block--quote{font-style:italic;font-weight:600;line-height:1.6;position:relative;padding-left:42px;}
@@ -2116,9 +2122,11 @@
   function renderBlock(chapterId, entryId, block){
     if(block.type === "media") return renderMediaBlockEl(chapterId, entryId, block);
     const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
-    const styleAttr = `font-family:${block.font};font-size:${px}px;text-align:${block.align};${block.color ? `color:${block.color};` : ""}`;
+    // font and color are deliberately NOT author-adjustable per block (see the .block--*
+    // rules further up) -- one consistent look per block type across the whole dashboard,
+    // rather than each instance able to drift on its own; only size and alignment stay here
+    const styleAttr = `font-size:${px}px;text-align:${block.align};`;
     const optTypes = BLOCK_TYPES.map(t => `<option value="${t.type}" ${t.type===block.type?"selected":""}>${t.label}</option>`).join("");
-    const optFonts = FONT_OPTIONS.map(f => `<option value="${escapeHtml(f.value)}" ${f.value===block.font?"selected":""}>${f.label}</option>`).join("");
     const sizes = ["S","M","L","XL"];
     const optSizes = sizes.map(s => `<option value="${s}" ${s===block.size?"selected":""}>${s}</option>`).join("");
     const aligns = [["left","⟸ Left"],["center","≡ Center"],["right","⟹ Right"]];
@@ -2127,12 +2135,10 @@
       <div class="block-wrap" data-block-id="${block.id}" data-chapter-id="${chapterId}" data-entry-id="${entryId}">
         <div class="block-toolbar">
           <select data-act="blockStyle" data-field="type" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optTypes}</select>
-          <select data-act="blockStyle" data-field="font" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optFonts}</select>
           <select data-act="blockStyle" data-field="size" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optSizes}</select>
           <select data-act="blockStyle" data-field="align" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">${optAligns}</select>
           <button type="button" data-act="blockFormat" data-cmd="bold" data-block-id="${block.id}"><b>B</b></button>
           <button type="button" data-act="blockFormat" data-cmd="italic" data-block-id="${block.id}"><i>I</i></button>
-          <input type="color" class="block-color-input" title="Text color" data-act="blockColor" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}" value="${block.color || "#ffffff"}">
           <span class="spacer"></span>
           <button type="button" data-act="moveBlock" data-dir="-1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↑</button>
           <button type="button" data-act="moveBlock" data-dir="1" data-chapter-id="${chapterId}" data-entry-id="${entryId}" data-block-id="${block.id}">↓</button>
@@ -2426,11 +2432,6 @@
       b[el.dataset.field] = el.value;
       applyMediaBlockStyle(el.dataset.blockId, b);
       saveState();
-    } else if(el.matches('[data-act="blockColor"]')){
-      const b = getBlock(el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId);
-      b.color = el.value;
-      applyBlockStyle(el.dataset.blockId, b);
-      saveState();
     } else if(el.matches('[data-act="annoStyle"]')){
       const a = getAnnotation(el.dataset.aScope, el.dataset.chapterId, el.dataset.entryId, el.dataset.blockId, el.dataset.annotationId);
       if(a){ a[el.dataset.field] = el.value; applyAnnotationStyle(a); saveState(); }
@@ -2465,10 +2466,8 @@
     const el = wrap.querySelector(".block");
     const px = (SIZE_PX[block.type] || SIZE_PX.body)[block.size] || SIZE_PX.body.M;
     el.className = "block block--" + block.type;
-    el.style.fontFamily = block.font;
     el.style.fontSize = px + "px";
     el.style.textAlign = block.align;
-    el.style.color = block.color || "";
   }
 
   /* ---------------- Full Background point markers: click a dot to open its popup, click
