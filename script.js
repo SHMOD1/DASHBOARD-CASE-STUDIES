@@ -49,7 +49,7 @@ const baseLayers = { osm, satellite, cartoLight, cartoPositron };
 
 //#endregion
 
-const DATA_ROOT = '../download_center/data';
+const DATA_ROOT = 'data';
 
 //#region Map Container
 const map = new maplibregl.Map({
