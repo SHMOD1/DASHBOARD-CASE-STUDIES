@@ -7,251 +7,299 @@
 <meta name="description" content="A reference map of Bengaluru's civic and infrastructure stakeholders — the Greater Bengaluru Authority, parastatal agencies, regulators and their leadership, mandates and reporting lines.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#0b2545;
-    --navy-2:#123a6b;
-    --ink:#1b2430;
-    --ink-soft:#4b5563;
-    --line:#e2e6ec;
-    --paper:#ffffff;
-    --paper-2:#f6f8fb;
-    --accent:#b8892b;
-    --accent-soft:#f4ead4;
-    --state:#0b2545;
-    --gba:#155e75;
-    --gba-soft:#e3f2f6;
-    --utility:#7a3b12;
-    --utility-soft:#f6e9dc;
-    --regulator:#4c1d95;
-    --regulator-soft:#efe8fb;
-    --radius:10px;
-    --shadow:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
-    --shadow-lg:0 4px 14px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.05);
+    --ink:#2b2118;
+    --ink-soft:#6b5d4f;
+    --line:#ecdfc8;
+    --paper:#fffdf8;
+    --paper-2:#fbf3e4;
+    --cream:#fbf3e4;
+    --terracotta:#d9622e;
+    --terracotta-deep:#a83f1a;
+    --terracotta-soft:#fbe2d2;
+    --mustard:#f0a93a;
+    --mustard-soft:#fcecc7;
+    --teal:#0e7c7b;
+    --teal-deep:#0a5453;
+    --teal-soft:#dcf2ee;
+    --plum:#8a3fa8;
+    --plum-soft:#f2e3f8;
+    --navy-2:#0a5453;
+    --accent:#f0a93a;
+    --accent-soft:#fcecc7;
+    --gba:#0e7c7b;
+    --gba-soft:#dcf2ee;
+    --utility:#b2531b;
+    --utility-soft:#fbe6d2;
+    --regulator:#8a3fa8;
+    --regulator-soft:#f2e3f8;
+    --radius:18px;
+    --shadow:0 2px 6px rgba(78,53,20,.06), 0 1px 2px rgba(78,53,20,.05);
+    --shadow-lg:0 10px 24px rgba(78,53,20,.12), 0 3px 8px rgba(78,53,20,.06);
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
     color:var(--ink);
-    background:var(--paper-2);
+    background:var(--cream);
     -webkit-font-smoothing:antialiased;
-    line-height:1.55;
+    line-height:1.6;
   }
   h1,h2,h3,h4{
-    font-family:'Source Serif 4', Georgia, serif;
-    font-weight:600;
-    color:var(--navy);
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:700;
+    color:var(--terracotta-deep);
     margin:0 0 .4em;
     letter-spacing:-0.01em;
   }
-  a{color:var(--navy-2);}
-  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:var(--teal-deep);}
+  .mono{font-family:'Plus Jakarta Sans', monospace;}
   .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- decorative wave divider ---------- */
+  .wave{display:block;width:100%;height:34px;line-height:0;}
+  .wave svg{width:100%;height:100%;display:block;}
 
   /* ---------- Top bar ---------- */
   .topbar{
     position:sticky;top:0;z-index:50;
-    background:rgba(255,255,255,.92);
+    background:rgba(255,253,248,.9);
     backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);
+    border-bottom:2px solid var(--line);
   }
   .topbar-inner{
     max-width:1180px;margin:0 auto;padding:0 28px;
-    height:60px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+    height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;
   }
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--navy);text-decoration:none;font-size:15px;}
-  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;}
-  nav.crumbs{display:flex;gap:22px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--terracotta-deep);text-decoration:none;font-size:15.5px;font-family:'Fraunces',serif;}
+  .brand .dot{width:12px;height:12px;border-radius:50%;background:var(--mustard);flex:none;box-shadow:0 0 0 3px var(--mustard-soft);}
+  nav.crumbs{display:flex;gap:6px;flex-wrap:wrap;}
   nav.crumbs a{
-    font-size:13.5px;font-weight:600;color:var(--ink-soft);text-decoration:none;
-    padding:6px 0;border-bottom:2px solid transparent;
+    font-size:13.5px;font-weight:700;color:var(--ink-soft);text-decoration:none;
+    padding:8px 14px;border-radius:99px;transition:background .15s ease, color .15s ease;
   }
-  nav.crumbs a:hover{color:var(--navy);border-bottom-color:var(--accent);}
+  nav.crumbs a:hover{color:var(--terracotta-deep);background:var(--terracotta-soft);}
   @media (max-width:880px){ nav.crumbs{display:none;} }
 
   /* ---------- Hero ---------- */
   .hero{
-    background:
-      radial-gradient(1100px 420px at 85% -10%, #16406e 0%, transparent 60%),
-      linear-gradient(180deg, var(--navy) 0%, #0e2f56 100%);
-    color:#eaf0fa;
-    padding:64px 0 56px;
+    position:relative;
+    background:linear-gradient(180deg, #f7cf8a 0%, var(--mustard) 32%, var(--terracotta) 78%, var(--terracotta-deep) 100%);
+    color:#3a1e0e;
+    padding:56px 0 0;
+    overflow:hidden;
   }
+  .hero .wrap{position:relative;z-index:2;padding-bottom:40px;}
   .eyebrow{
     display:inline-flex;align-items:center;gap:8px;
-    font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-    color:#cfe0f5;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
-    padding:6px 12px;border-radius:99px;margin-bottom:20px;
+    font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    color:#3a1e0e;background:rgba(255,255,255,.55);border:2px solid rgba(58,30,14,.15);
+    padding:7px 14px;border-radius:99px;margin-bottom:22px;transform:rotate(-1.5deg);
   }
-  .hero h1{color:#fff;font-size:40px;max-width:760px;line-height:1.15;}
-  .hero p.lede{color:#c7d5ea;max-width:680px;font-size:16.5px;margin-top:14px;}
-  .hero-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:32px;padding-top:26px;border-top:1px solid rgba(255,255,255,.14);}
-  .hero-meta div{min-width:140px;}
-  .hero-meta .n{font-family:'Source Serif 4',serif;font-size:26px;font-weight:600;color:#fff;}
-  .hero-meta .l{font-size:12.5px;color:#a9bdda;margin-top:2px;}
+  .hero h1{color:#3a1e0e;font-size:44px;max-width:760px;line-height:1.12;font-style:normal;}
+  .hero p.lede{color:#4a2c14;max-width:640px;font-size:16.5px;margin-top:16px;font-weight:500;}
+  .hero-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:34px;}
+  .hero-meta div{
+    min-width:130px;background:rgba(255,253,248,.85);border-radius:16px;padding:14px 18px;
+    box-shadow:var(--shadow);
+  }
+  .hero-meta div:nth-child(odd){transform:rotate(-1.2deg);}
+  .hero-meta div:nth-child(even){transform:rotate(1.2deg);}
+  .hero-meta .n{font-family:'Fraunces',serif;font-size:26px;font-weight:800;color:var(--terracotta-deep);}
+  .hero-meta .l{font-size:12px;color:var(--ink-soft);margin-top:2px;font-weight:600;}
+  .hero-skyline{display:block;width:100%;height:auto;position:relative;z-index:1;margin-top:20px;}
 
   /* ---------- Section shell ---------- */
   section{padding:56px 0;}
-  section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  section.alt{background:var(--paper);}
   .section-head{max-width:720px;margin-bottom:34px;}
   .kicker{
-    font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
-    margin-bottom:8px;display:block;
+    font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--terracotta);
+    margin-bottom:14px;display:inline-block;padding:5px 13px;border-radius:99px;transform:rotate(-1deg);
   }
-  .section-head h2{font-size:27px;}
+  .section-head h2{font-size:30px;}
   .section-head p{color:var(--ink-soft);font-size:15px;margin-top:8px;}
 
   /* ---------- Legend ---------- */
   .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;}
-  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);font-weight:600;}
-  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);font-weight:700;}
+  .legend i{width:12px;height:12px;border-radius:5px;display:inline-block;}
+
+  /* ---------- Agency icon sprite ---------- */
+  .agency-icon{width:34px;height:34px;flex:none;display:block;margin-bottom:10px;}
 
   /* ---------- Org chart ---------- */
   .chart{overflow-x:auto;padding:8px 4px 26px;}
   .chart-inner{min-width:920px;}
   .tier{display:flex;justify-content:center;gap:18px;position:relative;padding-bottom:34px;}
   .tier::after{
-    content:"";position:absolute;left:50%;bottom:0;width:2px;height:22px;background:#c7cfdb;
+    content:"";position:absolute;left:50%;bottom:0;width:3px;height:22px;
+    background:repeating-linear-gradient(180deg, var(--terracotta) 0 6px, transparent 6px 11px);
   }
   .tier.no-drop::after{display:none;}
   .node{
-    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    background:var(--paper);border:2px solid var(--line);border-radius:16px;
     padding:14px 16px;min-width:190px;max-width:230px;text-align:center;
     box-shadow:var(--shadow);position:relative;
   }
-  .node.top{background:var(--navy);color:#fff;border-color:var(--navy);min-width:260px;}
-  .node.top .role{color:#bcd0ec;}
-  .node .role{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8a93a3;font-weight:700;margin-bottom:5px;}
-  .node .name{font-weight:700;font-size:14px;color:var(--ink);}
+  .node.top{background:var(--terracotta-deep);color:#fff;border-color:var(--terracotta-deep);min-width:260px;}
+  .node.top .role{color:#ffd9bd;}
+  .node .role{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);font-weight:800;margin-bottom:5px;}
+  .node .name{font-weight:700;font-size:14px;color:var(--ink);font-family:'Fraunces',serif;}
   .node.top .name{color:#fff;}
   .node .sub{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
-  .node.top .sub{color:#9fb6d8;}
+  .node.top .sub{color:#ffe8d4;}
 
   .branch-row{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;position:relative;padding:0 0 30px;}
   .branch-row::before{
-    content:"";position:absolute;top:-1px;left:12%;right:12%;height:2px;background:#c7cfdb;
+    content:"";position:absolute;top:-1px;left:12%;right:12%;height:3px;
+    background:repeating-linear-gradient(90deg, var(--terracotta) 0 8px, transparent 8px 14px);
   }
   .branch{display:flex;flex-direction:column;align-items:center;position:relative;}
-  .branch::before{content:"";position:absolute;top:-23px;height:22px;width:2px;background:#c7cfdb;left:50%;}
+  .branch::before{content:"";position:absolute;top:-23px;height:22px;width:3px;background:repeating-linear-gradient(180deg, var(--terracotta) 0 6px, transparent 6px 11px);left:50%;}
   .branch .node{margin-top:0;}
   .stub{position:relative;display:flex;justify-content:center;height:22px;}
-  .stub::before{content:"";position:absolute;top:0;width:2px;height:100%;background:#c7cfdb;}
+  .stub::before{content:"";position:absolute;top:0;width:3px;height:100%;background:repeating-linear-gradient(180deg, var(--terracotta) 0 6px, transparent 6px 11px);}
 
   .map-wrap{
     display:grid;grid-template-columns:1.3fr 1fr;gap:28px;align-items:center;
-    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);border:2px solid var(--line);border-radius:var(--radius);
     box-shadow:var(--shadow);padding:22px 26px;margin-bottom:8px;
   }
   @media (max-width:880px){ .map-wrap{grid-template-columns:1fr;} }
   .map-wrap svg{width:100%;height:auto;display:block;}
   .map-wrap svg .corp-fill{transition:filter .15s ease, opacity .15s ease; cursor:default;}
   .map-wrap svg .corp-fill:hover{filter:brightness(1.08) saturate(1.15);}
-  .map-wrap svg .zone-pin-label{font-size:11px;font-weight:700;fill:#0b2545;font-family:'Inter',sans-serif;}
+  .map-wrap svg .zone-pin-label{font-size:11px;font-weight:700;fill:#2b2118;font-family:'Plus Jakarta Sans',sans-serif;}
   .map-wrap svg .zone-pin circle{filter:drop-shadow(0 1px 1px rgba(0,0,0,.25));}
   .map-key{display:flex;flex-direction:column;gap:10px;}
-  .map-key-item{display:flex;align-items:center;gap:10px;font-size:13px;}
-  .map-key-item i{width:14px;height:14px;border-radius:4px;flex:none;}
-  .map-caption{font-size:12px;color:var(--ink-soft);margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);}
-  .map-caption a{color:var(--gba);font-weight:600;}
+  .map-key-item{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;}
+  .map-key-item i{width:15px;height:15px;border-radius:6px;flex:none;}
+  .map-caption{font-size:12px;color:var(--ink-soft);margin-top:14px;padding-top:14px;border-top:2px dashed var(--line);}
+  .map-caption a{color:var(--teal-deep);font-weight:700;}
   .corp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:16px;}
   .corp{
-    background:var(--gba-soft);border:1px solid #bfe0e8;border-radius:10px;padding:14px;
+    background:var(--teal-soft);border:2px solid #b6e2dc;border-radius:16px;padding:14px;
   }
-  .corp h4{font-size:13.5px;margin-bottom:4px;color:var(--gba);}
-  .corp .role{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#3f7a89;font-weight:700;}
-  .corp .name{font-size:12.5px;font-weight:600;margin-top:3px;color:var(--ink);}
-  .corp .zones{font-size:11px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px dashed #bfe0e8;}
+  .corp h4{font-size:13.5px;margin-bottom:4px;color:var(--teal-deep);}
+  .corp .role{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--teal);font-weight:800;}
+  .corp .name{font-size:12.5px;font-weight:700;margin-top:3px;color:var(--ink);}
+  .corp .zones{font-size:11px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px dashed #b6e2dc;}
   @media (max-width:980px){ .corp-grid{grid-template-columns:repeat(2,1fr);} }
 
   /* ---------- Agency cards ---------- */
   .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
   @media (max-width:820px){ .card-grid{grid-template-columns:1fr;} }
   .card{
-    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    background:var(--paper);border:2px solid var(--line);border-radius:var(--radius);
     box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .15s ease, box-shadow .15s ease;
   }
-  .card-top{padding:20px 22px 16px;border-bottom:1px solid var(--line);}
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+  .card-top{padding:22px 22px 16px;border-bottom:2px dashed var(--line);position:relative;}
+  .card-top::after{
+    content:"";position:absolute;top:0;left:0;right:0;height:6px;
+    background:var(--terracotta);border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .card.util-tone .card-top::after{background:var(--utility);}
+  .card.reg-tone .card-top::after{background:var(--regulator);}
   .badge{
-    display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
-    padding:4px 9px;border-radius:5px;margin-bottom:10px;
+    display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+    padding:5px 11px;border-radius:99px;margin-bottom:10px;
   }
   .badge.gba{background:var(--gba-soft);color:var(--gba);}
   .badge.utility{background:var(--utility-soft);color:var(--utility);}
   .badge.regulator{background:var(--regulator-soft);color:var(--regulator);}
-  .badge.state{background:var(--accent-soft);color:#8a6414;}
-  .card-top .full-name{font-size:12.5px;color:var(--ink-soft);margin-bottom:2px;}
-  .card-top h3{font-size:18px;margin-bottom:0;}
-  .detail-link{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--gba);text-decoration:none;}
+  .badge.state{background:var(--accent-soft);color:#8a5a10;}
+  .card-top .full-name{font-size:12.5px;color:var(--ink-soft);margin-bottom:2px;font-weight:600;}
+  .card-top h3{font-size:19px;margin-bottom:0;}
+  .detail-link{display:inline-block;margin-top:8px;font-size:12px;font-weight:800;color:var(--teal-deep);text-decoration:none;}
   .detail-link:hover{text-decoration:underline;}
   .card-body{padding:16px 22px 20px;display:flex;flex-direction:column;gap:12px;flex:1;}
   .fact{display:flex;gap:10px;font-size:13px;}
-  .fact .k{flex:none;width:110px;color:var(--ink-soft);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;padding-top:1px;}
-  .fact .v{color:var(--ink);}
-  .fact .v .tag{font-size:11px;color:#8a93a3;}
-  .mandate{font-size:13.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px;}
+  .fact .k{flex:none;width:110px;color:var(--ink-soft);font-weight:700;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;padding-top:1px;}
+  .fact .v{color:var(--ink);font-weight:500;}
+  .fact .v .tag{font-size:11px;color:var(--ink-soft);}
+  .mandate{font-size:13.5px;color:var(--ink-soft);border-top:2px dashed var(--line);padding-top:12px;}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
 
-  .ladder{border-top:1px dashed var(--line);padding-top:12px;}
-  .ladder-title{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700;margin-bottom:10px;}
+  .ladder{border-top:2px dashed var(--line);padding-top:12px;}
+  .ladder-title{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:800;margin-bottom:10px;}
   .ladder ol{list-style:none;margin:0;padding:0;}
-  .ladder li{position:relative;padding-left:20px;padding-bottom:11px;}
+  .ladder li{position:relative;padding-left:22px;padding-bottom:11px;}
   .ladder li:last-child{padding-bottom:0;}
-  .ladder li::before{content:"";position:absolute;left:3px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--gba);border:2px solid var(--gba-soft);}
-  .ladder li::after{content:"";position:absolute;left:6.5px;top:14px;bottom:-2px;width:1.5px;background:var(--line);}
+  .ladder li::before{content:"";position:absolute;left:2px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--teal);border:2px solid var(--teal-soft);}
+  .ladder li::after{content:"";position:absolute;left:6.5px;top:16px;bottom:-2px;width:2px;background:var(--line);}
   .ladder li:last-child::after{display:none;}
   .ladder li b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.35;}
   .ladder li span{display:block;font-size:11px;color:var(--ink-soft);margin-top:1px;}
-  .ladder .src{margin-top:10px;font-size:10.5px;color:#8a93a3;}
-  .ladder .src a{color:var(--gba);font-weight:600;}
+  .ladder .src{margin-top:10px;font-size:10.5px;color:var(--ink-soft);}
+  .ladder .src a{color:var(--teal-deep);font-weight:700;}
   .card.util-tone .ladder li::before{background:var(--utility);border-color:var(--utility-soft);}
   .card.reg-tone .ladder li::before{background:var(--regulator);border-color:var(--regulator-soft);}
   .chip{
-    font-size:11px;font-weight:600;background:var(--paper-2);border:1px solid var(--line);
-    color:var(--ink-soft);padding:3px 8px;border-radius:99px;
+    font-size:11px;font-weight:700;background:var(--paper-2);border:2px solid var(--line);
+    color:var(--ink-soft);padding:4px 10px;border-radius:99px;
   }
 
   /* ---------- Table ---------- */
-  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);box-shadow:var(--shadow);}
+  .table-wrap{overflow-x:auto;border:2px solid var(--line);border-radius:var(--radius);background:var(--paper);box-shadow:var(--shadow);}
   table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px;}
   thead th{
     text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);
-    background:var(--paper-2);padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;
+    background:var(--mustard-soft);padding:13px 16px;border-bottom:2px solid var(--line);font-weight:800;
   }
   tbody td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;}
   tbody tr:last-child td{border-bottom:none;}
-  tbody tr:hover{background:#fafbfd;}
-  td.name-cell{font-weight:700;color:var(--navy);white-space:nowrap;}
+  tbody tr:hover{background:var(--paper-2);}
+  td.name-cell{font-weight:700;color:var(--terracotta-deep);white-space:nowrap;}
   td .sub{display:block;font-weight:400;color:var(--ink-soft);font-size:12px;margin-top:2px;}
 
   /* ---------- Ward tier ---------- */
   .ward-note{
     margin-top:18px;display:flex;gap:14px;align-items:flex-start;
-    background:var(--accent-soft);border:1px solid #e6d3a3;border-radius:10px;padding:16px 18px;
+    background:var(--mustard-soft);border:2px solid #ecd193;border-radius:16px;padding:16px 18px;
   }
   .ward-note .icon{
-    flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;
+    flex:none;width:32px;height:32px;border-radius:50%;background:var(--mustard);color:#3a1e0e;
     display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
   }
   .ward-note p{margin:0;font-size:13.5px;color:#6b5015;}
 
   /* ---------- Footer ---------- */
-  footer{background:var(--navy);color:#a9bdda;padding:40px 0 32px;}
-  footer h4{color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:.05em;font-family:'Inter';margin-bottom:12px;}
+  footer{background:var(--teal-deep);color:#cdece7;padding:44px 0 32px;position:relative;}
+  footer h4{color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:.05em;font-family:'Plus Jakarta Sans';margin-bottom:12px;font-weight:800;}
   footer .cols{display:grid;grid-template-columns:2fr 1fr;gap:40px;}
   footer .sources{font-size:12.5px;line-height:2;}
-  footer .sources a{color:#cfe0f5;text-decoration:none;}
+  footer .sources a{color:#c9ecc0;text-decoration:none;font-weight:600;}
   footer .sources a:hover{text-decoration:underline;}
   footer p{font-size:12.5px;}
-  footer .fine{margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);font-size:11.5px;color:#7d92b3;}
+  footer .fine{margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.15);font-size:11.5px;color:#8fc4bd;}
   @media (max-width:760px){ footer .cols{grid-template-columns:1fr;} }
 
   .anchor-offset{scroll-margin-top:76px;}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute;overflow:hidden;" aria-hidden="true">
+  <defs>
+    <symbol id="icon-gba" viewBox="0 0 40 40"><rect x="5" y="16" width="8" height="19" rx="1.5" fill="#0e7c7b"/><rect x="16" y="9" width="8" height="26" rx="1.5" fill="#0a5453"/><rect x="27" y="20" width="8" height="15" rx="1.5" fill="#0e7c7b"/><circle cx="20" cy="5" r="3" fill="#f0a93a"/></symbol>
+    <symbol id="icon-planning" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="22" rx="2" fill="#dcf2ee" stroke="#0e7c7b" stroke-width="2"/><path d="M11 13h18M11 18h18M11 23h11" stroke="#0e7c7b" stroke-width="2" stroke-linecap="round"/><circle cx="30" cy="30" r="6" fill="#f0a93a"/><path d="M27.5 30l1.8 1.8 3.2-3.6" stroke="#3a1e0e" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="icon-region" viewBox="0 0 40 40"><path d="M6 12l9-4 10 4 9-4v20l-9 4-10-4-9 4z" fill="#dcf2ee" stroke="#0e7c7b" stroke-width="2" stroke-linejoin="round"/><path d="M15 8v20M25 12v20" stroke="#0e7c7b" stroke-width="1.5" stroke-dasharray="2 2"/><circle cx="20" cy="18" r="4" fill="#d9622e"/></symbol>
+    <symbol id="icon-water" viewBox="0 0 40 40"><path d="M20 5c6 8 11 14.5 11 20.5A11 11 0 0 1 9 25.5C9 19.5 14 13 20 5z" fill="#b2531b"/><path d="M14.5 24a5.5 5.5 0 0 0 5.5 5.5" stroke="#fbe6d2" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="icon-power" viewBox="0 0 40 40"><path d="M22 4L9 23h9l-2 13 15-21h-9z" fill="#b2531b" stroke="#7c3a10" stroke-width="1"/></symbol>
+    <symbol id="icon-metro" viewBox="0 0 40 40"><rect x="7" y="8" width="26" height="20" rx="6" fill="#b2531b"/><rect x="11" y="13" width="7" height="6" rx="1" fill="#fbe6d2"/><rect x="22" y="13" width="7" height="6" rx="1" fill="#fbe6d2"/><circle cx="13" cy="26" r="2.4" fill="#3a1e0e"/><circle cx="27" cy="26" r="2.4" fill="#3a1e0e"/><rect x="16" y="4" width="8" height="4" rx="1" fill="#b2531b"/></symbol>
+    <symbol id="icon-bus" viewBox="0 0 40 40"><rect x="5" y="11" width="30" height="16" rx="4" fill="#b2531b"/><rect x="9" y="15" width="6" height="5" rx="1" fill="#fbe6d2"/><rect x="17" y="15" width="6" height="5" rx="1" fill="#fbe6d2"/><rect x="25" y="15" width="6" height="5" rx="1" fill="#fbe6d2"/><circle cx="12" cy="29" r="2.6" fill="#3a1e0e"/><circle cx="28" cy="29" r="2.6" fill="#3a1e0e"/></symbol>
+    <symbol id="icon-traffic" viewBox="0 0 40 40"><rect x="14" y="4" width="12" height="26" rx="4" fill="#8a3fa8"/><circle cx="20" cy="10" r="2.6" fill="#f6a3a3"/><circle cx="20" cy="17" r="2.6" fill="#fbe08a"/><circle cx="20" cy="24" r="2.6" fill="#a8e6a1"/><rect x="18" y="30" width="4" height="6" fill="#5e2a76"/></symbol>
+    <symbol id="icon-leaf" viewBox="0 0 40 40"><path d="M8 30C8 14 22 6 33 7c1 11-7 25-23 25-1 0-2 0-2-2z" fill="#8a3fa8"/><path d="M12 28C18 20 24 14 31 9" stroke="#f2e3f8" stroke-width="1.6" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="icon-scale" viewBox="0 0 40 40"><rect x="19" y="5" width="2" height="26" fill="#8a3fa8"/><path d="M8 13h11M21 13h11" stroke="#8a3fa8" stroke-width="2"/><path d="M4 13l4 8h-8z" fill="#f2e3f8" stroke="#8a3fa8" stroke-width="1.5"/><path d="M32 13l4 8h-8z" fill="#f2e3f8" stroke="#8a3fa8" stroke-width="1.5"/><rect x="13" y="31" width="14" height="3" rx="1.5" fill="#8a3fa8"/></symbol>
+    <symbol id="icon-road" viewBox="0 0 40 40"><path d="M14 4L6 34h6l4-30z" fill="#0e7c7b"/><path d="M26 4l8 30h-6l-4-30z" fill="#0e7c7b"/><rect x="18" y="10" width="4" height="4" fill="#dcf2ee"/><rect x="18" y="19" width="4" height="4" fill="#dcf2ee"/></symbol>
+  </defs>
+</svg>
 
 <div class="topbar">
   <div class="topbar-inner">
@@ -281,7 +329,50 @@
       <div><div class="n">712 km²</div><div class="l">Greater Bengaluru area</div></div>
     </div>
   </div>
+  <svg class="hero-skyline" viewBox="0 0 1200 160" preserveAspectRatio="none" aria-hidden="true">
+    <rect x="0" y="0" width="1200" height="160" fill="#fffdf8"/>
+    <g opacity="0.55" fill="#e8a24f">
+      <rect x="40" y="70" width="46" height="90"/><rect x="100" y="50" width="34" height="110"/>
+      <rect x="150" y="85" width="40" height="75"/><rect x="740" y="60" width="40" height="100"/>
+      <rect x="800" y="90" width="30" height="70"/><rect x="1080" y="55" width="44" height="105"/>
+      <rect x="1140" y="80" width="34" height="80"/>
+    </g>
+    <g fill="#3a1e0e">
+      <rect x="55" y="95" width="46" height="65"/>
+      <rect x="115" y="65" width="34" height="95"/>
+      <rect x="165" y="100" width="40" height="60"/>
+      <rect x="230" y="40" width="10" height="120"/>
+      <circle cx="235" cy="34" r="16" fill="none" stroke="#3a1e0e" stroke-width="6"/>
+      <path d="M215 40h40l-6 -14h-28z" />
+      <rect x="330" y="80" width="8" height="80"/><rect x="345" y="60" width="8" height="100"/>
+      <rect x="360" y="95" width="8" height="65"/>
+      <rect x="560" y="30" width="14" height="130"/>
+      <path d="M545 42 h44 v10 h-44 z"/>
+      <rect x="700" y="30" width="4" height="6" opacity="0"/>
+      <rect x="755" y="85" width="40" height="75"/>
+      <rect x="815" y="110" width="30" height="50"/>
+      <rect x="900" y="55" width="10" height="105"/><rect x="915" y="75" width="10" height="85"/>
+      <rect x="930" y="45" width="10" height="115"/>
+      <rect x="1000" y="90" width="46" height="70"/>
+      <rect x="1095" y="70" width="44" height="90"/>
+      <rect x="1155" y="95" width="34" height="65"/>
+    </g>
+    <g fill="none" stroke="#0e7c7b" stroke-width="4" stroke-linecap="round">
+      <path d="M0 118 L1200 118" stroke-dasharray="1 22"/>
+    </g>
+    <g fill="#0e7c7b">
+      <rect x="420" y="108" width="90" height="20" rx="4"/>
+      <rect x="432" y="98" width="10" height="12"/><rect x="452" y="98" width="10" height="12"/>
+      <rect x="472" y="98" width="10" height="12"/><rect x="492" y="98" width="10" height="12"/>
+      <circle cx="436" cy="132" r="5"/><circle cx="494" cy="132" r="5"/>
+    </g>
+    <g fill="#6fae52" opacity="0.9">
+      <circle cx="640" cy="130" r="22"/><circle cx="615" cy="140" r="16"/><circle cx="668" cy="142" r="18"/>
+      <rect x="636" y="140" width="8" height="20" fill="#7a5232"/>
+    </g>
+  </svg>
 </header>
+<div class="wave"><svg viewBox="0 0 1200 34" preserveAspectRatio="none"><path d="M0 18 Q 60 2 120 18 T 240 18 T 360 18 T 480 18 T 600 18 T 720 18 T 840 18 T 960 18 T 1080 18 T 1200 18 V34 H0 Z" fill="#fbf3e4"/></svg></div>
 
 <section id="hierarchy" class="anchor-offset">
   <div class="wrap">
@@ -515,6 +606,7 @@
 
       <div class="card">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-planning"/></svg>
           <span class="badge gba">Planning</span>
           <div class="full-name">Bangalore Development Authority</div>
           <h3>BDA</h3>
@@ -542,6 +634,7 @@
 
       <div class="card">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-region"/></svg>
           <span class="badge gba">Regional Planning</span>
           <div class="full-name">Bengaluru Metropolitan Region Development Authority</div>
           <h3>BMRDA</h3>
@@ -569,6 +662,7 @@
 
       <div class="card util-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-water"/></svg>
           <span class="badge utility">Water &amp; Sewerage</span>
           <div class="full-name">Bengaluru Water Supply &amp; Sewerage Board</div>
           <h3>BWSSB</h3>
@@ -596,6 +690,7 @@
 
       <div class="card util-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-power"/></svg>
           <span class="badge utility">Power Distribution</span>
           <div class="full-name">Bangalore Electricity Supply Company Ltd.</div>
           <h3>BESCOM</h3>
@@ -623,6 +718,7 @@
 
       <div class="card util-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-metro"/></svg>
           <span class="badge utility">Metro Rail</span>
           <div class="full-name">Bangalore Metro Rail Corporation Ltd.</div>
           <h3>BMRCL</h3>
@@ -650,6 +746,7 @@
 
       <div class="card util-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-bus"/></svg>
           <span class="badge utility">Public Transport</span>
           <div class="full-name">Bengaluru Metropolitan Transport Corporation</div>
           <h3>BMTC</h3>
@@ -677,6 +774,7 @@
 
       <div class="card reg-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-traffic"/></svg>
           <span class="badge regulator">Traffic &amp; Road Safety</span>
           <div class="full-name">Bengaluru City Traffic Police</div>
           <h3>Traffic Police</h3>
@@ -704,6 +802,7 @@
 
       <div class="card reg-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-leaf"/></svg>
           <span class="badge regulator">Environment</span>
           <div class="full-name">Karnataka State Pollution Control Board</div>
           <h3>KSPCB</h3>
@@ -731,6 +830,7 @@
 
       <div class="card reg-tone">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-scale"/></svg>
           <span class="badge regulator">Anti-Corruption Ombudsman</span>
           <div class="full-name">Karnataka Lokayukta</div>
           <h3>Lokayukta</h3>
@@ -758,6 +858,7 @@
 
       <div class="card">
         <div class="card-top">
+          <svg class="agency-icon"><use href="#icon-road"/></svg>
           <span class="badge gba">Transport Planning</span>
           <div class="full-name">Directorate of Urban Land Transport</div>
           <h3>DULT</h3>
