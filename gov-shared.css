@@ -1,0 +1,166 @@
+/* Shared design system for the Bengaluru governance sub-pages.
+   Kept in sync (by eye) with the inline styles in bengaluru-governance.html
+   so the hub page and every detail page read as one system. */
+
+:root{
+  --navy:#0b2545;
+  --navy-2:#123a6b;
+  --ink:#1b2430;
+  --ink-soft:#4b5563;
+  --line:#e2e6ec;
+  --paper:#ffffff;
+  --paper-2:#f6f8fb;
+  --accent:#b8892b;
+  --accent-soft:#f4ead4;
+  --gba:#155e75;
+  --gba-soft:#e3f2f6;
+  --utility:#7a3b12;
+  --utility-soft:#f6e9dc;
+  --regulator:#4c1d95;
+  --regulator-soft:#efe8fb;
+  --radius:10px;
+  --shadow:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+  --shadow-lg:0 4px 14px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.05);
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--ink);
+  background:var(--paper-2);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.55;
+}
+h1,h2,h3,h4{
+  font-family:'Source Serif 4', Georgia, serif;
+  font-weight:600;
+  color:var(--navy);
+  margin:0 0 .4em;
+  letter-spacing:-0.01em;
+}
+a{color:var(--navy-2);}
+.wrap{max-width:1000px;margin:0 auto;padding:0 28px;}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1000px;margin:0 auto;padding:0 28px;
+  height:56px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--navy);text-decoration:none;font-size:14.5px;}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;}
+.back-link{font-size:13px;font-weight:600;color:var(--ink-soft);text-decoration:none;display:flex;align-items:center;gap:6px;}
+.back-link:hover{color:var(--navy);}
+
+/* ---------- Hero ---------- */
+.hero{
+  background:
+    radial-gradient(1100px 420px at 85% -10%, #16406e 0%, transparent 60%),
+    linear-gradient(180deg, var(--navy) 0%, #0e2f56 100%);
+  color:#eaf0fa;
+  padding:44px 0 38px;
+}
+.hero .badge{
+  display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+  padding:5px 10px;border-radius:5px;margin-bottom:14px;
+}
+.badge.gba{background:var(--gba-soft);color:var(--gba);}
+.badge.utility{background:var(--utility-soft);color:var(--utility);}
+.badge.regulator{background:var(--regulator-soft);color:var(--regulator);}
+.badge.state{background:var(--accent-soft);color:#8a6414;}
+.hero .full-name{color:#a9bdda;font-size:13.5px;margin-bottom:2px;}
+.hero h1{color:#fff;font-size:32px;max-width:640px;line-height:1.15;}
+.hero p.lede{color:#c7d5ea;max-width:620px;font-size:15px;margin-top:12px;}
+.hero-facts{display:flex;gap:26px;flex-wrap:wrap;margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);}
+.hero-facts div{min-width:120px;}
+.hero-facts .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#8ea6ca;margin-bottom:3px;}
+.hero-facts .v{font-size:14px;font-weight:600;color:#fff;}
+
+/* ---------- Section shell ---------- */
+section{padding:44px 0;}
+section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.section-head{max-width:680px;margin-bottom:26px;}
+.kicker{
+  font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+  margin-bottom:8px;display:block;
+}
+.section-head h2{font-size:22px;}
+.section-head p{color:var(--ink-soft);font-size:14.5px;margin-top:8px;}
+
+/* ---------- Accountability chain ---------- */
+.chain{display:flex;flex-direction:column;gap:0;}
+.chain-step{
+  display:grid;grid-template-columns:28px 1fr;gap:14px;position:relative;
+}
+.chain-step .rail{display:flex;flex-direction:column;align-items:center;}
+.chain-step .dot{width:12px;height:12px;border-radius:50%;background:var(--navy);border:3px solid var(--gba-soft);flex:none;margin-top:4px;}
+.chain-step .line{flex:1;width:2px;background:var(--line);margin-top:2px;}
+.chain-step:last-child .line{display:none;}
+.chain-card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:14px 18px;margin-bottom:20px;
+}
+.chain-card .role{font-weight:700;font-size:14.5px;color:var(--ink);}
+.chain-card .who{font-size:13px;color:var(--navy-2);font-weight:600;margin-top:2px;}
+.chain-card .desc{font-size:12.5px;color:var(--ink-soft);margin-top:4px;}
+.chain-card .reports{font-size:11px;color:#8a93a3;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);}
+
+/* ---------- Info cards / board composition ---------- */
+.info-card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:20px 24px;margin-bottom:16px;
+}
+.info-card h3{font-size:15px;margin-bottom:10px;}
+.info-card ul{margin:0;padding-left:18px;font-size:13.5px;color:var(--ink-soft);}
+.info-card li{margin-bottom:6px;}
+.info-card li b{color:var(--ink);}
+
+/* ---------- Table ---------- */
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);box-shadow:var(--shadow);}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px;}
+thead th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);
+  background:var(--paper-2);padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;
+}
+tbody td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;}
+tbody tr:last-child td{border-bottom:none;}
+td.name-cell{font-weight:700;color:var(--navy);white-space:nowrap;}
+td .sub{display:block;font-weight:400;color:var(--ink-soft);font-size:12px;margin-top:2px;}
+
+/* ---------- Disclaimer ---------- */
+.disclaimer{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--accent-soft);border:1px solid #e6d3a3;border-radius:10px;padding:16px 18px;
+}
+.disclaimer .icon{
+  flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;
+}
+.disclaimer p{margin:0;font-size:13px;color:#6b5015;}
+
+/* ---------- Sources ---------- */
+.sources-list{font-size:12.5px;color:var(--ink-soft);line-height:2;}
+.sources-list a{color:var(--gba);font-weight:600;}
+
+/* ---------- Cross-links ---------- */
+.crosslinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.crosslinks a{
+  font-size:12px;font-weight:600;background:var(--paper);border:1px solid var(--line);
+  color:var(--navy-2);padding:6px 12px;border-radius:99px;text-decoration:none;
+}
+.crosslinks a:hover{border-color:var(--navy-2);}
+
+/* ---------- Footer ---------- */
+footer{background:var(--navy);color:#a9bdda;padding:34px 0 28px;}
+footer h4{color:#fff;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;}
+footer p{font-size:12px;}
+footer a{color:#cfe0f5;}
+footer .fine{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);font-size:11px;color:#7d92b3;}
+
+.anchor-offset{scroll-margin-top:70px;}
