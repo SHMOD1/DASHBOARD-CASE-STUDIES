@@ -133,6 +133,23 @@ tbody tr:last-child td{border-bottom:none;}
 td.name-cell{font-weight:700;color:var(--navy);white-space:nowrap;}
 td .sub{display:block;font-weight:400;color:var(--ink-soft);font-size:12px;margin-top:2px;}
 
+/* ---------- Reach the desk ---------- */
+.desk-box{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:20px 24px;margin-bottom:14px;
+}
+.desk-box h3{font-size:14.5px;margin-bottom:4px;}
+.desk-box .desk-role{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--gba);font-weight:700;margin-bottom:8px;}
+.desk-box p{font-size:13px;color:var(--ink-soft);margin:0 0 10px;}
+.desk-box ul{margin:0;padding-left:18px;font-size:13px;color:var(--ink-soft);}
+.desk-box li{margin-bottom:6px;}
+.desk-box li a{font-weight:600;}
+.desk-note{
+  display:flex;gap:12px;align-items:flex-start;background:var(--gba-soft);border:1px solid #bfe0e8;
+  border-radius:10px;padding:14px 16px;font-size:12.5px;color:#134a56;margin-bottom:18px;
+}
+.desk-note b{color:var(--gba);}
+
 /* ---------- Disclaimer ---------- */
 .disclaimer{
   display:flex;gap:14px;align-items:flex-start;
