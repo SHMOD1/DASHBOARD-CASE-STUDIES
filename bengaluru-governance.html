@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bengaluru Governance &amp; Civic Stakeholders</title>
+<meta name="description" content="A reference map of Bengaluru's civic and infrastructure stakeholders — the Greater Bengaluru Authority, parastatal agencies, regulators and their leadership, mandates and reporting lines.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0b2545;
+    --navy-2:#123a6b;
+    --ink:#1b2430;
+    --ink-soft:#4b5563;
+    --line:#e2e6ec;
+    --paper:#ffffff;
+    --paper-2:#f6f8fb;
+    --accent:#b8892b;
+    --accent-soft:#f4ead4;
+    --state:#0b2545;
+    --gba:#155e75;
+    --gba-soft:#e3f2f6;
+    --utility:#7a3b12;
+    --utility-soft:#f6e9dc;
+    --regulator:#4c1d95;
+    --regulator-soft:#efe8fb;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06);
+    --shadow-lg:0 4px 14px rgba(16,24,40,.08), 0 2px 4px rgba(16,24,40,.05);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    color:var(--ink);
+    background:var(--paper-2);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.55;
+  }
+  h1,h2,h3,h4{
+    font-family:'Source Serif 4', Georgia, serif;
+    font-weight:600;
+    color:var(--navy);
+    margin:0 0 .4em;
+    letter-spacing:-0.01em;
+  }
+  a{color:var(--navy-2);}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{
+    max-width:1180px;margin:0 auto;padding:0 28px;
+    height:60px;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--navy);text-decoration:none;font-size:15px;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none;}
+  nav.crumbs{display:flex;gap:22px;flex-wrap:wrap;}
+  nav.crumbs a{
+    font-size:13.5px;font-weight:600;color:var(--ink-soft);text-decoration:none;
+    padding:6px 0;border-bottom:2px solid transparent;
+  }
+  nav.crumbs a:hover{color:var(--navy);border-bottom-color:var(--accent);}
+  @media (max-width:880px){ nav.crumbs{display:none;} }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    background:
+      radial-gradient(1100px 420px at 85% -10%, #16406e 0%, transparent 60%),
+      linear-gradient(180deg, var(--navy) 0%, #0e2f56 100%);
+    color:#eaf0fa;
+    padding:64px 0 56px;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:#cfe0f5;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    padding:6px 12px;border-radius:99px;margin-bottom:20px;
+  }
+  .hero h1{color:#fff;font-size:40px;max-width:760px;line-height:1.15;}
+  .hero p.lede{color:#c7d5ea;max-width:680px;font-size:16.5px;margin-top:14px;}
+  .hero-meta{display:flex;gap:28px;flex-wrap:wrap;margin-top:32px;padding-top:26px;border-top:1px solid rgba(255,255,255,.14);}
+  .hero-meta div{min-width:140px;}
+  .hero-meta .n{font-family:'Source Serif 4',serif;font-size:26px;font-weight:600;color:#fff;}
+  .hero-meta .l{font-size:12.5px;color:#a9bdda;margin-top:2px;}
+
+  /* ---------- Section shell ---------- */
+  section{padding:56px 0;}
+  section.alt{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .section-head{max-width:720px;margin-bottom:34px;}
+  .kicker{
+    font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+    margin-bottom:8px;display:block;
+  }
+  .section-head h2{font-size:27px;}
+  .section-head p{color:var(--ink-soft);font-size:15px;margin-top:8px;}
+
+  /* ---------- Legend ---------- */
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);font-weight:600;}
+  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;}
+
+  /* ---------- Org chart ---------- */
+  .chart{overflow-x:auto;padding:8px 4px 26px;}
+  .chart-inner{min-width:920px;}
+  .tier{display:flex;justify-content:center;gap:18px;position:relative;padding-bottom:34px;}
+  .tier::after{
+    content:"";position:absolute;left:50%;bottom:0;width:2px;height:22px;background:#c7cfdb;
+  }
+  .tier.no-drop::after{display:none;}
+  .node{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:14px 16px;min-width:190px;max-width:230px;text-align:center;
+    box-shadow:var(--shadow);position:relative;
+  }
+  .node.top{background:var(--navy);color:#fff;border-color:var(--navy);min-width:260px;}
+  .node.top .role{color:#bcd0ec;}
+  .node .role{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:#8a93a3;font-weight:700;margin-bottom:5px;}
+  .node .name{font-weight:700;font-size:14px;color:var(--ink);}
+  .node.top .name{color:#fff;}
+  .node .sub{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+  .node.top .sub{color:#9fb6d8;}
+
+  .branch-row{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;position:relative;padding:0 0 30px;}
+  .branch-row::before{
+    content:"";position:absolute;top:-1px;left:12%;right:12%;height:2px;background:#c7cfdb;
+  }
+  .branch{display:flex;flex-direction:column;align-items:center;position:relative;}
+  .branch::before{content:"";position:absolute;top:-23px;height:22px;width:2px;background:#c7cfdb;left:50%;}
+  .branch .node{margin-top:0;}
+  .stub{position:relative;display:flex;justify-content:center;height:22px;}
+  .stub::before{content:"";position:absolute;top:0;width:2px;height:100%;background:#c7cfdb;}
+
+  .corp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:16px;}
+  .corp{
+    background:var(--gba-soft);border:1px solid #bfe0e8;border-radius:10px;padding:14px;
+  }
+  .corp h4{font-size:13.5px;margin-bottom:4px;color:var(--gba);}
+  .corp .role{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#3f7a89;font-weight:700;}
+  .corp .name{font-size:12.5px;font-weight:600;margin-top:3px;color:var(--ink);}
+  .corp .zones{font-size:11px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px dashed #bfe0e8;}
+  @media (max-width:980px){ .corp-grid{grid-template-columns:repeat(2,1fr);} }
+
+  /* ---------- Agency cards ---------- */
+  .card-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media (max-width:820px){ .card-grid{grid-template-columns:1fr;} }
+  .card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;
+  }
+  .card-top{padding:20px 22px 16px;border-bottom:1px solid var(--line);}
+  .badge{
+    display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+    padding:4px 9px;border-radius:5px;margin-bottom:10px;
+  }
+  .badge.gba{background:var(--gba-soft);color:var(--gba);}
+  .badge.utility{background:var(--utility-soft);color:var(--utility);}
+  .badge.regulator{background:var(--regulator-soft);color:var(--regulator);}
+  .badge.state{background:var(--accent-soft);color:#8a6414;}
+  .card-top .full-name{font-size:12.5px;color:var(--ink-soft);margin-bottom:2px;}
+  .card-top h3{font-size:18px;margin-bottom:0;}
+  .card-body{padding:16px 22px 20px;display:flex;flex-direction:column;gap:12px;flex:1;}
+  .fact{display:flex;gap:10px;font-size:13px;}
+  .fact .k{flex:none;width:110px;color:var(--ink-soft);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;padding-top:1px;}
+  .fact .v{color:var(--ink);}
+  .fact .v .tag{font-size:11px;color:#8a93a3;}
+  .mandate{font-size:13.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px;}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+  .chip{
+    font-size:11px;font-weight:600;background:var(--paper-2);border:1px solid var(--line);
+    color:var(--ink-soft);padding:3px 8px;border-radius:99px;
+  }
+
+  /* ---------- Table ---------- */
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);box-shadow:var(--shadow);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px;}
+  thead th{
+    text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);
+    background:var(--paper-2);padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;
+  }
+  tbody td{padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#fafbfd;}
+  td.name-cell{font-weight:700;color:var(--navy);white-space:nowrap;}
+  td .sub{display:block;font-weight:400;color:var(--ink-soft);font-size:12px;margin-top:2px;}
+
+  /* ---------- Ward tier ---------- */
+  .ward-note{
+    margin-top:18px;display:flex;gap:14px;align-items:flex-start;
+    background:var(--accent-soft);border:1px solid #e6d3a3;border-radius:10px;padding:16px 18px;
+  }
+  .ward-note .icon{
+    flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+  }
+  .ward-note p{margin:0;font-size:13.5px;color:#6b5015;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--navy);color:#a9bdda;padding:40px 0 32px;}
+  footer h4{color:#fff;font-size:13px;text-transform:uppercase;letter-spacing:.05em;font-family:'Inter';margin-bottom:12px;}
+  footer .cols{display:grid;grid-template-columns:2fr 1fr;gap:40px;}
+  footer .sources{font-size:12.5px;line-height:2;}
+  footer .sources a{color:#cfe0f5;text-decoration:none;}
+  footer .sources a:hover{text-decoration:underline;}
+  footer p{font-size:12.5px;}
+  footer .fine{margin-top:26px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);font-size:11.5px;color:#7d92b3;}
+  @media (max-width:760px){ footer .cols{grid-template-columns:1fr;} }
+
+  .anchor-offset{scroll-margin-top:76px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top"><span class="dot"></span>Bengaluru Civic &amp; Governance Map</a>
+    <nav class="crumbs">
+      <a href="#hierarchy">State Hierarchy</a>
+      <a href="#gba">GBA Structure</a>
+      <a href="#agencies">Agencies</a>
+      <a href="#leadership">Leadership</a>
+      <a href="#regulators">Oversight</a>
+    </nav>
+  </div>
+</div>
+
+<a id="top"></a>
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Reference · Updated September 2026</span>
+    <h1>Who runs Bengaluru — stakeholders, departments &amp; reporting lines</h1>
+    <p class="lede">A single map of the state departments, the Greater Bengaluru Authority, and the parastatal
+      agencies — BWSSB, BESCOM, BMRCL, BMTC, BDA and others — that plan, build and operate the city, with
+      their current mandates, leadership and where each one reports.</p>
+    <div class="hero-meta">
+      <div><div class="n">10</div><div class="l">Civic bodies mapped</div></div>
+      <div><div class="n">5</div><div class="l">City corporations under GBA</div></div>
+      <div><div class="n">10</div><div class="l">Administrative zones</div></div>
+      <div><div class="n">712 km²</div><div class="l">Greater Bengaluru area</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="hierarchy" class="anchor-offset">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">01 — Apex Structure</span>
+      <h2>State government hierarchy</h2>
+      <p>Every civic and infrastructure body in Bengaluru ultimately reports up to the Government of Karnataka,
+        either directly through the Chief Minister's own portfolio or through a sectoral minister and department.
+        This is the line of political and administrative accountability above the city-level agencies.</p>
+    </div>
+
+    <div class="chart">
+      <div class="chart-inner">
+        <div class="tier">
+          <div class="node top">
+            <div class="role">Head of Government</div>
+            <div class="name">Chief Minister, Karnataka</div>
+            <div class="sub">Holds Bengaluru Development · Finance · BDA · BMRDA</div>
+          </div>
+        </div>
+        <div class="branch-row">
+          <div class="branch">
+            <div class="stub"></div>
+            <div class="node"><div class="role">Deputy CM</div><div class="name">Revenue · Youth Empowerment &amp; Sports</div></div>
+          </div>
+          <div class="branch">
+            <div class="stub"></div>
+            <div class="node"><div class="role">Energy Dept.</div><div class="name">Minister for Energy</div><div class="sub">Oversees ESCOMs incl. BESCOM</div></div>
+          </div>
+          <div class="branch">
+            <div class="stub"></div>
+            <div class="node"><div class="role">Transport Dept.</div><div class="name">Minister for Transport</div><div class="sub">Oversees BMTC, KSRTC</div></div>
+          </div>
+          <div class="branch">
+            <div class="stub"></div>
+            <div class="node"><div class="role">Housing &amp; Urban Dev.</div><div class="name">Minister for Housing / UDD</div><div class="sub">Urban planning, water boards</div></div>
+          </div>
+          <div class="branch">
+            <div class="stub"></div>
+            <div class="node"><div class="role">Home Dept.</div><div class="name">Minister for Home Affairs</div><div class="sub">Bengaluru City Police, Traffic Police</div></div>
+          </div>
+          <div class="branch">
+            <div class="stub"></div>
+            <div class="node"><div class="role">Forest, Ecology &amp; Env.</div><div class="name">Minister for Environment</div><div class="sub">Oversees KSPCB</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-top:-8px;">Portfolio allocations shift with every
+      cabinet reshuffle; the department-level reporting lines shown here are structural and change less often
+      than the individual ministers holding them.</p>
+  </div>
+</section>
+
+<section id="gba" class="alt anchor-offset">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">02 — Municipal Governance</span>
+      <h2>Greater Bengaluru Authority (GBA)</h2>
+      <p>The GBA replaced the Bruhat Bengaluru Mahanagara Palike (BBMP) as the city's primary civic body under
+        the Greater Bengaluru Governance Act, 2024, and has been operational since September 2025. It introduced
+        a three-tier structure: the GBA itself at the apex, five new city corporations in the middle, and ward
+        committees at the grassroots.</p>
+    </div>
+
+    <div class="chart">
+      <div class="chart-inner">
+        <div class="tier">
+          <div class="node top">
+            <div class="role">Chairperson</div>
+            <div class="name">Chief Minister, Karnataka</div>
+            <div class="sub">Apex coordinating &amp; supervisory body</div>
+          </div>
+        </div>
+        <div class="tier">
+          <div class="node">
+            <div class="role">Member Secretary</div>
+            <div class="name">Chief Commissioner, GBA</div>
+            <div class="sub">M. Maheshwara Rao, IAS · since Jun 2026</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:15px;margin:8px 0 4px;">Five city corporations, ten zones</h3>
+    <p style="font-size:13.5px;color:var(--ink-soft);margin:0 0 4px;">Each corporation is headed by its own
+      Chief Commissioner and split into two administrative zones, for civic service delivery closer to residents.</p>
+    <div class="corp-grid">
+      <div class="corp">
+        <div class="role">Corporation</div>
+        <h4>Bengaluru Central</h4>
+        <div class="name">Rajendra Cholan P, IAS</div>
+        <div class="zones">2 zones</div>
+      </div>
+      <div class="corp">
+        <div class="role">Corporation</div>
+        <h4>Bengaluru East</h4>
+        <div class="name">Ramesh D S, IAS</div>
+        <div class="zones">2 zones</div>
+      </div>
+      <div class="corp">
+        <div class="role">Corporation</div>
+        <h4>Bengaluru West</h4>
+        <div class="name">Rajendra K V, IAS</div>
+        <div class="zones">2 zones</div>
+      </div>
+      <div class="corp">
+        <div class="role">Corporation</div>
+        <h4>Bengaluru North</h4>
+        <div class="name">Pommala Sunil Kumar, IAS</div>
+        <div class="zones">2 zones</div>
+      </div>
+      <div class="corp">
+        <div class="role">Corporation</div>
+        <h4>Bengaluru South</h4>
+        <div class="name">Ramesh K N, IAS</div>
+        <div class="zones">2 zones</div>
+      </div>
+    </div>
+
+    <div class="ward-note">
+      <div class="icon">W</div>
+      <p><strong>Ward committees</strong> sit at the base of the GBA structure — the grassroots tier meant to
+        bring elected corporators and residents into local decisions on roads, sanitation and civic amenities.
+        The first elections to the GBA corporations are scheduled for 2026, following the transition from BBMP.</p>
+    </div>
+
+    <div style="margin-top:22px;">
+      <h3 style="font-size:15px;margin-bottom:8px;">What GBA is responsible for</h3>
+      <div class="chips">
+        <span class="chip">Roads &amp; footpaths</span>
+        <span class="chip">Solid waste management</span>
+        <span class="chip">Storm-water drains</span>
+        <span class="chip">Property tax</span>
+        <span class="chip">Parks &amp; playgrounds</span>
+        <span class="chip">Street lighting</span>
+        <span class="chip">Town planning enforcement</span>
+        <span class="chip">Building approvals</span>
+        <span class="chip">Public health &amp; sanitation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="agencies" class="anchor-offset">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">03 — Parastatal Agencies</span>
+      <h2>The infrastructure &amp; utility bodies</h2>
+      <p>Outside the GBA's own civic remit, a set of specialised state agencies plan and operate Bengaluru's
+        water, power, transport and land — each an independent statutory body reporting to a different state
+        department.</p>
+    </div>
+
+    <div class="legend">
+      <span><i style="background:var(--gba)"></i>Municipal / Planning</span>
+      <span><i style="background:var(--utility)"></i>Utility &amp; Transport</span>
+      <span><i style="background:var(--regulator)"></i>Regulatory / Oversight</span>
+    </div>
+
+    <div class="card-grid" style="margin-top:24px;">
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge gba">Planning</span>
+          <div class="full-name">Bangalore Development Authority</div>
+          <h3>BDA</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Chief Minister's Bengaluru Development portfolio</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Commissioner, IAS <span class="tag">(rotational IAS posting)</span></div></div>
+          <div class="fact"><div class="k">Formed</div><div class="v">1976</div></div>
+          <div class="mandate">Prepares the Revised Master Plan for greater Bengaluru, forms residential
+            layouts and sites, acquires and allots land, and administers Transferable Development Rights (TDR).</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge gba">Regional Planning</span>
+          <div class="full-name">Bengaluru Metropolitan Region Development Authority</div>
+          <h3>BMRDA</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Chief Minister's Bengaluru Development portfolio</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Commissioner, IAS</div></div>
+          <div class="fact"><div class="k">Coverage</div><div class="v">Bengaluru Metropolitan Region, beyond GBA limits</div></div>
+          <div class="mandate">Handles regional-scale master planning, peri-urban layouts and satellite-town
+            coordination in the districts ringing Bengaluru city.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge utility">Water &amp; Sewerage</span>
+          <div class="full-name">Bengaluru Water Supply &amp; Sewerage Board</div>
+          <h3>BWSSB</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Urban Development Department</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Dr. Manjula N, IAS <span class="tag">Chairperson</span></div></div>
+          <div class="fact"><div class="k">Formed</div><div class="v">1964</div></div>
+          <div class="mandate">Supplies potable Cauvery and groundwater across Bengaluru, operates sewage
+            treatment plants, and regulates borewell registration and groundwater extraction citywide.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge utility">Power Distribution</span>
+          <div class="full-name">Bangalore Electricity Supply Company Ltd.</div>
+          <h3>BESCOM</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Energy Department</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Mahantesh Bilagi, IAS <span class="tag">Managing Director</span></div></div>
+          <div class="fact"><div class="k">Coverage</div><div class="v">Bengaluru Urban/Rural + 8 districts</div></div>
+          <div class="mandate">One of five Karnataka ESCOMs; distributes electricity, manages billing and
+            outage response, and runs the city's feeder-level grid infrastructure.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge utility">Metro Rail</span>
+          <div class="full-name">Bangalore Metro Rail Corporation Ltd.</div>
+          <h3>BMRCL</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Joint venture — Govt. of India &amp; Govt. of Karnataka (50:50)</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Managing Director, IAS/IRTS deputation <span class="tag">frequent rotation</span></div></div>
+          <div class="fact"><div class="k">Formed</div><div class="v">2006</div></div>
+          <div class="mandate">Builds and operates Namma Metro — currently the Purple, Green and Yellow lines,
+            with the Pink and Blue (airport) lines under phased construction.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge utility">Public Transport</span>
+          <div class="full-name">Bengaluru Metropolitan Transport Corporation</div>
+          <h3>BMTC</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Transport Department</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Managing Director, IAS <span class="tag">frequent rotation</span></div></div>
+          <div class="fact"><div class="k">Fleet</div><div class="v">~6,000 buses, incl. AC &amp; Vayu Vajra airport services</div></div>
+          <div class="mandate">Runs the city's bus network and feeder routes into Namma Metro stations, and
+            coordinates fare integration with BMRCL.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge regulator">Traffic &amp; Road Safety</span>
+          <div class="full-name">Bengaluru City Traffic Police</div>
+          <h3>Traffic Police</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Home Department, via the City Police Commissioner</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Addl. Commissioner of Police (Traffic)</div></div>
+          <div class="fact"><div class="k">Structure</div><div class="v">DCP-led traffic sub-divisions across the city</div></div>
+          <div class="mandate">Enforces traffic law, manages signal and junction operations, issues e-challans,
+            and runs road-safety and congestion-management programmes.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge regulator">Environment</span>
+          <div class="full-name">Karnataka State Pollution Control Board</div>
+          <h3>KSPCB</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Forest, Ecology &amp; Environment Department</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Chairman &amp; Member Secretary</div></div>
+          <div class="fact"><div class="k">Jurisdiction</div><div class="v">Statewide, HQ in Bengaluru</div></div>
+          <div class="mandate">Monitors air and water quality, issues environmental clearances (Consent to
+            Establish/Operate), and enforces pollution-control law across the metro area.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge regulator">Anti-Corruption Ombudsman</span>
+          <div class="full-name">Karnataka Lokayukta</div>
+          <h3>Lokayukta</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Statutory body, independent of the executive</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Lokayukta (retired judge) + Upa-Lokayukta(s)</div></div>
+          <div class="fact"><div class="k">Jurisdiction</div><div class="v">Statewide, incl. all Bengaluru civic bodies</div></div>
+          <div class="mandate">Investigates corruption and maladministration complaints against public
+            servants and civic agencies, including GBA, BDA, BWSSB and BESCOM officials.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-top">
+          <span class="badge gba">Transport Planning</span>
+          <div class="full-name">Directorate of Urban Land Transport</div>
+          <h3>DULT</h3>
+        </div>
+        <div class="card-body">
+          <div class="fact"><div class="k">Reports to</div><div class="v">Urban Development Department</div></div>
+          <div class="fact"><div class="k">Leadership</div><div class="v">Commissioner, IAS</div></div>
+          <div class="fact"><div class="k">Role</div><div class="v">Secretariat to the Unified Metropolitan Transport Authority</div></div>
+          <div class="mandate">Coordinates multimodal transport planning between BMTC, BMRCL, BDA and the
+            traffic police — footpaths, cycling infrastructure, and integrated fare/ticketing efforts.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="leadership" class="alt anchor-offset">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">04 — Current Leadership</span>
+      <h2>Who holds each portfolio, at a glance</h2>
+      <p>Senior IAS postings in Karnataka rotate often — treat the names below as indicative of who currently
+        holds each seat rather than fixed appointments.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Body</th><th>Position</th><th>Current holder</th><th>Parent department</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="name-cell">Govt. of Karnataka</td><td>Chief Minister</td><td>D. K. Shivakumar <span class="sub">since 3 Jun 2026</span></td><td>Holds Finance, Bengaluru Development, BDA, BMRDA directly</td></tr>
+          <tr><td class="name-cell">Govt. of Karnataka</td><td>Deputy Chief Minister</td><td>G. Parameshwara <span class="sub">since 3 Jun 2026</span></td><td>Revenue, Youth Empowerment &amp; Sports</td></tr>
+          <tr><td class="name-cell">GBA</td><td>Chief Commissioner (Member Secretary)</td><td>M. Maheshwara Rao, IAS <span class="sub">since 3 Jun 2026</span></td><td>Reports to CM as GBA Chairperson</td></tr>
+          <tr><td class="name-cell">Bengaluru Central Corp.</td><td>Chief Commissioner</td><td>Rajendra Cholan P, IAS</td><td>GBA</td></tr>
+          <tr><td class="name-cell">Bengaluru East Corp.</td><td>Chief Commissioner</td><td>Ramesh D S, IAS</td><td>GBA</td></tr>
+          <tr><td class="name-cell">Bengaluru West Corp.</td><td>Chief Commissioner</td><td>Rajendra K V, IAS</td><td>GBA</td></tr>
+          <tr><td class="name-cell">Bengaluru North Corp.</td><td>Chief Commissioner</td><td>Pommala Sunil Kumar, IAS</td><td>GBA</td></tr>
+          <tr><td class="name-cell">Bengaluru South Corp.</td><td>Chief Commissioner</td><td>Ramesh K N, IAS</td><td>GBA</td></tr>
+          <tr><td class="name-cell">BWSSB</td><td>Chairperson</td><td>Dr. Manjula N, IAS</td><td>Urban Development Dept.</td></tr>
+          <tr><td class="name-cell">BESCOM</td><td>Managing Director</td><td>Mahantesh Bilagi, IAS <span class="sub">since Aug 2026</span></td><td>Energy Dept.</td></tr>
+          <tr><td class="name-cell">BMTC</td><td>Managing Director</td><td>IAS officer <span class="sub">post rotates frequently</span></td><td>Transport Dept.</td></tr>
+          <tr><td class="name-cell">BMRCL</td><td>Managing Director</td><td>IAS/IRTS officer <span class="sub">post rotates frequently</span></td><td>GoI–GoK joint venture</td></tr>
+          <tr><td class="name-cell">BDA</td><td>Commissioner</td><td>IAS officer <span class="sub">post rotates frequently</span></td><td>CM's Bengaluru Development portfolio</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="regulators" class="anchor-offset">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">05 — How It Fits Together</span>
+      <h2>Reading the map</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-body" style="padding-top:20px;">
+          <h3 style="font-size:15px;">Two parallel tracks</h3>
+          <p style="font-size:13.5px;color:var(--ink-soft);">GBA and its five corporations handle
+            <em>place-based, day-to-day civic services</em> — roads, waste, drains, property tax. The
+            parastatal agencies (BWSSB, BESCOM, BMRCL, BMTC, BDA) each handle one <em>sector</em> city-wide,
+            independent of GBA's ward and zone boundaries. A single street can involve GBA for the footpath,
+            BWSSB for the water line beneath it, BESCOM for the streetlight, and BMRCL for the metro pillar
+            next to it.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body" style="padding-top:20px;">
+          <h3 style="font-size:15px;">Coordination points</h3>
+          <p style="font-size:13.5px;color:var(--ink-soft);">DULT/UMTA is the formal forum meant to align
+            BMTC, BMRCL, BDA, GBA and the Traffic Police on transport projects. The Lokayukta and KSPCB sit
+            outside this operating hierarchy as independent oversight bodies — the former on integrity and
+            conduct, the latter on environmental compliance — with jurisdiction over every agency above.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <h4>About this reference</h4>
+        <p>This page summarises Bengaluru's civic and infrastructure governance structure as publicly reported.
+          It is intended as an orientation reference, not a legal or official record — verify current office-holders
+          and mandates against each agency's own website before citing them.</p>
+      </div>
+      <div>
+        <h4>Primary sources</h4>
+        <div class="sources">
+          <a href="https://en.wikipedia.org/wiki/Greater_Bengaluru_Authority" target="_blank" rel="noopener">Greater Bengaluru Authority — Wikipedia</a><br>
+          <a href="https://en.wikipedia.org/wiki/Administrative_divisions_of_Bengaluru" target="_blank" rel="noopener">Administrative divisions of Bengaluru</a><br>
+          <a href="https://thesouthfirst.com/karnataka/greater-bengaluru-authority-takes-over-it-capital-will-it-fix-the-citys-civic-woes/" target="_blank" rel="noopener">The South First — GBA takeover coverage</a><br>
+          <a href="https://en.wikipedia.org/wiki/D._K._Shivakumar" target="_blank" rel="noopener">D. K. Shivakumar — Wikipedia</a><br>
+          <a href="https://en.wikipedia.org/wiki/Bengaluru_Metropolitan_Transport_Corporation" target="_blank" rel="noopener">BMTC — Wikipedia</a>
+        </div>
+      </div>
+    </div>
+    <div class="fine">Compiled September 2026. Senior appointments across Karnataka's IAS cadre are transferred
+      frequently; names in the Leadership table should be re-verified periodically.</div>
+  </div>
+</footer>
+
+</body>
+</html>
