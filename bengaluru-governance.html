@@ -191,6 +191,19 @@
   .fact .v .tag{font-size:11px;color:#8a93a3;}
   .mandate{font-size:13.5px;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px;}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+
+  .ladder{border-top:1px dashed var(--line);padding-top:12px;}
+  .ladder-title{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);font-weight:700;margin-bottom:10px;}
+  .ladder ol{list-style:none;margin:0;padding:0;}
+  .ladder li{position:relative;padding-left:20px;padding-bottom:11px;}
+  .ladder li:last-child{padding-bottom:0;}
+  .ladder li::before{content:"";position:absolute;left:3px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--gba);border:2px solid var(--gba-soft);}
+  .ladder li::after{content:"";position:absolute;left:6.5px;top:14px;bottom:-2px;width:1.5px;background:var(--line);}
+  .ladder li:last-child::after{display:none;}
+  .ladder li b{display:block;font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.35;}
+  .ladder li span{display:block;font-size:11px;color:var(--ink-soft);margin-top:1px;}
+  .card.util-tone .ladder li::before{background:var(--utility);border-color:var(--utility-soft);}
+  .card.reg-tone .ladder li::before{background:var(--regulator);border-color:var(--regulator-soft);}
   .chip{
     font-size:11px;font-weight:600;background:var(--paper-2);border:1px solid var(--line);
     color:var(--ink-soft);padding:3px 8px;border-radius:99px;
@@ -444,6 +457,17 @@
         The first elections to the GBA corporations are scheduled for 2026, following the transition from BBMP.</p>
     </div>
 
+    <div class="ladder" style="margin-top:22px;">
+      <div class="ladder-title">Typical internal hierarchy — within each city corporation</div>
+      <ol>
+        <li><b>Chief Commissioner</b><span>Corporation head, reports to the GBA Chief Commissioner</span></li>
+        <li><b>Zonal Commissioners</b><span>One per zone (2 per corporation)</span></li>
+        <li><b>Assistant Revenue Officers &amp; Executive Engineers</b><span>Zone-level tax collection &amp; civic works</span></li>
+        <li><b>Ward-level Assistant Engineers &amp; Health Inspectors</b><span>Roads, drains, sanitation on the ground</span></li>
+        <li><b>Elected Corporators &amp; Ward Committees</b><span>Grassroots representation once GBA elections are held</span></li>
+      </ol>
+    </div>
+
     <div style="margin-top:22px;">
       <h3 style="font-size:15px;margin-bottom:8px;">What GBA is responsible for</h3>
       <div class="chips">
@@ -491,6 +515,16 @@
           <div class="fact"><div class="k">Formed</div><div class="v">1976</div></div>
           <div class="mandate">Prepares the Revised Master Plan for greater Bengaluru, forms residential
             layouts and sites, acquires and allots land, and administers Transferable Development Rights (TDR).</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Commissioner, IAS</b><span>Head of the authority</span></li>
+              <li><b>Secretary</b><span>Board affairs &amp; statutory approvals</span></li>
+              <li><b>Additional Commissioners</b><span>Planning · Engineering · Finance verticals</span></li>
+              <li><b>Executive Engineers &amp; Town Planning Officers</b><span>Layout-level project execution</span></li>
+              <li><b>Assistant Executive Engineers / Assistant Directors</b><span>Site inspection &amp; field enforcement</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
@@ -506,10 +540,20 @@
           <div class="fact"><div class="k">Coverage</div><div class="v">Bengaluru Metropolitan Region, beyond GBA limits</div></div>
           <div class="mandate">Handles regional-scale master planning, peri-urban layouts and satellite-town
             coordination in the districts ringing Bengaluru city.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Commissioner, IAS</b><span>Head of the authority</span></li>
+              <li><b>Secretary</b></li>
+              <li><b>Planning Members</b><span>Regional master-plan formulation</span></li>
+              <li><b>Town Planners</b><span>Satellite-town &amp; peri-urban layouts</span></li>
+              <li><b>Field Surveyors</b><span>Land records &amp; survey verification</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card util-tone">
         <div class="card-top">
           <span class="badge utility">Water &amp; Sewerage</span>
           <div class="full-name">Bengaluru Water Supply &amp; Sewerage Board</div>
@@ -521,10 +565,20 @@
           <div class="fact"><div class="k">Formed</div><div class="v">1964</div></div>
           <div class="mandate">Supplies potable Cauvery and groundwater across Bengaluru, operates sewage
             treatment plants, and regulates borewell registration and groundwater extraction citywide.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Chairperson, IAS</b><span>Board head</span></li>
+              <li><b>Chief Engineers</b><span>Cauvery Water Supply · Sewerage · Maintenance</span></li>
+              <li><b>Superintending Engineers</b><span>Circle-level oversight</span></li>
+              <li><b>Executive Engineers</b><span>Division-level projects &amp; operations</span></li>
+              <li><b>Assistant Engineers</b><span>Sub-division field operations &amp; complaints</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card util-tone">
         <div class="card-top">
           <span class="badge utility">Power Distribution</span>
           <div class="full-name">Bangalore Electricity Supply Company Ltd.</div>
@@ -536,10 +590,20 @@
           <div class="fact"><div class="k">Coverage</div><div class="v">Bengaluru Urban/Rural + 8 districts</div></div>
           <div class="mandate">One of five Karnataka ESCOMs; distributes electricity, manages billing and
             outage response, and runs the city's feeder-level grid infrastructure.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Managing Director, IAS</b><span>Company head</span></li>
+              <li><b>Directors</b><span>Technical · Finance · HR &amp; Industrial Relations</span></li>
+              <li><b>Chief Engineers</b><span>One per operating Circle</span></li>
+              <li><b>Executive Engineers</b><span>Division-level distribution &amp; billing</span></li>
+              <li><b>Assistant Engineers</b><span>Sub-division — outage response, new connections</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card util-tone">
         <div class="card-top">
           <span class="badge utility">Metro Rail</span>
           <div class="full-name">Bangalore Metro Rail Corporation Ltd.</div>
@@ -551,10 +615,20 @@
           <div class="fact"><div class="k">Formed</div><div class="v">2006</div></div>
           <div class="mandate">Builds and operates Namma Metro — currently the Purple, Green and Yellow lines,
             with the Pink and Blue (airport) lines under phased construction.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Managing Director</b><span>Company head</span></li>
+              <li><b>Directors</b><span>Operations · Electrical &amp; Mechanical · Finance</span></li>
+              <li><b>Chief Project Managers</b><span>Line-wise construction &amp; systems delivery</span></li>
+              <li><b>Station Controllers</b><span>Day-to-day station operations</span></li>
+              <li><b>Train Operators &amp; Maintainers</b><span>Front-line operations &amp; upkeep</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card util-tone">
         <div class="card-top">
           <span class="badge utility">Public Transport</span>
           <div class="full-name">Bengaluru Metropolitan Transport Corporation</div>
@@ -566,10 +640,20 @@
           <div class="fact"><div class="k">Fleet</div><div class="v">~6,000 buses, incl. AC &amp; Vayu Vajra airport services</div></div>
           <div class="mandate">Runs the city's bus network and feeder routes into Namma Metro stations, and
             coordinates fare integration with BMRCL.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Managing Director, IAS</b><span>Corporation head</span></li>
+              <li><b>Directors</b><span>Operations · Vigilance &amp; Security · Finance</span></li>
+              <li><b>Divisional Controllers</b><span>Regional route &amp; depot oversight</span></li>
+              <li><b>Depot Managers</b><span>Fleet scheduling &amp; maintenance per depot</span></li>
+              <li><b>Conductors &amp; Drivers</b><span>Front-line crew</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card reg-tone">
         <div class="card-top">
           <span class="badge regulator">Traffic &amp; Road Safety</span>
           <div class="full-name">Bengaluru City Traffic Police</div>
@@ -581,10 +665,20 @@
           <div class="fact"><div class="k">Structure</div><div class="v">DCP-led traffic sub-divisions across the city</div></div>
           <div class="mandate">Enforces traffic law, manages signal and junction operations, issues e-challans,
             and runs road-safety and congestion-management programmes.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Addl. Commissioner of Police (Traffic)</b><span>City-wide traffic command</span></li>
+              <li><b>Deputy Commissioners of Police (Traffic)</b><span>One per traffic zone (East/West/North/South/Central)</span></li>
+              <li><b>Assistant Commissioners of Police</b><span>Sub-division supervision</span></li>
+              <li><b>Traffic Police Inspectors</b><span>Police-station-level command</span></li>
+              <li><b>Sub-Inspectors &amp; Head Constables</b><span>Junction &amp; signal enforcement</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card reg-tone">
         <div class="card-top">
           <span class="badge regulator">Environment</span>
           <div class="full-name">Karnataka State Pollution Control Board</div>
@@ -596,10 +690,20 @@
           <div class="fact"><div class="k">Jurisdiction</div><div class="v">Statewide, HQ in Bengaluru</div></div>
           <div class="mandate">Monitors air and water quality, issues environmental clearances (Consent to
             Establish/Operate), and enforces pollution-control law across the metro area.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Chairman</b><span>Policy head, government appointee</span></li>
+              <li><b>Member Secretary</b><span>Chief executive of the Board</span></li>
+              <li><b>Senior Environmental Officers</b><span>Regional office heads</span></li>
+              <li><b>Environmental Officers</b><span>District/zone-level compliance</span></li>
+              <li><b>Field Inspectors</b><span>Site inspection &amp; sampling</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
-      <div class="card">
+      <div class="card reg-tone">
         <div class="card-top">
           <span class="badge regulator">Anti-Corruption Ombudsman</span>
           <div class="full-name">Karnataka Lokayukta</div>
@@ -611,6 +715,16 @@
           <div class="fact"><div class="k">Jurisdiction</div><div class="v">Statewide, incl. all Bengaluru civic bodies</div></div>
           <div class="mandate">Investigates corruption and maladministration complaints against public
             servants and civic agencies, including GBA, BDA, BWSSB and BESCOM officials.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Lokayukta</b><span>Retired High Court/Supreme Court judge</span></li>
+              <li><b>Upa-Lokayukta(s)</b><span>Deputy ombudspersons</span></li>
+              <li><b>Registrar</b><span>Case administration</span></li>
+              <li><b>Superintendent of Police (Lokayukta wing)</b><span>Heads the investigative police wing</span></li>
+              <li><b>Deputy SPs &amp; Inspectors</b><span>Trap operations &amp; investigations</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
@@ -626,6 +740,15 @@
           <div class="fact"><div class="k">Role</div><div class="v">Secretariat to the Unified Metropolitan Transport Authority</div></div>
           <div class="mandate">Coordinates multimodal transport planning between BMTC, BMRCL, BDA and the
             traffic police — footpaths, cycling infrastructure, and integrated fare/ticketing efforts.</div>
+          <div class="ladder">
+            <div class="ladder-title">Typical internal hierarchy</div>
+            <ol>
+              <li><b>Commissioner, IAS</b><span>Directorate head</span></li>
+              <li><b>Additional Director</b></li>
+              <li><b>Deputy Directors</b><span>Transport Planning · Non-Motorised Transport</span></li>
+              <li><b>Project Officers</b><span>Corridor &amp; scheme-level delivery</span></li>
+            </ol>
+          </div>
         </div>
       </div>
 
